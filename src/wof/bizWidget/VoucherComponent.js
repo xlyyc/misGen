@@ -795,6 +795,8 @@ wof.bizWidget.VoucherComponent.prototype = {
                 var voucherItemGroup = tabGroups[i];
                 voucherItemGroup.setTop(0);
                 voucherItemGroup.getDomInstance().css('top','0px');
+                voucherItemGroup.setLeft(0);
+                voucherItemGroup.getDomInstance().css('left','0px');
                 voucherItemGroup.remove();
                 this._tab.insertNode(voucherItemGroup,(i+1));
             }
@@ -804,7 +806,7 @@ wof.bizWidget.VoucherComponent.prototype = {
             for(var i=0;i<tabGroups.length;i++){
                 var voucherItemGroup = tabGroups[i];
                 if(voucherItemGroup.getIndex()==this.getActiveVoucherItemGroupIndex()){
-                    tabItemIndex  = i+1;
+                    tabItemIndex = i+1;
                     break;
                 }
             }
@@ -822,10 +824,12 @@ wof.bizWidget.VoucherComponent.prototype = {
                 }else{
                     var prevVoucherItemGroup = voucherItemGroup.prevNode();
                     voucherItemGroup.setTop(prevVoucherItemGroup.getTop()+prevVoucherItemGroup.getHeight());
+                    voucherItemGroup.setLeft(0);
                     height += voucherItemGroup.getHeight();
                 }
                 voucherItemGroup.setIndex(i+1);
                 voucherItemGroup.getDomInstance().css('top', voucherItemGroup.getTop()*this.getScale()+'px');
+                voucherItemGroup.getDomInstance().css('left','0px');
             }
         }
 

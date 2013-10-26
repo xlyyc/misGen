@@ -1,11 +1,12 @@
-É¾³ı·Ö×é
+
+
 this.deleteSection(2);
 
-ĞŞ¸Ä·Ö×é
+
 this.updateSection({index:2,cols:5,itemHeight:100});
 this.render();
 
-²åÈëĞÂµÄ·Ö×é
-var sectionData = {title:'Î´ÃüÃû',titleHeight:30,cols:2,itemHeight:80};
+
+var sectionData = {title:'æœªå‘½å',titleHeight:30,cols:2,itemHeight:80};
 this.insertSection(sectionData);
 this.render();
