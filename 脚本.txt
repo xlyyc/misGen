@@ -1,0 +1,11 @@
+删除分组
+this.deleteSection(2);
+
+修改分组
+this.updateSection({index:2,cols:5,itemHeight:100});
+this.render();
+
+插入新的分组
+var sectionData = {title:'未命名',titleHeight:30,cols:2,itemHeight:80};
+this.insertSection(sectionData);
+this.render();
