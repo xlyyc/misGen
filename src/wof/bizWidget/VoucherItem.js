@@ -368,8 +368,8 @@ wof.bizWidget.VoucherItem.prototype = {
                                 b=false;
                             }else{
 
-                                var layout = draggableObj.parentNode().parentNode();
-                                var thisLayout = _this.parentNode().parentNode();
+                                var layout = draggableObj.parentNode().getVoucherComponent();
+                                var thisLayout = _this.parentNode().getVoucherComponent();
                                 if(thisLayout.getId()==layout.getId()){
                                     b=true;
                                 }

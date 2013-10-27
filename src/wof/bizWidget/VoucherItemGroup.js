@@ -45,10 +45,25 @@ wof.bizWidget.VoucherItemGroup.prototype = {
 
     _backgroundImg: null,
 
+    _voucherComponent: null,
+
 
     /**
      * get/set 属性方法定义
      */
+
+    getVoucherComponent: function(){
+        if(this._voucherComponent == null){
+            var parentNode = this;
+            while((parentNode=parentNode.parentNode())!=null){
+                if(parentNode.getClassName()=='wof.bizWidget.VoucherComponent'){
+                    this._voucherComponent = parentNode;
+                    break;
+                }
+            }
+        }
+        return this._voucherComponent;
+    },
 
     getIsHead: function(){
         if(this._isHead==null){
@@ -71,7 +86,7 @@ wof.bizWidget.VoucherItemGroup.prototype = {
 
     getColsNum: function(){
         if(this._colsNum==null){
-            if(this.parentNode()!=null){
+            if(this.getVoucherComponent()!=null){
                 this._colsNum = 4;
             }
         }
@@ -117,8 +132,8 @@ wof.bizWidget.VoucherItemGroup.prototype = {
 
     getItemHeight: function(){
         if(this._itemHeight==null){
-            if(this.parentNode()!=null){
-                this._itemHeight = this.parentNode().getItemHeight();
+            if(this.getVoucherComponent()!=null){
+                this._itemHeight = this.getVoucherComponent().getItemHeight();
             }else{
                 this._itemHeight = 70;
             }
@@ -150,8 +165,8 @@ wof.bizWidget.VoucherItemGroup.prototype = {
     },
 
     getWidth: function(){
-        if(this.parentNode()!=null){
-            this._width = this.parentNode().getWidth();
+        if(this.getVoucherComponent()!=null){
+            this._width = this.getVoucherComponent().getWidth();
         }
         return this._width;
     },
@@ -190,8 +205,8 @@ wof.bizWidget.VoucherItemGroup.prototype = {
                     var draggableObj = wof.util.ObjectManager.get(draggable.attr('oid'));
                     if(draggableObj!=null){
                         if(draggableObj.getClassName()=='wof.bizWidget.VoucherItemGroup'){
-                            var layout = draggableObj.parentNode();
-                            var thisLayout = _this.parentNode();
+                            var layout = draggableObj.getVoucherComponent();
+                            var thisLayout = _this.getVoucherComponent();
                             if(thisLayout.getId()==layout.getId()){
                                 b=true;
                             }
@@ -213,7 +228,7 @@ wof.bizWidget.VoucherItemGroup.prototype = {
                     left:0
                 },
                 scroll: false,
-                containment: 'div[oid="'+this.parentNode().getId()+'"]',  //限定拖放只能在当前VoucherComponent内
+                containment: 'div[oid="'+this.getVoucherComponent().getId()+'"]',  //限定拖放只能在当前VoucherComponent内
                 start:function(event,ui){
                     event.stopPropagation();
                     clearTimeout(timeFn);
@@ -294,8 +309,8 @@ wof.bizWidget.VoucherItemGroup.prototype = {
             var voucherItem = wof.util.ObjectManager.get(message.sender.id);
             insertVoucherItem.remove();
             insertVoucherItem.beforeTo(voucherItem);
-            this.parentNode().render();
-            this.parentNode().sendMessage('wof.bizWidget.VoucherComponent_active');
+            this.getVoucherComponent().render();
+            this.getVoucherComponent().sendMessage('wof.bizWidget.VoucherComponent_active');
             return false;
         }
     },
@@ -335,14 +350,18 @@ wof.bizWidget.VoucherItemGroup.prototype = {
     },
 
     //删除voucherItem
+    //return true 真正移除 false 没有从移除
     deleteVoucherItem: function(voucherItem){
+        var flag = true;
         if(this.findVoucherItems().length==1){ //如果voucherItem只剩一个
             voucherItem.setColspan(1);
             voucherItem.setRowspan(1);
+            flag = false;
         }else{
             voucherItem.removeChildren(true);
             voucherItem.remove(true);
         }
+        return flag;
     },
 
     //减少列数

@@ -12,6 +12,8 @@ wof.bizWidget.VoucherComponent = function () {
     this._tab.setLeft(0);
     this._tab.appendTo(this);
 
+    this._voucherItemGroups = [];
+
 };
 wof.bizWidget.VoucherComponent.prototype = {
     /**
@@ -42,6 +44,8 @@ wof.bizWidget.VoucherComponent.prototype = {
     _activeVoucherItemRank: null,     //聚焦voucherItem行、列号
 
     _tab: null,
+
+    _voucherItemGroups: null,
 
     /**
      * get/set 属性方法定义
@@ -166,18 +170,14 @@ wof.bizWidget.VoucherComponent.prototype = {
             this._initFlag = true;
         }
 
-        //将tab下的分组首先移动到当前节点下(如果有分组的话)
-        var tempGroups = [];
-        var groupsCount = this._tab.getItemsCount();
-        for(var i=1;i<=groupsCount;i++){
-            var nodes = this._tab.getNodesByItemIndex(i);
-            if(nodes.length>0){
-                var node = nodes[0];
-                node.remove();
-                node.appendTo(this);
-            }
+        for(var i=0;i<this._voucherItemGroups.length;i++){
+            var group = this._voucherItemGroups[i];
+            group.remove();
+            group.appendTo(this);
         }
+        //删除tab下所有的item
         this._tab.deleteItem();
+
     },
 
     //----------必须实现----------
@@ -286,13 +286,25 @@ wof.bizWidget.VoucherComponent.prototype = {
         },
         'wof.bizWidget.VoucherItemGroup_drop':function(message){
             console.log(message.id+'   '+this.getClassName());
-            var insertVoucherItemGroup = wof.util.ObjectManager.get(message.data.VoucherItemGroupId);
+            console.log('message.data.VoucherItemGroupId='+message.data.voucherItemGroupId);
+            var insertVoucherItemGroup = wof.util.ObjectManager.get(message.data.voucherItemGroupId);
             var voucherItemGroup = wof.util.ObjectManager.get(message.sender.id);
+            console.log('insertVoucherItemGroup'+insertVoucherItemGroup);
+            console.log('voucherItemGroup'+voucherItemGroup);
             insertVoucherItemGroup.remove();
             insertVoucherItemGroup.beforeTo(voucherItemGroup);
             var insertVoucherItemGroupIndex = voucherItemGroup.getIndex();
             this.setActiveVoucherItemGroupIndex(insertVoucherItemGroupIndex);
             this.setActiveVoucherItemRank(null);
+
+            this._voucherItemGroups.splice(insertVoucherItemGroup.getIndex()-1,1);
+            this._voucherItemGroups.splice(insertVoucherItemGroupIndex-1,0,insertVoucherItemGroup);
+            //重设index
+            for(var i=0;i<this._voucherItemGroups.length;i++){
+                var group = this._voucherItemGroups[i];
+                group.setIndex(i+1);
+            }
+
             this.render();
             this.sendMessage('wof.bizWidget.VoucherComponent_active');
             return false;
@@ -321,16 +333,18 @@ wof.bizWidget.VoucherComponent.prototype = {
         newVoucherItemGroup.setGroupCaption(voucherItemGroupData.groupCaption);
         newVoucherItemGroup.setColsNum(colsNum);
         newVoucherItemGroup.setItemHeight(itemHeight);
-        var voucherItemGroup = this.findVoucherItemGroupByIndex(voucherItemGroupIndex);
-        if(voucherItemGroup!=null){
-            newVoucherItemGroup.beforeTo(voucherItemGroup);
-        }else{
-            newVoucherItemGroup.appendTo(this);
-        }
         var newVoucherItem = new wof.bizWidget.VoucherItem();
         newVoucherItem.appendTo(newVoucherItemGroup);
         if(voucherItemGroupIndex==this.getActiveVoucherItemGroupIndex()){
             this.setActiveVoucherItemRank(null);
+        }
+        //重设index并且依次插入当前表头
+        this._voucherItemGroups.splice(voucherItemGroupIndex-1,0,newVoucherItemGroup);
+        for(var i=0;i<this._voucherItemGroups.length;i++){
+            var group = this._voucherItemGroups[i];
+            group.setIndex(i+1);
+            group.remove();
+            group.appendTo(this);
         }
     },
 
@@ -375,7 +389,7 @@ wof.bizWidget.VoucherComponent.prototype = {
      * 获得VoucherItemGroup的个数
      */
     getVoucherItemGroups:function(){
-        return this._findVoucherItemGroups().length;
+        return this._voucherItemGroups.length;
     },
 
     /**
@@ -404,6 +418,14 @@ wof.bizWidget.VoucherComponent.prototype = {
                 this.setActiveVoucherItemGroupIndex(voucherItemGroupIndex-1);
                 this.setActiveVoucherItemRank(null);
             }
+
+            this._voucherItemGroups.splice(voucherItemGroupIndex-1,1);
+            this._voucherItemGroups.splice(voucherItemGroupIndex-2,0,voucherItemGroup);
+            //重设index
+            for(var i=0;i<this._voucherItemGroups.length;i++){
+                var group = this._voucherItemGroups[i];
+                group.setIndex(i+1);
+            }
         }
     },
 
@@ -421,6 +443,14 @@ wof.bizWidget.VoucherComponent.prototype = {
                 this.setActiveVoucherItemGroupIndex(voucherItemGroupIndex+1);
                 this.setActiveVoucherItemRank(null);
             }
+
+            this._voucherItemGroups.splice(voucherItemGroupIndex-1,1);
+            this._voucherItemGroups.splice(voucherItemGroupIndex,0,voucherItemGroup);
+            //重设index
+            for(var i=0;i<this._voucherItemGroups.length;i++){
+                var group = this._voucherItemGroups[i];
+                group.setIndex(i+1);
+            }
         }
     },
 
@@ -435,6 +465,13 @@ wof.bizWidget.VoucherComponent.prototype = {
             voucherItemGroup.remove(true);
             this.setActiveVoucherItemGroupIndex(null);
             this.setActiveVoucherItemRank(null);
+
+            this._voucherItemGroups.splice(voucherItemGroupIndex-1,1);
+            //重设index
+            for(var i=0;i<this._voucherItemGroups.length;i++){
+                var group = this._voucherItemGroups[i];
+                group.setIndex(i+1);
+            }
         }
     },
 
@@ -636,7 +673,7 @@ wof.bizWidget.VoucherComponent.prototype = {
         if(voucherItemGroup!=null){
             var voucherItem = voucherItemGroup.findVoucherItemByRank(voucherItemRank);
             if(voucherItem!=null){
-                voucherItemGroup.deleteVoucherItem(voucherItem)
+                voucherItemGroup.deleteVoucherItem(voucherItem);
             }
         }
     },
@@ -664,7 +701,7 @@ wof.bizWidget.VoucherComponent.prototype = {
     //找到指定序号的sectoin
     findVoucherItemGroupByIndex: function(voucherItemGroupIndex){
         var voucherItemGroup = null;
-        var voucherItemGroups = this._findVoucherItemGroups();
+        var voucherItemGroups = this._voucherItemGroups;
         for(var i=0;i<voucherItemGroups.length;i++){
             if(voucherItemGroups[i].getIndex()==Number(voucherItemGroupIndex)){
                 voucherItemGroup = voucherItemGroups[i];
@@ -676,15 +713,7 @@ wof.bizWidget.VoucherComponent.prototype = {
 
     //找到所有VoucherItemGroup
     _findVoucherItemGroups: function(){
-        var voucherItemGroups = [];
-        var childNodes = this.childNodes();
-        for(var i=0;i<childNodes.length;i++){
-            var node = childNodes[i];
-            if(node.getClassName()=='wof.bizWidget.VoucherItemGroup'){
-                voucherItemGroups.push(node);
-            }
-        }
-        return voucherItemGroups;
+        return this._voucherItemGroups;
     },
 
     //根据voucherItemRank和voucherItemGroupIndex定位到voucherItem并减少列数
@@ -756,7 +785,7 @@ wof.bizWidget.VoucherComponent.prototype = {
     //进行布局
     _layout: function(){
         var height = 0;
-        var voucherItemGroups = this._findVoucherItemGroups();
+        var voucherItemGroups = this._voucherItemGroups;
         if(this.getViewType()=='tab'){
             this._tab.setHiden(false);
 
@@ -769,7 +798,6 @@ wof.bizWidget.VoucherComponent.prototype = {
                 }else{
                     tabGroups.push(voucherItemGroup);
                 }
-                voucherItemGroup.setIndex(i+1);
             }
             //获得最大分组高度
             var maxGroupHeight = 150;
@@ -827,7 +855,6 @@ wof.bizWidget.VoucherComponent.prototype = {
                     voucherItemGroup.setLeft(0);
                     height += voucherItemGroup.getHeight();
                 }
-                voucherItemGroup.setIndex(i+1);
                 voucherItemGroup.getDomInstance().css('top', voucherItemGroup.getTop()*this.getScale()+'px');
                 voucherItemGroup.getDomInstance().css('left','0px');
             }
