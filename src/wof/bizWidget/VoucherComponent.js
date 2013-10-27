@@ -7,11 +7,6 @@
 wof.bizWidget.VoucherComponent = function () {
     this._version = '1.0';
 
-    this._tab = new wof.widget.Tab();
-    this._tab.setIsInside(true);
-    this._tab.setLeft(0);
-    this._tab.appendTo(this);
-
     this._voucherItemGroups = [];
 
 };
@@ -167,6 +162,45 @@ wof.bizWidget.VoucherComponent.prototype = {
                 _this.sendMessage('wof.bizWidget.VoucherComponent_dblclick');
                 _this.sendMessage('wof.bizWidget.VoucherComponent_active');
             });
+
+            //_tab初始化
+            if(this._tab==null){
+                var tab = this._findTab();
+                if(tab!=null){
+                    this._tab = tab;
+                }else{
+                    this._tab = new wof.widget.Tab();
+                }
+                this._tab.setIsInside(true);
+                this._tab.setLeft(0);
+                this._tab.appendTo(this);
+            }
+            //_voucherItemGroups初始化
+            if(this._voucherItemGroups.length==0){
+                if(this.getViewType()=='tab'){
+                    var ic = this._tab.getItemsCount();
+                    console.log('ic=========='+ic);
+                    for(var i=0;i<ic;i++){
+                        var tempGroups = this._tab.getNodesByItemIndex(i+1);
+                        if(tempGroups.length>0){
+                            console.log('tempGroups[0]====='+tempGroups[0].getIndex());
+                            this._voucherItemGroups.push(tempGroups[0]);
+                        }
+                    }
+                    var groups = this._findGroups();
+                    if(groups.length==1){
+                        var headGroup = groups[0];
+                        var idx = headGroup.getIndex()-1;
+                        this._voucherItemGroups.splice(idx,0,headGroup);
+                    }
+                }else{
+                    var groups  = this._findGroups();
+                    for(var i=0;i<groups.length;i++){
+                        this._voucherItemGroups.push(groups[i]);
+                    }
+                }
+            }
+
             this._initFlag = true;
         }
 
@@ -310,6 +344,32 @@ wof.bizWidget.VoucherComponent.prototype = {
             return false;
         }
 
+    },
+
+
+    //查找到group
+    _findGroups: function(){
+        var groups = [];
+        for(var i=0;i<this.childNodes().length;i++){
+            var node = this.childNodes()[i];
+            if(node.getClassName()=='wof.bizWidget.VoucherItemGroup'){
+                groups.push(node);
+            }
+        }
+        return groups;
+    },
+
+    //查找到tab
+    _findTab: function(){
+        var tab = null;
+        for(var i=0;i<this.childNodes().length;i++){
+            var node = this.childNodes()[i];
+            if(node.getClassName()=='wof.widget.Tab'){
+                tab = node;
+                break;
+            }
+        }
+        return tab;
     },
 
     /**
