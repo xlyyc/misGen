@@ -398,6 +398,31 @@ wof.bizWidget.spanner.GridComponentSpanner.prototype = {
     setData:function(data){
         this.setPropertys(data.propertys);
         this.setActiveData(data.activeData);
+    },
+
+    //静态方法 导出数据(只有需要给运行时解析的叶子节点才需要定义此方法)
+    exportData: function(node){
+        /*
+         <GridComponent Name="员工列表" ID="emGrid" BindEntityID="Employee" index="1" GridComponentState="" CallStr="gridcomponent:0_0_1" numberDisplay="true" headerHeight="30" rowHeight="20" useMutiplePage="true" rowsCount="5">
+         <Columns>
+         <Column Name="emId" Caption="工号" VisbleType="" RegExp="" ScaleLength="2" IntLength="6" Min="4" Max="6" Required="true" Length="6" Display="true" CanSearch="true" ColumnType="BindData" BindDataField="emId" columnWidth="100" ReadOnly="true" />
+         <Column Name="name" Caption="姓名" VisbleType="text" ColumnType="string" BindDataField="name" columnWidth="200" />
+         <Column Name="sex" Caption="性别" VisbleType="" RegExp="" ScaleLength="2" IntLength="6" Min="4" Max="6" Required="true" Length="6" Display="true" CanSearch="true" ColumnType="BindData" BindDataField="menu.name" columnWidth="100" />
+         <Column Name="age" Caption="年龄" VisbleType="int" RegExp="" ColumnType="integer" BindDataField="age" columnWidth="100" />
+         <Column Name="country" Caption="国籍" ColumnType="BindData" BindDataField="country" columnWidth="100" />
+         <Column Name="nation" Caption="民族" VisbleType="" RegExp="" Required="true" Length="6" Display="true" CanSearch="true" ColumnType="BindData" BindDataField="nation" columnWidth="100" />
+         <Column Name="address" Caption="家庭住1址" VisbleType="" Display="true" CanSearch="true" ColumnType="BindData" BindDataField="address" columnWidth="200" />
+         <Column Name="comments" Caption="备注" VisbleType="" RegExp="" Required="true" Length="6" Display="true" CanSearch="true" ColumnType="BindData" BindDataField="comments" columnWidth="200" />
+         </Columns>
+         <ParamMaps>
+         <ParamMap MapType="value" CompParamName="" PageParamName="" ChangeExpt="" />
+         </ParamMaps>
+         <MutiplePageInfo RowsCount="10" />
+         </GridComponent>
+         */
+        if(node.getClassName()=='wof.bizWidget.GridComponent'){
+
+        }
     }
 
 };

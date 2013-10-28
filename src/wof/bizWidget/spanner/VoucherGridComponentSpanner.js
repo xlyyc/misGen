@@ -115,6 +115,11 @@ wof.bizWidget.spanner.VoucherGridComponentSpanner.prototype = {
     setData:function(data){
         this.setPropertys(data.propertys);
         this.setActiveData(data.activeData);
+    },
+
+    //静态方法 导出数据
+    exportData: function(node){
+        console.log('node.getId()=='+node.getId()+'   '+node.getClassName());
     }
 
 };

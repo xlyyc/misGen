@@ -108,9 +108,15 @@ wof.bizWidget.spanner.SearchComponentSpanner.prototype = {
             meta: this.getMeta()
         };
     },
+
     //必须实现
     setData:function(data){
         this.setPropertys(data.propertys);
         this.setActiveData(data.activeData);
+    },
+
+    //静态方法 导出数据
+    exportData: function(node){
+        console.log('node.getId()=='+node.getId()+'   '+node.getClassName());
     }
 };

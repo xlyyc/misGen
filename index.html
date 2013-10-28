@@ -366,9 +366,9 @@ jQuery(function(){
 		var id = jQuery(event.target).attr('id');
 		if(id=='saveBtn'){
 			var gridLayout = wof.util.ObjectManager.get(content.children('div[oid]').first().attr('oid'));
-			//alert(gridLayout.toJSON());
-            //console.log(gridLayout.toJSON());
-            wof.bizWidget.spanner.VoucherComponentSpanner.prototype.exportData(gridLayout);
+			alert(gridLayout.toJSON());
+            console.log(gridLayout.toJSON());
+            //wof.bizWidget.spanner.VoucherComponentSpanner.prototype.exportData(gridLayout);
 
 
 
@@ -376,9 +376,21 @@ jQuery(function(){
 		}
 	});
 });
+
+
+function xxx(){
+    var bizEntitiesData = getBizEntities();
+
+}
+
+//保存
+function save(){
+    setBizEntities(bizEntities);
+}
+
 </script>
 </head>
-<body>
+<body onload="xxx();">
 <div id="container" style="position:absolute;">
 	<div id="header" style="position:absolute;background-color:#fff;border-bottom:1px solid black;z-index:90000">
     	<input type="button" id="saveBtn" value="保存" /><input type="button" id="cancelBtn" value="取消" />
