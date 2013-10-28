@@ -366,12 +366,12 @@ jQuery(function(){
 		var id = jQuery(event.target).attr('id');
 		if(id=='saveBtn'){
 			var gridLayout = wof.util.ObjectManager.get(content.children('div[oid]').first().attr('oid'));
-			alert(gridLayout.toJSON());
-            console.log(gridLayout.toJSON());
+			//alert(gridLayout.toJSON());
+            //console.log(gridLayout.toJSON());
             //wof.bizWidget.spanner.VoucherComponentSpanner.prototype.exportData(gridLayout);
-
-
-
+            var grid = gridLayout.childNodes()[0];
+            var json = wof.bizWidget.spanner.GridComponentSpanner.prototype.exportData(grid);
+            console.log(JSON.stringify(json));
 
 		}
 	});
@@ -379,7 +379,7 @@ jQuery(function(){
 
 
 function xxx(){
-    var bizEntitiesData = getBizEntities();
+    //var bizEntitiesData = getBizEntities();
 
 }
 

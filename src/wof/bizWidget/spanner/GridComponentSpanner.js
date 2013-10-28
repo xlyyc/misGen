@@ -403,7 +403,8 @@ wof.bizWidget.spanner.GridComponentSpanner.prototype = {
     //静态方法 导出数据(只有需要给运行时解析的叶子节点才需要定义此方法)
     exportData: function(node){
         /*
-         <GridComponent Name="员工列表" ID="emGrid" BindEntityID="Employee" index="1" GridComponentState="" CallStr="gridcomponent:0_0_1" numberDisplay="true" headerHeight="30" rowHeight="20" useMutiplePage="true" rowsCount="5">
+         <GridComponent Name="员工列表" ID="emGrid" BindEntityID="Employee" index="1" GridComponentState="" CallStr="gridcomponent:0_0_1"
+         numberDisplay="true" headerHeight="30" rowHeight="20" useMutiplePage="true" rowsCount="5">
          <Columns>
          <Column Name="emId" Caption="工号" VisbleType="" RegExp="" ScaleLength="2" IntLength="6" Min="4" Max="6" Required="true" Length="6" Display="true" CanSearch="true" ColumnType="BindData" BindDataField="emId" columnWidth="100" ReadOnly="true" />
          <Column Name="name" Caption="姓名" VisbleType="text" ColumnType="string" BindDataField="name" columnWidth="200" />
@@ -420,9 +421,61 @@ wof.bizWidget.spanner.GridComponentSpanner.prototype = {
          <MutiplePageInfo RowsCount="10" />
          </GridComponent>
          */
+        var json = {};
         if(node.getClassName()=='wof.bizWidget.GridComponent'){
+            json.className = 'wof.bizWidget.GridComponent';
+            json.id = node.getId();
+            json.name = node.getName();
+            json.bindEntityID = node.getBindEntityID();
+            json.index = node.getIndex();
+            json.gridComponentState = node.getGridComponentState();
+            json.callStr = node.getCallStr();
+            json.numberDisplay = node.getNumberDisplay();
+            json.headerHeight = node.getHeaderHeight();
+            json.rowHeight = node.getRowHeight();
+            json.useMutiplePage = node.getUseMutiplePage();
+            json.rowsCount = node.getRowsCount();
 
+            var columns = [];
+            var childNodes = node.childNodes();
+            for(var i=0;i<childNodes.length;i++){
+                var column = {};
+                var childNode = childNodes[i];
+                column.name = childNode.getName();
+                column.caption = childNode.getCaption();
+                column.visbleType = childNode.getVisbleType();
+                column.regExp = childNode.getRegExp();
+                column.scaleLength = childNode.getScaleLength();
+                column.intLength = childNode.getIntLength();
+                column.min = childNode.getMin();
+                column.max = childNode.getMax();
+                column.required = childNode.getRequired();
+                column.length = childNode.getLength();
+                column.display = childNode.getDisplay();
+                column.canSearch = childNode.getCanSearch();
+                column.columnType = childNode.getColumnType();
+                column.bindDataField = childNode.getBindDataField();
+                column.columnWidth = childNode.getColumnWidth();
+                column.readOnly = childNode.getReadOnly();
+                column.caption = childNode.getCaption();
+                column.caption = childNode.getCaption();
+                column.useMultiSelect = childNode.getUseMultiSelect();
+                column.gridId = childNode.getGridId();
+                column.isPin = childNode.getIsPin();
+                column.dateTimeFormat = childNode.getDateTimeFormat();
+                column.editor = childNode.getEditor();
+                column.picUrl = childNode.getPicUrl();
+                column.selectPattern = childNode.getSelectPattern();
+                column.orderByType = childNode.getOrderByType();
+                column.canSearch = childNode.getCanSearch();
+                column.refSearchCondition = childNode.getRefSearchCondition();
+                column.checkErrorInfo = childNode.getCheckErrorInfo();
+                column.linkForm = childNode.getLinkForm();
+                columns.push(column);
+            }
+            json.columns = columns;
         }
+        return json;
     }
 
 };
