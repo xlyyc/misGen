@@ -33,7 +33,7 @@ wof.bizWidget.VoucherItemGroup.prototype = {
 
     _index: null,  //渲染位置
 
-    _isHead: null,   //是是否为head，即不在tab中展示，并且viewtype选择HEAD_TAB时的配置，其他类型忽略该属性
+    _isHead: null,   //是否为head，即不在tab中展示，并且viewtype选择HEAD_TAB时的配置，其他类型忽略该属性
 
     _label: null,
 

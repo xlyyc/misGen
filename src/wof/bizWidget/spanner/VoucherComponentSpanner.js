@@ -28,6 +28,7 @@ wof.bizWidget.spanner.VoucherComponentSpanner = function () {
             'colsNum':{prop:'colsNum','name':'列数','type':'naturalNumber','readOnly':false,'isHide':false,required:true},
             'itemHeight':{prop:'itemHeight','name':'行高','type':'naturalNumber','readOnly':false,'isHide':false,required:true},
             'isExpand':{prop:'isExpand','name':'是否展开','type':'yesOrNo','readOnly':false,'isHide':false,required:false},
+            'isHead':{prop:'isHead','name':'是否为Head','type':'yesOrNo','readOnly':false,'isHide':false,required:false},
             'mustInOrder':{prop:'mustInOrder','name':'保持顺序','type':'yesOrNo','readOnly':false,'isHide':false,required:false}
         },
         'VoucherItem':{

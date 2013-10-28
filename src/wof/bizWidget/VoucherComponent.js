@@ -179,19 +179,22 @@ wof.bizWidget.VoucherComponent.prototype = {
             if(this._voucherItemGroups.length==0){
                 if(this.getViewType()=='tab'){
                     var ic = this._tab.getItemsCount();
-                    console.log('ic=========='+ic);
                     for(var i=0;i<ic;i++){
                         var tempGroups = this._tab.getNodesByItemIndex(i+1);
                         if(tempGroups.length>0){
-                            console.log('tempGroups[0]====='+tempGroups[0].getIndex());
                             this._voucherItemGroups.push(tempGroups[0]);
                         }
                     }
                     var groups = this._findGroups();
-                    if(groups.length==1){
-                        var headGroup = groups[0];
-                        var idx = headGroup.getIndex()-1;
-                        this._voucherItemGroups.splice(idx,0,headGroup);
+                    for(var i=groups.length-1;i>=0;i--){
+                        var headGroup = groups[i];
+                        this._voucherItemGroups.push(headGroup);
+                    }
+                    this._voucherItemGroups.sort(function(a, b) {
+                        return a.getIndex() - b.getIndex();
+                    });
+                    for(var i=0;i<this._voucherItemGroups.length;i++){
+                        console.log('this._voucherItemGroups[i].getIndex()='+this._voucherItemGroups[i].getIndex());
                     }
                 }else{
                     var groups  = this._findGroups();
@@ -627,6 +630,10 @@ wof.bizWidget.VoucherComponent.prototype = {
                 if(voucherItemGroupData.mustInOrder!=null){
                     voucherItemGroup.setMustInOrder((voucherItemGroupData.mustInOrder=='true'||voucherItemGroupData.mustInOrder==true)?true:false);
                 }
+                if(voucherItemGroupData.isHead!=null){
+                    voucherItemGroup.setIsHead((voucherItemGroupData.isHead=='true'||voucherItemGroupData.isHead==true)?true:false);
+                }
+
                 /*this.setActiveVoucherItemGroupIndex(Number(voucherItemGroupData.index));
                  this.setActiveItemRank(null);*/
             }
@@ -758,7 +765,7 @@ wof.bizWidget.VoucherComponent.prototype = {
         return voucherItemGroup;
     },
 
-    //找到指定序号的sectoin
+    //找到指定序号的Group
     findVoucherItemGroupByIndex: function(voucherItemGroupIndex){
         var voucherItemGroup = null;
         var voucherItemGroups = this._voucherItemGroups;
@@ -847,8 +854,6 @@ wof.bizWidget.VoucherComponent.prototype = {
         var height = 0;
         var voucherItemGroups = this._voucherItemGroups;
         if(this.getViewType()=='tab'){
-            this._tab.setHiden(false);
-
             var headerGroups = [];
             var tabGroups = [];
             for(var i=0;i<voucherItemGroups.length;i++){
@@ -859,46 +864,66 @@ wof.bizWidget.VoucherComponent.prototype = {
                     tabGroups.push(voucherItemGroup);
                 }
             }
-            //获得最大分组高度
-            var maxGroupHeight = 150;
-            for(var i=0;i<tabGroups.length;i++){
-                var voucherItemGroup = tabGroups[i];
-                if(maxGroupHeight < voucherItemGroup.getHeight()){
-                    maxGroupHeight = voucherItemGroup.getHeight();
+
+            for(var i=0;i<headerGroups.length;i++){
+                var headerGroup = headerGroups[i];
+                if(i==0){
+                    headerGroup.setTop(0);
+                    headerGroup.setLeft(0);
+                    height += headerGroup.getHeight();
+                }else{
+                    var prevHeaderGroup = headerGroups[i-1];
+                    headerGroup.setTop(prevHeaderGroup.getTop()+prevHeaderGroup.getHeight());
+                    headerGroup.setLeft(0);
+                    height += headerGroup.getHeight();
                 }
+                headerGroup.getDomInstance().css('top', headerGroup.getTop()*this.getScale()+'px');
+                headerGroup.getDomInstance().css('left','0px');
             }
 
-            this._tab.setTop(height);
-            this._tab.setWidth(this.getWidth()-12);
-            this._tab.setHeight(maxGroupHeight);
-
-
-            for(var i=0;i<tabGroups.length;i++){
-                var voucherItemGroup = tabGroups[i];
-                this._tab.insertItem({title:voucherItemGroup.getGroupCaption()});
-            }
-            this._tab.render();
-
-            for(var i=0;i<tabGroups.length;i++){
-                var voucherItemGroup = tabGroups[i];
-                voucherItemGroup.setTop(0);
-                voucherItemGroup.getDomInstance().css('top','0px');
-                voucherItemGroup.setLeft(0);
-                voucherItemGroup.getDomInstance().css('left','0px');
-                voucherItemGroup.remove();
-                this._tab.insertNode(voucherItemGroup,(i+1));
-            }
-
-            //计算激活的tab item
-            var tabItemIndex = 1;
-            for(var i=0;i<tabGroups.length;i++){
-                var voucherItemGroup = tabGroups[i];
-                if(voucherItemGroup.getIndex()==this.getActiveVoucherItemGroupIndex()){
-                    tabItemIndex = i+1;
-                    break;
+            if(tabGroups.length>0){
+                //获得最大分组高度
+                var maxGroupHeight = 200;
+                for(var i=0;i<tabGroups.length;i++){
+                    var voucherItemGroup = tabGroups[i];
+                    if(maxGroupHeight < voucherItemGroup.getHeight()){
+                        maxGroupHeight = voucherItemGroup.getHeight();
+                    }
                 }
+                this._tab.setHiden(false);
+                this._tab.setTop(height);
+                this._tab.setWidth(this.getWidth()-12);
+                this._tab.setHeight(maxGroupHeight);
+
+                for(var i=0;i<tabGroups.length;i++){
+                    var voucherItemGroup = tabGroups[i];
+                    this._tab.insertItem({title:voucherItemGroup.getGroupCaption()});
+                }
+                this._tab.render();
+
+                for(var i=0;i<tabGroups.length;i++){
+                    var voucherItemGroup = tabGroups[i];
+                    voucherItemGroup.setTop(0);
+                    voucherItemGroup.getDomInstance().css('top','0px');
+                    voucherItemGroup.setLeft(0);
+                    voucherItemGroup.getDomInstance().css('left','0px');
+                    voucherItemGroup.remove();
+                    this._tab.insertNode(voucherItemGroup,(i+1));
+                }
+
+                //计算激活的tab item
+                var tabItemIndex = 1;
+                for(var i=0;i<tabGroups.length;i++){
+                    var voucherItemGroup = tabGroups[i];
+                    if(voucherItemGroup.getIndex()==this.getActiveVoucherItemGroupIndex()){
+                        tabItemIndex = i+1;
+                        break;
+                    }
+                }
+                this._tab.setActiveIndex(tabItemIndex);
+            }else{
+                this._tab.setHiden(true);
             }
-            this._tab.setActiveIndex(tabItemIndex);
 
             height += maxGroupHeight;
         }else{
@@ -910,7 +935,7 @@ wof.bizWidget.VoucherComponent.prototype = {
                     voucherItemGroup.setLeft(0);
                     height += voucherItemGroup.getHeight();
                 }else{
-                    var prevVoucherItemGroup = voucherItemGroup.prevNode();
+                    var prevVoucherItemGroup = voucherItemGroups[i-1];
                     voucherItemGroup.setTop(prevVoucherItemGroup.getTop()+prevVoucherItemGroup.getHeight());
                     voucherItemGroup.setLeft(0);
                     height += voucherItemGroup.getHeight();
