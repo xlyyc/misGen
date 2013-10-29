@@ -116,6 +116,7 @@ wof.bizWidget.spanner.GridComponentSpanner = function () {
 
     this._selectGridIco = jQuery('<img style="position:absolute;width:16px;height:16px;" src="src/img/selectGrid.png">');
     this._deleteGridIco = jQuery('<img style="position:absolute;width:16px;height:16px;" src="src/img/deleteGrid.png">');
+    this._cutGridtIco = jQuery('<img style="position:absolute;width:16px;height:16px;z-index:90;" src="src/img/cut.gif">');
     this._pinColumnIco = jQuery('<img style="position:absolute;width:16px;height:16px;" src="src/img/pin.png">');
     this._unPinColumnIco = jQuery('<img style="position:absolute;width:16px;height:16px;" src="src/img/unPin.png">');
     this._deleteGridColumnIco = jQuery('<img style="position:absolute;width:16px;height:16px;" src="src/img/deleteGridColumn.png">');
@@ -152,6 +153,8 @@ wof.bizWidget.spanner.GridComponentSpanner.prototype = {
     _selectGridIco : null,
 
     _deleteGridIco : null,
+
+    _cutGridtIco:null,
 
 
 /**
@@ -194,6 +197,7 @@ wof.bizWidget.spanner.GridComponentSpanner.prototype = {
         this._gridColumnMoveLeftIco.remove();
         this._selectGridIco.remove();
         this._deleteGridIco.remove();
+        this._cutGridtIco.remove();
 
         var _this = this;
         this._pinColumnIco.mousedown(function(event){
@@ -280,6 +284,10 @@ wof.bizWidget.spanner.GridComponentSpanner.prototype = {
             });
         });
 
+        this._cutGridtIco.mousedown(function(event){
+            event.stopPropagation();
+            wof.util.GlobalObject.add('cutObjectId',_this.getPropertys().id);
+        });
 
     },
 
@@ -298,6 +306,9 @@ wof.bizWidget.spanner.GridComponentSpanner.prototype = {
 
             this._deleteGridIco.css('top','0px').css('left',(this._deleteGridIco.width()+2)+'px');
             gridComponent.getDomInstance().append(this._deleteGridIco);
+
+            this._cutGridtIco.css('top',0).css('left',this._deleteGridIco.width()*2+4);
+            gridComponent.getDomInstance().append(this._cutGridtIco);
 
             var activeColumnIndex = this.getPropertys().activeColumnIndex;
             var column = gridComponent.findColumnByIndex(activeColumnIndex);

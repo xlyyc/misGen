@@ -87,6 +87,7 @@ wof.bizWidget.spanner.VoucherComponentSpanner = function () {
 
     this._selectVoucherComponentIco = jQuery('<img style="position:absolute;width:16px;height:16px;z-index:90;" src="src/img/selectVoucherComponent.png">');
     this._deleteVoucherComponentIco = jQuery('<img style="position:absolute;width:16px;height:16px;z-index:90;" src="src/img/deleteVoucherComponent.png">');
+    this._cutVoucherComponentIco = jQuery('<img style="position:absolute;width:16px;height:16px;z-index:90;" src="src/img/cut.gif">');
 
     this._deleteVoucherItemGroupIco = jQuery('<img style="position:absolute;width:16px;height:16px;z-index:90;" src="src/img/deleteVoucherItemGroup.png">');
     this._insertVoucherItemGroupIco = jQuery('<img style="position:absolute;width:16px;height:16px;z-index:90;" src="src/img/insertVoucherItemGroup.png">');
@@ -140,6 +141,8 @@ wof.bizWidget.spanner.VoucherComponentSpanner.prototype = {
 
     _deleteVoucherComponentIco:null,
 
+    _cutVoucherComponentIco:null,
+
 
     /**
      * get/set 属性方法定义
@@ -176,6 +179,7 @@ wof.bizWidget.spanner.VoucherComponentSpanner.prototype = {
     beforeRender: function () {
         this._selectVoucherComponentIco.remove();
         this._deleteVoucherComponentIco.remove();
+        this._cutVoucherComponentIco.remove();
         this._deleteVoucherItemGroupIco.remove();
         this._insertVoucherItemGroupIco.remove();
         this._upVoucherItemGroupIco.remove();
@@ -218,6 +222,11 @@ wof.bizWidget.spanner.VoucherComponentSpanner.prototype = {
                     }
                 }
             });
+        });
+
+        this._cutVoucherComponentIco.mousedown(function(event){
+            event.stopPropagation();
+            wof.util.GlobalObject.add('cutObjectId',_this.getPropertys().id);
         });
 
         this._deleteVoucherItemGroupIco.mousedown(function(event){
@@ -505,6 +514,8 @@ wof.bizWidget.spanner.VoucherComponentSpanner.prototype = {
             voucherComponent.getDomInstance().append(this._selectVoucherComponentIco);
             this._deleteVoucherComponentIco.css('top',0).css('left',this._deleteVoucherComponentIco.width()+2);
             voucherComponent.getDomInstance().append(this._deleteVoucherComponentIco);
+            this._cutVoucherComponentIco.css('top',0).css('left',this._deleteVoucherComponentIco.width()*2+4);
+            voucherComponent.getDomInstance().append(this._cutVoucherComponentIco);
         }
         this.setActiveData(activeData);
         this.sendMessage('wof.bizWidget.spanner.VoucherComponentSpanner_render');

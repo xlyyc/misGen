@@ -442,17 +442,15 @@ wof.bizWidget.spanner.FlowLayoutSpanner.prototype = {
                 var activeItemRank = this.getPropertys().activeItemRank;
                 var activeItem = activeSection.findItemByRank(activeItemRank);
                 if(activeItem!=null){
-                    //当前激活item加入减少列数句柄
                     if(activeSection.canReduceItemColspan(activeItem)){
                         this._splitItemArrow.css('top',2).css('left',0);
                         activeItem.getDomInstance().append(this._splitItemArrow);
                     }
-                    //当前激活item加入增加列数句柄
                     if(activeSection.canAddItemColspan(activeItem)){
                         this._mergeItemArrow.css('top',2).css('left',activeItem.getWidth()*activeItem.getScale()-this._mergeItemArrow.width()-2);
                         activeItem.getDomInstance().append(this._mergeItemArrow);
                     }
-                    if(true){           //todo 需要判断是否能够剪切
+                    if(activeItem.canPasteObject(wof.util.ObjectManager.get(wof.util.GlobalObject.get('cutObjectId')))){
                         this._pasteObjectIco.css('top',activeItem.getHeight()*activeItem.getScale()-this._pasteObjectIco.height()-2).css('left',activeItem.getWidth()*activeItem.getScale()-this._pasteObjectIco.width()*3-10);
                         activeItem.getDomInstance().append(this._pasteObjectIco);
                     }

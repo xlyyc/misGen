@@ -247,6 +247,23 @@ wof.bizWidget.FlowLayoutItem.prototype = {
         this.setRow(data.row);
         this.setCol(data.col);
         this.setColspan(data.colspan);
+    },
+
+    //是否能够粘贴指定的对象
+    canPasteObject: function(obj){
+        var f = true;
+        if(obj!=null){
+            var parentNode = this;
+            while((parentNode=parentNode.parentNode())!=null){
+                if(parentNode.getId()==obj.getId()){
+                    f = false;
+                    break;
+                }
+            }
+        }else{
+            f = false;
+        }
+        return f;
     }
 
 };

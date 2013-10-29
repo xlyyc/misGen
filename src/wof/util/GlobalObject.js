@@ -9,6 +9,7 @@
         },
 
         add: function(key, value) {
+            wof.util.GlobalObject._cache.remove(key);
             return wof.util.GlobalObject._cache.add(key, value);
         },
 
