@@ -67,6 +67,7 @@ wof.bizWidget.spanner.FlowLayoutSpanner = function () {
 
     this._selectFlowLayoutIco = jQuery('<img style="position:absolute;width:16px;height:16px;z-index:90;" src="src/img/selectFlowLayout.png">');
     this._deleteFlowLayoutIco = jQuery('<img style="position:absolute;width:16px;height:16px;z-index:90;" src="src/img/deleteFlowLayout.png">');
+    this._cutFlowLayoutIco = jQuery('<img style="position:absolute;width:16px;height:16px;z-index:90;" src="src/img/cut.gif">');
 
     this._deleteSectionIco = jQuery('<img style="position:absolute;width:16px;height:16px;z-index:90;" src="src/img/deleteSection.png">');
     this._insertSectionIco = jQuery('<img style="position:absolute;width:16px;height:16px;z-index:90;" src="src/img/insertSection.png">');
@@ -80,6 +81,7 @@ wof.bizWidget.spanner.FlowLayoutSpanner = function () {
     this._deleteItemIco = jQuery('<img style="position:absolute;width:16px;height:16px;z-index:90;" src="src/img/deleteItem.png">');
     this._lockItemIco = jQuery('<img style="position:absolute;width:16px;height:16px;z-index:90;" src="src/img/lock.png">');
     this._unlockItemIco = jQuery('<img style="position:absolute;width:16px;height:16px;z-index:90;" src="src/img/unlock.png">');
+    this._pasteObjectIco = jQuery('<img style="position:absolute;width:16px;height:16px;z-index:90;" src="src/img/paste.gif">');
 };
 wof.bizWidget.spanner.FlowLayoutSpanner.prototype = {
     /**
@@ -120,6 +122,10 @@ wof.bizWidget.spanner.FlowLayoutSpanner.prototype = {
 
     _deleteFlowLayoutIco:null,
 
+    _cutFlowLayoutIco:null,
+
+    _pasteObjectIco:null,
+
 
     /**
      * get/set 属性方法定义
@@ -156,6 +162,8 @@ wof.bizWidget.spanner.FlowLayoutSpanner.prototype = {
     beforeRender: function () {
         this._selectFlowLayoutIco.remove();
         this._deleteFlowLayoutIco.remove();
+        this._cutFlowLayoutIco.remove();
+        this._pasteObjectIco.remove();
         this._deleteSectionIco.remove();
         this._insertSectionIco.remove();
         this._upSectionIco.remove();
@@ -198,6 +206,11 @@ wof.bizWidget.spanner.FlowLayoutSpanner.prototype = {
                     }
                 }
             });
+        });
+
+        this._cutFlowLayoutIco.mousedown(function(event){
+            event.stopPropagation();
+            wof.util.GlobalObject.add('cutObjectId',_this.getPropertys().id);
         });
 
         this._deleteSectionIco.mousedown(function(event){
@@ -326,6 +339,55 @@ wof.bizWidget.spanner.FlowLayoutSpanner.prototype = {
             flowLayout.render();
             flowLayout.sendMessage('wof.bizWidget.FlowLayout_active');
         });
+        this._pasteObjectIco.mousedown(function(event){
+            event.stopPropagation();
+            var dialogDiv = jQuery('<div title="提示"><p><span class="ui-icon ui-icon-alert" style="float:left;margin:0 7px 20px 0;"></span>是否复制被粘贴对象?</p></div>');
+            dialogDiv.dialog({
+                resizable:false,
+                height:200,
+                modal: true,
+                buttons:{
+                    '复制':function(){
+                        var obj = wof.util.ObjectManager.get(wof.util.GlobalObject.get('cutObjectId'));
+                        if(obj!=null){
+                            wof.util.GlobalObject.remove('cutObjectId');
+                            var flowLayout = wof.util.ObjectManager.get(_this.getPropertys().id);
+                            var activeSectionIndex = _this.getPropertys().activeSectionIndex;
+                            var activeItemRank = _this.getPropertys().activeItemRank;
+                            var newObj = eval('new '+obj.getClassName()+'();');
+                            newObj.setData(obj.getData());
+                            flowLayout.insertNode(newObj, activeItemRank, activeSectionIndex);
+                            flowLayout.setActiveItemRank(null);
+                            flowLayout.render();
+                            flowLayout.sendMessage('wof.bizWidget.FlowLayout_active');
+                        }
+                        jQuery(this).dialog('close');
+                        jQuery(this).remove();
+                    },
+                    '移动':function(){
+                        var obj = wof.util.ObjectManager.get(wof.util.GlobalObject.get('cutObjectId'));
+                        if(obj!=null){
+                            wof.util.GlobalObject.remove('cutObjectId');
+                            obj.remove();
+                            var flowLayout = wof.util.ObjectManager.get(_this.getPropertys().id);
+                            var activeSectionIndex = _this.getPropertys().activeSectionIndex;
+                            var activeItemRank = _this.getPropertys().activeItemRank;
+                            flowLayout.insertNode(obj, activeItemRank, activeSectionIndex);
+                            flowLayout.setActiveItemRank(null);
+                            flowLayout.render();
+                            flowLayout.sendMessage('wof.bizWidget.FlowLayout_active');
+                        }
+                        jQuery(this).dialog('close');
+                        jQuery(this).remove();
+                    },
+                    '关闭':function(){
+                        jQuery(this).dialog('close');
+                        jQuery(this).remove();
+                    }
+                }
+            });
+        });
+
         this._deleteItemIco.mousedown(function(event){
             event.stopPropagation();
             var flowLayout = wof.util.ObjectManager.get(_this.getPropertys().id);
@@ -389,6 +451,10 @@ wof.bizWidget.spanner.FlowLayoutSpanner.prototype = {
                     if(activeSection.canAddItemColspan(activeItem)){
                         this._mergeItemArrow.css('top',2).css('left',activeItem.getWidth()*activeItem.getScale()-this._mergeItemArrow.width()-2);
                         activeItem.getDomInstance().append(this._mergeItemArrow);
+                    }
+                    if(true){           //todo 需要判断是否能够剪切
+                        this._pasteObjectIco.css('top',activeItem.getHeight()*activeItem.getScale()-this._pasteObjectIco.height()-2).css('left',activeItem.getWidth()*activeItem.getScale()-this._pasteObjectIco.width()*3-10);
+                        activeItem.getDomInstance().append(this._pasteObjectIco);
                     }
                     if(activeSection.canDeleteItem(activeItem)){
                         this._deleteItemIco.css('top',activeItem.getHeight()*activeItem.getScale()-this._deleteItemIco.height()-2).css('left',activeItem.getWidth()*activeItem.getScale()-this._deleteItemIco.width()*2-6);
@@ -454,11 +520,13 @@ wof.bizWidget.spanner.FlowLayoutSpanner.prototype = {
                 activeData.activeSectionIndex = flowLayout.getActiveSectionIndex();
                 activeData.activeItemRank = flowLayout.getActiveItemRank();
             }
-            //当前选中的flowLayout加入拖放 删除操作句柄
+            //当前选中的flowLayout加入拖放 删除 剪切操作句柄
             this._selectFlowLayoutIco.css('top',0).css('left',0);
             flowLayout.getDomInstance().append(this._selectFlowLayoutIco);
-            this._deleteFlowLayoutIco.css('top',0).css('left',this._deleteFlowLayoutIco.width()+2);
+            this._deleteFlowLayoutIco.css('top',0).css('left',this._selectFlowLayoutIco.width()+2);
             flowLayout.getDomInstance().append(this._deleteFlowLayoutIco);
+            this._cutFlowLayoutIco.css('top',0).css('left',this._deleteFlowLayoutIco.width()*2+4);
+            flowLayout.getDomInstance().append(this._cutFlowLayoutIco);
         }
         this.setActiveData(activeData);
         this.sendMessage('wof.bizWidget.spanner.FlowLayoutSpanner_render');
