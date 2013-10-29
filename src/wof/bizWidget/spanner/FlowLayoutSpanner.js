@@ -354,7 +354,7 @@ wof.bizWidget.spanner.FlowLayoutSpanner.prototype = {
                             var flowLayout = wof.util.ObjectManager.get(_this.getPropertys().id);
                             var activeSectionIndex = _this.getPropertys().activeSectionIndex;
                             var activeItemRank = _this.getPropertys().activeItemRank;
-                            var newObj = eval('new '+obj.getClassName()+'();');
+                            var newObj = obj.clone();
                             newObj.setData(obj.getData());
                             flowLayout.insertNode(newObj, activeItemRank, activeSectionIndex);
                             flowLayout.setActiveItemRank(null);
