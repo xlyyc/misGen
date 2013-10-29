@@ -365,14 +365,34 @@ jQuery(function(){
 		event.preventDefault();
 		var id = jQuery(event.target).attr('id');
 		if(id=='saveBtn'){
-			var gridLayout = wof.util.ObjectManager.get(content.children('div[oid]').first().attr('oid'));
-			//alert(gridLayout.toJSON());
-            //console.log(gridLayout.toJSON());
-            //wof.bizWidget.spanner.VoucherComponentSpanner.prototype.exportData(gridLayout);
-            var grid = gridLayout.childNodes()[0];
-            var json = wof.bizWidget.spanner.GridComponentSpanner.prototype.exportData(grid);
-            console.log(JSON.stringify(json));
+            var json = {};
+			var layout = wof.util.ObjectManager.get(content.children('div[oid]').first().attr('oid'));
 
+            //将叶子节点数据拉平导出
+            var _leafsData = [];
+            function _getLeafData(node){
+                var clz = node.getClassName();
+                var shortName = clz.substring(clz.lastIndexOf('.')+1);
+                var package =  clz.substring(0,clz.lastIndexOf(shortName)-1);
+                var spann = eval(package+'.spanner.'+shortName+'Spanner');
+                if(spann!=null){
+                    if(spann.prototype.exportData!=null){
+                        _leafsData.push(spann.prototype.exportData(node));
+                    }
+                }
+                var childNodes = node.childNodes();
+                if(childNodes.length>0){
+                    for(var i=0; i<childNodes.length; i++){
+                        _getLeafData(childNodes[i]);
+                    }
+                }
+            }
+            _getLeafData(layout);
+
+            json.components = _leafsData;
+            json.layout = layout.getData();
+
+            console.log(JSON.stringify(json));
 		}
 	});
 });

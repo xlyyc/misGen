@@ -533,9 +533,93 @@ wof.bizWidget.spanner.VoucherComponentSpanner.prototype = {
         this.setActiveData(data.activeData);
     },
 
-    //静态方法 导出数据
+    //静态方法 导出数据(只有需要给运行时解析的叶子节点才需要定义此方法)
     exportData: function(node){
-        console.log('node.getId()=='+node.getId()+'   '+node.getClassName());
+        /*
+         <VoucherComponent CallStr="VoucherComponent:1.0.0" BindEntityID="Employee" ID="emplyform" index="1" ViewType="nomal" width="1000">
+         <VoucherItemGroup MustInOrder="true" ColsNum="5" GroupCaption="员工基本信息" IsHead="false" index="0" ItemHeight="50">
+         <VoucherItem ItemName="emId" TipValue="EM201302001" ReadOnly="false" InputWidth="150" InputHeight="20" Visiable="false" ItemLabel="工号" LableWidth="100" DataField="emId" VisbleType="Text" />
+         <VoucherItem ItemName="name" InputWidth="150" Visible="true" Required="true" ItemLabel="姓名" LableWidth="100" DataField="name" VisbleType="Text" RowNum="0" />
+         <VoucherItem ItemName="sex" InputWidth="150" Visible="true" ItemLabel="性别" LableWidth="100" DataField="sex" VisbleType="Radio" RowNum="0" />
+         <VoucherItem ItemName="entryDate" InputWidth="150" Visible="true" ItemLabel="入职时间" LableWidth="100" TipValue="点击选择时间" DataField="entryDate" DateTimeBoxFormat="yyyy-MM-dd hh:mm" VisbleType="Date" RowNum="1" />
+         <VoucherItem ItemName="birthdate" InputWidth="150" Visible="true" ItemLabel="出生年月" LableWidth="100" TipValue="点击选择时间" DataField="birthdate" DateTimeBoxFormat="yyyy-MM" VisbleType="Date" RowNum="0" />
+         <VoucherItem ItemName="empty" Visible="true" ItemLabel="" LableWidth="" DataField="" VisbleType="" IsFixItem="false" RowNum="5" ColNum="2" Colspan="2" Rowspan="2" />
+         <VoucherItem ItemName="age" InputWidth="150" Visible="true" ItemLabel="年龄" LableWidth="100" DataField="age" VisbleType="Number" />
+         <VoucherItem ItemName="pic" InputWidth="150" Visible="true" Colspan="2" Rowspan="2" ItemLabel="照片" LableWidth="100" DataField="pic" VisbleType="File" IsFixItem="true" RowNum="1" ColNum="2" />
+         <VoucherItem ItemName="country" InputWidth="150" Visiable="true" ItemLabel="国籍" LableWidth="100" DataField="country" VisbleType="Select" RowNum="2" />
+         <VoucherItem ItemName="comments" InputWidth="300" Index="10" IsFixItem="false" RowNum="5" ColNum="1" InputHeight="80" Visible="true" ItemLabel="自我介绍" LableWidth="100" DataField="comments" VisbleType="TextArea" Min="10" Max="100" Colspan="3" Rowspan="2" />
+         <VoucherItem ItemName="eMail" InputWidth="100" Visible="true" ItemLabel="电子邮箱" LableWidth="150" DataField="eMail" Required="true" RegExp="/^((13[0-9]{1})|159|153)+\d{8}$/" CheckErrorInfo="请输入正确的邮箱格式" VisbleType="Text" RowNum="3" />
+         </VoucherItemGroup>
+         <ParamMaps>
+         <ParamMap MapType="value" CompParamName="" PageParamName="" ChangeExpt="" />
+         </ParamMaps>
+         </VoucherComponent>
+         */
+        var json = {};
+        if(node.getClassName()=='wof.bizWidget.VoucherComponent'){
+            json.className = node.getClassName();
+            json.itemHeight = node.getItemHeight();
+            json.callStr = node.getCallStr();
+            json.initActionName = node.getInitActionName();
+            json.state = node.getState();
+            json.caption = node.getCaption();
+            json.bindEntityID = node.getBindEntityID();
+            json.id = node.getId();
+            json.index = node.getIndex();
+            json.viewType = node.getViewType();
+            json.width = node.getWidth();
+
+            var voucherItemGroups = [];
+            var childNodes = node.childNodes();
+            for(var i=0;i<childNodes.length;i++){
+                if(childNodes[i].getClassName()=='wof.bizWidget.VoucherItemGroup'){
+                    var group = childNodes[i];
+                    var voucherItemGroup = {};
+                    voucherItemGroup.mustInOrder = group.getMustInOrder();
+                    voucherItemGroup.itemHeight = group.getItemHeight();
+                    voucherItemGroup.groupCaption = group.getGroupCaption();
+                    voucherItemGroup.colsNum = group.getColsNum();
+                    voucherItemGroup.index = group.getIndex();
+                    voucherItemGroup.isHead = group.getIsHead();
+                    var cns = group.childNodes();
+                    for(var t=0;t<cns.length;t++){
+                        if(cns[t]=='wof.bizWidget.VoucherItem'){
+                            var item = cns[t];
+                            var voucherItem = {};
+                            voucherItem.colNum = item.getColNum();
+                            voucherItem.rowNum = item.getRowNum();
+                            voucherItem.isFixItem = item.getIsFixItem();
+                            voucherItem.rowspan = item.getRowspan();
+                            voucherItem.itemName = item.getItemName();
+                            voucherItem.index = item.getIndex();
+                            voucherItem.visiable = item.getVisiable();
+                            voucherItem.itemLabel = item.getItemLabel();
+                            voucherItem.dataField = item.getDataField();
+                            voucherItem.dateTimeBoxFormat = item.getDateTimeBoxFormat();
+                            voucherItem.readOnly = item.getReadOnly();
+                            voucherItem.required = item.getRequired();
+                            voucherItem.length = item.getLength();
+                            voucherItem.min = item.getMin();
+                            voucherItem.max = item.getMax();
+                            voucherItem.regExp = item.getRegExp();
+                            voucherItem.checkErrorInfo = item.getCheckErrorInfo();
+                            voucherItem.selectPattern = item.getSelectPattern();
+                            voucherItem.useMultiSelect = item.getUseMultiSelect();
+                            voucherItem.visbleType = item.getVisbleType();
+                            voucherItem.labelWidth = item.getLabelWidth();
+                            voucherItem.inputWidth = item.getInputWidth();
+                            voucherItem.linkageItem = item.getLinkageItem();
+                            voucherItem.colspan = item.getColspan();
+                            voucherItem.tipValue = item.getTipValue();
+                            voucherItemGroup.push(voucherItem);
+                        }
+                    }
+                    voucherItemGroups.push(voucherItemGroup);
+                }
+            }
+            json.voucherItemGroups = voucherItemGroups;
+        }
+        return json;
     }
 
 };
