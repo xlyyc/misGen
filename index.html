@@ -408,7 +408,6 @@ jQuery(function(){
                     '确定':function(){
                         var name = jQuery('#dialog_form_name').val();
                         if(name!=null&&name.length>0){
-                            //window.localStorage.removeItem('compositeComponentsData');
 
                             var compositeComponentsData = window.localStorage.getItem('compositeComponentsData');
                             if(compositeComponentsData==null){
@@ -429,6 +428,8 @@ jQuery(function(){
                 }
             });
             jQuery('#dialog-form').dialog('open');
+        }else{
+            window.localStorage.removeItem('compositeComponentsData');
         }
 	});
 });

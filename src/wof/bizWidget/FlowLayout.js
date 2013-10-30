@@ -150,7 +150,22 @@ wof.bizWidget.FlowLayout.prototype = {
             console.log(message.id+'   '+this.getClassName());
             var obj = wof.util.ObjectManager.get(message.data.widgetId);
             var item = wof.util.ObjectManager.get(message.sender.id);
-            var node = eval('(new '+obj.getValue()+'()).createSelf('+item.getWidth()+','+item.getHeight()+');');
+            var node = null;
+            if(obj.getType()=='composite'){
+                var json = {};
+                var compositeComponentsData = JSON.parse(window.localStorage.getItem('compositeComponentsData'));
+                for(var i=0;i<compositeComponentsData.length;i++){
+                    var compositeComponentData = compositeComponentsData[i];
+                    if(compositeComponentData.name==obj.getValue()){
+                        json = compositeComponentData.data;
+                        break;
+                    }
+                }
+                node = eval('(new '+json.className+'())');
+                node.setData(json);
+            }else{
+                node = eval('(new '+obj.getValue()+'()).createSelf('+item.getWidth()+','+item.getHeight()+');');
+            }
             this.insertNode(node);
             this.render();
             this.sendMessage('wof.bizWidget.FlowLayout_active');
