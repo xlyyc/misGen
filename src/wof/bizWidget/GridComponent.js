@@ -89,7 +89,7 @@ wof.bizWidget.GridComponent.prototype = {
 
     getRowsCount: function(){
         if(this._rowsCount==null){
-            this._rowsCount = 100;
+            this._rowsCount = 30;
         }
         return this._rowsCount;
     },

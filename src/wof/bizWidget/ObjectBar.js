@@ -1,11 +1,6 @@
 ﻿wof.bizWidget.ObjectBar = function(){
     this._version = '1.0';
 
-    var _this = this;
-	this.getDomInstance().click(function(event){
-		event.stopPropagation();
-        _this.sendMessage('wof.bizWidget.ObjectBar_click');
-	});
 };
 wof.bizWidget.ObjectBar.prototype={
 
@@ -16,6 +11,8 @@ wof.bizWidget.ObjectBar.prototype={
     _layoutComponents: null,
 
     _widgetComponents: null,
+
+    _compositeComponents: null,
 
     getWidgetComponents: function(){
         if(this._widgetComponents==null){
@@ -49,6 +46,18 @@ wof.bizWidget.ObjectBar.prototype={
     setLayoutComponents: function(layoutComponents){
         this._layoutComponents = layoutComponents;
     },
+
+    getCompositeComponents: function(){
+        if(this._compositeComponents==null){
+            this._compositeComponents = [];
+        }
+        return this._compositeComponents;
+    },
+
+    setCompositeComponents: function(compositeComponents){
+        this._compositeComponents = compositeComponents;
+    },
+
 
 
 	//选择实现
@@ -176,6 +185,44 @@ wof.bizWidget.ObjectBar.prototype={
                 }
             }
 
+            var compositeComponents = this.getCompositeComponents();
+            if(compositeComponents.length>0){
+                var toolbarItem3 = new wof.widget.ToolbarItem();
+                toolbarItem3.setIsInside(true);
+                toolbarItem3.setTitle('复合构件');
+                toolbarItem3.setName('composite');
+                toolbarItem3.appendTo(toolbar);
+                for(var i=0;i<compositeComponents.length;i++){
+                    var compositeComponent = compositeComponents[i];
+                    var label = new wof.widget.Label();
+                    label.setIsInside(true);
+                    label.setIco('src/img/dropdown.png');
+                    label.setWidth(130);
+                    label.setHeight(25);
+                    label.setType('composite')
+                    label.setValue(compositeComponent.name);
+                    label.setText(compositeComponent.title);
+                    label.appendTo(toolbarItem3);
+                    label.getDomInstance().draggable({
+                        cursor:"move",
+                        opacity: 0.7,
+                        cursorAt:{
+                            top:0,
+                            left:0
+                        },
+                        scroll: false,
+                        helper: 'clone',
+                        start:function(event,ui){
+                            event.stopPropagation();
+                            label.getDomInstance().css('zIndex',60000);
+                        },
+                        stop:function(event,ui){
+                            event.stopPropagation();
+                            label.getDomInstance().css('zIndex','auto');
+                        }
+                    });
+                }
+            }
 
             this._initFlag=true;
         }
@@ -193,7 +240,8 @@ wof.bizWidget.ObjectBar.prototype={
 		return {
             layoutComponents: this.getLayoutComponents(),
             bizWidgetComponents: this.getLayoutComponents(),
-            widgetComponents: this.getWidgetComponents()
+            widgetComponents: this.getWidgetComponents(),
+            compositeComponents: this.getCompositeComponents()
 		};
 	},
 	//必须实现
@@ -201,6 +249,7 @@ wof.bizWidget.ObjectBar.prototype={
         this.setLayoutComponents(data.layoutComponents);
         this.setLayoutComponents(data.bizWidgetComponents);
         this.setWidgetComponents(data.widgetComponents);
+        this.setCompositeComponents(data.compositeComponents);
 	}
 	
 };

@@ -27,6 +27,8 @@ wof.widget.Label.prototype = {
 
     _value: null,
 
+    _type: null,
+
     _ico: null,
 
     _initFlag: null,
@@ -41,12 +43,22 @@ wof.widget.Label.prototype = {
     setIco : function (ico){
         this._ico = ico;
     },
+
+
     getValue : function (){
         return this._value || '';
     },
 
     setValue : function (value){
         this._value = value;
+    },
+
+    getType : function (){
+        return this._type || '';
+    },
+
+    setType : function (type){
+        this._type = type;
     },
 
 	 getText: function(){
@@ -144,6 +156,7 @@ wof.widget.Label.prototype = {
             this._label.removeClass('ui-state-hover');
         }
         this._label.attr('value',this.getValue());
+        this._label.attr('type',this.getType());
 		if(this.getIsUnderline()==true){
             var hr = jQuery('<hr style="position:absolute;top:24px;width:100%;border-top:1px solid black;">');
             this.getDomInstance().append(hr);
@@ -167,7 +180,8 @@ wof.widget.Label.prototype = {
 			text: this.getText(),
             isUnderline: this.getIsUnderline(),
             isBold: this.getIsBold(),
-            isHighlight: this.getIsHighlight()
+            isHighlight: this.getIsHighlight(),
+            type: this.getType()
         };
     },
     //----------必须实现----------
@@ -178,6 +192,7 @@ wof.widget.Label.prototype = {
         this.setIsUnderline(data.isUnderline);
         this.setIsBold(data.isBold);
         this.setIsHighlight(data.isHighlight);
+        this.setType(data.type);
     }
 
 };

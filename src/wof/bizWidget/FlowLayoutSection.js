@@ -644,7 +644,7 @@ wof.bizWidget.FlowLayoutSection.prototype = {
             }
         }
         //补全每行空缺的item
-        rows = calcRows();    //todo 需要思考items参数是否正确
+        rows = calcRows();
         for(var r=1; r<=rows; r++){
             var top = (r-1) * itemHeight + label.getHeight();
             for(var c=1; c<=this.getCols(); c++){
