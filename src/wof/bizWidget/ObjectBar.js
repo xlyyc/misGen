@@ -199,9 +199,9 @@ wof.bizWidget.ObjectBar.prototype={
                     label.setIco('src/img/dropdown.png');
                     label.setWidth(130);
                     label.setHeight(25);
-                    label.setType('composite')
+                    label.setType('composite');
                     label.setValue(compositeComponent.name);
-                    label.setText(compositeComponent.title);
+                    label.setText(compositeComponent.name);
                     label.appendTo(toolbarItem3);
                     label.getDomInstance().draggable({
                         cursor:"move",

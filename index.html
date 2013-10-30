@@ -197,7 +197,10 @@ jQuery(function(){
                             widgetComponents.push(tabSpanner);
                             components.push(tabSpanner);
 
+                            var compositeComponentsData = JSON.parse(window.localStorage.getItem('compositeComponentsData'));
+
                             var objectBar = new ObjectBar();
+                            objectBar.setCompositeComponents(compositeComponentsData);
                             objectBar.setLayoutComponents(layoutComponents);
                             objectBar.setBizWidgetComponents(bizWidgetComponents);
                             objectBar.setWidgetComponents(widgetComponents);
@@ -363,7 +366,7 @@ jQuery(function(){
 		resizeSidebar2();
         resizeContent();
 	});
-	jQuery("#saveBtn,#cancelBtn").button().click(function(event){
+	jQuery("#saveBtn,#saveToCompositeComponentBtn,#cancelBtn").button().click(function(event){
 		event.preventDefault();
 		var id = jQuery(event.target).attr('id');
 		if(id=='saveBtn'){
@@ -395,7 +398,38 @@ jQuery(function(){
             json.layout = layout.getData();
 
             console.log(JSON.stringify(json));
-		}
+		}else if(id=='saveToCompositeComponentBtn'){
+            jQuery('#dialog-form').dialog({
+                autoOpen: false,
+                height:200,
+                width: 300,
+                modal: true,
+                buttons:{
+                    '确定':function(){
+                        var name = jQuery('#dialog_form_name').val();
+                        if(name!=null&&name.length>0){
+                            //window.localStorage.removeItem('compositeComponentsData');
+
+                            var compositeComponentsData = window.localStorage.getItem('compositeComponentsData');
+                            if(compositeComponentsData==null){
+                                compositeComponentsData = [];
+                            }else{
+                                compositeComponentsData = JSON.parse(window.localStorage.getItem('compositeComponentsData'));
+                            }
+                            var layout = wof.util.ObjectManager.get(content.children('div[oid]').first().attr('oid'));
+                            compositeComponentsData.push({'name':name, 'data':layout.getData()});
+                            window.localStorage.setItem('compositeComponentsData', JSON.stringify(compositeComponentsData));
+                        }
+
+                        jQuery(this).dialog('close');
+                    },
+                    '关闭':function(){
+                        jQuery(this).dialog('close');
+                    }
+                }
+            });
+            jQuery('#dialog-form').dialog('open');
+        }
 	});
 });
 
@@ -415,7 +449,7 @@ function save(){
 <body onload="xxx();">
 <div id="container" style="position:absolute;">
 	<div id="header" style="position:absolute;background-color:#fff;border-bottom:1px solid black;z-index:90000">
-    	<input type="button" id="saveBtn" value="保存" /><input type="button" id="cancelBtn" value="取消" />
+    	<input type="button" id="saveBtn" value="保存" /><input type="button" id="saveToCompositeComponentBtn" value="保存为复合构件" /><input type="button" id="cancelBtn" value="取消" />
     </div>
 	<div id="sidebar1" style="position:absolute;z-index:90000;">
     	
@@ -427,6 +461,11 @@ function save(){
     	
     </div>
     <div id="footer" style="position:absolute;z-index:90000;background:#FFC;"></div>
+</div>
+
+<div id="dialog-form" title="保存为复合构件">
+    <p class="validateTips">复合构件名称</p>
+    <p><input type="text" id="dialog_form_name" class="text" /></p>
 </div>
 </body>
 </html>
