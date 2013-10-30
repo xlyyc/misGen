@@ -430,7 +430,7 @@ jQuery(function(){
                 width: 300,
                 modal: true,
                 buttons:{
-                    '确定':function(){
+                    '保存':function(){
                         var name = jQuery('#dialog_form_name').val();
                         if(name!=null&&name.length>0){
 
@@ -441,7 +441,17 @@ jQuery(function(){
                                 compositeComponentsData = JSON.parse(window.localStorage.getItem('compositeComponentsData'));
                             }
                             var layout = wof.util.ObjectManager.get(content.children('div[oid]').first().attr('oid'));
-                            compositeComponentsData.push({'name':name, 'data':layout.getData()});
+
+                            var obj = wof.util.ObjectManager.get(wof.util.GlobalObject.get('cutObjectId'));
+                            if(obj!=null){
+                                if(window.confirm('是否只保存剪切板中的内容？')){
+                                    compositeComponentsData.push({'name':name, 'data':obj.getData()});
+                                }else{
+                                    compositeComponentsData.push({'name':name, 'data':layout.getData()});
+                                }
+                            }else{
+                                compositeComponentsData.push({'name':name, 'data':layout.getData()});
+                            }
                             window.localStorage.setItem('compositeComponentsData', JSON.stringify(compositeComponentsData));
                         }
 
