@@ -339,6 +339,24 @@ jQuery(function(){
                             var sectionData1 = {title:'默认分组1',width:width,titleHeight:30,cols:1,itemHeight:500};
                             flowLayout.insertSection(sectionData1);
 
+
+                           /* var nodes = [
+                             {"name":"网站导航", open:true, children: [
+                             { "name":"google", "url":"http://g.cn", "target":"_blank"},
+                             { "name":"baidu", "url":"http://baidu.com", "target":"_blank"},
+                             { "name":"sina", "url":"http://www.sina.com.cn", "target":"_blank"}
+                             ]
+                             }
+                             ];*/
+
+                            var tree = new Tree();
+                            tree.setTop(100);
+                            tree.setLeft(0);
+                            tree.setWidth(400);
+                            tree.setHeight(400);
+                            tree.setNodes(getBizEntitys());
+                            tree.appendTo(gridLayout);
+
                             gridLayout.render();
 
                         }
@@ -398,6 +416,13 @@ jQuery(function(){
             json.layout = layout.getData();
 
             console.log(JSON.stringify(json));
+
+            try{
+                setPageMetas(json);
+            }catch(e){
+                alert(e);
+            }
+
 		}else if(id=='saveToCompositeComponentBtn'){
             jQuery('#dialog-form').dialog({
                 autoOpen: false,
@@ -436,15 +461,196 @@ jQuery(function(){
 
 
 function xxx(){
-    //var bizEntitiesData = getBizEntities();
-        window.localStorage.setItem('','');
+    //var pageMetas = setPageMetas();  //获得page设置元数据数据
+
+    //alert(JSON.stringify(pageMetas));
 }
 
-//保存
-function save(){
-    setBizEntities(bizEntities);
-}
+function getBizEntitys(){
+    var nodes = [
+        {"name":"业务元数据", open:true, children: [
+            {"name":"主实体"},
+            {"name":"对等实体"}
+        ]
+        }
+    ];
 
+    var json ={
+        "MainEntity":{
+            "学生基本信息":{
+                "cached": false,
+                "className": "",
+                "display": "学生基本信息",
+                "entityVersion": "",
+                "id": "学生基本信息",
+                "isSystemEntity": true,
+                "label": "学生基本信息",
+                "tableAlias": "",
+                "tableName": "学生基本信息",
+                "useridPropertyName": "",
+                "usernamePropertyName": "",
+                "properties": [{
+                    "columnName": "编号",
+                    "content": "",
+                    "defaultValue": "",
+                    "description": "",
+                    "disabled": false,
+                    "display": "编号",
+                    "displayWidth": "",
+                    "enumValue": "",
+                    "errorMessage": "",
+                    "isSystemAttribute": false,
+                    "label": "编号",
+                    "length": "",
+                    "max": 0,
+                    "maxLength": 0,
+                    "min": 0,
+                    "minLength": 0,
+                    "name": "编号",
+                    "notNull": false,
+                    "prompt": "",
+                    "refEntity": "专业年级",
+                    "refEntityDisplay": "",
+                    "refEntityProperty": "id",
+                    "refName": "",
+                    "scale": "0",
+                    "sql": "",
+                    "tip": "",
+                    "type": "",
+                    "uniqueName": ""
+                }, {
+                    "columnName": "姓名",
+                    "content": "",
+                    "defaultValue": "",
+                    "description": "",
+                    "disabled": false,
+                    "display": "姓名",
+                    "displayWidth": "",
+                    "enumValue": "",
+                    "errorMessage": "",
+                    "isSystemAttribute": false,
+                    "label": "姓名",
+                    "length": "",
+                    "max": 0,
+                    "maxLength": 0,
+                    "min": 0,
+                    "minLength": 0,
+                    "name": "姓名",
+                    "notNull": false,
+                    "prompt": "",
+                    "refEntity": "",
+                    "refEntityDisplay": "",
+                    "refEntityProperty": "",
+                    "refName": "",
+                    "scale": "0",
+                    "sql": "",
+                    "tip": "",
+                    "type": "",
+                    "uniqueName": ""
+                }],
+                "Relationship":[
+                    {
+                        "content": "",
+                        "deleteRule": "cascade",
+                        "label": "对等",
+                        "name": "对等",
+                        "physical": true,
+                        "sourceProperty": "id",
+                        "targetId": "专业年级",
+                        "targetProperty": "id",
+                        "toMany": false
+                    }, {
+                        "content": "",
+                        "deleteRule": "none",
+                        "label": "子实体",
+                        "name": "子实体",
+                        "physical": true,
+                        "sourceProperty": "",
+                        "targetId": "",
+                        "targetProperty": "",
+                        "toMany": true
+                    }]
+            }
+        }
+        ,
+        "Entities": [
+            {"专业年级":{
+                "cached": false,
+                "className": "",
+                "display": "专业年级",
+                "entityVersion": "",
+                "id": "专业年级",
+                "isSystemEntity": true,
+                "label": "专业年级",
+                "tableAlias": "",
+                "tableName": "专业年级",
+                "useridPropertyName": "",
+                "usernamePropertyName": "",
+                "property": [{
+                    "columnName": "id",
+                    "content": "",
+                    "defaultValue": "",
+                    "description": "",
+                    "disabled": false,
+                    "display": "id",
+                    "displayWidth": "",
+                    "enumValue": "",
+                    "errorMessage": "",
+                    "isSystemAttribute": false,
+                    "label": "id",
+                    "length": "",
+                    "max": 0,
+                    "maxLength": 0,
+                    "min": 0,
+                    "minLength": 0,
+                    "name": "id",
+                    "notNull": false,
+                    "prompt": "",
+                    "refEntity": "",
+                    "refEntityDisplay": "",
+                    "refEntityProperty": "",
+                    "refName": "",
+                    "scale": "0",
+                    "sql": "",
+                    "tip": "",
+                    "type": "",
+                    "uniqueName": ""
+                }, {
+                    "columnName": "名称",
+                    "content": "",
+                    "defaultValue": "",
+                    "description": "",
+                    "disabled": false,
+                    "display": "名称",
+                    "displayWidth": "",
+                    "enumValue": "",
+                    "errorMessage": "",
+                    "isSystemAttribute": false,
+                    "label": "名称",
+                    "length": "",
+                    "max": 0,
+                    "maxLength": 0,
+                    "min": 0,
+                    "minLength": 0,
+                    "name": "名称",
+                    "notNull": false,
+                    "prompt": "",
+                    "refEntity": "",
+                    "refEntityDisplay": "",
+                    "refEntityProperty": "",
+                    "refName": "",
+                    "scale": "0",
+                    "sql": "",
+                    "tip": "",
+                    "type": "",
+                    "uniqueName": ""
+                }]
+            }
+            }
+        ]
+    };
+    return json;
+}
 </script>
 </head>
 <body onload="xxx();">

@@ -1,24 +1,23 @@
 wof.widget.Tree = function () {
     this._version = '1.0';
 
-    var _this = this;
-    this.getDomInstance().click(function (event) {
-        event.stopPropagation();
 
-    });
 };
 
 wof.widget.Tree.prototype = {
 
     _initFlag: null,
 
-    url: null,
+    _url: null,
+
+    _ztree: null,
 
     setUrl: function (url) {
-        this.url = url;
+        this._url = url;
     },
+
     getUrl: function () {
-        return this.url;
+        return this._url;
     },
 
     /**
@@ -44,15 +43,15 @@ wof.widget.Tree.prototype = {
      {name: "父节点3",open : true}
      ];
      */
-    nodes: null,
+    _nodes: null,
 
     setNodes: function (nodes) {
-        this.nodes = nodes;
-    },
-    getNodes: function () {
-        return this.nodes;
+        this._nodes = nodes;
     },
 
+    getNodes: function () {
+        return this._nodes;
+    },
 
     onClick: jQuery.noop,
 
@@ -60,9 +59,21 @@ wof.widget.Tree.prototype = {
 
     //选择实现
     beforeRender: function () {
-        if (!this._initFlag) {
-            jQuery.fn.zTree.init(this.getDomInstance().addClass('ztree'),
-                {treeId: this.getId(), callback: {onClick: this.onClick}}, this.nodes);
+        if (this._initFlag==null) {
+            this._ztree = jQuery.fn.zTree.init(this.getDomInstance().addClass('ztree'),
+                {treeId: this.getId(), callback: {onClick: this.onClick}});
+
+            /*var nodes = [
+                {"name":"网站导航", open:true, children: [
+                    { "name":"google", "url":"http://g.cn", "target":"_blank"},
+                    { "name":"baidu", "url":"http://baidu.com", "target":"_blank"},
+                    { "name":"sina", "url":"http://www.sina.com.cn", "target":"_blank"}
+                ]
+                }
+            ];*/
+
+            this._ztree.addNodes(null, this.getNodes());
+
             this._initFlag = true;
         }
     },
