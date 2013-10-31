@@ -61,7 +61,18 @@ wof.widget.Tree.prototype = {
     beforeRender: function () {
         if (this._initFlag==null) {
             this._ztree = jQuery.fn.zTree.init(this.getDomInstance().addClass('ztree'),
-                {treeId: this.getId(), callback: {onClick: this.onClick}});
+                {
+                    treeId: this.getId(),
+                    callback: {
+                        onClick: this.onClick
+                    },
+                    check: {
+                        enable: true,
+                        chkStyle: "radio",
+                        radioType: "level"
+                    }
+                }
+            );
 
             /*var nodes = [
                 {"name":"网站导航", open:true, children: [

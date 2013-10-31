@@ -477,15 +477,18 @@ function xxx(){
 }
 
 function getBizEntitys(){
-    var nodes = [
-        {"name":"业务元数据", open:true, children: [
-            {"name":"主实体"},
-            {"name":"对等实体"}
+    var json = [
+        {"name":"业务元数据", open:true, nocheck:true, children: [
+            {"name":"主实体", open:true, nocheck:true, children:
+            [{"name":"学生基本信息", nocheck:true, children:
+            [{"name":"编号"},{"name":"专业年级"}]}]
+            },
+            {"name":"对等实体", nocheck:true, }
         ]
         }
     ];
 
-    var json ={
+    /*var json ={
         "MainEntity":{
             "学生基本信息":{
                 "cached": false,
@@ -658,7 +661,7 @@ function getBizEntitys(){
             }
             }
         ]
-    };
+    };*/
     return json;
 }
 </script>
