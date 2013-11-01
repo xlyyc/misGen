@@ -480,20 +480,7 @@ function xxx(){
 }
 
 function getBizEntitys(){
-    var json = [
-        {"nodeId":"1", "name":"业务元数据", open:true, nocheck:true, children: [
-            {"nodeId":"2", "name":"主实体", open:true, nocheck:true, children:
-            [{"nodeId":"3", "name":"学生基本信息", nocheck:true, children:
-            [{"nodeId":"4", "name":"编号"},{"nodeId":"5", "name":"专业年级"}]}]
-            },
-            {"nodeId":"6", "name":"对等实体", nocheck:true, children:
-                    [{"nodeId":"7", "name":"学生基本信息", nocheck:true, children:
-                            [{"nodeId":"8", "name":"编号"},{"nodeId":"9", "name":"专业年级"}]}]}
-        ]
-        }
-    ];
-
-    /*var json ={
+    var bizEntity = {
         "MainEntity":{
             "学生基本信息":{
                 "cached": false,
@@ -666,7 +653,133 @@ function getBizEntitys(){
             }
             }
         ]
-    };*/
+    };
+
+    var mainEntity = null;
+    for(var m in bizEntity.MainEntity){
+        mainEntity = bizEntity.MainEntity[m];
+        break;
+    }
+    var entity = {
+        "nodeId":mainEntity.id,
+        "name":mainEntity.display,
+        "nocheck":true
+    };
+    var children = [];
+
+    var properties = mainEntity.properties;
+    for(var i=0; i<properties.length; i++){
+        var prop = properties[i];
+        var column = {};
+        column.nodeId = prop.name;
+        column.name = prop.label;
+        children.push(column);
+    }
+
+    //todo 计算列
+    var computedColumn = {"nodeId":"4", "name":"计算列", "nocheck":true, "children":
+            [
+                {"nodeId":"5", "name":"编号"},
+                {"nodeId":"6", "name":"专业年级"}
+            ]
+    };
+    children.push(computedColumn);
+
+    var peerEntity = {"nodeId":"7", "name":"对等实体", nocheck:true, "children": [] };
+    var childEntity = {"nodeId":"9", "name":"子实体", "nocheck":true, "children": [] };
+
+    function findRelationshipEntity(entityId){
+        var rse = null;
+        for(var i=0; i<bizEntity.Entities.length; i++){
+            var entity = bizEntity.Entities[i];
+            if(entity[entityId]!=null){
+                rse = entity[entityId];
+                break;
+            }
+        }
+        return rse;
+    }
+    var rs = mainEntity.Relationship;
+    for(var i=0; i<rs.length; i++){
+        var r = rs[i];
+        var e = findRelationshipEntity(r.targetId);
+        if(e!=null){
+            if(r.toMany==false){
+                var ent = {
+                    "nodeId":e.id,
+                    "name":e.display,
+                    "nocheck":true
+                };
+                ent.children = [];
+                var properties = e.property;
+                for(var i=0; i<properties.length; i++){
+                    var prop = properties[i];
+                    var column = {};
+                    column.nodeId = prop.name;
+                    column.name = prop.label;
+                    ent.children.push(column);
+                }
+                peerEntity.children.push(ent);
+            }else{
+                var ent = {
+                    "nodeId":e.id,
+                    "name":e.display,
+                    "nocheck":true
+                };
+                ent.children = [];
+                var properties = e.property;
+                for(var i=0; i<properties.length; i++){
+                    var prop = properties[i];
+                    var column = {};
+                    column.nodeId = prop.name;
+                    column.name = prop.label;
+                    ent.children.push(column);
+                }
+                childEntity.children.push(ent);
+            }
+        }
+    }
+
+    children.push(peerEntity);
+    children.push(childEntity);
+
+    entity.children = children;
+    return [entity];
+
+    /*    var json = [
+            {"nodeId":"2", "name":"学生基本信息", nocheck:true, children:
+                    [
+                        {"nodeId":"3", "name":"编号"},
+                        {"nodeId":"4", "name":"专业年级"},
+                        {"nodeId":"13", "name":"计算列", nocheck:true, children:
+                                [
+                                    {"nodeId":"15", "name":"编号"},
+                                    {"nodeId":"16", "name":"专业年级"}
+                                ]
+                        },
+                        {"nodeId":"5", "name":"对等实体", nocheck:true, children:
+                                [
+                                    {"nodeId":"6", "name":"学生基本信息", nocheck:true, children:
+                                        [
+                                            {"nodeId":"7", "name":"编号"},
+                                            {"nodeId":"8", "name":"专业年级"}
+                                        ]
+                                    }
+                                ]
+                        },
+                        {"nodeId":"9", "name":"子实体", nocheck:true, children:
+                                [
+                                    {"nodeId":"10", "name":"学生基本信息", nocheck:true, children:
+                                        [
+                                            {"nodeId":"11", "name":"编号"},
+                                            {"nodeId":"12", "name":"专业年级"}
+                                        ]
+                                    }
+                                ]
+                        }
+                    ]
+            }
+        ];*/
     return json;
 }
 </script>
