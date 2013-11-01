@@ -69,6 +69,7 @@
 <script src="src/wof/bizWidget/GridComponentColumn.js"></script>
 <script src="src/wof/bizWidget/VoucherGridComponent.js"></script>
 <script src="src/wof/bizWidget/SearchComponent.js"></script>
+<script src="src/wof/bizWidget/BizEntityTree.js"></script>
 <script src="src/wof/bizWidget/spanner/GridLayoutSpanner.js"></script>
 <script src="src/wof/bizWidget/spanner/FlowLayoutSpanner.js"></script>
 <script src="src/wof/bizWidget/spanner/VoucherComponentSpanner.js"></script>
@@ -339,15 +340,6 @@ jQuery(function(){
                             var sectionData1 = {title:'默认分组1',width:width,titleHeight:30,cols:1,itemHeight:500};
                             flowLayout.insertSection(sectionData1);
 
-
-                           /* var nodes = [
-                             {"name":"网站导航", open:true, children: [
-                             { "name":"google", "url":"http://g.cn", "target":"_blank"},
-                             { "name":"baidu", "url":"http://baidu.com", "target":"_blank"},
-                             { "name":"sina", "url":"http://www.sina.com.cn", "target":"_blank"}
-                             ]
-                             }
-                             ];*/
 
                             var tree = new Tree();
                             tree.setTop(100);
@@ -650,6 +642,104 @@ function getBizEntitys(){
                     "type": "",
                     "uniqueName": ""
                 }]
+                ,
+                "Relationship":[
+                    {
+                        "content": "",
+                        "deleteRule": "cascade",
+                        "label": "对等",
+                        "name": "对等",
+                        "physical": true,
+                        "sourceProperty": "id",
+                        "targetId": "",
+                        "targetProperty": "id",
+                        "toMany": false
+                    }, {
+                        "content": "",
+                        "deleteRule": "none",
+                        "label": "子实体",
+                        "name": "子实体",
+                        "physical": true,
+                        "sourceProperty": "",
+                        "targetId": "班级",
+                        "targetProperty": "",
+                        "toMany": true
+                    }]
+            }
+            },
+            {"班级":{
+                "cached": false,
+                "className": "",
+                "display": "班级",
+                "entityVersion": "",
+                "id": "班级",
+                "isSystemEntity": true,
+                "label": "班级",
+                "tableAlias": "",
+                "tableName": "班级",
+                "useridPropertyName": "",
+                "usernamePropertyName": "",
+                "property": [{
+                    "columnName": "id",
+                    "content": "",
+                    "defaultValue": "",
+                    "description": "",
+                    "disabled": false,
+                    "display": "id",
+                    "displayWidth": "",
+                    "enumValue": "",
+                    "errorMessage": "",
+                    "isSystemAttribute": false,
+                    "label": "id",
+                    "length": "",
+                    "max": 0,
+                    "maxLength": 0,
+                    "min": 0,
+                    "minLength": 0,
+                    "name": "id",
+                    "notNull": false,
+                    "prompt": "",
+                    "refEntity": "",
+                    "refEntityDisplay": "",
+                    "refEntityProperty": "",
+                    "refName": "",
+                    "scale": "0",
+                    "sql": "",
+                    "tip": "",
+                    "type": "",
+                    "uniqueName": ""
+                }, {
+                    "columnName": "班级名称",
+                    "content": "",
+                    "defaultValue": "",
+                    "description": "",
+                    "disabled": false,
+                    "display": "班级名称",
+                    "displayWidth": "",
+                    "enumValue": "",
+                    "errorMessage": "",
+                    "isSystemAttribute": false,
+                    "label": "班级名称",
+                    "length": "",
+                    "max": 0,
+                    "maxLength": 0,
+                    "min": 0,
+                    "minLength": 0,
+                    "name": "班级名称",
+                    "notNull": false,
+                    "prompt": "",
+                    "refEntity": "",
+                    "refEntityDisplay": "",
+                    "refEntityProperty": "",
+                    "refName": "",
+                    "scale": "0",
+                    "sql": "",
+                    "tip": "",
+                    "type": "",
+                    "uniqueName": ""
+                }]
+                ,
+                "Relationship":[]
             }
             }
         ]
@@ -685,9 +775,6 @@ function getBizEntitys(){
     };
     children.push(computedColumn);
 
-    var peerEntity = {"nodeId":"7", "name":"对等实体", nocheck:true, "children": [] };
-    var childEntity = {"nodeId":"9", "name":"子实体", "nocheck":true, "children": [] };
-
     function findRelationshipEntity(entityId){
         var rse = null;
         for(var i=0; i<bizEntity.Entities.length; i++){
@@ -699,50 +786,64 @@ function getBizEntitys(){
         }
         return rse;
     }
-    var rs = mainEntity.Relationship;
-    for(var i=0; i<rs.length; i++){
-        var r = rs[i];
-        var e = findRelationshipEntity(r.targetId);
-        if(e!=null){
-            if(r.toMany==false){
-                var ent = {
-                    "nodeId":e.id,
-                    "name":e.display,
-                    "nocheck":true
-                };
-                ent.children = [];
-                var properties = e.property;
-                for(var i=0; i<properties.length; i++){
-                    var prop = properties[i];
-                    var column = {};
-                    column.nodeId = prop.name;
-                    column.name = prop.label;
-                    ent.children.push(column);
+
+    function relationshipEntity(relationship){
+        var peerEntity = {"nodeId":"7", "name":"对等实体", nocheck:true, "children":[] };
+        var childEntity = {"nodeId":"9", "name":"子实体", "nocheck":true, "children":[] };
+        for(var i=0; i<relationship.length; i++){
+            var r = relationship[i];
+            var e = findRelationshipEntity(r.targetId);
+            if(e!=null){
+                if(r.toMany==false){
+                    var ent = {
+                        "nodeId":e.id,
+                        "name":e.display,
+                        "nocheck":true
+                    };
+                    ent.children = [];
+                    var properties = e.property;
+                    for(var i=0; i<properties.length; i++){
+                        var prop = properties[i];
+                        var column = {};
+                        column.nodeId = prop.name;
+                        column.name = prop.label;
+                        ent.children.push(column);
+                    }
+                    peerEntity.children.push(ent);
+                    var relationshipEntitys = relationshipEntity(e.Relationship);
+                    for(var i=0;i<relationshipEntitys.length;i++){
+                        peerEntity.children.push(relationshipEntitys[i]);
+                    }
+                }else{
+                    var ent = {
+                        "nodeId":e.id,
+                        "name":e.display,
+                        "nocheck":true
+                    };
+                    ent.children = [];
+                    var properties = e.property;
+                    for(var i=0; i<properties.length; i++){
+                        var prop = properties[i];
+                        var column = {};
+                        column.nodeId = prop.name;
+                        column.name = prop.label;
+                        ent.children.push(column);
+                    }
+                    childEntity.children.push(ent);
+                    var relationshipEntitys = relationshipEntity(e.Relationship);
+                    for(var i=0;i<relationshipEntitys.length;i++){
+                        childEntity.children.push(relationshipEntitys[i]);
+                    }
                 }
-                peerEntity.children.push(ent);
-            }else{
-                var ent = {
-                    "nodeId":e.id,
-                    "name":e.display,
-                    "nocheck":true
-                };
-                ent.children = [];
-                var properties = e.property;
-                for(var i=0; i<properties.length; i++){
-                    var prop = properties[i];
-                    var column = {};
-                    column.nodeId = prop.name;
-                    column.name = prop.label;
-                    ent.children.push(column);
-                }
-                childEntity.children.push(ent);
             }
         }
+        return [peerEntity,childEntity];
     }
 
-    children.push(peerEntity);
-    children.push(childEntity);
-
+    var relationshipEntitys = relationshipEntity(mainEntity.Relationship);
+    for(var i=0;i<relationshipEntitys.length;i++){
+        children.push(relationshipEntitys[i]);
+    }
     entity.children = children;
     return [entity];
 
