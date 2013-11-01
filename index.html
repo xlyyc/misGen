@@ -351,9 +351,12 @@ jQuery(function(){
 
                             var tree = new Tree();
                             tree.setTop(100);
+                            tree.setChkStyle('radio');
+                            tree.setRadioType('all');
                             tree.setLeft(0);
                             tree.setWidth(400);
                             tree.setHeight(400);
+                            tree.setNodeId('8');
                             tree.setNodes(getBizEntitys());
                             tree.appendTo(gridLayout);
 
@@ -478,12 +481,14 @@ function xxx(){
 
 function getBizEntitys(){
     var json = [
-        {"name":"业务元数据", open:true, nocheck:true, children: [
-            {"name":"主实体", open:true, nocheck:true, children:
-            [{"name":"学生基本信息", nocheck:true, children:
-            [{"name":"编号"},{"name":"专业年级"}]}]
+        {"nodeId":"1", "name":"业务元数据", open:true, nocheck:true, children: [
+            {"nodeId":"2", "name":"主实体", open:true, nocheck:true, children:
+            [{"nodeId":"3", "name":"学生基本信息", nocheck:true, children:
+            [{"nodeId":"4", "name":"编号"},{"nodeId":"5", "name":"专业年级"}]}]
             },
-            {"name":"对等实体", nocheck:true, }
+            {"nodeId":"6", "name":"对等实体", nocheck:true, children:
+                    [{"nodeId":"7", "name":"学生基本信息", nocheck:true, children:
+                            [{"nodeId":"8", "name":"编号"},{"nodeId":"9", "name":"专业年级"}]}]}
         ]
         }
     ];
@@ -683,8 +688,8 @@ function getBizEntitys(){
     <div id="footer" style="position:absolute;z-index:90000;background:#FFC;"></div>
 </div>
 
-<div id="dialog-form" title="保存为复合构件">
-    <p class="validateTips">复合构件名称</p>
+<div id="dialog-form" title="保存为构件组合">
+    <p class="validateTips">构件组合名称</p>
     <p><input type="text" id="dialog_form_name" class="text" /></p>
 </div>
 </body>

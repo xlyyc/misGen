@@ -189,7 +189,7 @@ wof.bizWidget.ObjectBar.prototype={
             if(compositeComponents.length>0){
                 var toolbarItem3 = new wof.widget.ToolbarItem();
                 toolbarItem3.setIsInside(true);
-                toolbarItem3.setTitle('复合构件');
+                toolbarItem3.setTitle('构件组合');
                 toolbarItem3.setName('composite');
                 toolbarItem3.appendTo(toolbar);
                 for(var i=0;i<compositeComponents.length;i++){

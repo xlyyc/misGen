@@ -12,6 +12,42 @@ wof.widget.Tree.prototype = {
 
     _ztree: null,
 
+    _radioType: null,  //radio 的分组范围  level 在每一级节点范围内当做一个分组  all 在整棵树范围内当做一个分组
+
+    _chkStyle: null,    // 勾选框类型 checkbox    radio
+
+    _nodeId: null,
+
+    setNodeId: function(nodeId){
+        this._nodeId = nodeId;
+    },
+
+    getNodeId: function(){
+        return this._nodeId;
+    },
+
+    setChkStyle: function(chkStyle){
+        this._chkStyle = chkStyle;
+    },
+
+    getChkStyle: function(){
+        if(this._chkStyle==null){
+            this._chkStyle = 'checkbox';
+        }
+        return this._chkStyle;
+    },
+
+    setRadioType: function (radioType ) {
+        this._radioType  = radioType;
+    },
+
+    getRadioType: function () {
+        if(this._radioType==null){
+            this._radioType = 'all';
+        }
+        return this._radioType;
+    },
+
     setUrl: function (url) {
         this._url = url;
     },
@@ -53,36 +89,33 @@ wof.widget.Tree.prototype = {
         return this._nodes;
     },
 
-    onClick: jQuery.noop,
-
     onExpand: jQuery.noop,
 
     //选择实现
     beforeRender: function () {
-        if (this._initFlag==null) {
+        var _this = this;
+        if(this._initFlag==null){
             this._ztree = jQuery.fn.zTree.init(this.getDomInstance().addClass('ztree'),
                 {
                     treeId: this.getId(),
                     callback: {
-                        onClick: this.onClick
+                        onClick: function(event, treeId, treeNode){
+                            event.stopPropagation();
+                            var nodes = _this._ztree.getSelectedNodes();
+                            for(var i=0, l=nodes.length; i<l; i++){
+                                nodes[i].treeNodeId = true;
+                                _this._ztree.checkNode(nodes[i], true, true);
+                                break;
+                            }
+                        }
                     },
                     check: {
                         enable: true,
-                        chkStyle: "radio",
-                        radioType: "level"
+                        chkStyle: this.getChkStyle(),
+                        radioType: this.getRadioType()
                     }
                 }
             );
-
-            /*var nodes = [
-                {"name":"网站导航", open:true, children: [
-                    { "name":"google", "url":"http://g.cn", "target":"_blank"},
-                    { "name":"baidu", "url":"http://baidu.com", "target":"_blank"},
-                    { "name":"sina", "url":"http://www.sina.com.cn", "target":"_blank"}
-                ]
-                }
-            ];*/
-
             this._ztree.addNodes(null, this.getNodes());
 
             this._initFlag = true;
@@ -96,7 +129,10 @@ wof.widget.Tree.prototype = {
 
     //选择实现
     afterRender: function () {
-
+        var node = this._ztree.getNodeByParam('nodeId', this.getNodeId());
+        if(node!=null){
+            this._ztree.checkNode(node, true, true);
+        }
     },
 
     /**
@@ -108,14 +144,22 @@ wof.widget.Tree.prototype = {
         return {
             url: this.getUrl(),
             param: this.getParam(),
-            nodes: this.getNodes()
+            nodes: this.getNodes(),
+            radioType: this.getRadioType(),
+            chkStyle: this.getChkStyle(),
+            nodeId: this.getNodeId()
         };
     },
+
     //----------必须实现----------
     setData: function (data) {
         this.setUrl(data.url);
         this.setParam(data.param);
         this.setNodes(data.nodes);
+        this.setRadioType(data.radioType);
+        this.setChkStyle(data.chkStyle);
+        this.setNodeId(data.nodeId);
     }
+
 
 };
