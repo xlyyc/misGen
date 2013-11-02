@@ -38,6 +38,8 @@
 
 <script src="src/wof/widget/Mediator.js"></script>
 
+<script src="src/wof/customWindow/MetaTreeSelector.js"></script>
+
 <script src="src/wof/widget/Tab.js"></script>
 <script src="src/wof/widget/TabItem.js"></script>
 <script src="src/wof/widget/Toolbar.js"></script>
@@ -341,16 +343,7 @@ jQuery(function(){
                             flowLayout.insertSection(sectionData1);
 
 
-                            var tree = new Tree();
-                            tree.setTop(100);
-                            tree.setChkStyle('radio');
-                            tree.setRadioType('all');
-                            tree.setLeft(0);
-                            tree.setWidth(400);
-                            tree.setHeight(400);
-                            tree.setNodeId('8');
-                            tree.setNodes(getBizEntitys());
-                            tree.appendTo(gridLayout);
+
 
                             gridLayout.render();
 

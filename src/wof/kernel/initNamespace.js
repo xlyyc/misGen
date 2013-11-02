@@ -15,3 +15,4 @@ wof_register('wof.widget.spanner');
 wof_register('wof.bizWidget');
 wof_register('wof.bizWidget.spanner');
 wof_register('wof.util');
+wof_register('wof.customWindow');

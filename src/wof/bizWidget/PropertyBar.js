@@ -176,6 +176,21 @@ wof.bizWidget.PropertyBar.prototype={
                 var td = jQuery('<td style="width:55%;">');
                 td.append(sel);
                 tr.append(td);
+            }else if(meta.type=='custom'){ //定制类型
+                tr = jQuery('<tr style="height:30px;border:1px inset #a1a1a1;">');
+                tr.append(jQuery('<td style="width:45%;"><span style="width:100px;" title="'+meta.prop+'">'+meta.name+'</span></td>'));
+                var td = jQuery('<td style="width:55%;">');
+                var hidden = jQuery('<input type="hidden" style="width:100px;" name="'+meta.prop+'" value="'+value+'"/>');
+                td.append(hidden);
+                var button = jQuery('<input type="button" value=" 设置 ">');
+                td.append(button);
+                var _this = this;
+                button.mousedown(function(event){
+                    event.stopPropagation();
+                    console.log(meta.customMethod+'.run(hidden);');
+                    eval(meta.customMethod+'.run(hidden);');
+                });
+                tr.append(td);
             }
         }
 		return tr;
