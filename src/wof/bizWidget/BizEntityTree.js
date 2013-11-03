@@ -1,7 +1,8 @@
 wof.bizWidget.BizEntityTree = function () {
     this._version = '1.0';
 
-    this.getDomInstance().css('overflow','auto').css('backgroundColor','white').css('zIndex','200');
+    this.getDomInstance().css('overflow','auto').css('backgroundColor','white');
+    this.setZIndex('200');
 
 };
 
@@ -31,6 +32,11 @@ wof.bizWidget.BizEntityTree.prototype = {
     beforeRender: function () {
         var _this = this;
         if(this._initFlag==null){
+            this.getDomInstance().mousedown(function(event){
+                event.stopPropagation();
+
+            });
+
             this._tree = new wof.widget.Tree();
             this._tree.setTop(0);
             this._tree.setChkStyle('radio');
