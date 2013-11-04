@@ -30,11 +30,17 @@
                 modal: true,
                 buttons:{
                     '确定':function(){
-
-
-
-                        wof.customWindow.MetaTreeSelector._tree.remove();
-                        jQuery(this).dialog('close');
+                        var nodes = wof.customWindow.MetaTreeSelector._tree.getCheckedNodes();
+                        if(nodes.length>0){
+                            var node = nodes[0];
+                            console.log('hidden.val()1111=='+hidden.val());
+                            hidden.val(node.name);
+                            console.log('hidden.val()2222=='+hidden.val());
+                            wof.customWindow.MetaTreeSelector._tree.remove();
+                            jQuery(this).dialog('close');
+                        }else{
+                            alert('请选择一个属性');
+                        }
                     },
                     '关闭':function(){
                         wof.customWindow.MetaTreeSelector._tree.remove();

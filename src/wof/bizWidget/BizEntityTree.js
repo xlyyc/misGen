@@ -1,7 +1,7 @@
 wof.bizWidget.BizEntityTree = function () {
     this._version = '1.0';
 
-    this.getDomInstance().css('overflow','auto');//.css('backgroundColor','white');
+    this.getDomInstance().css('overflow','auto');
     this.setZIndex('200');
 
 };
@@ -75,7 +75,18 @@ wof.bizWidget.BizEntityTree.prototype = {
     //----------必须实现----------
     setData: function (data) {
         this.setValue(data.value);
+    },
+
+    getSelectedNodes: function(){
+        var nodes = this._tree.getSelectedNodes();
+        return nodes;
+    },
+
+    getCheckedNodes: function(){
+        var nodes = this._tree.getCheckedNodes();
+        return nodes;
     }
+
 
 
 };

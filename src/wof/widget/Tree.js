@@ -163,7 +163,18 @@ wof.widget.Tree.prototype = {
         this.setRadioType(data.radioType);
         this.setChkStyle(data.chkStyle);
         this.setNodeId(data.nodeId);
+    },
+
+    getSelectedNodes: function(){
+        var nodes = this._ztree.getSelectedNodes();
+        return nodes;
+    },
+
+    getCheckedNodes: function(){
+        var nodes = this._ztree.getCheckedNodes(true);
+        return nodes;
     }
+
 
 
 };
