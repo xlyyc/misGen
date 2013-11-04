@@ -133,6 +133,10 @@ wof.widget.Tree.prototype = {
         if(node!=null){
             this._ztree.checkNode(node, true, true);
         }
+        var nodes = this._ztree.getNodes();
+        if(nodes.length>0){
+            this._ztree.expandNode(nodes[0], true, true, true);
+        }
     },
 
     /**

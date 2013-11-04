@@ -342,9 +342,6 @@ jQuery(function(){
                             var sectionData1 = {title:'默认分组1',width:width,titleHeight:30,cols:1,itemHeight:500};
                             flowLayout.insertSection(sectionData1);
 
-
-
-
                             gridLayout.render();
 
                         }
@@ -378,6 +375,9 @@ jQuery(function(){
 		if(id=='saveBtn'){
             var json = {};
 			var layout = wof.util.ObjectManager.get(content.children('div[oid]').first().attr('oid'));
+
+            console.log(layout.toJSON());
+            return;
 
             //将叶子节点数据拉平导出
             var _leafsData = [];
@@ -838,6 +838,7 @@ function getBizEntitys(){
         children.push(relationshipEntitys[i]);
     }
     entity.children = children;
+    console.log(JSON.stringify([entity]));
     return [entity];
 
     /*    var json = [
@@ -874,14 +875,14 @@ function getBizEntitys(){
                     ]
             }
         ];*/
-    return json;
+
 }
 </script>
 </head>
 <body onload="xxx();">
 <div id="container" style="position:absolute;">
 	<div id="header" style="position:absolute;background-color:#fff;border-bottom:1px solid black;z-index:90000">
-    	<input type="button" id="saveBtn" value="保存" /><input type="button" id="saveToCompositeComponentBtn" value="保存为复合构件" /><input type="button" id="cancelBtn" value="取消" />
+    	<input type="button" id="saveBtn" value="保存" /><input type="button" id="saveToCompositeComponentBtn" value="保存为构件组合" /><input type="button" id="cancelBtn" value="取消" />
     </div>
 	<div id="sidebar1" style="position:absolute;z-index:90000;">
     	

@@ -1,7 +1,7 @@
 wof.bizWidget.BizEntityTree = function () {
     this._version = '1.0';
 
-    this.getDomInstance().css('overflow','auto').css('backgroundColor','white');
+    this.getDomInstance().css('overflow','auto');//.css('backgroundColor','white');
     this.setZIndex('200');
 
 };
