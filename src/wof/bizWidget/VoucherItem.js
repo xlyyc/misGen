@@ -416,7 +416,7 @@ wof.bizWidget.VoucherItem.prototype = {
     render: function () {
         this.getDomInstance().children().remove();
         if(this.getItemLabel()!=''&&this.getVisbleType()!=''){
-            var label = jQuery('<label style="width:'+this.getLabelWidth()+'px;">'+(this.getItemLabel()==''?'&nbsp;':this.getItemLabel())+'</label>');
+            var label = jQuery('<label style="width:'+this.getLabelWidth()+'px;">'+(this.getItemLabel()==''?'&nbsp;':this.getItemLabel())+(this.getDataField()==''?'':'('+this.getDataField()+')')+'</label>');
             this.getDomInstance().append(label);
             var hr = jQuery('<hr style="width:96%;border-top:1px solid black;">');
             this.getDomInstance().append(hr);

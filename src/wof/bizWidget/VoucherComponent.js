@@ -193,9 +193,6 @@ wof.bizWidget.VoucherComponent.prototype = {
                     this._voucherItemGroups.sort(function(a, b) {
                         return a.getIndex() - b.getIndex();
                     });
-                    for(var i=0;i<this._voucherItemGroups.length;i++){
-                        console.log('this._voucherItemGroups[i].getIndex()='+this._voucherItemGroups[i].getIndex());
-                    }
                 }else{
                     var groups  = this._findGroups();
                     for(var i=0;i<groups.length;i++){
@@ -323,11 +320,8 @@ wof.bizWidget.VoucherComponent.prototype = {
         },
         'wof.bizWidget.VoucherItemGroup_drop':function(message){
             console.log(message.id+'   '+this.getClassName());
-            console.log('message.data.VoucherItemGroupId='+message.data.voucherItemGroupId);
             var insertVoucherItemGroup = wof.util.ObjectManager.get(message.data.voucherItemGroupId);
             var voucherItemGroup = wof.util.ObjectManager.get(message.sender.id);
-            console.log('insertVoucherItemGroup'+insertVoucherItemGroup);
-            console.log('voucherItemGroup'+voucherItemGroup);
             insertVoucherItemGroup.remove();
             insertVoucherItemGroup.beforeTo(voucherItemGroup);
             var insertVoucherItemGroupIndex = voucherItemGroup.getIndex();

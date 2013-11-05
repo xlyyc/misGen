@@ -17,6 +17,7 @@ wof.bizWidget.BizEntityTree.prototype = {
     /**
      * get/set 属性方法定义
      */
+
     getValue: function(){
         if(this._value==null){
             this._value = '';
@@ -58,7 +59,7 @@ wof.bizWidget.BizEntityTree.prototype = {
 
     //选择实现
     afterRender: function () {
-        //this._tree.setNodeId('8');
+
     },
 
     /**
@@ -75,6 +76,10 @@ wof.bizWidget.BizEntityTree.prototype = {
     //----------必须实现----------
     setData: function (data) {
         this.setValue(data.value);
+    },
+
+    checkNodeByParam: function(key, value){
+        this._tree.checkNodeByParam(key,value);
     },
 
     getSelectedNodes: function(){

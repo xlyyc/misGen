@@ -16,15 +16,6 @@ wof.widget.Tree.prototype = {
 
     _chkStyle: null,    // 勾选框类型 checkbox    radio
 
-    _nodeId: null,
-
-    setNodeId: function(nodeId){
-        this._nodeId = nodeId;
-    },
-
-    getNodeId: function(){
-        return this._nodeId;
-    },
 
     setChkStyle: function(chkStyle){
         this._chkStyle = chkStyle;
@@ -103,8 +94,7 @@ wof.widget.Tree.prototype = {
                             event.stopPropagation();
                             var nodes = _this._ztree.getSelectedNodes();
                             for(var i=0, l=nodes.length; i<l; i++){
-                                nodes[i].treeNodeId = true;
-                                _this._ztree.checkNode(nodes[i], true, true);
+                                _this._ztree.checkNode(nodes[i], true, false);
                                 break;
                             }
                         }
@@ -117,6 +107,10 @@ wof.widget.Tree.prototype = {
                 }
             );
             this._ztree.addNodes(null, this.getNodes());
+            var nodes = this._ztree.getNodes();
+            if(nodes.length>0){
+                this._ztree.expandNode(nodes[0], true, true, true);
+            }
 
             this._initFlag = true;
         }
@@ -129,14 +123,7 @@ wof.widget.Tree.prototype = {
 
     //选择实现
     afterRender: function () {
-        var node = this._ztree.getNodeByParam('nodeId', this.getNodeId());
-        if(node!=null){
-            this._ztree.checkNode(node, true, true);
-        }
-        var nodes = this._ztree.getNodes();
-        if(nodes.length>0){
-            this._ztree.expandNode(nodes[0], true, true, true);
-        }
+
     },
 
     /**
@@ -150,8 +137,7 @@ wof.widget.Tree.prototype = {
             param: this.getParam(),
             nodes: this.getNodes(),
             radioType: this.getRadioType(),
-            chkStyle: this.getChkStyle(),
-            nodeId: this.getNodeId()
+            chkStyle: this.getChkStyle()
         };
     },
 
@@ -162,7 +148,14 @@ wof.widget.Tree.prototype = {
         this.setNodes(data.nodes);
         this.setRadioType(data.radioType);
         this.setChkStyle(data.chkStyle);
-        this.setNodeId(data.nodeId);
+    },
+
+    checkNodeByParam: function(key, value){
+        var node = this._ztree.getNodeByParam(key, value);
+        if(node!=null){
+            this._ztree.checkNode(node, true, false);
+            this._ztree.selectNode(node, false);
+        }
     },
 
     getSelectedNodes: function(){
