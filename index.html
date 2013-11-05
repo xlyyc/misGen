@@ -803,6 +803,7 @@ function getBizEntitys(){
                         ent.children.push(column);
                     }
                     peerEntity.nodeId = r.name;
+                    peerEntity.name +='('+ r.name+')';
                     peerEntity.children.push(ent);
                     var relationshipEntitys = relationshipEntity(e.Relationship);
                     for(var i=0;i<relationshipEntitys.length;i++){
@@ -824,6 +825,7 @@ function getBizEntitys(){
                         ent.children.push(column);
                     }
                     childEntity.nodeId = r.name;
+                    childEntity.name +='('+ r.name+')';
                     childEntity.children.push(ent);
                     var relationshipEntitys = relationshipEntity(e.Relationship);
                     for(var i=0;i<relationshipEntitys.length;i++){

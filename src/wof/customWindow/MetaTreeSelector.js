@@ -16,7 +16,7 @@
                 tree.setHeight(450);
                 tree.setValue(hidden.val());
 
-                wof.customWindow.MetaTreeSelector._dialogDiv = jQuery('<div id="dialog-form" title="绑定实体属性"></div>');
+                wof.customWindow.MetaTreeSelector._dialogDiv = jQuery('<div title="绑定实体属性"></div>');
                 wof.customWindow.MetaTreeSelector._dialogDiv.append(tree.getDomInstance());
                 wof.util.ObjectManager.add(tree.getId(), tree);
                 tree.render();
