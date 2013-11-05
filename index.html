@@ -543,7 +543,7 @@ function getBizEntitys(){
                         "content": "",
                         "deleteRule": "cascade",
                         "label": "对等",
-                        "name": "对等",
+                        "name": "对等1",
                         "physical": true,
                         "sourceProperty": "id",
                         "targetId": "专业年级",
@@ -553,7 +553,7 @@ function getBizEntitys(){
                         "content": "",
                         "deleteRule": "none",
                         "label": "子实体",
-                        "name": "子实体",
+                        "name": "子实体1",
                         "physical": true,
                         "sourceProperty": "",
                         "targetId": "",
@@ -641,7 +641,7 @@ function getBizEntitys(){
                         "content": "",
                         "deleteRule": "cascade",
                         "label": "对等",
-                        "name": "对等",
+                        "name": "对等3",
                         "physical": true,
                         "sourceProperty": "id",
                         "targetId": "",
@@ -651,7 +651,7 @@ function getBizEntitys(){
                         "content": "",
                         "deleteRule": "none",
                         "label": "子实体",
-                        "name": "子实体",
+                        "name": "子实体3",
                         "physical": true,
                         "sourceProperty": "",
                         "targetId": "班级",
@@ -781,8 +781,8 @@ function getBizEntitys(){
     }
 
     function relationshipEntity(relationship){
-        var peerEntity = {"nodeId":"7", "name":"对等实体", nocheck:true, "children":[] };
-        var childEntity = {"nodeId":"9", "name":"子实体", "nocheck":true, "children":[] };
+        var peerEntity = {"nodeId": "", "name": "对等实体", nocheck:true, "children":[] };
+        var childEntity = {"nodeId": "", "name":"子实体", "nocheck":true, "children":[] };
         for(var i=0; i<relationship.length; i++){
             var r = relationship[i];
             var e = findRelationshipEntity(r.targetId);
@@ -802,6 +802,7 @@ function getBizEntitys(){
                         column.name = prop.label;
                         ent.children.push(column);
                     }
+                    peerEntity.nodeId = r.name;
                     peerEntity.children.push(ent);
                     var relationshipEntitys = relationshipEntity(e.Relationship);
                     for(var i=0;i<relationshipEntitys.length;i++){
@@ -822,6 +823,7 @@ function getBizEntitys(){
                         column.name = prop.label;
                         ent.children.push(column);
                     }
+                    childEntity.nodeId = r.name;
                     childEntity.children.push(ent);
                     var relationshipEntitys = relationshipEntity(e.Relationship);
                     for(var i=0;i<relationshipEntitys.length;i++){
