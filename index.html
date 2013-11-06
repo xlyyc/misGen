@@ -59,6 +59,7 @@
 <script src="src/wof/bizWidget/FlowLayoutSection.js"></script>
 <script src="src/wof/bizWidget/FlowLayoutItem.js"></script>
 <script src="src/wof/bizWidget/GridLayout.js"></script>
+<script src="src/wof/bizWidget/Page.js"></script>
 <script src="src/wof/bizWidget/PropertyBar.js"></script>
 <script src="src/wof/bizWidget/ObjectBar.js"></script>
 <script src="src/wof/bizWidget/OnSendMessageBar.js"></script>
@@ -73,6 +74,7 @@
 <script src="src/wof/bizWidget/SearchComponent.js"></script>
 <script src="src/wof/bizWidget/BizEntityTree.js"></script>
 <script src="src/wof/bizWidget/spanner/GridLayoutSpanner.js"></script>
+<script src="src/wof/bizWidget/spanner/PageSpanner.js"></script>
 <script src="src/wof/bizWidget/spanner/FlowLayoutSpanner.js"></script>
 <script src="src/wof/bizWidget/spanner/VoucherComponentSpanner.js"></script>
 <script src="src/wof/bizWidget/spanner/SearchComponentSpanner.js"></script>
@@ -80,6 +82,9 @@
 <script src="src/wof/bizWidget/spanner/GridComponentSpanner.js"></script>
 <script src="src/wof/bizWidget/ObjectInspector.js"></script>
 <script src="src/wof/bizWidget/Spanner.js"></script>
+
+<script src="src/wof/functionWidget/CommitComponent.js"></script>
+<script src="src/wof/functionWidget/spanner/CommitComponentSpanner.js"></script>
 
 <script src="src/wof/kernel/initAOP.js"></script>
 <script>
@@ -140,9 +145,11 @@ jQuery(function(){
 		var windowHeight = jQuery(window).height();
         with(wof.widget)
             with(wof.bizWidget)
-                with(wof.bizWidget.spanner)
-                    with(wof.widget.spanner)
-                        with(wof.kernel){
+                with(wof.functionWidget)
+                    with(wof.bizWidget.spanner)
+                        with(wof.widget.spanner)
+                            with(wof.functionWidget.spanner)
+                            with(wof.kernel){
                             var gridLayout = new GridLayout();
                             gridLayout.setOnSendMessage([{id:'wof.bizWidget.GridLayout_active',method:'return false;'}]);
                             gridLayout.setOverflow('y');
@@ -190,6 +197,11 @@ jQuery(function(){
                             bizWidgetComponents.push(voucherGridComponentSpanner);
                             components.push(voucherGridComponentSpanner);
 
+                            var pageSpanner = new PageSpanner();
+                            pageSpanner.appendTo(gridLayout);
+                            bizWidgetComponents.push(pageSpanner);
+                            components.push(pageSpanner);
+
                             var buttonSpanner = new ButtonSpanner();
                             buttonSpanner.appendTo(gridLayout);
                             widgetComponents.push(buttonSpanner);
@@ -199,6 +211,11 @@ jQuery(function(){
                             tabSpanner.appendTo(gridLayout);
                             widgetComponents.push(tabSpanner);
                             components.push(tabSpanner);
+
+                            var commitComponent = new CommitComponentSpanner();
+                            commitComponent.appendTo(gridLayout);
+                            widgetComponents.push(commitComponent);
+                            components.push(commitComponent);
 
                             var compositeComponentsData = JSON.parse(window.localStorage.getItem('compositeComponentsData'));
 
@@ -311,6 +328,7 @@ jQuery(function(){
             with(wof.bizWidget)
                 with(wof.bizWidget.spanner)
                     with(wof.widget.spanner)
+                        with(wof.functionWidget.spanner)
                         with(wof.kernel){
                             gridLayout = new GridLayout();
                             gridLayout.setOverflow('auto');

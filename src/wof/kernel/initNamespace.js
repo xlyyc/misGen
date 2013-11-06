@@ -16,3 +16,5 @@ wof_register('wof.bizWidget');
 wof_register('wof.bizWidget.spanner');
 wof_register('wof.util');
 wof_register('wof.customWindow');
+wof_register('wof.functionWidget');
+wof_register('wof.functionWidget.spanner');
