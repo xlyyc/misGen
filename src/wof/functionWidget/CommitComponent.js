@@ -27,6 +27,8 @@ wof.functionWidget.CommitComponent.prototype = {
 
     _value: null,
 
+    _bindComponents: null,
+
     _btn: null,
 
     _initFlag: null,
@@ -34,6 +36,13 @@ wof.functionWidget.CommitComponent.prototype = {
     /**
      * get/set 属性方法定义
      */
+    getBindComponents : function (){
+        return this._bindComponents || [];
+    },
+
+    setBindComponents : function (bindComponents){
+        this._bindComponents = bindComponents;
+    },
 
     getValue : function (){
         return this._value || '';
@@ -162,7 +171,8 @@ wof.functionWidget.CommitComponent.prototype = {
             icons: this.getIcons(),
             text: this.getText(),
             textShowed: this.getTextShowed() ,
-            type: this.getType()
+            type: this.getType(),
+            bindComponents: this.getBindComponents()
         };
     },
     //----------必须实现----------
@@ -173,6 +183,7 @@ wof.functionWidget.CommitComponent.prototype = {
         this.setText(data.text);
         this.setTextShowed(data.textShowed);
         this.setType(data.type);
+        this.setBindComponents(data.bindComponents)
     },
 
     //创建初始化的button
@@ -181,8 +192,8 @@ wof.functionWidget.CommitComponent.prototype = {
         node.setType('submit');
         node.setLeft(0);
         node.setTop(0);
-        node.setWidth(width/2);
-        node.setHeight(height/2);
+        node.setWidth(90);
+        node.setHeight(30);
         node.setText('提交');
         return node;
     }

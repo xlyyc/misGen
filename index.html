@@ -266,6 +266,8 @@ jQuery(function(){
                 onReceiveMessage.push({id:'wof.bizWidget.spanner.SearchComponentSpanner_render',method:method});
                 onReceiveMessage.push({id:'wof.bizWidget.spanner.VoucherGridComponentSpanner_render',method:method});
                 onReceiveMessage.push({id:'wof.bizWidget.spanner.GridComponentSpanner_render',method:method});
+                onReceiveMessage.push({id:'wof.bizWidget.spanner.PageSpanner_render',method:method});
+                onReceiveMessage.push({id:'wof.functionWidget.spanner.CommitComponentSpanner_render',method:method});
                 propertyBar.setOnReceiveMessage(onReceiveMessage);
                 propertyBar.setTop(0);
                 propertyBar.setLeft(4);
@@ -284,6 +286,8 @@ jQuery(function(){
                 receives.push({id:'wof.bizWidget.spanner.SearchComponentSpanner_render',method:meth});
                 receives.push({id:'wof.bizWidget.spanner.VoucherGridComponentSpanner_render',method:meth});
                 receives.push({id:'wof.bizWidget.spanner.GridComponentSpanner_render',method:meth});
+                receives.push({id:'wof.bizWidget.spanner.PageSpanner_render',method:meth});
+                receives.push({id:'wof.functionWidget.spanner.CommitComponentSpanner_render',method:meth});
                 onSendMessageBar.setOnReceiveMessage(receives);
                 onSendMessageBar.setTop(0);
                 onSendMessageBar.setLeft(4);
@@ -302,6 +306,8 @@ jQuery(function(){
                 receiv.push({id:'wof.bizWidget.spanner.SearchComponentSpanner_render',method:met});
                 receiv.push({id:'wof.bizWidget.spanner.VoucherGridComponentSpanner_render',method:met});
                 receiv.push({id:'wof.bizWidget.spanner.GridComponentSpanner_render',method:met});
+                receiv.push({id:'wof.bizWidget.spanner.PageSpanner_render',method:met});
+                receiv.push({id:'wof.functionWidget.spanner.CommitComponentSpanner_render',method:met});
                 onReceiveMessageBar.setOnReceiveMessage(receiv);
                 onReceiveMessageBar.setTop(0);
                 onReceiveMessageBar.setLeft(4);

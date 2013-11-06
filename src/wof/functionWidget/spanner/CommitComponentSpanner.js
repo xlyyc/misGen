@@ -15,7 +15,8 @@ wof.functionWidget.spanner.CommitComponentSpanner = function () {
     this._meta.propertys = {
         'CommitComponent':{
             'id':{prop:'id','name':'ID','type':'text','readOnly':true,'isHide':false},
-            'className':{prop:'className','name':'类名','type':'text','readOnly':true,'isHide':false}
+            'className':{prop:'className','name':'类名','type':'text','readOnly':true,'isHide':false},
+            'bindComponents':{prop:'bindComponents','name':'绑定组件','type':'text','readOnly':false,'isHide':false}
         }
     };
 
@@ -87,10 +88,18 @@ wof.functionWidget.spanner.CommitComponentSpanner.prototype = {
 
     //选择实现
     afterRender: function () {
-        if(!jQuery.isEmptyObject(this.getPropertys())){
-            this.getPropertys().activeClass = 'CommitComponent';
+        var activeData = {};
+        var commitComponent = wof.util.ObjectManager.get(this.getPropertys().id);
+        if(commitComponent!=null){
+            activeData.id = this.getPropertys().id;
+            activeData.className = this.getPropertys().className;
+            activeData.onReceiveMessage = this.getPropertys().onReceiveMessage;
+            activeData.onSendMessage = this.getPropertys().onSendMessage;
+
+            activeData.bindComponents = this.getPropertys().bindComponents;
+            activeData.activeClass = 'CommitComponent';
         }
-        this.setActiveData(this.getPropertys());
+        this.setActiveData(activeData);
         this.sendMessage('wof.functionWidget.spanner.CommitComponentSpanner_render');
     },
 
