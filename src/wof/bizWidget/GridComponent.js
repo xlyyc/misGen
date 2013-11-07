@@ -122,7 +122,7 @@ wof.bizWidget.GridComponent.prototype = {
 
     getCallStr: function(){
         if(this._callStr==null){
-            this._callStr = 'gridcomponent:0_0_1';
+            this._callStr = 'gridcomponent:1.0.0';
         }
         return this._callStr;
     },
@@ -141,7 +141,7 @@ wof.bizWidget.GridComponent.prototype = {
 
     getName: function(){
         if(this._name==null){
-            this._name = '';
+            this._name = '未命名列表';
         }
         return this._name;
     },

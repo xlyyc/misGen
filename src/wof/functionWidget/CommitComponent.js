@@ -14,20 +14,27 @@ wof.functionWidget.CommitComponent.prototype = {
     /**
      * 属性声明 （private ，用"_"标识）
      */
-    //按钮启用属性
-    _disabled:null,
-    //按钮图标
-    _icons:null,
+
+    _callStr: null,    //调用字符串，格式为 构件类型唯一识别串:构件版本，例如【GridComponent:1.0.0】
+
+    _commandItemID: null,
+
+    _iSPermissionControl: null,    //此功能点是否权限控制
+
+    _functionID: null,    //功能ID，默认生成，设计时功能号与运行时功能号不一致，但有内在逻辑关系
+
+    _callItemName: null,    //调用行为名称，新增|编辑|删除|查看|保存|批量修改|修改属性为特定值(通过、不通过）|导入|导出
+
+    _callItemCaption: null,    //调用行为显示名称
+
+    _callType: null,    //调用类型。类型包括系统内置菜单命令项、自定义菜单命令项。自定义命令项需提前在Action节点中提前定义.
+
     //按钮文本
     _text:null,
-    //是否显示按钮文本
-    _textShowed: null,
-    //按钮类型：button 普通，submit 提交
-    _type: null ,
 
-    _value: null,
+    _bindComponents: null, //绑定构件ID
 
-    _bindComponents: null,
+    _isAutoCommit: null,      //是否自动提交
 
     _btn: null,
 
@@ -36,6 +43,70 @@ wof.functionWidget.CommitComponent.prototype = {
     /**
      * get/set 属性方法定义
      */
+    getCallStr : function (){
+        return this._callStr || 'CommitComponent:1.0.0';
+    },
+
+    setCallStr : function (callStr){
+        this._callStr = callStr;
+    },
+
+    getCommandItemID : function (){
+        return this._commandItemID || '';
+    },
+
+    setCommandItemID : function (commandItemID){
+        this._commandItemID = commandItemID;
+    },
+
+    getISPermissionControl : function (){
+        return this._iSPermissionControl || false;
+    },
+
+    setISPermissionControl : function (iSPermissionControl){
+        this._iSPermissionControl = iSPermissionControl;
+    },
+
+    getFunctionID : function (){
+        return this._functionID || '';
+    },
+
+    setFunctionID : function (functionID){
+        this._functionID = functionID;
+    },
+
+    getCallItemName : function (){
+        return this._callItemName || 'commitEntity';
+    },
+
+    setCallItemName : function (callItemName){
+        this._callItemName = callItemName || '';
+    },
+
+    getCallItemCaption : function (){
+        return this._callItemCaption || '';
+    },
+
+    setCallItemCaption : function (callItemCaption){
+        this._callItemCaption = callItemCaption;
+    },
+
+    getCallType : function (){
+        return this._callType || 'JS';
+    },
+
+    setCallType : function (callType){
+        this._callType = callType;
+    },
+
+    getIsAutoCommit : function (){
+        return this._isAutoCommit || false;
+    },
+
+    setIsAutoCommit : function (isAutoCommit){
+        this._isAutoCommit = isAutoCommit;
+    },
+
     getBindComponents : function (){
         return this._bindComponents || [];
     },
@@ -44,63 +115,6 @@ wof.functionWidget.CommitComponent.prototype = {
         this._bindComponents = bindComponents;
     },
 
-    getValue : function (){
-        return this._value || '';
-    },
-
-    setValue : function (value){
-        this._value = value;
-    },
-
-    getDisabled: function(){
-        if(this._disabled == null)
-            this._disabled = '';
-        return this._disabled;
-    },
-
-    setDisabled: function(disabled){
-        this._disabled = disabled;
-    },
-
-    getIcons: function(){
-        if(this._icons ==null)
-            this._icons = false;
-        return this._icons ;
-    },
-
-    setIcons: function(icons){
-        this._icons = icons ;
-    },
-
-    getText: function(){
-        if(this._text == null)
-            this._text = '';
-        return this._text;
-    },
-
-    setText: function(text){
-        this._text = text;
-    },
-
-    getTextShowed: function(){
-        if(this._textShowed == null)
-            this._textShowed = true;
-        return this._textShowed;
-    },
-
-    setTextShowed: function(textShowed){
-        this._textShowed = textShowed;
-    },
-
-    getType: function(){
-        if(this._type == null)
-            this._type = '';
-        return this._type ;
-    },
-
-    setType: function(type){
-        this._btnType = type;
-    },
     /**
      * Render 方法定义
      */
@@ -126,37 +140,29 @@ wof.functionWidget.CommitComponent.prototype = {
                 _this.sendMessage('wof.functionWidget.CommitComponent_active');
             });
 
-            this._btn = jQuery('<button type="'+this.getType()+'" '+this.getDisabled()+' />');
-            this.getDomInstance().append(this._btn);
+            var button = new wof.widget.Button();
+            button.setIsInside(true);
+            button.setType('submit');
+            button.setLeft(0);
+            button.setTop(0);
+            button.setWidth(this.getWidth());
+            button.setHeight(this.getHeight());
+            button.appendTo(this);
+            this._btn = button;
 
             this._initFlag = true;
         }
+        this._btn.setText(this.getCallItemCaption());
     },
 
     //----------必须实现----------
     render: function () {
-        this._btn.attr('value',this.getValue());
-        this._btn.button(
-            {
-                label: this.getText() ,
-                icons : {
-                    primary: "ui-icon-gear" ,
-                    secondary: "ui-icon-triangle-1-s"
-                },
-                text : this.getTextShowed()
-            }
-        );
-        if(this.getHeight()!=null){
-            this._btn.css('height',this.getHeight())
-        }
-        if(this.getWidth()!=null){
-            this._btn.css('width',this.getWidth())
-        }
+
     },
 
     //选择实现
     afterRender: function () {
-        this._btn.button('refresh');
+
     },
 
     /**
@@ -166,35 +172,76 @@ wof.functionWidget.CommitComponent.prototype = {
     //----------必须实现----------
     getData: function () {
         return {
-            value : this.getValue(),
-            disabled: this.getDisabled() ,
-            icons: this.getIcons(),
-            text: this.getText(),
-            textShowed: this.getTextShowed() ,
-            type: this.getType(),
-            bindComponents: this.getBindComponents()
+            bindComponents: this.getBindComponents(),
+            isAutoCommit: this.getIsAutoCommit(),
+            callStr: this.getCallStr(),
+            commandItemID: this.getCommandItemID(),
+            iSPermissionControl: this.getISPermissionControl(),
+            functionID: this.getFunctionID(),
+            callItemName: this.getCallItemName(),
+            callItemCaption: this.getCallItemCaption(),
+            callType: this.getCallType()
         };
     },
     //----------必须实现----------
     setData: function (data) {
-        this.setValue(data.value);
-        this.setDisabled(data.disabled);
-        this.setIcons(data.icons);
-        this.setText(data.text);
-        this.setTextShowed(data.textShowed);
-        this.setType(data.type);
-        this.setBindComponents(data.bindComponents)
+        this.setBindComponents(data.bindComponents);
+        this.setIsAutoCommit(data.isAutoCommit);
+        this.setCallStr(data.callStr);
+        this.setCommandItemID(data.commandItemID);
+        this.setISPermissionControl(data.iSPermissionControl);
+        this.setFunctionID(data.functionID);
+        this.setCallItemName(data.callItemName);
+        this.setCallItemCaption(data.callItemCaption);
+        this.setCallType(data.callType);
+    },
+
+    _insideOnReceiveMessage:{
+        'wof.widget.Button_mousedown':function(message){
+            console.log(message.id+'   '+this.getClassName());
+            this.sendMessage('wof.functionWidget.CommitComponent_active');
+            return false;
+        },
+        'wof.widget.Button_dblclick':function(message){
+            console.log(message.id+'   '+this.getClassName());
+            this.sendMessage('wof.functionWidget.CommitComponent_active');
+            return false;
+        }
+
+    },
+
+    updateCommitComponent: function(data){
+        if(!jQuery.isEmptyObject(data)){
+            if(data.bindComponents!=null){
+                this.setBindComponents(data.bindComponents);
+            }
+            if(data.isAutoCommit!=null){
+                this.setIsAutoCommit((data.isAutoCommit=='true'||data.isAutoCommit==true)?true:false);
+            }
+            if(data.commandItemID!=null){
+                this.setCommandItemID(data.commandItemID);
+            }
+            if(data.iSPermissionControl!=null){
+                this.setISPermissionControl((data.iSPermissionControl=='true'||data.iSPermissionControl==true)?true:false);
+            }
+            if(data.functionID!=null){
+                this.setFunctionID(data.functionID);
+            }
+            if(data.callItemCaption!=null){
+                this.setCallItemCaption(data.callItemCaption);
+            }
+
+        }
     },
 
     //创建初始化的button
     createSelf: function(width, height){
         var node = new wof.functionWidget.CommitComponent();
-        node.setType('submit');
         node.setLeft(0);
         node.setTop(0);
-        node.setWidth(90);
+        node.setWidth(110);
         node.setHeight(30);
-        node.setText('提交');
+        node.setCallItemCaption('提交');
         return node;
     }
 

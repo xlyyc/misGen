@@ -24,12 +24,14 @@
                 wof.customWindow.MetaTreeSelector._tree = tree;
                 wof.customWindow.MetaTreeSelector._initFlag = true;
             }
-            wof.customWindow.MetaTreeSelector._tree.checkNodeByParam('nodeId',hidden.val());
             wof.customWindow.MetaTreeSelector._dialogDiv.dialog({
                 resizable:false,
                 width:450,
                 height:550,
                 modal: true,
+                open: function(event, ui){
+                    wof.customWindow.MetaTreeSelector._tree.checkNodeByParam('nodeId',hidden.val());
+                },
                 buttons:{
                     '确定':function(){
                         var nodes = wof.customWindow.MetaTreeSelector._tree.getCheckedNodes();

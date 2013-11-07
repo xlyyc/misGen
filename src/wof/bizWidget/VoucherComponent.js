@@ -69,6 +69,9 @@ wof.bizWidget.VoucherComponent.prototype = {
     },
 
     getCaption: function(){
+        if(this._caption==null){
+            this._caption = '未命名表头';
+        }
         return this._caption;
     },
 
@@ -577,7 +580,9 @@ wof.bizWidget.VoucherComponent.prototype = {
             if(voucherComponentData.viewType!=null){
                 this.setViewType(voucherComponentData.viewType);
             }
-
+            if(voucherComponentData.caption!=null){
+                this.setCaption(voucherComponentData.caption);
+            }
 
             /*this.setActiveVoucherItemGroupIndex(null);
              this.setActiveItemRank(null);*/

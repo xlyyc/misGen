@@ -14,6 +14,7 @@ wof.bizWidget.spanner.VoucherComponentSpanner = function () {
     this._meta.sendMessages = {'wof.bizWidget.VoucherComponent_mousedown':'单击','wof.bizWidget.VoucherComponent_render':'重绘'};
     this._meta.propertys = {
         'VoucherComponent':{
+            'caption':{prop:'caption','name':'标题','type':'text','readOnly':false,'isHide':false,required:false},
             'itemHeight':{prop:'itemHeight','name':'默认行高','type':'naturalNumber','readOnly':false,'isHide':false,required:true},
             'width':{prop:'width','name':'宽度','type':'naturalNumber','readOnly':false,'isHide':false,required:false},
             'left':{prop:'left','name':'左边距','type':'naturalNumber','readOnly':false,'isHide':false,required:true},

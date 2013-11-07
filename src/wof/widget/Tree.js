@@ -85,34 +85,31 @@ wof.widget.Tree.prototype = {
     //选择实现
     beforeRender: function () {
         var _this = this;
-        if(this._initFlag==null){
-            this._ztree = jQuery.fn.zTree.init(this.getDomInstance().addClass('ztree'),
-                {
-                    treeId: this.getId(),
-                    callback: {
-                        onClick: function(event, treeId, treeNode){
-                            event.stopPropagation();
-                            var nodes = _this._ztree.getSelectedNodes();
-                            for(var i=0, l=nodes.length; i<l; i++){
-                                _this._ztree.checkNode(nodes[i], true, false);
-                                break;
-                            }
+        this._ztree = jQuery.fn.zTree.init(this.getDomInstance().addClass('ztree'),
+            {
+                treeId: this.getId(),
+                callback: {
+                    onClick: function(event, treeId, treeNode){
+                        event.stopPropagation();
+                        var nodes = _this._ztree.getSelectedNodes();
+                        for(var i=0, l=nodes.length; i<l; i++){
+                            _this._ztree.checkNode(nodes[i], true, false);
+                            break;
                         }
-                    },
-                    check: {
-                        enable: true,
-                        chkStyle: this.getChkStyle(),
-                        radioType: this.getRadioType()
                     }
+                },
+                check: {
+                    enable: true,
+                    chkStyle: this.getChkStyle(),
+                    radioType: this.getRadioType()
                 }
-            );
-            this._ztree.addNodes(null, this.getNodes());
-            var nodes = this._ztree.getNodes();
-            if(nodes.length>0){
-                this._ztree.expandNode(nodes[0], true, true, true);
             }
+        );
+        this._ztree.addNodes(null, this.getNodes());
 
-            this._initFlag = true;
+        var nodes = this._ztree.getNodes();
+        if(nodes.length>0){
+            this._ztree.expandNode(nodes[0], true, true, true);
         }
     },
 
@@ -166,8 +163,14 @@ wof.widget.Tree.prototype = {
     getCheckedNodes: function(){
         var nodes = this._ztree.getCheckedNodes(true);
         return nodes;
-    }
+    },
 
+    checkAllNodes: function(checked){
+        if(checked==null){
+            checked = true;
+        }
+        this._ztree.checkAllNodes(checked);
+    }
 
 
 };

@@ -39,6 +39,7 @@
 <script src="src/wof/widget/Mediator.js"></script>
 
 <script src="src/wof/customWindow/MetaTreeSelector.js"></script>
+<script src="src/wof/customWindow/ComponentTreeSelector.js"></script>
 
 <script src="src/wof/widget/Tab.js"></script>
 <script src="src/wof/widget/TabItem.js"></script>
@@ -73,6 +74,7 @@
 <script src="src/wof/bizWidget/VoucherGridComponent.js"></script>
 <script src="src/wof/bizWidget/SearchComponent.js"></script>
 <script src="src/wof/bizWidget/BizEntityTree.js"></script>
+<script src="src/wof/bizWidget/ComponentsTree.js"></script>
 <script src="src/wof/bizWidget/spanner/GridLayoutSpanner.js"></script>
 <script src="src/wof/bizWidget/spanner/PageSpanner.js"></script>
 <script src="src/wof/bizWidget/spanner/FlowLayoutSpanner.js"></script>
@@ -375,10 +377,10 @@ jQuery(function(){
 		try{
 			var windowWidth = jQuery(window).width();
 			var windowHeight = jQuery(window).height();
-			var gridLayout = wof.util.ObjectManager.get(content.children('div[oid]').first().attr('oid'));
-            gridLayout.setWidth(windowWidth-sidebar1Width-sidebar2Width);
-            gridLayout.setHeight(windowHeight-headerHeight-footerHeight);
-            gridLayout.render();
+			var layout = getContentLayout();
+            layout.setWidth(windowWidth-sidebar1Width-sidebar2Width);
+            layout.setHeight(windowHeight-headerHeight-footerHeight);
+            layout.render();
 		}catch(e){}
 	}
 	jQuery(window).load(function(){
@@ -398,7 +400,7 @@ jQuery(function(){
 		var id = jQuery(event.target).attr('id');
 		if(id=='saveBtn'){
             var json = {};
-			var layout = wof.util.ObjectManager.get(content.children('div[oid]').first().attr('oid'));
+			var layout = getContentLayout();
 
             console.log(layout.toJSON());
             return;
@@ -452,7 +454,7 @@ jQuery(function(){
                             }else{
                                 compositeComponentsData = JSON.parse(window.localStorage.getItem('compositeComponentsData'));
                             }
-                            var layout = wof.util.ObjectManager.get(content.children('div[oid]').first().attr('oid'));
+                            var layout = getContentLayout();
 
                             var obj = wof.util.ObjectManager.get(wof.util.GlobalObject.get('cutObjectId'));
                             if(obj!=null){
@@ -481,7 +483,9 @@ jQuery(function(){
 	});
 });
 
-
+window.getContentLayout = function(){
+    return wof.util.ObjectManager.get(jQuery('#content').children('div[oid]').first().attr('oid'));
+}
 function xxx(){
     //var pageMetas = setPageMetas();  //获得page设置元数据数据
 
@@ -905,6 +909,7 @@ function getBizEntitys(){
         ];*/
 
 }
+
 </script>
 </head>
 <body onload="xxx();">
