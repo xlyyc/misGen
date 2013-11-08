@@ -14,9 +14,16 @@ wof.bizWidget.BizEntityTree.prototype = {
 
     _value : null,
 
-    /**
-     * get/set 属性方法定义
-     */
+    _nodes: null,
+
+    setNodes: function (nodes) {
+        this._nodes = nodes;
+    },
+
+    getNodes: function () {
+        return this._nodes;
+    },
+
 
     getValue: function(){
         if(this._value==null){
@@ -39,13 +46,13 @@ wof.bizWidget.BizEntityTree.prototype = {
             });
 
             this._tree = new wof.widget.Tree();
+            this._tree.setNodes(this.getNodes());
             this._tree.setTop(0);
             this._tree.setChkStyle('radio');
             this._tree.setRadioType('all');
             this._tree.setLeft(0);
             this._tree.setWidth(this.getWidth());
             this._tree.setHeight(this.getHeight()-30);
-            this._tree.setNodes(getBizEntitys());
             this._tree.appendTo(this);
 
             this._initFlag = true;
@@ -69,13 +76,15 @@ wof.bizWidget.BizEntityTree.prototype = {
     //----------必须实现----------
     getData: function () {
         return {
-            value: this.getValue()
+            value: this.getValue(),
+            nodes: this.getNodes()
         };
     },
 
     //----------必须实现----------
     setData: function (data) {
         this.setValue(data.value);
+        this.setNodes(data.nodes);
     },
 
     checkNodeByParam: function(key, value){

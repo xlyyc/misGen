@@ -135,75 +135,50 @@ wof.functionWidget.spanner.CommitComponentSpanner.prototype = {
     //静态方法 导出数据(只有需要给运行时解析的叶子节点才需要定义此方法)
     exportData: function(node){
         /**
-         <CommandItem CallType="JS" FunctionID="手动填写"
-         CallItemCaption="addRecord" CallItemName="新增" CallStr="addcmd:0_0_1">
-         <Before CanStop="true">
-         <Call Type="JS" />
-         </Before>
-         <After>
-         <Call Type="JS" />
-         </After>
-         <Return />
-         <ParamMaps>
-         <ParamMap MapType="value" CompParamName="LinkComponentID"
-         CompParamValue="emGrid" PageParamName="" ChangeExpt=""></ParamMap>
-         <ParamMap MapType="value" CompParamName="formId"
-         CompParamValue="emplyform" PageParamName="" ChangeExpt=""></ParamMap>
-         </ParamMaps>
+         <CommandItem CallType="JS" FunctionID="手动填写" CallItemCaption="addRecord" CallItemName="新增" CallStr="addcmd:0_0_1">
+             <Before CanStop="true">
+                <Call Type="JS" />
+             </Before>
+             <After>
+                <Call Type="JS" />
+             </After>
+             <Return />
+             <ParamMaps>
+                <ParamMap MapType="value" CompParamName="LinkComponentID" CompParamValue="emGrid" PageParamName="" ChangeExpt=""></ParamMap>
+                <ParamMap MapType="value" CompParamName="formId" CompParamValue="emplyform" PageParamName="" ChangeExpt=""></ParamMap>
+             </ParamMaps>
          </CommandItem>
          */
         var json = {};
-        if(node.getClassName()=='wof.bizWidget.GridComponent'){
+        if(node.getClassName()=='wof.functionWidget.CommitComponent'){
             json.className = node.getClassName();
             json.callStr = node.getCallStr();
-            json.initActionName = node.getInitActionName();
-            json.name = node.getName();
-            json.numberDisplay = node.getNumberDisplay();
-            json.gridComponentState = node.getGridComponentState();
-            json.bindEntityID = node.getBindEntityID();
-            json.id = node.getId();
-            json.index = node.getIndex();
-            json.headerHeight = node.getHeaderHeight();
-            json.rowHeight = node.getRowHeight();
-            json.useMutiplePage = node.getUseMutiplePage();
-            json.rowsCount = node.getRowsCount();
+            json.iSPermissionControl = String(node.getISPermissionControl());
+            json.functionID = node.getFunctionID();
+            json.callItemName = node.getCallItemName();
+            json.callItemCaption = node.getCallItemCaption();
+            json.callType = node.getCallType();
 
-            var columns = [];
-            var childNodes = node.childNodes();
-            for(var i=0;i<childNodes.length;i++){
-                var column = {};
-                var childNode = childNodes[i];
-                column.name = childNode.getName();
-                column.useMultiSelect = childNode.getUseMultiSelect();
-                column.columnType = childNode.getColumnType();
-                column.caption = childNode.getCaption();
-                column.columnWidth = childNode.getColumnWidth();
-                column.bindDataField = childNode.getBindDataField();
-                column.gridId = childNode.getGridId();
-                column.display = childNode.getDisplay();
-                column.isPin = childNode.getIsPin();
-                column.dateTimeFormat = childNode.getDateTimeFormat();
-                column.editor = childNode.getEditor();
-                column.picUrl = childNode.getPicUrl();
-                column.selectPattern = childNode.getSelectPattern();
-                column.visbleType = childNode.getVisbleType();
-                column.readOnly = childNode.getReadOnly();
-                column.required = childNode.getRequired();
-                column.orderByType = childNode.getOrderByType();
-                column.canSearch = childNode.getCanSearch();
-                column.length = childNode.getLength();
-                column.min = childNode.getMin();
-                column.max = childNode.getMax();
-                column.intLength = childNode.getIntLength();
-                column.scaleLength = childNode.getScaleLength();
-                column.regExp = childNode.getRegExp();
-                column.refSearchCondition = childNode.getRefSearchCondition();
-                column.checkErrorInfo = childNode.getCheckErrorInfo();
-                column.linkForm = childNode.getLinkForm();
-                columns.push(column);
-            }
-            json.columns = columns;
+            var paramMaps = [];
+            var paramMap1 = {};
+            paramMap1.mapType = 'value';
+            paramMap1.compParamName = 'bindComponents';
+            paramMap1.compParamValue = node.getBindComponents();
+            paramMap1.pageParamName = '';
+            paramMap1.changeExpt = '';
+            paramMaps.push(paramMap1);
+
+            var paramMap2 = {};
+            paramMap2.mapType = 'value';
+            paramMap2.compParamName = 'isAutoCommit';
+            paramMap2.compParamValue = String(node.getIsAutoCommit());
+            paramMap2.pageParamName = '';
+            paramMap2.changeExpt = '';
+            paramMaps.push(paramMap2);
+
+            json.paramMaps = paramMaps;
         }
+        console.log(JSON.stringify(json));
         return json;
     }
 

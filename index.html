@@ -402,9 +402,6 @@ jQuery(function(){
             var json = {};
 			var layout = getContentLayout();
 
-            console.log(layout.toJSON());
-            return;
-
             //将叶子节点数据拉平导出
             var _leafsData = [];
             function _getLeafData(node){
@@ -492,7 +489,7 @@ function xxx(){
     //alert(JSON.stringify(pageMetas));
 }
 
-function getBizEntitys(){
+function getBizEntitys1(){
     var bizEntity = {
         "MainEntity":{
             "学生基本信息":{
@@ -765,6 +762,8 @@ function getBizEntitys(){
             }
         ]
     };
+
+
 
     var mainEntity = null;
     for(var m in bizEntity.MainEntity){
