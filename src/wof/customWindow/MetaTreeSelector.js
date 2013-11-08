@@ -56,8 +56,8 @@
 		},
 
         getBizEntities:function(){
-            var bizEntity = JSON.parse(getBizEntities());
-          /*  var bizEntity = {
+            //var bizEntity = JSON.parse(getBizEntities());
+            var bizEntity = {
                 "childEntity": [{
                     "ID": "XXJL",
                     "alias": "XXJL",
@@ -331,7 +331,7 @@
                         "uniqueName": ""
                     }]
                 }
-            };*/
+            };
 
             var tempLinkEntityTable = {};
             for(var i=0; i<bizEntity.linkEntity.length; i++){

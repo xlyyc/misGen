@@ -49,7 +49,7 @@ wof.bizWidget.spanner.GridComponentSpanner = function () {
             },
             'caption':{prop:'caption','name':'显示名称','type':'text','readOnly':false,'isHide':false,required:false},
             'columnWidth':{prop:'columnWidth','name':'列宽度','type':'naturalNumber','readOnly':false,'isHide':false,required:false},
-            'bindDataField':{prop:'bindDataField','name':'绑定元数据','type':'text','readOnly':false,'isHide':false,required:false},
+            'bindDataField':{prop:'bindDataField','name':'绑定实体属性','type':'custom','readOnly':false,'isHide':false,required:false, customMethod:'wof.customWindow.MetaTreeSelector'},
             'gridId':{prop:'gridId','name':'下拉框表格ID','type':'text','readOnly':false,'isHide':false,required:false},
             'display':{prop:'display','name':'是否显示','type':'yesOrNo','readOnly':false,'isHide':false,required:false},
             'isPin':{prop:'isPin','name':'是否钉住','type':'yesOrNo','readOnly':false,'isHide':false,required:false},
