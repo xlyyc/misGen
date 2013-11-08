@@ -86,7 +86,9 @@
 <script src="src/wof/bizWidget/Spanner.js"></script>
 
 <script src="src/wof/functionWidget/CommitComponent.js"></script>
+<script src="src/wof/functionWidget/DeleteRecordComponent.js"></script>
 <script src="src/wof/functionWidget/spanner/CommitComponentSpanner.js"></script>
+<script src="src/wof/functionWidget/spanner/DeleteRecordComponentSpanner.js"></script>
 
 <script src="src/wof/kernel/initAOP.js"></script>
 <script>
@@ -219,6 +221,11 @@ jQuery(function(){
                             widgetComponents.push(commitComponent);
                             components.push(commitComponent);
 
+                            var deleteRecordComponentSpanner = new DeleteRecordComponentSpanner();
+                            deleteRecordComponentSpanner.appendTo(gridLayout);
+                            widgetComponents.push(deleteRecordComponentSpanner);
+                            components.push(deleteRecordComponentSpanner);
+
                             var compositeComponentsData = JSON.parse(window.localStorage.getItem('compositeComponentsData'));
 
                             var objectBar = new ObjectBar();
@@ -270,6 +277,7 @@ jQuery(function(){
                 onReceiveMessage.push({id:'wof.bizWidget.spanner.GridComponentSpanner_render',method:method});
                 onReceiveMessage.push({id:'wof.bizWidget.spanner.PageSpanner_render',method:method});
                 onReceiveMessage.push({id:'wof.functionWidget.spanner.CommitComponentSpanner_render',method:method});
+                onReceiveMessage.push({id:'wof.functionWidget.spanner.DeleteRecordComponentSpanner_render',method:method});
                 propertyBar.setOnReceiveMessage(onReceiveMessage);
                 propertyBar.setTop(0);
                 propertyBar.setLeft(4);
@@ -290,6 +298,7 @@ jQuery(function(){
                 receives.push({id:'wof.bizWidget.spanner.GridComponentSpanner_render',method:meth});
                 receives.push({id:'wof.bizWidget.spanner.PageSpanner_render',method:meth});
                 receives.push({id:'wof.functionWidget.spanner.CommitComponentSpanner_render',method:meth});
+                receives.push({id:'wof.functionWidget.spanner.DeleteRecordComponentSpanner_render',method:meth});
                 onSendMessageBar.setOnReceiveMessage(receives);
                 onSendMessageBar.setTop(0);
                 onSendMessageBar.setLeft(4);
@@ -310,6 +319,7 @@ jQuery(function(){
                 receiv.push({id:'wof.bizWidget.spanner.GridComponentSpanner_render',method:met});
                 receiv.push({id:'wof.bizWidget.spanner.PageSpanner_render',method:met});
                 receiv.push({id:'wof.functionWidget.spanner.CommitComponentSpanner_render',method:met});
+                receiv.push({id:'wof.functionWidget.spanner.DeleteRecordComponentSpanner_render',method:met});
                 onReceiveMessageBar.setOnReceiveMessage(receiv);
                 onReceiveMessageBar.setTop(0);
                 onReceiveMessageBar.setLeft(4);
