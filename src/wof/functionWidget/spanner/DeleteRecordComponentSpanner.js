@@ -35,6 +35,10 @@ wof.functionWidget.spanner.DeleteRecordComponentSpanner = function () {
     onReceiveMessage.push({id:'wof.bizWidget.OnReceiveMessageBar_apply',method:method});
     this.setOnReceiveMessage(onReceiveMessage);
 
+    this._selectObjectIco = jQuery('<img style="position:absolute;width:16px;height:16px;z-index:90;" src="src/img/selectObject.png">');
+    this._deleteObjectIco = jQuery('<img style="position:absolute;width:16px;height:16px;z-index:90;" src="src/img/deleteObject.png">');
+    this._cutObjectIco = jQuery('<img style="position:absolute;width:16px;height:16px;z-index:90;" src="src/img/cut.gif">');
+
 };
 wof.functionWidget.spanner.DeleteRecordComponentSpanner.prototype = {
     /**
@@ -47,6 +51,12 @@ wof.functionWidget.spanner.DeleteRecordComponentSpanner.prototype = {
     _propertys: null,
 
     _setActiveData: null,
+
+    _selectObjectIco : null,
+
+    _deleteObjectIco : null,
+
+    _cutObjectIco : null,
 
     /**
      * get/set 属性方法定义
@@ -80,6 +90,44 @@ wof.functionWidget.spanner.DeleteRecordComponentSpanner.prototype = {
 
     //选择实现
     beforeRender: function () {
+        this._selectObjectIco.remove();
+        this._deleteObjectIco.remove();
+        this._cutObjectIco.remove();
+
+        var _this = this;
+        this._selectObjectIco.mousedown(function(event){
+            event.stopPropagation();
+            var obj = wof.util.ObjectManager.get(_this.getPropertys().id);
+            obj.render();
+            obj.sendMessage('wof.functionWidget.DeleteRecordComponent_active');
+        });
+        this._deleteObjectIco.mousedown(function(event){
+            event.stopPropagation();
+            var dialogDiv = jQuery('<div title="提示"><p><span class="ui-icon ui-icon-alert" style="float:left;margin:0 7px 20px 0;"></span>确定要删除该构件吗?</p></div>');
+            dialogDiv.dialog({
+                resizable:false,
+                height:200,
+                modal: true,
+                buttons:{
+                    '确定':function(){
+                        var obj = wof.util.ObjectManager.get(_this.getPropertys().id);
+                        obj.removeChildren(true);
+                        obj.remove(true);
+                        jQuery(this).dialog('close');
+                        jQuery(this).remove();
+                    },
+                    '关闭':function(){
+                        jQuery(this).dialog('close');
+                        jQuery(this).remove();
+                    }
+                }
+            });
+        });
+
+        this._cutObjectIco.mousedown(function(event){
+            event.stopPropagation();
+            wof.util.GlobalObject.add('cutObjectId',_this.getPropertys().id);
+        });
 
     },
 
@@ -91,8 +139,8 @@ wof.functionWidget.spanner.DeleteRecordComponentSpanner.prototype = {
     //选择实现
     afterRender: function () {
         var activeData = {};
-        var commitComponent = wof.util.ObjectManager.get(this.getPropertys().id);
-        if(commitComponent!=null){
+        var deleteRecordComponent = wof.util.ObjectManager.get(this.getPropertys().id);
+        if(deleteRecordComponent!=null){
             activeData.id = this.getPropertys().id;
             activeData.className = this.getPropertys().className;
             activeData.onReceiveMessage = this.getPropertys().onReceiveMessage;
@@ -104,6 +152,14 @@ wof.functionWidget.spanner.DeleteRecordComponentSpanner.prototype = {
             activeData.callItemCaption = this.getPropertys().callItemCaption;
 
             activeData.activeClass = 'DeleteRecordComponent';
+
+            //加入拖放 删除 剪切操作句柄
+            this._selectObjectIco.css('top',0).css('left',0);
+            deleteRecordComponent.getDomInstance().append(this._selectObjectIco);
+            this._deleteObjectIco.css('top',0).css('left',this._selectObjectIco.width()+2);
+            deleteRecordComponent.getDomInstance().append(this._deleteObjectIco);
+            this._cutObjectIco.css('top',0).css('left',this._deleteObjectIco.width()*2+4);
+            deleteRecordComponent.getDomInstance().append(this._cutObjectIco);
         }
         this.setActiveData(activeData);
         this.sendMessage('wof.functionWidget.spanner.DeleteRecordComponentSpanner_render');

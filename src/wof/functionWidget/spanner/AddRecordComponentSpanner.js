@@ -1,19 +1,19 @@
 /**
- * @widgetClass CommitComponentSpanner class
+ * @widgetClass AddRecordComponentSpanner class
  * @package wof.functionWidget.spanner
  * @copyright author
  * @Time: 13-8-5 下午1:29
  */
-wof.functionWidget.spanner.CommitComponentSpanner = function () {
+wof.functionWidget.spanner.AddRecordComponentSpanner = function () {
     this._version = '1.0';
 
     //初始化构件元数据 包括名称、标题、发送的消息
     this._meta = {};
-    this._meta.name = 'wof.functionWidget.CommitComponent';
-    this._meta.title = '提交';
-    this._meta.sendMessages = {'wof.functionWidget.CommitComponent_mousedown':'单击'};
+    this._meta.name = 'wof.functionWidget.AddRecordComponent';
+    this._meta.title = '增加';
+    this._meta.sendMessages = {'wof.functionWidget.AddRecordComponent_mousedown':'单击'};
     this._meta.propertys = {
-        'CommitComponent':{
+        'AddRecordComponent':{
             'functionID':{prop:'functionID','name':'功能ID','type':'text','readOnly':false,'isHide':false},
             'isAutoCommit':{prop:'isAutoCommit','name':'是否自动提交','type':'yesOrNo','readOnly':false,'isHide':false},
             'bindComponents':{prop:'bindComponents','name':'绑定组件','type':'custom','readOnly':false,'isHide':false,required:false, customMethod:'wof.customWindow.ComponentTreeSelector'},
@@ -24,11 +24,11 @@ wof.functionWidget.spanner.CommitComponentSpanner = function () {
     };
 
     var onReceiveMessage = [];
-    onReceiveMessage.push({id:'wof.bizWidget.Spanner_render',method:'var propertys=message.sender.propertys;if(propertys.className=="wof.functionWidget.CommitComponent"){this.setPropertys(propertys);}else{this.setPropertys(null)}this.render();'});
+    onReceiveMessage.push({id:'wof.bizWidget.Spanner_render',method:'var propertys=message.sender.propertys;if(propertys.className=="wof.functionWidget.AddRecordComponent"){this.setPropertys(propertys);}else{this.setPropertys(null)}this.render();'});
     var method = 'var data=message.sender.propertys; '
         +'if(data.id==this.getPropertys().id){ '
         +' var node=wof.util.ObjectManager.get(data.id); '
-        +' node.updateCommitComponent(data); '
+        +' node.updateAddRecordComponent(data); '
         +' node.render();'
         +'}';
     onReceiveMessage.push({id:'wof.bizWidget.PropertyBar_apply',method:method});
@@ -41,7 +41,7 @@ wof.functionWidget.spanner.CommitComponentSpanner = function () {
     this._cutObjectIco = jQuery('<img style="position:absolute;width:16px;height:16px;z-index:90;" src="src/img/cut.gif">');
 
 };
-wof.functionWidget.spanner.CommitComponentSpanner.prototype = {
+wof.functionWidget.spanner.AddRecordComponentSpanner.prototype = {
     /**
      * 属性声明 （private ，用"_"标识）
      */
@@ -100,7 +100,7 @@ wof.functionWidget.spanner.CommitComponentSpanner.prototype = {
             event.stopPropagation();
             var obj = wof.util.ObjectManager.get(_this.getPropertys().id);
             obj.render();
-            obj.sendMessage('wof.functionWidget.CommitComponent_active');
+            obj.sendMessage('wof.functionWidget.AddRecordComponent_active');
         });
         this._deleteObjectIco.mousedown(function(event){
             event.stopPropagation();
@@ -140,8 +140,8 @@ wof.functionWidget.spanner.CommitComponentSpanner.prototype = {
     //选择实现
     afterRender: function () {
         var activeData = {};
-        var commitComponent = wof.util.ObjectManager.get(this.getPropertys().id);
-        if(commitComponent!=null){
+        var addRecordComponent = wof.util.ObjectManager.get(this.getPropertys().id);
+        if(addRecordComponent!=null){
             activeData.id = this.getPropertys().id;
             activeData.className = this.getPropertys().className;
             activeData.onReceiveMessage = this.getPropertys().onReceiveMessage;
@@ -155,18 +155,18 @@ wof.functionWidget.spanner.CommitComponentSpanner.prototype = {
             activeData.callItemName = this.getPropertys().callItemName;
             activeData.callItemCaption = this.getPropertys().callItemCaption;
 
-            activeData.activeClass = 'CommitComponent';
+            activeData.activeClass = 'AddRecordComponent';
 
             //加入拖放 删除 剪切操作句柄
             this._selectObjectIco.css('top',0).css('left',0);
-            commitComponent.getDomInstance().append(this._selectObjectIco);
+            addRecordComponent.getDomInstance().append(this._selectObjectIco);
             this._deleteObjectIco.css('top',0).css('left',this._selectObjectIco.width()+2);
-            commitComponent.getDomInstance().append(this._deleteObjectIco);
+            addRecordComponent.getDomInstance().append(this._deleteObjectIco);
             this._cutObjectIco.css('top',0).css('left',this._deleteObjectIco.width()*2+4);
-            commitComponent.getDomInstance().append(this._cutObjectIco);
+            addRecordComponent.getDomInstance().append(this._cutObjectIco);
         }
         this.setActiveData(activeData);
-        this.sendMessage('wof.functionWidget.spanner.CommitComponentSpanner_render');
+        this.sendMessage('wof.functionWidget.spanner.AddRecordComponentSpanner_render');
     },
 
     /**
@@ -191,22 +191,22 @@ wof.functionWidget.spanner.CommitComponentSpanner.prototype = {
     //静态方法 导出数据(只有需要给运行时解析的叶子节点才需要定义此方法)
     exportData: function(node){
         /**
-         <CommandItem CallType="JS" FunctionID="手动填写" CallItemCaption="addRecord" CallItemName="新增" CallStr="addcmd:0_0_1">
-             <Before CanStop="true">
-                <Call Type="JS" />
-             </Before>
-             <After>
-                <Call Type="JS" />
-             </After>
-             <Return />
-             <ParamMaps>
-                <ParamMap MapType="value" CompParamName="LinkComponentID" CompParamValue="emGrid" PageParamName="" ChangeExpt=""></ParamMap>
-                <ParamMap MapType="value" CompParamName="formId" CompParamValue="emplyform" PageParamName="" ChangeExpt=""></ParamMap>
-             </ParamMaps>
+         <CommandItem CallType="JS" FunctionID="201304" CallItemCaption="addRecord" CallItemName="新增" CallStr="addcmd:0_0_1">
+         <Before CanStop="true">
+            <Call Type="JS" />
+         </Before>
+         <After>
+            <Call Type="JS" />
+         </After>
+         <Return />
+         <ParamMaps>
+             <ParamMap MapType="value" CompParamName="LinkComponentID" CompParamValue="emGrid" PageParamName="" ChangeExpt=""></ParamMap>
+             <ParamMap MapType="value" CompParamName="formId" CompParamValue="emplyform" PageParamName="" ChangeExpt=""></ParamMap>
+         </ParamMaps>
          </CommandItem>
          */
         var json = {};
-        if(node.getClassName()=='wof.functionWidget.CommitComponent'){
+        if(node.getClassName()=='wof.functionWidget.AddRecordComponent'){
             json.className = node.getClassName();
             json.callStr = node.getCallStr();
             json.iSPermissionControl = String(node.getISPermissionControl());

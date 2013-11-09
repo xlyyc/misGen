@@ -86,9 +86,16 @@
 <script src="src/wof/bizWidget/Spanner.js"></script>
 
 <script src="src/wof/functionWidget/CommitComponent.js"></script>
+<script src="src/wof/functionWidget/ViewRecordComponent.js"></script>
+<script src="src/wof/functionWidget/UpdateRecordComponent.js"></script>
 <script src="src/wof/functionWidget/DeleteRecordComponent.js"></script>
+<script src="src/wof/functionWidget/AddRecordComponent.js"></script>
+
 <script src="src/wof/functionWidget/spanner/CommitComponentSpanner.js"></script>
+<script src="src/wof/functionWidget/spanner/ViewRecordComponentSpanner.js"></script>
+<script src="src/wof/functionWidget/spanner/UpdateRecordComponentSpanner.js"></script>
 <script src="src/wof/functionWidget/spanner/DeleteRecordComponentSpanner.js"></script>
+<script src="src/wof/functionWidget/spanner/AddRecordComponentSpanner.js"></script>
 
 <script src="src/wof/kernel/initAOP.js"></script>
 <script>
@@ -216,10 +223,26 @@ jQuery(function(){
                             widgetComponents.push(tabSpanner);
                             components.push(tabSpanner);
 
-                            var commitComponent = new CommitComponentSpanner();
-                            commitComponent.appendTo(gridLayout);
-                            widgetComponents.push(commitComponent);
-                            components.push(commitComponent);
+                            var commitComponentSpanner = new CommitComponentSpanner();
+                            commitComponentSpanner.appendTo(gridLayout);
+                            widgetComponents.push(commitComponentSpanner);
+                            components.push(commitComponentSpanner);
+
+                            var viewRecordComponentSpanner = new ViewRecordComponentSpanner();
+                            viewRecordComponentSpanner.appendTo(gridLayout);
+                            widgetComponents.push(viewRecordComponentSpanner);
+                            components.push(viewRecordComponentSpanner);
+
+                            var updateRecordComponentSpanner = new UpdateRecordComponentSpanner();
+                            updateRecordComponentSpanner.appendTo(gridLayout);
+                            widgetComponents.push(updateRecordComponentSpanner);
+                            components.push(updateRecordComponentSpanner);
+
+                            var addRecordComponentSpanner = new AddRecordComponentSpanner();
+                            addRecordComponentSpanner.appendTo(gridLayout);
+                            widgetComponents.push(addRecordComponentSpanner);
+                            components.push(addRecordComponentSpanner);
+
 
                             var deleteRecordComponentSpanner = new DeleteRecordComponentSpanner();
                             deleteRecordComponentSpanner.appendTo(gridLayout);
@@ -277,7 +300,10 @@ jQuery(function(){
                 onReceiveMessage.push({id:'wof.bizWidget.spanner.GridComponentSpanner_render',method:method});
                 onReceiveMessage.push({id:'wof.bizWidget.spanner.PageSpanner_render',method:method});
                 onReceiveMessage.push({id:'wof.functionWidget.spanner.CommitComponentSpanner_render',method:method});
+                onReceiveMessage.push({id:'wof.functionWidget.spanner.ViewRecordComponentSpanner_render',method:method});
+                onReceiveMessage.push({id:'wof.functionWidget.spanner.UpdateRecordComponentSpanner_render',method:method});
                 onReceiveMessage.push({id:'wof.functionWidget.spanner.DeleteRecordComponentSpanner_render',method:method});
+                onReceiveMessage.push({id:'wof.functionWidget.spanner.AddRecordComponentSpanner_render',method:method});
                 propertyBar.setOnReceiveMessage(onReceiveMessage);
                 propertyBar.setTop(0);
                 propertyBar.setLeft(4);
@@ -298,7 +324,10 @@ jQuery(function(){
                 receives.push({id:'wof.bizWidget.spanner.GridComponentSpanner_render',method:meth});
                 receives.push({id:'wof.bizWidget.spanner.PageSpanner_render',method:meth});
                 receives.push({id:'wof.functionWidget.spanner.CommitComponentSpanner_render',method:meth});
+                receives.push({id:'wof.functionWidget.spanner.ViewRecordComponentSpanner_render',method:meth});
+                receives.push({id:'wof.functionWidget.spanner.UpdateRecordComponentSpanner_render',method:meth});
                 receives.push({id:'wof.functionWidget.spanner.DeleteRecordComponentSpanner_render',method:meth});
+                receives.push({id:'wof.functionWidget.spanner.AddRecordComponentSpanner_render',method:meth});
                 onSendMessageBar.setOnReceiveMessage(receives);
                 onSendMessageBar.setTop(0);
                 onSendMessageBar.setLeft(4);
@@ -319,7 +348,10 @@ jQuery(function(){
                 receiv.push({id:'wof.bizWidget.spanner.GridComponentSpanner_render',method:met});
                 receiv.push({id:'wof.bizWidget.spanner.PageSpanner_render',method:met});
                 receiv.push({id:'wof.functionWidget.spanner.CommitComponentSpanner_render',method:met});
+                receiv.push({id:'wof.functionWidget.spanner.ViewRecordComponentSpanner_render',method:met});
+                receiv.push({id:'wof.functionWidget.spanner.UpdateRecordComponentSpanner_render',method:met});
                 receiv.push({id:'wof.functionWidget.spanner.DeleteRecordComponentSpanner_render',method:met});
+                receiv.push({id:'wof.functionWidget.spanner.AddRecordComponentSpanner_render',method:met});
                 onReceiveMessageBar.setOnReceiveMessage(receiv);
                 onReceiveMessageBar.setTop(0);
                 onReceiveMessageBar.setLeft(4);

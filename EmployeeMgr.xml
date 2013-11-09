@@ -104,8 +104,7 @@
 		</StatesMaps>
 		<Bar BarID="bar1">
 			<!-- TEMP -->
-			<CommandItem CallType="JS" FunctionID="201304"
-				CallItemCaption="addRecord" CallItemName="新增" CallStr="addcmd:0_0_1">
+			<CommandItem CallType="JS" FunctionID="201304" CallItemCaption="addRecord" CallItemName="新增" CallStr="addcmd:0_0_1">
 				<Before CanStop="true">
 					<Call Type="JS" />
 				</Before>
@@ -120,8 +119,7 @@
 						CompParamValue="emplyform" PageParamName="" ChangeExpt=""></ParamMap>
 				</ParamMaps>
 			</CommandItem>
-			<CommandItem CallType="JS" FunctionID="emap.form"
-				CallItemCaption="updateRecord" CallStr="updatecmd:0_0_1"
+			<CommandItem CallType="JS" FunctionID="emap.form" CallItemCaption="updateRecord" CallStr="updatecmd:0_0_1"
 				CallItemName="修改">
 				<Before CanStop="true">
 					<Call Type="JS" />
@@ -137,8 +135,7 @@
 						CompParamValue="emplyform" PageParamName="" ChangeExpt=""></ParamMap>
 				</ParamMaps>
 			</CommandItem>
-			<CommandItem CallType="JS" FunctionID="emap.form"
-				CallItemCaption="viewRecord" CallItemName="查看" CallStr="viewcmd:0_0_1">
+			<CommandItem CallType="JS" FunctionID="emap.form" CallItemCaption="viewRecord" CallItemName="查看" CallStr="viewcmd:0_0_1">
 				<Before CanStop="true">
 					<Call Type="JS" />
 				</Before>
