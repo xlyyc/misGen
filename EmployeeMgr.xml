@@ -34,8 +34,7 @@
 
 	<Layout>
 		<IncludeControls>
-			<SearchComponent BindEntityID="Employee" Id="emSearch" ColsNum="3" Caption="员工信息搜索"
-				index="A" State="" CallStr="searchcomponent:0_0_1" LinkComponentID="emGrid">
+			<SearchComponent BindEntityID="Employee" Id="emSearch" ColsNum="3" Caption="员工信息搜索" index="A" State="" CallStr="searchcomponent:0_0_1" LinkComponentID="emGrid">
 				<SearchItem Caption="姓名" Index="0" DataField="name" Name="name"
 					VisbleType="Text" LableWidth="100" InputWidth="100" Max="5"/>
 				<SearchItem Caption="年龄" Index="1" DataField="age" Name="age"
