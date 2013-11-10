@@ -196,7 +196,8 @@ wof.bizWidget.SearchComponent.prototype = {
             itemHeight:this.getItemHeight(),
             titleHeight: this.getTitleHeight(),
             rows: this.getRows(),
-            isExpand: this.getIsExpand()
+            isExpand: this.getIsExpand(),
+            activeSearchItemRank: this.getActiveSearchItemRank()
         };
     },
     //----------必须实现----------
@@ -208,6 +209,7 @@ wof.bizWidget.SearchComponent.prototype = {
         this.setTitleHeight(data.titleHeight);
         this.setRows(data.rows);
         this.setIsExpand(data.isExpand);
+        this.setActiveSearchItemRank(data.activeSearchItemRank);
     },
 
     _insideOnReceiveMessage:{
@@ -275,22 +277,30 @@ wof.bizWidget.SearchComponent.prototype = {
 
     //删除searchItem
     //return true 真正移除 false 没有从移除
-    deleteSearchItem: function(searchItem){
+    deleteSearchItem: function(searchItemRank){
         var flag = true;
-        if(this.findSearchItems().length==1){ //如果searchItem只剩一个
-            searchItem.setColspan(1);
-            searchItem.setRowspan(1);
-            flag = false;
+        var searchItem = this.findSearchItemByRank(searchItemRank);
+        if(searchItem!=null){
+            if(this.findSearchItems().length==1){ //如果searchItem只剩一个
+                searchItem.setColspan(1);
+                searchItem.setRowspan(1);
+                flag = false;
+            }else{
+                searchItem.removeChildren(true);
+                searchItem.remove(true);
+            }
         }else{
-            searchItem.removeChildren(true);
-            searchItem.remove(true);
+            flag = false;
         }
         return flag;
     },
 
     //减少列数
-    reduceSearchItemColspan: function(searchItem){
-        searchItem.setColspan(searchItem.getColspan()-1);
+    reduceSearchItemColspan: function(searchItemRank){
+        var searchItem = this.findSearchItemByRank(searchItemRank);
+        if(searchItem!=null){
+            searchItem.setColspan(searchItem.getColspan()-1);
+        }
     },
 
     //判断是否可以减少列数
@@ -320,8 +330,11 @@ wof.bizWidget.SearchComponent.prototype = {
     },
 
     //增加列数
-    addSearchItemColspan: function(searchItem){
-        searchItem.setColspan(searchItem.getColspan()+1);
+    addSearchItemColspan: function(searchItemRank){
+        var searchItem = this.findSearchItemByRank(searchItemRank);
+        if(searchItem!=null){
+            searchItem.setColspan(searchItem.getColspan()+1);
+        }
     },
 
     //判断是否可以增加行数
@@ -334,8 +347,11 @@ wof.bizWidget.SearchComponent.prototype = {
     },
 
     //增加行数
-    addSearchItemRowspan: function(searchItem){
-        searchItem.setRowspan(searchItem.getRowspan()+1);
+    addSearchItemRowspan: function(searchItemRank){
+        var searchItem = this.findSearchItemByRank(searchItemRank);
+        if(searchItem!=null){
+            searchItem.setRowspan(searchItem.getRowspan()+1);
+        }
     },
 
     //判断是否可以减少行数
@@ -361,8 +377,11 @@ wof.bizWidget.SearchComponent.prototype = {
     },
 
     //解锁searchItem
-    unfixSearchItem: function(searchItem){
-        searchItem.setIsFixItem(false);
+    unfixSearchItem: function(searchItemRank){
+        var searchItem = this.findSearchItemByRank(searchItemRank);
+        if(searchItem!=null){
+            searchItem.setIsFixItem(false);
+        }
     },
 
     //判断是否可以锁定
@@ -375,13 +394,19 @@ wof.bizWidget.SearchComponent.prototype = {
     },
 
     //锁定searchItem
-    fixSearchItem: function(searchItem){
-        searchItem.setIsFixItem(true);
+    fixSearchItem: function(searchItemRank){
+        var searchItem = this.findSearchItemByRank(searchItemRank);
+        if(searchItem!=null){
+            searchItem.setIsFixItem(true);
+        }
     },
 
     //减少列数
-    reduceSearchItemRowspan: function(searchItem){
-        searchItem.setRowspan(searchItem.getRowspan()-1);
+    reduceSearchItemRowspan: function(searchItemRank){
+        var searchItem = this.findSearchItemByRank(searchItemRank);
+        if(searchItem!=null){
+            searchItem.setRowspan(searchItem.getRowspan()-1);
+        }
     },
 
     //设置当前激活的SearchComponent样式

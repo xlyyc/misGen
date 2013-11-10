@@ -16,6 +16,10 @@ wof.bizWidget.spanner.SearchComponentSpanner = function () {
         'SearchComponent':{
             'id':{prop:'id','name':'ID','type':'text','readOnly':true,'isHide':false},
             'className':{prop:'className','name':'类名','type':'text','readOnly':true,'isHide':false}
+        },
+        'SearchItem':{
+            'id':{prop:'id','name':'ID','type':'text','readOnly':true,'isHide':false},
+            'className':{prop:'className','name':'类名','type':'text','readOnly':true,'isHide':false}
         }
     };
 
@@ -32,6 +36,18 @@ wof.bizWidget.spanner.SearchComponentSpanner = function () {
     onReceiveMessage.push({id:'wof.bizWidget.OnReceiveMessageBar_apply',method:method});
     this.setOnReceiveMessage(onReceiveMessage);
 
+    this._selectSearchComponentIco = jQuery('<img style="position:absolute;width:16px;height:16px;z-index:90;" src="src/img/selectSearchComponent.png">');
+    this._deleteSearchComponentIco = jQuery('<img style="position:absolute;width:16px;height:16px;z-index:90;" src="src/img/deleteSearchComponent.png">');
+    this._cutSearchComponentIco = jQuery('<img style="position:absolute;width:16px;height:16px;z-index:90;" src="src/img/cut.gif">');
+
+    this._mergeSearchItemArrow = jQuery('<img style="position:absolute;width:16px;height:16px;z-index:90;" src="src/img/mergeSearchItemArrow.png">');
+    this._splitSearchItemArrow = jQuery('<img style="position:absolute;width:16px;height:16px;z-index:90;" src="src/img/splitSearchItemArrow.png">');
+    this._addSearchItemRowspanArrow = jQuery('<img style="position:absolute;width:16px;height:16px;z-index:90;" src="src/img/addSearchItemRowspanArrow.png">');
+    this._reduceSearchItemRowspanArrow = jQuery('<img style="position:absolute;width:16px;height:16px;z-index:90;" src="src/img/reduceSearchItemRowspanArrow.png">');
+    this._deleteSearchItemIco = jQuery('<img style="position:absolute;width:16px;height:16px;z-index:90;" src="src/img/deleteSearchItem.png">');
+    this._lockSearchItemIco = jQuery('<img style="position:absolute;width:16px;height:16px;z-index:90;" src="src/img/lock.png">');
+    this._unlockSearchItemIco = jQuery('<img style="position:absolute;width:16px;height:16px;z-index:90;" src="src/img/unlock.png">');
+
 };
 wof.bizWidget.spanner.SearchComponentSpanner.prototype = {
     /**
@@ -45,6 +61,26 @@ wof.bizWidget.spanner.SearchComponentSpanner.prototype = {
     _propertys: null,
 
     _activeData: null,
+
+    _mergeSearchItemArrow:null,
+
+    _splitSearchItemArrow:null,
+
+    _addSearchItemRowspanArrow:null,
+
+    _reduceSearchItemRowspanArrow:null,
+
+    _deleteSearchItemIco:null,
+
+    _lockSearchItemIco:null,
+
+    _unlockSearchItemIco:null,
+
+    _selectSearchComponentIco:null,
+
+    _deleteSearchComponentIco:null,
+
+    _cutSearchComponentIco:null,
 
     /**
      * get/set 属性方法定义
@@ -79,21 +115,236 @@ wof.bizWidget.spanner.SearchComponentSpanner.prototype = {
 
     //选择实现
     beforeRender: function () {
+        this._selectSearchComponentIco.remove();
+        this._deleteSearchComponentIco.remove();
+        this._cutSearchComponentIco.remove();
+        this._splitSearchItemArrow.remove();
+        this._mergeSearchItemArrow.remove();
+        this._reduceSearchItemRowspanArrow.remove();
+        this._addSearchItemRowspanArrow.remove();
+        this._deleteSearchItemIco.remove();
+        this._lockSearchItemIco.remove();
+        this._unlockSearchItemIco.remove();
 
+        var _this = this;
+        this._selectSearchComponentIco.mousedown(function(event){
+            event.stopPropagation();
+            var searchComponent = wof.util.ObjectManager.get(_this.getPropertys().id);
+            searchComponent.setActiveSearchItemRank(null);
+            searchComponent.render();
+            searchComponent.sendMessage('wof.bizWidget.SearchComponent_active');
+        });
+        this._deleteSearchComponentIco.mousedown(function(event){
+            event.stopPropagation();
+            var dialogDiv = jQuery('<div title="提示"><p><span class="ui-icon ui-icon-alert" style="float:left;margin:0 7px 20px 0;"></span>确定要删除该构件吗?</p></div>');
+            dialogDiv.dialog({
+                resizable:false,
+                height:200,
+                modal: true,
+                buttons:{
+                    '确定':function(){
+                        var searchComponent = wof.util.ObjectManager.get(_this.getPropertys().id);
+                        searchComponent.removeChildren(true);
+                        searchComponent.remove(true);
+                        jQuery(this).dialog('close');
+                        jQuery(this).remove();
+                    },
+                    '关闭':function(){
+                        jQuery(this).dialog('close');
+                        jQuery(this).remove();
+                    }
+                }
+            });
+        });
+
+        this._cutSearchComponentIco.mousedown(function(event){
+            event.stopPropagation();
+            wof.util.GlobalObject.add('cutObjectId',_this.getPropertys().id);
+        });
+
+        this._mergeSearchItemArrow.mousedown(function(event){
+            event.stopPropagation();
+            var searchComponent = wof.util.ObjectManager.get(_this.getPropertys().id);
+            var activeSearchItemRank = _this.getPropertys().activeSearchItemRank;
+            searchComponent.addSearchItemColspan(activeSearchItemRank);
+            searchComponent.setActiveSearchItemRank(null);
+            searchComponent.render();
+            searchComponent.sendMessage('wof.bizWidget.SearchComponent_active');
+        });
+        this._splitSearchItemArrow.mousedown(function(event){
+            event.stopPropagation();
+            var searchComponent = wof.util.ObjectManager.get(_this.getPropertys().id);
+            var activeSearchItemRank = _this.getPropertys().activeSearchItemRank;
+            searchComponent.reduceSearchItemColspan(activeSearchItemRank);
+            searchComponent.setActiveSearchItemRank(null);
+            searchComponent.render();
+            searchComponent.sendMessage('wof.bizWidget.SearchComponent_active');
+        });
+        this._reduceSearchItemRowspanArrow.mousedown(function(event){
+            event.stopPropagation();
+            var searchComponent = wof.util.ObjectManager.get(_this.getPropertys().id);
+            var activeSearchItemRank = _this.getPropertys().activeSearchItemRank;
+            searchComponent.reduceSearchItemRowspan(activeSearchItemRank);
+            searchComponent.setActiveSearchItemRank(null);
+            searchComponent.render();
+            searchComponent.sendMessage('wof.bizWidget.SearchComponent_active');
+        });
+        this._addSearchItemRowspanArrow.mousedown(function(event){
+            event.stopPropagation();
+            var searchComponent = wof.util.ObjectManager.get(_this.getPropertys().id);
+            var activeSearchItemRank = _this.getPropertys().activeSearchItemRank;
+            searchComponent.addSearchItemRowspan(activeSearchItemRank);
+            searchComponent.setActiveSearchItemRank(null);
+            searchComponent.render();
+            searchComponent.sendMessage('wof.bizWidget.SearchComponent_active');
+        });
+
+        this._unlockSearchItemIco.mousedown(function(event){
+            event.stopPropagation();
+            var searchComponent = wof.util.ObjectManager.get(_this.getPropertys().id);
+            var activeSearchItemRank = _this.getPropertys().activeSearchItemRank;
+            searchComponent.unfixSearchItem(activeSearchItemRank);
+            searchComponent.setActiveSearchItemRank(null);
+            searchComponent.render();
+            searchComponent.sendMessage('wof.bizWidget.SearchComponent_active');
+        });
+        this._lockSearchItemIco.mousedown(function(event){
+            event.stopPropagation();
+            var searchComponent = wof.util.ObjectManager.get(_this.getPropertys().id);
+            var activeSearchItemRank = _this.getPropertys().activeSearchItemRank;
+            searchComponent.fixSearchItem(activeSearchItemRank);
+            searchComponent.setActiveSearchItemRank(null);
+            searchComponent.render();
+            searchComponent.sendMessage('wof.bizWidget.SearchComponent_active');
+        });
+        this._deleteSearchItemIco.mousedown(function(event){
+            event.stopPropagation();
+            var searchComponent = wof.util.ObjectManager.get(_this.getPropertys().id);
+            var activeSearchItemRank = _this.getPropertys().activeSearchItemRank;
+            var activeSearchItem = searchComponent.findSearchItemByRank(activeSearchItemRank);
+            if(activeSearchItem!=null&&activeSearchItem.childNodes().length>0){
+                var dialogDiv = jQuery('<div title="提示"><p><span class="ui-icon ui-icon-alert" style="float:left;margin:0 7px 20px 0;"></span>该单元格包含对象,确定要删除该单元格吗?</p></div>');
+                dialogDiv.dialog({
+                    resizable:false,
+                    height:200,
+                    modal: true,
+                    buttons:{
+                        '确定':function(){
+                            searchComponent.deleteSearchItem(activeSearchItemRank);
+                            searchComponent.setActiveSearchItemRank(null);
+                            searchComponent.render();
+                            searchComponent.sendMessage('wof.bizWidget.SearchComponent_active');
+                            jQuery(this).dialog('close');
+                            jQuery(this).remove();
+                        },
+                        '关闭':function(){
+                            jQuery(this).dialog('close');
+                            jQuery(this).remove();
+                        }
+                    }
+                });
+            }else{
+                searchComponent.deleteSearchItem(activeSearchItemRank);
+                searchComponent.setActiveSearchItemRank(null);
+                searchComponent.render();
+                searchComponent.sendMessage('wof.bizWidget.SearchComponent_active');
+            }
+        });
     },
 
     //----------必须实现----------
     render: function () {
+        var activeData = {};
+        var searchComponent = wof.util.ObjectManager.get(this.getPropertys().id);
+        if(searchComponent!=null){
+            activeData.id = this.getPropertys().id;
+            activeData.className = this.getPropertys().className;
+            activeData.onReceiveMessage = this.getPropertys().onReceiveMessage;
+            activeData.onSendMessage = this.getPropertys().onSendMessage;
 
+                var activeSearchItemRank = this.getPropertys().activeSearchItemRank;
+                var activeSearchItem = searchComponent.findSearchItemByRank(activeSearchItemRank);
+                if(activeSearchItem!=null){
+                    //当前激活SearchItem加入减少列数句柄
+                    if(searchComponent.canReduceSearchItemColspan(activeSearchItem)){
+                        this._splitSearchItemArrow.css('top',2).css('left',0);
+                        activeSearchItem.getDomInstance().append(this._splitSearchItemArrow);
+                    }
+                    //当前激活SearchItem加入增加列数句柄
+                    if(searchComponent.canAddSearchItemColspan(activeSearchItem)){
+                        this._mergeSearchItemArrow.css('top',2).css('left',activeSearchItem.getWidth()*activeSearchItem.getScale()-this._mergeSearchItemArrow.width()-2);
+                        activeSearchItem.getDomInstance().append(this._mergeSearchItemArrow);
+                    }
+                    if(searchComponent.canDeleteSearchItem(activeSearchItem)){
+                        this._deleteSearchItemIco.css('top',activeSearchItem.getHeight()*activeSearchItem.getScale()-this._deleteSearchItemIco.height()-2).css('left',activeSearchItem.getWidth()*activeSearchItem.getScale()-this._deleteSearchItemIco.width()*2-6);
+                        activeSearchItem.getDomInstance().append(this._deleteSearchItemIco);
+                    }
+                    if(searchComponent.canFixSearchItem(activeSearchItem)){
+                        this._lockSearchItemIco.css('top',activeSearchItem.getHeight()*activeSearchItem.getScale()-this._lockSearchItemIco.height()-2).css('left',activeSearchItem.getWidth()*activeSearchItem.getScale()-this._lockSearchItemIco.width()-2);
+                        activeSearchItem.getDomInstance().append(this._lockSearchItemIco);
+                    }
+                    if(searchComponent.canUnfixSearchItem(activeSearchItem)){
+                        this._unlockSearchItemIco.css('top',activeSearchItem.getHeight()*activeSearchItem.getScale()-this._unlockSearchItemIco.height()-2).css('left',activeSearchItem.getWidth()*activeSearchItem.getScale()-this._unlockSearchItemIco.width()-2);
+                        activeSearchItem.getDomInstance().append(this._unlockSearchItemIco);
+                    }
+                    if(searchComponent.canReduceSearchItemRowspan(activeSearchItem)){
+                        this._reduceSearchItemRowspanArrow.css('top',0).css('left',activeSearchItem.getWidth()*activeSearchItem.getScale()/2-this._reduceSearchItemRowspanArrow.width()/2);
+                        activeSearchItem.getDomInstance().append(this._reduceSearchItemRowspanArrow);
+                    }
+                    if(searchComponent.canAddSearchItemRowspan(activeSearchItem)){
+                        this._addSearchItemRowspanArrow.css('top',activeSearchItem.getHeight()*activeSearchItem.getScale()-this._addSearchItemRowspanArrow.height()-2).css('left',activeSearchItem.getWidth()*activeSearchItem.getScale()/2-this._addSearchItemRowspanArrow.width()/2);
+                        activeSearchItem.getDomInstance().append(this._addSearchItemRowspanArrow);
+                    }
+                    activeData.activeClass = 'SearchItem';
+                    activeData.rowNum = activeSearchItem.getRowNum();
+                    activeData.colNum = activeSearchItem.getColNum();
+                    activeData.colspan = activeSearchItem.getColspan();
+                    activeData.rowspan = activeSearchItem.getRowspan();
+                    activeData.isFixItem = activeSearchItem.getIsFixItem();
+                    /*activeData.itemName = activeSearchItem.getItemName();
+                    activeData.visiable = activeSearchItem.getVisiable();
+                    activeData.itemLabel = activeSearchItem.getItemLabel();
+                    activeData.dataField = activeSearchItem.getDataField();
+                    activeData.dateTimeBoxFormat = activeSearchItem.getDateTimeBoxFormat();
+                    activeData.readOnly = activeSearchItem.getReadOnly();
+                    activeData.required = activeSearchItem.getRequired();
+                    activeData.length = activeSearchItem.getLength();
+                    activeData.min = activeSearchItem.getMin();
+                    activeData.max = activeSearchItem.getMax();
+                    activeData.regExp = activeSearchItem.getRegExp();
+                    activeData.checkErrorInfo = activeSearchItem.getCheckErrorInfo();
+                    activeData.selectPattern = activeSearchItem.getSelectPattern();
+                    activeData.useMultiSelect = activeSearchItem.getUseMultiSelect();
+                    activeData.visbleType = activeSearchItem.getVisbleType();
+                    activeData.labelWidth = activeSearchItem.getLabelWidth();
+                    activeData.inputWidth = activeSearchItem.getInputWidth();
+                    activeData.inputHeight = activeSearchItem.getInputHeight();
+                    activeData.linkageItem = activeSearchItem.getLinkageItem();
+                    activeData.tipValue = activeSearchItem.getTipValue();
+                    activeData.SearchItemGroupIndex = searchComponent.getIndex();*/
+                }else{
+                    activeData.activeClass = 'SearchComponent';
+                    activeData.groupCaption = searchComponent.getGroupCaption();
+                    activeData.colsNum = searchComponent.getColsNum();
+                    activeData.itemHeight = searchComponent.getItemHeight();
+                    activeData.isExpand = searchComponent.getIsExpand();
+                    activeData.mustInOrder = searchComponent.getMustInOrder();
+                }
+
+            //当前选中的SearchComponent加入拖放 删除操作句柄
+            this._selectSearchComponentIco.css('top',0).css('left',0);
+            searchComponent.getDomInstance().append(this._selectSearchComponentIco);
+            this._deleteSearchComponentIco.css('top',0).css('left',this._deleteSearchComponentIco.width()+2);
+            searchComponent.getDomInstance().append(this._deleteSearchComponentIco);
+            this._cutSearchComponentIco.css('top',0).css('left',this._deleteSearchComponentIco.width()*2+4);
+            searchComponent.getDomInstance().append(this._cutSearchComponentIco);
+        }
+        this.setActiveData(activeData);
+        this.sendMessage('wof.bizWidget.spanner.SearchComponentSpanner_render');
     },
 
     //选择实现
     afterRender: function () {
-        if(!jQuery.isEmptyObject(this.getPropertys())){
-            this.getPropertys().activeClass = 'SearchComponent';
-        }
-        this.setActiveData(this.getPropertys());
-        this.sendMessage('wof.bizWidget.spanner.SearchComponentSpanner_render');
     },
 
     /**
