@@ -117,6 +117,19 @@ wof.bizWidget.spanner.SearchComponentSpanner.prototype = {
 
     //静态方法 导出数据
     exportData: function(node){
+        /**
+         <SearchComponent BindEntityID="Employee" Id="emSearch" ColsNum="3" Caption="员工信息搜索" index="A" State="" CallStr="searchcomponent:0_0_1" LinkComponentID="emGrid">
+            <SearchItem Caption="姓名" Index="0" DataField="name" Name="name" VisbleType="Text" LableWidth="100" InputWidth="100" Max="5"/>
+            <SearchItem Caption="年龄" Index="1" DataField="age" Name="age" VisbleType="Number" FromTo="true" LableWidth="100" InputWidth="100" />
+            <SearchItem Name="Sex" InputWidth="150" Visible="true" Caption="性别" LableWidth="100" DataField="sex" VisbleType="Text"/>
+            <SearchItem Name="birthdate" InputWidth="150" Visible="true" Caption="出生日期" LableWidth="100" TipValue="点击选择时间" DataField="birthdate" DateTimeFormat="YYYY_MM_DD_HH_MM_SS" VisbleType="Date" FromTo="true"/>
+            <ParamMaps>
+               <ParamMap MapType="value" CompParamName="" PageParamName="" ChangeExpt=""></ParamMap>
+            </ParamMaps>
+         </SearchComponent>
+
+         */
+
         console.log('node.getId()=='+node.getId()+'   '+node.getClassName());
     }
 };

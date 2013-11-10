@@ -164,6 +164,7 @@ wof.bizWidget.FlowLayout.prototype = {
                 node = eval('(new '+json.className+'())');
                 node.setData(json);
             }else{
+                console.log('obj.getValue()='+obj.getValue());
                 node = eval('(new '+obj.getValue()+'()).createSelf('+item.getWidth()+','+item.getHeight()+');');
             }
             this.insertNode(node);

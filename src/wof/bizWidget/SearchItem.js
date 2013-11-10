@@ -349,13 +349,13 @@ wof.bizWidget.SearchItem.prototype = {
                 event.stopPropagation();
                 clearTimeout(timeFn);
                 timeFn = setTimeout(function(){
-                    _this.sendMessage('wof.bizWidget.VoucherItem_mousedown');
+                    _this.sendMessage('wof.bizWidget.SearchItem_mousedown');
                 },250);
             });
             this.getDomInstance().dblclick(function(event){
                 event.stopPropagation();
                 clearTimeout(timeFn);
-                _this.sendMessage('wof.bizWidget.VoucherItem_dblclick');
+                _this.sendMessage('wof.bizWidget.SearchItem_dblclick');
             });
             this.getDomInstance().droppable({
                 snap:true,
@@ -367,10 +367,9 @@ wof.bizWidget.SearchItem.prototype = {
                             if(_this.parentNode()==null){
                                 b=false;
                             }else{
-
-                                var layout = draggableObj.parentNode().getVoucherComponent();
-                                var thisLayout = _this.parentNode().getVoucherComponent();
-                                if(thisLayout.getId()==layout.getId()){
+                                var searchComponent = draggableObj.parentNode();
+                                var thisSearchComponent = _this.parentNode();
+                                if(thisSearchComponent.getId()==searchComponent.getId()){
                                     b=true;
                                 }
                             }
@@ -384,7 +383,7 @@ wof.bizWidget.SearchItem.prototype = {
                     var obj = wof.util.ObjectManager.get(ui.draggable.attr('oid'));
                     if(obj!=null){
                         if(obj.getClassName()=='wof.bizWidget.SearchItem'){
-                            _this.sendMessage('wof.bizWidget.VoucherItem_voucherItemDrop', {'voucherItemId':ui.draggable.attr('oid')});
+                            _this.sendMessage('wof.bizWidget.SearchItem_searchItemDrop', {'searchItemId':ui.draggable.attr('oid')});
                         }
                     }
                 }
