@@ -593,9 +593,10 @@ wof.bizWidget.spanner.VoucherComponentSpanner.prototype = {
                     voucherItemGroup.colsNum = group.getColsNum();
                     voucherItemGroup.index = group.getIndex();
                     voucherItemGroup.isHead = group.getIsHead();
+                    var voucherItems = [];
                     var cns = group.childNodes();
                     for(var t=0;t<cns.length;t++){
-                        if(cns[t]=='wof.bizWidget.VoucherItem'){
+                        if(cns[t].getClassName()=='wof.bizWidget.VoucherItem'){
                             var item = cns[t];
                             var voucherItem = {};
                             voucherItem.colNum = item.getColNum();
@@ -622,9 +623,10 @@ wof.bizWidget.spanner.VoucherComponentSpanner.prototype = {
                             voucherItem.linkageItem = item.getLinkageItem();
                             voucherItem.colspan = item.getColspan();
                             voucherItem.tipValue = item.getTipValue();
-                            voucherItemGroup.push(voucherItem);
+                            voucherItems.push(voucherItem);
                         }
                     }
+                    voucherItemGroup.columns = voucherItems;
                     voucherItemGroups.push(voucherItemGroup);
                 }
             }
