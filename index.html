@@ -472,7 +472,7 @@ jQuery(function(){
             console.log(JSON.stringify(json));
 
             try{
-                setPageMetas(json);
+                setPageMetas(JSON.stringify(json));
             }catch(e){
                 alert(e);
             }
