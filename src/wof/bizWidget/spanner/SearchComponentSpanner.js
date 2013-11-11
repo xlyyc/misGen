@@ -14,22 +14,49 @@ wof.bizWidget.spanner.SearchComponentSpanner = function () {
     this._meta.sendMessages = {'wof.bizWidget.SearchComponent_mousedown':'单击','wof.bizWidget.SearchComponent_render':'重绘'};
     this._meta.propertys = {
         'SearchComponent':{
-            'id':{prop:'id','name':'ID','type':'text','readOnly':true,'isHide':false},
-            'className':{prop:'className','name':'类名','type':'text','readOnly':true,'isHide':false}
+            'itemHeight':{prop:'itemHeight','name':'行高','type':'naturalNumber','readOnly':false,'isHide':false,required:true},
+            'name':{prop:'name','name':'构件名称','type':'text','readOnly':false,'isHide':false,required:false},
+            'caption':{prop:'caption','name':'标题','type':'text','readOnly':false,'isHide':false,required:false},
+            'linkComponentID':{prop:'linkComponentID','name':'关联组件','type':'text','readOnly':false,'isHide':false,required:false},
+            'colsNum':{prop:'colsNum','name':'列数','type':'naturalNumber','readOnly':false,'isHide':false,required:true},
+            'isExpand':{prop:'isExpand','name':'是否展开','type':'yesOrNo','readOnly':false,'isHide':false,required:false}
         },
         'SearchItem':{
-            'id':{prop:'id','name':'ID','type':'text','readOnly':true,'isHide':false},
-            'className':{prop:'className','name':'类名','type':'text','readOnly':true,'isHide':false}
+            'name':{prop:'name','name':'名称','type':'text','readOnly':false,'isHide':false,required:false},
+            'colNum':{prop:'colNum','name':'列号','type':'naturalNumber','readOnly':true,'isHide':false,required:false},
+            'rowNum':{prop:'rowNum','name':'行号','type':'naturalNumber','readOnly':true,'isHide':false,required:false},
+            'isFixItem':{prop:'isFixItem','name':'是否锁定','type':'yesOrNo','readOnly':false,'isHide':false,required:true},
+            'rowspan':{prop:'rowspan','name':'纵向通栏','type':'naturalNumber','readOnly':false,'isHide':false,required:true},
+            'caption':{prop:'caption','name':'显示名称','type':'text','readOnly':false,'isHide':false,required:false},
+            'dataField':{prop:'dataField','name':'绑定实体属性','type':'custom','readOnly':false,'isHide':false,required:false, customMethod:'wof.customWindow.MetaTreeSelector'},
+            'dateTimeBoxFormat':{prop:'dateTimeBoxFormat','name':'时间格式','type':'enum','readOnly':false,'isHide':false,enumData:{'YYYY-MM-DD hh:mm:ss':'YYYY-MM-DD hh:mm:ss','YYYY-MM':'YYYY-MM','MM-DD':'MM-DD','YYYY-MM-DD':'YYYY-MM-DD','hh:mm:ss':'hh:mm:ss','hh:mm':'hh:mm'},required:false},
+            'selectPattern':{prop:'selectPattern','name':'下拉框显示模式','type':'enum','readOnly':false,'isHide':false, 'enumData':{'normal':'普通','tree':'树形','grid':'列表'},required:false},
+            'useMultiSelect':{prop:'useMultiSelect','name':'下拉框是否多选','type':'yesOrNo','readOnly':false,'isHide':false,required:false},
+            'visbleType':{prop:'visbleType','name':'显示类型','type':'enum','readOnly':false,'isHide':false, enumData:{id:'Id',text:'文本框',textArea:'文本域',richTextArea:'文本编辑器',select:'下拉框',checkBox:'多选框',date:'日期',radio:'单选框',file:'文件选择框',number:'数字'},required:false},
+            'fromTo':{prop:'fromTo','name':'是否范围搜索','type':'yesOrNo','yesOrNo':false,'isHide':false,required:false},
+            'labelWidth':{prop:'labelWidth','name':'Label宽度','type':'naturalNumber','readOnly':false,'isHide':false,required:false},
+            'inputWidth':{prop:'inputWidth','name':'输入框宽度','type':'naturalNumber','readOnly':false,'isHide':false,required:false},
+            'inputHeight':{prop:'inputHeight','name':'输入框高度','type':'naturalNumber','readOnly':false,'isHide':false,required:false},
+            'colspan':{prop:'colspan','name':'横向通栏','type':'naturalNumber','readOnly':false,'isHide':false,required:true},
+            'tipValue':{prop:'tipValue','name':'提示信息','type':'text','readOnly':false,'isHide':false,required:false},
+            'linkageItem':{prop:'linkageItem','name':'关联联动项','type':'text','readOnly':false,'isHide':false,required:false}
         }
     };
 
     var onReceiveMessage = [];
     onReceiveMessage.push({id:'wof.bizWidget.Spanner_render',method:'var propertys=message.sender.propertys;if(propertys.className=="wof.bizWidget.SearchComponent"){this.setPropertys(propertys);}else{this.setPropertys(null)}this.render();'});
     var method = 'var data=message.sender.propertys; '
-        +'if(data.id==this.getPropertys().id){ '
-        +' var node=wof.util.ObjectManager.get(data.id); '
-        +' node.setData(data); '
-        +' node.render();'
+        +' if(data.id==this.getPropertys().id){ '
+        +' var searchComponent=wof.util.ObjectManager.get(data.id); '
+        +' if(data.activeClass=="SearchComponent"){ '
+        +'   searchComponent.updateSearchComponent(data); '
+        +'   searchComponent.render(); '
+        +'   searchComponent.sendMessage("wof.bizWidget.SearchComponent_active");'
+        +' }else if(data.activeClass=="SearchItem"){ '
+        +'     searchComponent.updateSearchItem(data); '
+        +'     searchComponent.render(); '
+        +'     searchComponent.sendMessage("wof.bizWidget.SearchComponent_active");'
+        +' } '
         +'}';
     onReceiveMessage.push({id:'wof.bizWidget.PropertyBar_apply',method:method});
     onReceiveMessage.push({id:'wof.bizWidget.OnSendMessageBar_apply',method:method});
@@ -262,74 +289,76 @@ wof.bizWidget.spanner.SearchComponentSpanner.prototype = {
             activeData.onReceiveMessage = this.getPropertys().onReceiveMessage;
             activeData.onSendMessage = this.getPropertys().onSendMessage;
 
-                var activeSearchItemRank = this.getPropertys().activeSearchItemRank;
-                var activeSearchItem = searchComponent.findSearchItemByRank(activeSearchItemRank);
-                if(activeSearchItem!=null){
-                    //当前激活SearchItem加入减少列数句柄
-                    if(searchComponent.canReduceSearchItemColspan(activeSearchItem)){
-                        this._splitSearchItemArrow.css('top',2).css('left',0);
-                        activeSearchItem.getDomInstance().append(this._splitSearchItemArrow);
-                    }
-                    //当前激活SearchItem加入增加列数句柄
-                    if(searchComponent.canAddSearchItemColspan(activeSearchItem)){
-                        this._mergeSearchItemArrow.css('top',2).css('left',activeSearchItem.getWidth()*activeSearchItem.getScale()-this._mergeSearchItemArrow.width()-2);
-                        activeSearchItem.getDomInstance().append(this._mergeSearchItemArrow);
-                    }
-                    if(searchComponent.canDeleteSearchItem(activeSearchItem)){
-                        this._deleteSearchItemIco.css('top',activeSearchItem.getHeight()*activeSearchItem.getScale()-this._deleteSearchItemIco.height()-2).css('left',activeSearchItem.getWidth()*activeSearchItem.getScale()-this._deleteSearchItemIco.width()*2-6);
-                        activeSearchItem.getDomInstance().append(this._deleteSearchItemIco);
-                    }
-                    if(searchComponent.canFixSearchItem(activeSearchItem)){
-                        this._lockSearchItemIco.css('top',activeSearchItem.getHeight()*activeSearchItem.getScale()-this._lockSearchItemIco.height()-2).css('left',activeSearchItem.getWidth()*activeSearchItem.getScale()-this._lockSearchItemIco.width()-2);
-                        activeSearchItem.getDomInstance().append(this._lockSearchItemIco);
-                    }
-                    if(searchComponent.canUnfixSearchItem(activeSearchItem)){
-                        this._unlockSearchItemIco.css('top',activeSearchItem.getHeight()*activeSearchItem.getScale()-this._unlockSearchItemIco.height()-2).css('left',activeSearchItem.getWidth()*activeSearchItem.getScale()-this._unlockSearchItemIco.width()-2);
-                        activeSearchItem.getDomInstance().append(this._unlockSearchItemIco);
-                    }
-                    if(searchComponent.canReduceSearchItemRowspan(activeSearchItem)){
-                        this._reduceSearchItemRowspanArrow.css('top',0).css('left',activeSearchItem.getWidth()*activeSearchItem.getScale()/2-this._reduceSearchItemRowspanArrow.width()/2);
-                        activeSearchItem.getDomInstance().append(this._reduceSearchItemRowspanArrow);
-                    }
-                    if(searchComponent.canAddSearchItemRowspan(activeSearchItem)){
-                        this._addSearchItemRowspanArrow.css('top',activeSearchItem.getHeight()*activeSearchItem.getScale()-this._addSearchItemRowspanArrow.height()-2).css('left',activeSearchItem.getWidth()*activeSearchItem.getScale()/2-this._addSearchItemRowspanArrow.width()/2);
-                        activeSearchItem.getDomInstance().append(this._addSearchItemRowspanArrow);
-                    }
-                    activeData.activeClass = 'SearchItem';
-                    activeData.rowNum = activeSearchItem.getRowNum();
-                    activeData.colNum = activeSearchItem.getColNum();
-                    activeData.colspan = activeSearchItem.getColspan();
-                    activeData.rowspan = activeSearchItem.getRowspan();
-                    activeData.isFixItem = activeSearchItem.getIsFixItem();
-                    /*activeData.itemName = activeSearchItem.getItemName();
-                    activeData.visiable = activeSearchItem.getVisiable();
-                    activeData.itemLabel = activeSearchItem.getItemLabel();
-                    activeData.dataField = activeSearchItem.getDataField();
-                    activeData.dateTimeBoxFormat = activeSearchItem.getDateTimeBoxFormat();
-                    activeData.readOnly = activeSearchItem.getReadOnly();
-                    activeData.required = activeSearchItem.getRequired();
-                    activeData.length = activeSearchItem.getLength();
-                    activeData.min = activeSearchItem.getMin();
-                    activeData.max = activeSearchItem.getMax();
-                    activeData.regExp = activeSearchItem.getRegExp();
-                    activeData.checkErrorInfo = activeSearchItem.getCheckErrorInfo();
-                    activeData.selectPattern = activeSearchItem.getSelectPattern();
-                    activeData.useMultiSelect = activeSearchItem.getUseMultiSelect();
-                    activeData.visbleType = activeSearchItem.getVisbleType();
-                    activeData.labelWidth = activeSearchItem.getLabelWidth();
-                    activeData.inputWidth = activeSearchItem.getInputWidth();
-                    activeData.inputHeight = activeSearchItem.getInputHeight();
-                    activeData.linkageItem = activeSearchItem.getLinkageItem();
-                    activeData.tipValue = activeSearchItem.getTipValue();
-                    activeData.SearchItemGroupIndex = searchComponent.getIndex();*/
-                }else{
-                    activeData.activeClass = 'SearchComponent';
-                    activeData.caption = searchComponent.getCaption();
-                    activeData.colsNum = searchComponent.getColsNum();
-                    activeData.itemHeight = searchComponent.getItemHeight();
-                    activeData.isExpand = searchComponent.getIsExpand();
-                    activeData.mustInOrder = searchComponent.getMustInOrder();
+            var activeSearchItemRank = this.getPropertys().activeSearchItemRank;
+            var activeSearchItem = searchComponent.findSearchItemByRank(activeSearchItemRank);
+            if(activeSearchItem!=null){
+                //当前激活SearchItem加入减少列数句柄
+                if(searchComponent.canReduceSearchItemColspan(activeSearchItem)){
+                    this._splitSearchItemArrow.css('top',2).css('left',0);
+                    activeSearchItem.getDomInstance().append(this._splitSearchItemArrow);
                 }
+                //当前激活SearchItem加入增加列数句柄
+                if(searchComponent.canAddSearchItemColspan(activeSearchItem)){
+                    this._mergeSearchItemArrow.css('top',2).css('left',activeSearchItem.getWidth()*activeSearchItem.getScale()-this._mergeSearchItemArrow.width()-2);
+                    activeSearchItem.getDomInstance().append(this._mergeSearchItemArrow);
+                }
+                if(searchComponent.canDeleteSearchItem(activeSearchItem)){
+                    this._deleteSearchItemIco.css('top',activeSearchItem.getHeight()*activeSearchItem.getScale()-this._deleteSearchItemIco.height()-2).css('left',activeSearchItem.getWidth()*activeSearchItem.getScale()-this._deleteSearchItemIco.width()*2-6);
+                    activeSearchItem.getDomInstance().append(this._deleteSearchItemIco);
+                }
+                if(searchComponent.canFixSearchItem(activeSearchItem)){
+                    this._lockSearchItemIco.css('top',activeSearchItem.getHeight()*activeSearchItem.getScale()-this._lockSearchItemIco.height()-2).css('left',activeSearchItem.getWidth()*activeSearchItem.getScale()-this._lockSearchItemIco.width()-2);
+                    activeSearchItem.getDomInstance().append(this._lockSearchItemIco);
+                }
+                if(searchComponent.canUnfixSearchItem(activeSearchItem)){
+                    this._unlockSearchItemIco.css('top',activeSearchItem.getHeight()*activeSearchItem.getScale()-this._unlockSearchItemIco.height()-2).css('left',activeSearchItem.getWidth()*activeSearchItem.getScale()-this._unlockSearchItemIco.width()-2);
+                    activeSearchItem.getDomInstance().append(this._unlockSearchItemIco);
+                }
+                if(searchComponent.canReduceSearchItemRowspan(activeSearchItem)){
+                    this._reduceSearchItemRowspanArrow.css('top',0).css('left',activeSearchItem.getWidth()*activeSearchItem.getScale()/2-this._reduceSearchItemRowspanArrow.width()/2);
+                    activeSearchItem.getDomInstance().append(this._reduceSearchItemRowspanArrow);
+                }
+                if(searchComponent.canAddSearchItemRowspan(activeSearchItem)){
+                    this._addSearchItemRowspanArrow.css('top',activeSearchItem.getHeight()*activeSearchItem.getScale()-this._addSearchItemRowspanArrow.height()-2).css('left',activeSearchItem.getWidth()*activeSearchItem.getScale()/2-this._addSearchItemRowspanArrow.width()/2);
+                    activeSearchItem.getDomInstance().append(this._addSearchItemRowspanArrow);
+                }
+                activeData.activeClass = 'SearchItem';
+                activeData.name = activeSearchItem.getName();
+                activeData.index = activeSearchItem.getIndex();
+                activeData.colNum = activeSearchItem.getColNum();
+                activeData.rowNum = activeSearchItem.getRowNum();
+                activeData.isFixItem = activeSearchItem.getIsFixItem();
+                activeData.rowspan = activeSearchItem.getRowspan();
+                activeData.caption = activeSearchItem.getCaption();
+                activeData.dataField = activeSearchItem.getDataField();
+                activeData.dateTimeBoxFormat = activeSearchItem.getDateTimeBoxFormat();
+                activeData.selectPattern = activeSearchItem.getSelectPattern();
+                activeData.useMultiSelect = activeSearchItem.getUseMultiSelect();
+                activeData.visbleType = activeSearchItem.getVisbleType();
+                activeData.fromTo = activeSearchItem.getFromTo();
+                activeData.labelWidth = activeSearchItem.getLabelWidth();
+                activeData.inputWidth = activeSearchItem.getInputWidth();
+                activeData.inputHeight = activeSearchItem.getInputHeight();
+                activeData.colspan = activeSearchItem.getColspan();
+                activeData.tipValue = activeSearchItem.getTipValue();
+                activeData.linkageItem = activeSearchItem.getLinkageItem();
+            }else{
+                activeData.activeClass = 'SearchComponent';
+                activeData.initActionName = searchComponent.getInitActionName();
+                activeData.itemHeight = searchComponent.getItemHeight();
+                activeData.name = searchComponent.getName();
+                activeData.callStr = searchComponent.getCallStr();
+                activeData.index = searchComponent.getIndex();
+                activeData.caption = searchComponent.getCaption();
+                activeData.linkComponentID = searchComponent.getLinkComponentID();
+                activeData.state = searchComponent.getState();
+                activeData.mustInOrder = searchComponent.getMustInOrder();
+                activeData.colsNum = searchComponent.getColsNum();
+                activeData.titleHeight = searchComponent.getTitleHeight();
+                activeData.rows = searchComponent.getRows();
+                activeData.isExpand = searchComponent.getIsExpand();
+                activeData.activeSearchItemRank = searchComponent.getActiveSearchItemRank();
+            }
 
             //当前选中的SearchComponent加入拖放 删除操作句柄
             this._selectSearchComponentIco.css('top',0).css('left',0);
@@ -380,7 +409,49 @@ wof.bizWidget.spanner.SearchComponentSpanner.prototype = {
          </SearchComponent>
 
          */
-
-        console.log('node.getId()=='+node.getId()+'   '+node.getClassName());
+        var json = {};
+        if(node.getClassName()=='wof.bizWidget.SearchComponent'){
+            json.className = node.getClassName();
+            json.linkComponentID = node.getLinkComponentID();
+            json.id = node.getId();
+            json.initActionName = node.getInitActionName();
+            json.colsNum = node.getColsNum();
+            json.itemHeight = node.getItemHeight();
+            json.name = node.getName();
+            json.callStr = node.getCallStr();
+            json.index = node.getIndex();
+            json.caption = node.getCaption();
+            json.state = node.getState();
+            var searchItems = [];
+            var childNodes = node.childNodes();
+            for(var i=0;i<childNodes.length;i++){
+                if(childNodes[i].getClassName()=='wof.bizWidget.SearchItem'){
+                    var item = childNodes[i];
+                    var searchItem = {};
+                    searchItem.colspan = item.getColspan();
+                    searchItem.name = item.getName();
+                    searchItem.index = item.getIndex();
+                    searchItem.colNum = item.getColNum();
+                    searchItem.rowNum = item.getRowNum();
+                    searchItem.isFixItem = item.getIsFixItem();
+                    searchItem.rowspan = item.getRowspan();
+                    searchItem.caption = item.getCaption();
+                    searchItem.dataField = item.getDataField();
+                    searchItem.dateTimeBoxFormat = item.getDateTimeBoxFormat();
+                    searchItem.selectPattern = item.getSelectPattern();
+                    searchItem.useMultiSelect = item.getUseMultiSelect();
+                    searchItem.visbleType = item.getVisbleType();
+                    searchItem.fromTo = item.getFromTo();
+                    searchItem.labelWidth = item.getLabelWidth();
+                    searchItem.inputWidth = item.getInputWidth();
+                    searchItem.inputHeight = item.getInputHeight();
+                    searchItem.tipValue = item.getTipValue();
+                    searchItem.linkageItem = item.getLinkageItem();
+                    searchItems.push(searchItem);
+                }
+            }
+            json.searchItem = searchItems;
+        }
+        return json;
     }
 };

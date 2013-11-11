@@ -84,6 +84,18 @@ wof.bizWidget.SearchComponent.prototype = {
         this._callStr = callStr;
     },
 
+    getLinkComponentID: function(){
+        if(this._linkComponentID==null){
+            this._linkComponentID = '';
+        }
+        return this._linkComponentID;
+    },
+
+    setLinkComponentID: function(linkComponentID){
+        this._linkComponentID = linkComponentID;
+    },
+
+
     getIndex: function(){
         return this._index;
     },
@@ -200,6 +212,9 @@ wof.bizWidget.SearchComponent.prototype = {
                 clearTimeout(timeFn);
                 timeFn = setTimeout(function(){
                     _this.sendMessage('wof.bizWidget.SearchComponent_mousedown');
+                    _this.setActiveSearchItemRank(null);
+                    _this.render();
+                    _this.sendMessage('wof.bizWidget.SearchComponent_active');
                 },250);
             });
             this.getDomInstance().dblclick(function(event){
@@ -211,6 +226,9 @@ wof.bizWidget.SearchComponent.prototype = {
                     _this.setIsExpand(true);
                 }
                 _this.sendMessage('wof.bizWidget.SearchComponent_dblclick');
+                _this.setActiveSearchItemRank(null);
+                _this.render();
+                _this.sendMessage('wof.bizWidget.SearchComponent_active');
             });
             //如果是clone过来的 会直接创建一个label对象 需要先移除
             var nodes = this.childNodes();
@@ -253,15 +271,15 @@ wof.bizWidget.SearchComponent.prototype = {
     getData: function () {
         return {
             initActionName:this.getInitActionName(),
+            itemHeight:this.getItemHeight(),
             name:this.getName(),
             callStr:this.getCallStr(),
             index:this.getIndex(),
             caption:this.getCaption(),
+            linkComponentID: this.getLinkComponentID(),
             state:this.getState(),
             mustInOrder:this.getMustInOrder(),
             colsNum:this.getColsNum(),
-
-            itemHeight:this.getItemHeight(),
             titleHeight: this.getTitleHeight(),
             rows: this.getRows(),
             isExpand: this.getIsExpand(),
@@ -275,11 +293,10 @@ wof.bizWidget.SearchComponent.prototype = {
         this.setCallStr(data.callStr);
         this.setIndex(data.index);
         this.setCaption(data.caption);
+        this.setLinkComponentID(data.linkComponentID);
         this.setState(data.state);
-
         this.setMustInOrder(data.mustInOrder);
         this.setColsNum(data.colsNum);
-
         this.setItemHeight(data.itemHeight);
         this.setTitleHeight(data.titleHeight);
         this.setRows(data.rows);
@@ -305,6 +322,33 @@ wof.bizWidget.SearchComponent.prototype = {
             this.render();
             this.sendMessage('wof.bizWidget.SearchComponent_active');
             return false;
+        }
+    },
+
+    /**
+     * 修改SearchComponent
+     * searchComponentData searchComponent数据
+     */
+    updateSearchComponent: function(searchComponentDataData){
+        if(!jQuery.isEmptyObject(searchComponentDataData)){
+            if(searchComponentDataData.itemHeight!=null){
+                this.setItemHeight(Number(searchComponentDataData.itemHeight));
+            }
+            if(searchComponentDataData.name!=null){
+                this.setName(searchComponentDataData.name);
+            }
+            if(searchComponentDataData.caption!=null){
+                this.setCaption(searchComponentDataData.caption);
+            }
+            if(searchComponentDataData.linkComponentID!=null){
+                this.setLinkComponentID(searchComponentDataData.linkComponentID);
+            }
+            if(searchComponentDataData.colsNum!=null){
+                this.setColsNum(Number(searchComponentDataData.colsNum));
+            }
+            if(searchComponentDataData.isExpand!=null){
+                this.setIsExpand((searchComponentDataData.isExpand=='true'||searchComponentDataData.isExpand==true)?true:false);
+            }
         }
     },
 
