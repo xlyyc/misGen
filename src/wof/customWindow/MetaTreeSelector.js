@@ -15,17 +15,16 @@
                 tree.setWidth(420);
                 tree.setHeight(450);
                 tree.setValue(hidden.val());
-                tree.setNodes(wof.customWindow.MetaTreeSelector.getBizEntities());
 
                 wof.customWindow.MetaTreeSelector._dialogDiv = jQuery('<div title="绑定实体属性"></div>');
                 wof.customWindow.MetaTreeSelector._dialogDiv.append(tree.getDomInstance());
                 wof.util.ObjectManager.add(tree.getId(), tree);
 
-                tree.render();
-
                 wof.customWindow.MetaTreeSelector._tree = tree;
                 wof.customWindow.MetaTreeSelector._initFlag = true;
             }
+            wof.customWindow.MetaTreeSelector._tree.setNodes(wof.customWindow.MetaTreeSelector.getBizEntities());
+            wof.customWindow.MetaTreeSelector._tree.render();
             wof.customWindow.MetaTreeSelector._dialogDiv.dialog({
                 resizable:false,
                 width:450,
