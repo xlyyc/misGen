@@ -16,6 +16,37 @@ wof.bizWidget.SearchItem.prototype = {
     /**
      * 属性声明 （private ，用"_"标识）
      */
+    _name:null,   //名称，设置格式：#EntityName.PropertyName
+
+    _index:null,
+
+    _dataField:null,
+
+    _caption:null,    //显示名称，设置格式：#EntityName.PropertyVisibleName,可以固定值，也可以是设置绑定实体字段
+
+    _useMultiSelect:null,          //数据字典用于选择项下拉时，指定多选还是单选
+
+    _selectPattern:null,        //下拉框显示模式，VisbleType为select时有意义，包括三种：normal、tree、grid（分别是普通下拉列表、下拉树、下拉表格）
+
+    _dateTimeBoxFormat:null,
+
+    _visbleType:null,            //显示类型，包括Id,Text、Textarea、RichTextArea、Select、CheckBox、Date、Radio、File、Number
+
+    _labelWidth:null, //Label宽度
+
+    _fromTo:null,        //是否是范围搜索
+
+    _lableWidth:null,  //Label宽度
+
+    _inputWidth:null,               //输入框宽度
+
+    _inputHeight:null,           //输入框高度
+
+    _linkageItem:null,          //关联联动的项，设置为其他item的Name属性
+
+    _colspan:null,           //横跨的列数
+
+    _tipValue:null,                       //提示性的值或默认值
 
     _colNum: null,   //列号
 
@@ -25,55 +56,30 @@ wof.bizWidget.SearchItem.prototype = {
 
     _rowspan: null,   //纵跨行数
 
-    _itemName: null,  //表单项名称,设置格式：#EntityName.PropertyName
-
-    _visiable: null, //表单项是否显示
-
-    _itemLabel: null, //显示名称，设置格式：#EntityName.PropertyVisibleName,可以固定值，也可以是设置绑定实体字段
-
-    _dataField: null, //绑定的数据实体属性，设置格式
-
-    _dateTimeBoxFormat: null, //日期 、时间格式，平台会预设几个格式
-
-    _readOnly: null, //是否只读
-
-    _required: null, //是否必填
-
-    _length: null, //字符长度
-
-    _min: null, //数值最小值
-
-    _max: null, //数值最大值
-
-    _regExp: null, //校验正则表达式
-
-    _checkErrorInfo: null, //数据校验失败提示信息
-
-    _selectPattern: null, //下拉框显示模式，VisbleType为select时有意义，包括三种：normal、tree、grid（分别是普通下拉列表、下拉树、下拉表格）
-
-    _useMultiSelect:null, //数据字典用于选择项下拉时，指定多选还是单选
-
-    _visbleType: null, //显示类型，包括Id,Text、Textarea、RichTextArea、Select、CheckBox、Date、Radio、File、Number
-
-    _labelWidth: null, //Label宽度
-
-    _inputWidth: null, //输入框宽度
-
-    _inputHeight: null, //输入框高度
-
-    _colspan: null, //横跨的列数
-
-    _tipValue: null, //提示性的值或默认值
-
-    _linkageItem: null,
-
     _initFlag:null,
-
-
 
     /**
      * get/set 属性方法定义
      */
+    getName: function(){
+        if(this._name==null){
+            this._name = '';
+        }
+        return this._name;
+    },
+
+    setName: function(name){
+        this._name = name;
+    },
+
+    getIndex: function(){
+        return this._index;
+    },
+
+    setIndex: function(index){
+        this._index = index;
+    },
+
     getColNum: function(){
         return this._colNum;
     },
@@ -90,37 +96,15 @@ wof.bizWidget.SearchItem.prototype = {
         this._rowNum = rowNum;
     },
 
-    getItemName: function(){
-        if(this._itemName==null){
-            this._itemName = '';
+    getCaption: function(){
+        if(this._caption==null){
+            this._caption = '';
         }
-        return this._itemName;
+        return this._caption;
     },
 
-    setItemName: function(itemName){
-        this._itemName = itemName;
-    },
-
-    getVisiable: function(){
-        if(this._visiable==null){
-            this._visiable = true;
-        }
-        return this._visiable;
-    },
-
-    setVisiable: function(visiable){
-        this._visiable = visiable;
-    },
-
-    getItemLabel: function(){
-        if(this._itemLabel==null){
-            this._itemLabel = '';
-        }
-        return this._itemLabel;
-    },
-
-    setItemLabel: function(itemLabel){
-        this._itemLabel = itemLabel;
+    setCaption: function(caption){
+        this._caption = caption;
     },
 
     getDataField: function(){
@@ -143,77 +127,6 @@ wof.bizWidget.SearchItem.prototype = {
 
     setDateTimeBoxFormat: function(dateTimeBoxFormat){
         this._dateTimeBoxFormat = dateTimeBoxFormat;
-    },
-
-    getReadOnly: function(){
-        return this._readOnly;
-    },
-
-    setReadOnly: function(readOnly){
-        this._readOnly = readOnly;
-    },
-
-    getRequired: function(){
-        return this._required;
-    },
-
-    setRequired: function(required){
-        this._required = required;
-    },
-
-    getLength: function(){
-        if(this._length==null){
-            this._length = '';
-        }
-        return this._length;
-    },
-
-    setLength: function(length){
-        this._length = length;
-    },
-
-    getMin: function(){
-        if(this._min==null){
-            this._min = '';
-        }
-        return this._min;
-    },
-
-    setMin: function(min){
-        this._min = min;
-    },
-
-    getMax: function(){
-        if(this._max==null){
-            this._max = '';
-        }
-        return this._max;
-    },
-
-    setMax: function(max){
-        this._max = max;
-    },
-
-    getRegExp: function(){
-        if(this._regExp==null){
-            this._regExp = '';
-        }
-        return this._regExp;
-    },
-
-    setRegExp: function(regExp){
-        this._regExp = regExp;
-    },
-
-    getCheckErrorInfo: function(){
-        if(this._checkErrorInfo==null){
-            this._checkErrorInfo = '';
-        }
-        return this._checkErrorInfo;
-    },
-
-    setCheckErrorInfo: function(checkErrorInfo){
-        this._checkErrorInfo = checkErrorInfo;
     },
 
     getSelectPattern: function(){
@@ -249,6 +162,14 @@ wof.bizWidget.SearchItem.prototype = {
         this._visbleType = visbleType;
     },
 
+
+    getFromTo: function(){
+        if(this._fromTo==null){
+            this._fromTo = false;
+        }
+        return this._fromTo;
+    },
+
     getLabelWidth: function(){
         if(this._labelWidth==null){
             this._labelWidth = 100;
@@ -258,6 +179,10 @@ wof.bizWidget.SearchItem.prototype = {
 
     setLabelWidth: function(labelWidth){
         this._labelWidth = labelWidth;
+    },
+
+    setFromTo: function(fromTo){
+        this._fromTo = fromTo;
     },
 
     getInputWidth: function(){
@@ -414,8 +339,8 @@ wof.bizWidget.SearchItem.prototype = {
     //----------必须实现----------
     render: function () {
         this.getDomInstance().children().remove();
-        if(this.getItemLabel()!=''&&this.getVisbleType()!=''){
-            var label = jQuery('<label style="width:'+this.getLabelWidth()+'px;">'+(this.getItemLabel()==''?'&nbsp;':this.getItemLabel())+(this.getDataField()==''?'':'('+this.getDataField()+')')+'</label>');
+        if(this.getCaption()!=''&&this.getVisbleType()!=''){
+            var label = jQuery('<label style="width:'+this.getLabelWidth()+'px;">'+(this.getCaption()==''?'&nbsp;':this.getCaption())+(this.getDataField()==''?'':'('+this.getDataField()+')')+'</label>');
             this.getDomInstance().append(label);
             var hr = jQuery('<hr style="width:96%;border-top:1px solid black;">');
             this.getDomInstance().append(hr);
@@ -455,25 +380,19 @@ wof.bizWidget.SearchItem.prototype = {
     //----------必须实现----------
     getData: function () {
         return {
+            name:this.getName(),
+            index:this.getIndex(),
             colNum: this.getColNum(),
             rowNum: this.getRowNum(),
             isFixItem: this.getIsFixItem(),
             rowspan: this.getRowspan(),
-            itemName: this.getItemName(),
-            visiable: this.getVisiable(),
-            itemLabel: this.getItemLabel(),
+            caption: this.getCaption(),
             dataField: this.getDataField(),
             dateTimeBoxFormat: this.getDateTimeBoxFormat(),
-            readOnly: this.getReadOnly(),
-            required: this.getRequired(),
-            length: this.getLength(),
-            min: this.getMin(),
-            max: this.getMax(),
-            regExp: this.getRegExp(),
-            checkErrorInfo: this.getCheckErrorInfo(),
             selectPattern: this.getSelectPattern(),
             useMultiSelect:this.getUseMultiSelect(),
             visbleType: this.getVisbleType(),
+            fromTo: this.getFromTo(),
             labelWidth: this.getLabelWidth(),
             inputWidth: this.getInputWidth(),
             inputHeight: this.getInputHeight(),
@@ -484,25 +403,19 @@ wof.bizWidget.SearchItem.prototype = {
     },
     //----------必须实现----------
     setData: function (data) {
+        this.setName(data.name);
+        this.setIndex(data.index);
         this.setColNum(data.colNum);
         this.setRowNum(data.rowNum);
         this.setIsFixItem(data.isFixItem);
         this.setRowspan(data.rowspan);
-        this.setItemName(data.itemName);
-        this.setVisiable(data.visiable);
-        this.setItemLabel(data.itemLabel);
+        this.setCaption(data.caption);
         this.setDataField(data.dataField);
         this.setDateTimeBoxFormat(data.dateTimeBoxFormat);
-        this.setReadOnly(data.readOnly);
-        this.setRequired(data.required);
-        this.setLength(data.length);
-        this.setMin(data.min);
-        this.setMax(data.max);
-        this.setRegExp(data.regExp);
-        this.setCheckErrorInfo(data.checkErrorInfo);
         this.setSelectPattern(data.selectPattern);
         this.setUseMultiSelect(data.useMultiSelect);
         this.setVisbleType(data.visbleType);
+        this.setFromTo(data.fromTo);
         this.setLabelWidth(data.labelWidth);
         this.setInputWidth(data.inputWidth);
         this.setInputHeight(data.inputHeight);
@@ -543,7 +456,7 @@ wof.bizWidget.SearchItem.prototype = {
         var f = true;
         if(this.getDataField()!=''){
             f = false;
-        }else if(this.getItemLabel()!=''){
+        }else if(this.getCaption()!=''){
             f = false;
         }else if(this.getIsFixItem()==true){
             f = false;

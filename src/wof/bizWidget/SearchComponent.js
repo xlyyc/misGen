@@ -14,16 +14,30 @@ wof.bizWidget.SearchComponent.prototype = {
     /**
      * 属性声明 （private ，用"_"标识）
      */
+    _initActionName: null,
+
+    _name:null,
+
+    _callStr:null,
+
+    _index:null,
+
+    _caption:null,
+
+    _linkComponentID:null,
+
+    _state:null,
+
+    _colsNum:null,
+
+
+
 
     _initFlag: null,
 
-    _mustInOrder: null,   //组内各项是否严格遵循次序排列
+    _mustInOrder: null,   //各项是否严格遵循次序排列
 
-    _itemHeight: null,  //表头单元格高度
-
-    _groupCaption: null,   //分组名称
-
-    _colsNum: null,   //分组列数
+    _itemHeight: null,  //单元格高度
 
     _label: null,
 
@@ -40,6 +54,45 @@ wof.bizWidget.SearchComponent.prototype = {
      * get/set 属性方法定义
      */
 
+    getInitActionName: function(){
+        return this._initActionName;
+    },
+
+    setInitActionName: function(initActionName){
+        this._initActionName = initActionName;
+    },
+
+    getName: function(){
+        if(this._name==null){
+            this._name = '';
+        }
+        return this._name;
+    },
+
+    setName: function(name){
+        this._name = name;
+    },
+
+    getCallStr: function(){
+        if(this._callStr==null){
+            this._callStr = 'SearchComponent:1.0.0';
+        }
+        return this._callStr;
+    },
+
+    setCallStr: function(callStr){
+        this._callStr = callStr;
+    },
+
+    getIndex: function(){
+        return this._index;
+    },
+
+    setIndex: function(index){
+        this._index = index;
+    },
+
+
     getColsNum: function(){
         if(this._colsNum==null){
             this._colsNum = 4;
@@ -51,15 +104,24 @@ wof.bizWidget.SearchComponent.prototype = {
         this._colsNum = colsNum;
     },
 
-    getGroupCaption: function(){
-        if(this._groupCaption==null){
-            this._groupCaption = '';
+    getCaption: function(){
+        if(this._caption==null){
+            this._caption = '未命名搜索';
         }
-        return this._groupCaption;
+        return this._caption;
     },
 
-    setGroupCaption: function(groupCaption){
-        this._groupCaption = groupCaption;
+    setCaption: function(caption){
+        this._caption = caption;
+    },
+
+
+    getState: function(){
+        return this._state;
+    },
+
+    setState: function(state){
+        this._state = state;
     },
 
     getMustInOrder: function(){
@@ -190,9 +252,15 @@ wof.bizWidget.SearchComponent.prototype = {
     //----------必须实现----------
     getData: function () {
         return {
+            initActionName:this.getInitActionName(),
+            name:this.getName(),
+            callStr:this.getCallStr(),
+            index:this.getIndex(),
+            caption:this.getCaption(),
+            state:this.getState(),
             mustInOrder:this.getMustInOrder(),
             colsNum:this.getColsNum(),
-            groupCaption:this.getGroupCaption(),
+
             itemHeight:this.getItemHeight(),
             titleHeight: this.getTitleHeight(),
             rows: this.getRows(),
@@ -202,9 +270,16 @@ wof.bizWidget.SearchComponent.prototype = {
     },
     //----------必须实现----------
     setData: function (data) {
+        this.setInitActionName(data.initActionName);
+        this.setName(data.name);
+        this.setCallStr(data.callStr);
+        this.setIndex(data.index);
+        this.setCaption(data.caption);
+        this.setState(data.state);
+
         this.setMustInOrder(data.mustInOrder);
         this.setColsNum(data.colsNum);
-        this.setGroupCaption(data.groupCaption);
+
         this.setItemHeight(data.itemHeight);
         this.setTitleHeight(data.titleHeight);
         this.setRows(data.rows);
@@ -429,7 +504,7 @@ wof.bizWidget.SearchComponent.prototype = {
         label.remove();
         label.setWidth(this.getWidth());
         label.setHeight(this.getTitleHeight());
-        label.setText(this.getGroupCaption());
+        label.setText(this.getCaption());
         if(this.childNodes().length>0){
             label.beforeTo(this.childNodes()[0]);
         }else{
@@ -699,7 +774,7 @@ wof.bizWidget.SearchComponent.prototype = {
 
     //创建初始化的SearchComponent
     createSelf: function(width, height){
-        var searchComponentData = {groupCaption:'搜索',width:width,titleHeight:25,colsNum:4,itemHeight:45};
+        var searchComponentData = {caption:'搜索',width:width,titleHeight:25,colsNum:4,itemHeight:45};
 
         var width = searchComponentData.width!=null?searchComponentData.width:this.getWidth();
         var titleHeight = searchComponentData.titleHeight!=null?searchComponentData.titleHeight:null;
@@ -709,7 +784,7 @@ wof.bizWidget.SearchComponent.prototype = {
         var newSearchComponent = new wof.bizWidget.SearchComponent();
         newSearchComponent.setWidth(width);
         newSearchComponent.setTitleHeight(titleHeight);
-        newSearchComponent.setGroupCaption(searchComponentData.groupCaption);
+        newSearchComponent.setCaption(searchComponentData.caption);
         newSearchComponent.setColsNum(colsNum);
         newSearchComponent.setItemHeight(itemHeight);
         var newSearchItem = new wof.bizWidget.SearchItem();

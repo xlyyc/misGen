@@ -324,7 +324,7 @@ wof.bizWidget.spanner.SearchComponentSpanner.prototype = {
                     activeData.SearchItemGroupIndex = searchComponent.getIndex();*/
                 }else{
                     activeData.activeClass = 'SearchComponent';
-                    activeData.groupCaption = searchComponent.getGroupCaption();
+                    activeData.caption = searchComponent.getCaption();
                     activeData.colsNum = searchComponent.getColsNum();
                     activeData.itemHeight = searchComponent.getItemHeight();
                     activeData.isExpand = searchComponent.getIsExpand();
