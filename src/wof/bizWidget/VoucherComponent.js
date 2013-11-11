@@ -640,7 +640,7 @@ wof.bizWidget.VoucherComponent.prototype = {
     },
 
     /**
-     * 修改指定序号的voucherItem
+     * 修改指定的voucherItem
      * voucherItemData voucherItem数据
      */
     updateVoucherItem: function(voucherItemData){

@@ -352,6 +352,68 @@ wof.bizWidget.SearchComponent.prototype = {
         }
     },
 
+
+    /**
+     * 修改指定的searchItem
+     * searchItemData searchItem数据
+     */
+    updateSearchItem: function(searchItemData){
+        if(!jQuery.isEmptyObject(searchItemData)){
+            var searchItem = this.findSearchItemByRank({rowNum:Number(searchItemData.rowNum),colNum:Number(searchItemData.colNum)});
+            if(searchItem!=null){
+                if(searchItemData.colspan!=null){
+                    searchItem.setColspan(Number(searchItemData.colspan));
+                }
+                if(searchItemData.name!=null){
+                    searchItem.setName(searchItemData.name);
+                }
+                if(searchItemData.isFixItem!=null){
+                    searchItem.setIsFixItem((searchItemData.isFixItem=='true'||searchItemData.isFixItem==true)?true:false);
+                }
+                if(searchItemData.rowspan!=null){
+                    searchItem.setRowspan(Number(searchItemData.rowspan));
+                }
+                if(searchItemData.caption!=null){
+                    searchItem.setCaption(searchItemData.caption);
+                }
+                if(searchItemData.dataField!=null){
+                    searchItem.setDataField(searchItemData.dataField);
+                }
+                if(searchItemData.dateTimeBoxFormat!=null){
+                    searchItem.setDateTimeBoxFormat(searchItemData.dateTimeBoxFormat);
+                }
+                if(searchItemData.selectPattern!=null){
+                    searchItem.setSelectPattern(searchItemData.selectPattern);
+                }
+                if(searchItemData.useMultiSelect!=null){
+                    searchItem.setUseMultiSelect((searchItemData.useMultiSelect=='true'||searchItemData.useMultiSelect==true)?true:false);
+                }
+                if(searchItemData.visbleType!=null){
+                    searchItem.setVisbleType(searchItemData.visbleType);
+                }
+                if(searchItemData.fromTo!=null){
+                    searchItem.setFromTo((searchItemData.fromTo=='true'||searchItemData.fromTo==true)?true:false);
+                }
+                if(searchItemData.labelWidth!=null){
+                    searchItem.setLabelWidth(searchItemData.labelWidth==''?'':Number(searchItemData.labelWidth));
+                }
+                if(searchItemData.inputWidth!=null){
+                    searchItem.setInputWidth(searchItemData.inputWidth==''?'':Number(searchItemData.inputWidth));
+                }
+                if(searchItemData.inputHeight!=null){
+                    searchItem.setInputHeight(searchItemData.inputHeight==''?'':Number(searchItemData.inputHeight));
+                }
+                if(searchItemData.tipValue!=null){
+                    searchItem.setTipValue(searchItemData.tipValue);
+                }
+                if(searchItemData.linkageItem!=null){
+                    searchItem.setLinkageItem(searchItemData.linkageItem);
+                }
+            }
+
+        }
+    },
+
     findSearchItemByRank: function(searchItemRank){
         var searchItem = null;
         if(!jQuery.isEmptyObject(searchItemRank)){

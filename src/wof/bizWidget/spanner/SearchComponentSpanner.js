@@ -430,7 +430,6 @@ wof.bizWidget.spanner.SearchComponentSpanner.prototype = {
                     var searchItem = {};
                     searchItem.colspan = item.getColspan();
                     searchItem.name = item.getName();
-                    searchItem.index = item.getIndex();
                     searchItem.colNum = item.getColNum();
                     searchItem.rowNum = item.getRowNum();
                     searchItem.isFixItem = item.getIsFixItem();

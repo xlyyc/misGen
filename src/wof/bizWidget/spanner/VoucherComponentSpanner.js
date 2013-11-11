@@ -603,7 +603,6 @@ wof.bizWidget.spanner.VoucherComponentSpanner.prototype = {
                             voucherItem.isFixItem = item.getIsFixItem();
                             voucherItem.rowspan = item.getRowspan();
                             voucherItem.itemName = item.getItemName();
-                            voucherItem.index = item.getIndex();
                             voucherItem.visiable = item.getVisiable();
                             voucherItem.itemLabel = item.getItemLabel();
                             voucherItem.dataField = item.getDataField();
