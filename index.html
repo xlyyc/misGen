@@ -69,6 +69,7 @@
 <script src="src/wof/bizWidget/VoucherItemGroup.js"></script>
 <script src="src/wof/bizWidget/VoucherItem.js"></script>
 <script src="src/wof/bizWidget/VoucherGridComponent.js"></script>
+<script src="src/wof/bizWidget/VoucherGridComponentColumn.js"></script>
 <script src="src/wof/bizWidget/GridComponent.js"></script>
 <script src="src/wof/bizWidget/GridComponentColumn.js"></script>
 <script src="src/wof/bizWidget/VoucherGridComponent.js"></script>
@@ -469,7 +470,7 @@ jQuery(function(){
             json.components = _leafsData;
             json.layout = layout.getData();
 
-            console.log(JSON.stringify(json));
+            console.log(JSON.stringify(json.components));
 
             try{
                 setPageMetas(JSON.stringify(json));
