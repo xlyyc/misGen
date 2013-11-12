@@ -7,7 +7,7 @@
 
         _dialogDiv: null,
 
-		run: function(hidden) {
+		run: function(hidden, customParam) {
             if(wof.customWindow.MetaTreeSelector._initFlag==null){
                 var tree = new wof.bizWidget.BizEntityTree();
                 tree.setTop(0);
@@ -23,7 +23,7 @@
                 wof.customWindow.MetaTreeSelector._tree = tree;
                 wof.customWindow.MetaTreeSelector._initFlag = true;
             }
-            wof.customWindow.MetaTreeSelector._tree.setNodes(wof.customWindow.MetaTreeSelector.getBizEntities());
+            wof.customWindow.MetaTreeSelector._tree.setNodes(wof.customWindow.MetaTreeSelector.getBizEntities(customParam));
             wof.customWindow.MetaTreeSelector._tree.render();
             wof.customWindow.MetaTreeSelector._dialogDiv.dialog({
                 resizable:false,
@@ -31,6 +31,17 @@
                 height:550,
                 modal: true,
                 open: function(event, ui){
+                    if(customParam=='mainEntity'){  //主实体和主实体下的对等
+                        function filter(node){
+                            return (node.level==2 && node.nodeType!='linkEntity') || (node.level==1 && node.nodeType!='linkEntity') || (node.level>2);
+                        }
+                        var nodes = wof.customWindow.MetaTreeSelector._tree.getNodesByFilter(filter);
+                        for (var i=0;i<nodes.length; i++) {
+                            wof.customWindow.MetaTreeSelector._tree.setChkDisabled(nodes[i], true);
+                        }
+                    }else{ //todo
+
+                    }
                     wof.customWindow.MetaTreeSelector._tree.checkNodeByParam('nodeId',hidden.val());
                 },
                 buttons:{
@@ -54,7 +65,8 @@
 
 		},
 
-        getBizEntities:function(){
+        getBizEntities:function(type){
+            console.log('type================='+type);
             //var bizEntity = JSON.parse(getBizEntities());
             var bizEntity = {
                 "childEntity": [{
@@ -349,8 +361,9 @@
             var mainEntity = bizEntity.mainEntity;
             var entity = {
                 "nodeId":mainEntity.alias,
-                "name":mainEntity.alias+"("+mainEntity.mainEntityName+")",
-                "nocheck":true
+                "name":mainEntity.alias+"("+mainEntity.mainEntityName+")"
+                ,"nodeType":"mainEntity"
+                //,"nocheck":true
             };
             var children = [];
 
@@ -370,7 +383,8 @@
                     var link = {"nodeId": "", "name":"对等实体", "nocheck":true, "children":[] };
                     for(var i=0; i<ents.length; i++){
                         var ent = ents[i];
-                        var linkEnt = {"nodeId":ent.alias, "name":ent.alias+"("+ent.name+")", "nocheck":true , "children":[]};
+                        //var linkEnt = {"nodeId":ent.alias, "name":ent.alias+"("+ent.name+")", "nocheck":true , "children":[]};
+                        var linkEnt = {"nodeId":ent.alias, "name":ent.alias+"("+ent.name+")", "nodeType":"linkEntity", "children":[]};
                         link.children.push(linkEnt);
                         for(var t=0; t<ent.properties.length; t++){
                             linkEnt.children.push({"nodeId":(ent.alias+"."+ent.properties[t].name), "name":ent.properties[t].label});
@@ -387,7 +401,8 @@
             var childEntity = {"nodeId": "", "name":"子实体", "nocheck":true, "children":[] };
             for(var i=0; i<bizEntity.childEntity.length; i++){
                 var child = bizEntity.childEntity[i];
-                var childNode = {"nodeId": child.alias, "name":child.alias+"("+child.name+")", "nocheck":true, "children":[] };
+                //var childNode = {"nodeId": child.alias, "name":child.alias+"("+child.name+")", "nocheck":true, "children":[] };
+                var childNode = {"nodeId": child.alias, "name":child.alias+"("+child.name+")", "nodeType":"childEntity", "children":[] };
                 for(var t=0; t<child.properties.length; t++){
                     childNode.children.push({"nodeId":(child.alias+"."+child.properties[t].name), "name":child.properties[t].label});
                 }

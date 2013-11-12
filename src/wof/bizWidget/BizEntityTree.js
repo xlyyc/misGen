@@ -46,6 +46,7 @@ wof.bizWidget.BizEntityTree.prototype = {
             });
 
             this._tree = new wof.widget.Tree();
+            this._tree.setIsInside(true);
             this._tree.setNodes(this.getNodes());
             this._tree.setTop(0);
             this._tree.setChkStyle('radio');
@@ -98,6 +99,20 @@ wof.bizWidget.BizEntityTree.prototype = {
 
     getCheckedNodes: function(){
         var nodes = this._tree.getCheckedNodes();
+        return nodes;
+    },
+
+    getNodesByParam: function(key,name,parentNode){
+        var nodes = this._tree.getNodesByParam(key,name,parentNode);
+        return nodes;
+    },
+
+    setChkDisabled: function(node,disable,inheritParent,inheritChildren){
+        this._tree.setChkDisabled(node,disable,inheritParent,inheritChildren);
+    },
+
+    getNodesByFilter: function(filter,isSingle){
+        var nodes = this._tree.getNodesByFilter(filter,isSingle);
         return nodes;
     }
 

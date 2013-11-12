@@ -188,8 +188,8 @@ wof.bizWidget.PropertyBar.prototype={
                 button.mousedown(function(event){
                     event.stopPropagation();
                     var hidden = jQuery(event.target).prev();
-                    console.log('hidden.val='+hidden.val());
-                    eval(meta.customMethod+'.run(hidden);');
+                    var customParam = meta.customParam;
+                    eval(meta.customMethod+'.run(hidden,customParam);');
                 });
                 tr.append(td);
             }

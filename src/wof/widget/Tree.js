@@ -170,7 +170,22 @@ wof.widget.Tree.prototype = {
             checked = true;
         }
         this._ztree.checkAllNodes(checked);
+    },
+
+    getNodesByParam: function(key,name,parentNode){
+        var nodes = this._ztree.getNodesByParam(key,name,parentNode);
+        return nodes;
+    },
+
+    setChkDisabled: function(node,disable,inheritParent,inheritChildren){
+        this._ztree.setChkDisabled(node,disable,inheritParent,inheritChildren);
+    },
+
+    getNodesByFilter: function(filter,isSingle){
+        var nodes = this._ztree.getNodesByFilter(filter,isSingle);
+        return nodes;
     }
+
 
 
 };
