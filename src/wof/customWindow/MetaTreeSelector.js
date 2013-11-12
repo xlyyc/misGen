@@ -31,16 +31,21 @@
                 height:550,
                 modal: true,
                 open: function(event, ui){
+                    var filter = null;
                     if(customParam=='mainEntity'){  //主实体和主实体下的对等
-                        function filter(node){
+                        filter = function(node){
                             return (node.level==2 && node.nodeType!='linkEntity') || (node.level==1 && node.nodeType!='linkEntity') || (node.level>2);
                         }
-                        var nodes = wof.customWindow.MetaTreeSelector._tree.getNodesByFilter(filter);
-                        for (var i=0;i<nodes.length; i++) {
-                            wof.customWindow.MetaTreeSelector._tree.setChkDisabled(nodes[i], true);
+                    }else if(customParam=='filed'){ //字段
+                        filter = function(node){
+                            return (node.nodeType=='mainEntity' || node.nodeType=='linkEntity' || node.nodeType=='childEntity');
                         }
                     }else{ //todo
 
+                    }
+                    var nodes = wof.customWindow.MetaTreeSelector._tree.getNodesByFilter(filter);
+                    for (var i=0;i<nodes.length; i++) {
+                        wof.customWindow.MetaTreeSelector._tree.setChkDisabled(nodes[i], true);
                     }
                     wof.customWindow.MetaTreeSelector._tree.checkNodeByParam('nodeId',hidden.val());
                 },
