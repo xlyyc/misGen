@@ -103,6 +103,15 @@ wof.bizWidget.ComponentsTree.prototype = {
 
     checkAllNodes: function(checked){
         this._tree.checkAllNodes(checked);
+    },
+
+    setChkDisabled: function(node,disable,inheritParent,inheritChildren){
+        this._tree.setChkDisabled(node,disable,inheritParent,inheritChildren);
+    },
+
+    getNodesByFilter: function(filter,isSingle){
+        var nodes = this._tree.getNodesByFilter(filter,isSingle);
+        return nodes;
     }
 
 

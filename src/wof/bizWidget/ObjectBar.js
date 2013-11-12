@@ -151,7 +151,7 @@ wof.bizWidget.ObjectBar.prototype={
             if(widgetComponents.length>0){
                 var toolbarItem2 = new wof.widget.ToolbarItem();
                 toolbarItem2.setIsInside(true);
-                toolbarItem2.setTitle('基础构件');
+                toolbarItem2.setTitle('功能构件');
                 toolbarItem2.setName('base');
                 toolbarItem2.appendTo(toolbar);
                 for(var i=0;i<widgetComponents.length;i++){

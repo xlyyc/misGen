@@ -880,7 +880,7 @@ wof.bizWidget.SearchComponent.prototype = {
 
     //创建初始化的SearchComponent
     createSelf: function(width, height){
-        var searchComponentData = {caption:'搜索',width:width,titleHeight:25,colsNum:4,itemHeight:45};
+        var searchComponentData = {caption:'未命名搜索',width:width,titleHeight:25,colsNum:4,itemHeight:45};
 
         var width = searchComponentData.width!=null?searchComponentData.width:this.getWidth();
         var titleHeight = searchComponentData.titleHeight!=null?searchComponentData.titleHeight:null;

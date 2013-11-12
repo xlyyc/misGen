@@ -753,6 +753,7 @@ wof.bizWidget.VoucherGridComponent.prototype = {
         node.setWidth(width-8);
         node.setHeight(height-25);
         node.setHeaderHeight(45);
+        node.setName('未命名表体列表');
         node.setTop(2);
         node.setLeft(2);
         node.setUseMutiplePage(true);

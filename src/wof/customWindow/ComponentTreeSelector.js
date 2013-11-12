@@ -7,7 +7,7 @@
 
         _dialogDiv: null,
 
-		run: function(hidden) {
+		run: function(hidden, customParam) {
             if(wof.customWindow.ComponentTreeSelector._initFlag==null){
                 var tree = new wof.bizWidget.ComponentsTree();
                 tree.setTop(0);
@@ -30,7 +30,14 @@
                 height:550,
                 modal: true,
                 open: function(event, ui){
-                    wof.customWindow.ComponentTreeSelector._tree.checkAllNodes(false);
+                    var nodeTypes = customParam.split(',');
+                    function filter(node){
+                        return (node.level==1 && jQuery.inArray(node.nodeType, nodeTypes)==-1);
+                    }
+                    var nodes = wof.customWindow.ComponentTreeSelector._tree.getNodesByFilter(filter);
+                    for (var i=0;i<nodes.length; i++) {
+                        wof.customWindow.ComponentTreeSelector._tree.setChkDisabled(nodes[i], true);
+                    }
                     if( hidden.val().length>0){
                         var componentIds = hidden.val().split(',');
                         for(var i=0;i<componentIds.length;i++){
@@ -69,13 +76,21 @@
             var json = [];
             var voucherComponents = {"nodeId":"0", "name":"表头构件", nocheck:true, children:[]};
             var gridComponents = {"nodeId":"1", "name":"列表构件", nocheck:true, children:[]};
+            var voucherGridComponents = {"nodeId":"1", "name":"表体列表构件", nocheck:true, children:[]};
+            var searchComponents = {"nodeId":"1", "name":"搜索构件", nocheck:true, children:[]};
             json.push(voucherComponents);
             json.push(gridComponents);
+            json.push(voucherGridComponents);
+            json.push(searchComponents);
             function findComponent(d){
                 if(d.className=='wof.bizWidget.VoucherComponent'){
-                    voucherComponents.children.push({"nodeId": d.id, "name": d.caption});
+                    voucherComponents.children.push({"nodeId": d.id, nodeType:'voucherComponent', "name": d.caption});
                 } else if(d.className=='wof.bizWidget.GridComponent'){
-                    gridComponents.children.push({"nodeId": d.id, "name": d.name});
+                    gridComponents.children.push({"nodeId": d.id, nodeType:'gridComponent', "name": d.name});
+                } else if(d.className=='wof.bizWidget.VoucherGridComponent'){
+                    voucherGridComponents.children.push({"nodeId": d.id, nodeType:'voucherGridComponent', "name": d.name});
+                } else if(d.className=='wof.bizWidget.SearchComponent'){
+                    searchComponents.children.push({"nodeId": d.id, nodeType:'searchComponent', "name": d.caption});
                 }
                 var cds = d.childNodes;
                 for(var i=0; i<cds.length; i++){
