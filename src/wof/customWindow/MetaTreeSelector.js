@@ -36,12 +36,18 @@
                         filter = function(node){
                             return (node.level==2 && node.nodeType!='linkEntity') || (node.level==1 && node.nodeType!='linkEntity') || (node.level>2);
                         }
-                    }else if(customParam=='filed'){ //字段
+                    }else if(customParam=='field'){ //字段
                         filter = function(node){
                             return (node.nodeType=='mainEntity' || node.nodeType=='linkEntity' || node.nodeType=='childEntity');
                         }
-                    }else{ //todo
-
+                    }else if(customParam=='childEntity'){ //子实体及子实体下的对等实体
+                        filter = function(node){
+                            return (node.level==1) || (node.level==2 && node.nodeType!='childEntity') || (node.level>2 && node.nodeType!='linkEntity');
+                        }
+                    }else{   //所有实体
+                        filter = function(node){
+                            return (node.nodeType!='mainEntity' || node.nodeType!='linkEntity' || node.nodeType!='childEntity');
+                        }
                     }
                     var nodes = wof.customWindow.MetaTreeSelector._tree.getNodesByFilter(filter);
                     for (var i=0;i<nodes.length; i++) {
