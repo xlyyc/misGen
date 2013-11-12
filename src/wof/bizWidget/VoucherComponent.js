@@ -965,7 +965,7 @@ wof.bizWidget.VoucherComponent.prototype = {
         var node = new wof.bizWidget.VoucherComponent();
         node.setLeft(0);
         node.setTop(0);
-        node.setWidth(width);
+        node.setWidth(width-4);
         node.setItemHeight(60);
         var voucherItemGroupData = {groupCaption:'表头分组1',width:width,titleHeight:25,colsNum:4,itemHeight:45};
         node.insertVoucherItemGroup(voucherItemGroupData);

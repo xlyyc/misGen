@@ -22,7 +22,7 @@ wof.bizWidget.spanner.VoucherComponentSpanner = function () {
             'hiden':{prop:'hiden','name':'是否隐藏','type':'yesOrNo','readOnly':false,'isHide':false,required:false},
             'scale':{prop:'scale','name':'缩放比例','type':'positiveIntegerOrPositiveDecimal','readOnly':false,'isHide':false,required:true},
             'viewType':{prop:'viewType','name':'展现方式','type':'enum','readOnly':false,'isHide':false, 'enumData':{'group':'分组','tab':'标签页'},required:false},
-            'bindEntityID':{prop:'bindEntityID','name':'实体ID','type':'custom','readOnly':false,'isHide':false,required:false, customMethod:'wof.customWindow.MetaTreeSelector', customParam:'mainEntity'}
+            'bindEntityID':{prop:'bindEntityID','name':'绑定实体','type':'custom','readOnly':false,'isHide':false,required:false, customMethod:'wof.customWindow.MetaTreeSelector', customParam:'mainEntity'}
 
         },
         'VoucherItemGroup':{
