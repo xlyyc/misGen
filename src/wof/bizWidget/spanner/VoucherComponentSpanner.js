@@ -621,6 +621,7 @@ wof.bizWidget.spanner.VoucherComponentSpanner.prototype = {
                             voucherItem.visbleType = item.getVisbleType();
                             voucherItem.labelWidth = item.getLabelWidth();
                             voucherItem.inputWidth = item.getInputWidth();
+                            voucherItem.inputHeight = item.getInputHeight();
                             voucherItem.linkageItem = item.getLinkageItem();
                             voucherItem.colspan = item.getColspan();
                             voucherItem.tipValue = item.getTipValue();
