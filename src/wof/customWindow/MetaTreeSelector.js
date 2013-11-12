@@ -42,11 +42,11 @@
                         }
                     }else if(customParam=='childEntity'){ //子实体及子实体下的对等实体
                         filter = function(node){
-                            return (node.level==1) || (node.level==2 && node.nodeType!='childEntity') || (node.level>2 && node.nodeType!='linkEntity');
+                            return (node.level==0) || (node.level==1) || (node.level==2 && node.nodeType!='childEntity') || (node.level>2 && node.nodeType!='linkEntity');
                         }
-                    }else{   //所有实体
+                    }else if(customParam=='allEntity'){   //所有实体
                         filter = function(node){
-                            return (node.nodeType!='mainEntity' || node.nodeType!='linkEntity' || node.nodeType!='childEntity');
+                            return (node.nodeType!='mainEntity' && node.nodeType!='linkEntity' && node.nodeType!='childEntity');
                         }
                     }
                     var nodes = wof.customWindow.MetaTreeSelector._tree.getNodesByFilter(filter);

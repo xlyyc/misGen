@@ -28,7 +28,7 @@ wof.bizWidget.spanner.SearchComponentSpanner = function () {
             'isFixItem':{prop:'isFixItem','name':'是否锁定','type':'yesOrNo','readOnly':false,'isHide':false,required:true},
             'rowspan':{prop:'rowspan','name':'纵向通栏','type':'naturalNumber','readOnly':false,'isHide':false,required:true},
             'caption':{prop:'caption','name':'显示名称','type':'text','readOnly':false,'isHide':false,required:false},
-            'dataField':{prop:'dataField','name':'绑定实体属性','type':'custom','readOnly':false,'isHide':false,required:false, customMethod:'wof.customWindow.MetaTreeSelector'},
+            'dataField':{prop:'dataField','name':'绑定实体属性','type':'custom','readOnly':false,'isHide':false,required:false, customMethod:'wof.customWindow.MetaTreeSelector', customParam:'field'},
             'dateTimeBoxFormat':{prop:'dateTimeBoxFormat','name':'时间格式','type':'enum','readOnly':false,'isHide':false,enumData:{'YYYY-MM-DD hh:mm:ss':'YYYY-MM-DD hh:mm:ss','YYYY-MM':'YYYY-MM','MM-DD':'MM-DD','YYYY-MM-DD':'YYYY-MM-DD','hh:mm:ss':'hh:mm:ss','hh:mm':'hh:mm'},required:false},
             'selectPattern':{prop:'selectPattern','name':'下拉框显示模式','type':'enum','readOnly':false,'isHide':false, 'enumData':{'normal':'普通','tree':'树形','grid':'列表'},required:false},
             'useMultiSelect':{prop:'useMultiSelect','name':'下拉框是否多选','type':'yesOrNo','readOnly':false,'isHide':false,required:false},
