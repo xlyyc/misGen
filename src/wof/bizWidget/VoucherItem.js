@@ -251,7 +251,7 @@ wof.bizWidget.VoucherItem.prototype = {
 
     getLabelWidth: function(){
         if(this._labelWidth==null){
-            this._labelWidth = 100;
+            this._labelWidth = 160;
         }
         return this._labelWidth;
     },

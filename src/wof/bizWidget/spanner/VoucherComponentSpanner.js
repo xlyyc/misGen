@@ -53,7 +53,20 @@ wof.bizWidget.spanner.VoucherComponentSpanner = function () {
             'checkErrorInfo':{prop:'checkErrorInfo','name':'校验失败提示','type':'text','readOnly':false,'isHide':false,required:false},
             'selectPattern':{prop:'selectPattern','name':'下拉框显示模式','type':'enum','readOnly':false,'isHide':false, 'enumData':{'normal':'普通','tree':'树形','grid':'列表'},required:false},
             'useMultiSelect':{prop:'useMultiSelect','name':'下拉框是否多选','type':'yesOrNo','readOnly':false,'isHide':false,required:false},
-            'visbleType':{prop:'visbleType','name':'显示类型','type':'enum','readOnly':false,'isHide':false, enumData:{id:'Id',text:'文本框',textArea:'文本域',richTextArea:'文本编辑器',select:'下拉框',checkBox:'多选框',date:'日期',radio:'单选框',file:'文件选择框',number:'数字'},required:false},
+            'visbleType':{prop:'visbleType','name':'显示类型','type':'enum','readOnly':false,'isHide':false,
+                enumData:{
+                    id:'Id',
+                    text:'文本框',
+                    textArea:'文本域',
+                    richTextArea:'文本编辑器',
+                    select:'下拉框',
+                    checkBox:'多选框',
+                    date:'日期',
+                    radio:'单选框',
+                    file:'文件选择框',
+                    number:'数字'
+                },
+                required:false},
             'labelWidth':{prop:'labelWidth','name':'Label宽度','type':'naturalNumber','readOnly':false,'isHide':false,required:false},
             'inputWidth':{prop:'inputWidth','name':'输入框宽度','type':'naturalNumber','readOnly':false,'isHide':false,required:false},
             'inputHeight':{prop:'inputHeight','name':'输入框高度','type':'naturalNumber','readOnly':false,'isHide':false,required:false},
@@ -583,7 +596,8 @@ wof.bizWidget.spanner.VoucherComponentSpanner.prototype = {
             json.width = node.getWidth();
 
             var voucherItemGroups = [];
-            var childNodes = node.childNodes();
+            //var childNodes = node.childNodes();
+            var childNodes = node._voucherItemGroups;
             for(var i=0;i<childNodes.length;i++){
                 if(childNodes[i].getClassName()=='wof.bizWidget.VoucherItemGroup'){
                     var group = childNodes[i];

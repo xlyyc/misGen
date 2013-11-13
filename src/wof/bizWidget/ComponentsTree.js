@@ -2,7 +2,6 @@ wof.bizWidget.ComponentsTree = function () {
     this._version = '1.0';
 
     this.getDomInstance().css('overflow','auto');
-    this.setZIndex('200');
 
 };
 

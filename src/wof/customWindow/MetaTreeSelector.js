@@ -10,6 +10,7 @@
 		run: function(hidden, customParam) {
             if(wof.customWindow.MetaTreeSelector._initFlag==null){
                 var tree = new wof.bizWidget.BizEntityTree();
+                tree.setIsInside(true);
                 tree.setTop(0);
                 tree.setLeft(0);
                 tree.setWidth(420);
