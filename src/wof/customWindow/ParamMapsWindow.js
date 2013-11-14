@@ -23,7 +23,13 @@
                 wof.customWindow.ComponentTreeSelector._paramWindow = paramWindow;
                 wof.customWindow.ParamMapsWindow._initFlag = true;
             }
-
+            var val = hidden.val();
+            if(val!=null&&val.length>0){
+                var paramMaps = JSON.parse(decodeURIComponent(val));
+                wof.customWindow.ComponentTreeSelector._paramWindow.setParamMaps(paramMaps);
+            }else{
+                wof.customWindow.ComponentTreeSelector._paramWindow.setParamMaps({});
+            }
             wof.customWindow.ComponentTreeSelector._paramWindow.render();
             wof.customWindow.ParamMapsWindow._dialogDiv.dialog({
                 resizable:false,
@@ -31,13 +37,12 @@
                 height:550,
                 modal: true,
                 open: function(event, ui){
-                    //wof.customWindow.ParamMapsWindow._input.val(decodeURIComponent(hidden.val()));
+
                 },
                 buttons:{
                     '确定':function(){
-                        //var val = wof.customWindow.ParamMapsWindow._input.val();
-                        //hidden.val(encodeURIComponent(val));
-
+                        var paramMaps = wof.customWindow.ComponentTreeSelector._paramWindow.receiveCompParamValue();
+                        hidden.val(encodeURIComponent(JSON.stringify(paramMaps)));
                         jQuery(this).dialog('close');
                     },
                     '关闭':function(){
