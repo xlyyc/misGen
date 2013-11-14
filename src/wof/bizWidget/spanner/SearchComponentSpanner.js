@@ -17,7 +17,7 @@ wof.bizWidget.spanner.SearchComponentSpanner = function () {
             'itemHeight':{prop:'itemHeight','name':'行高','type':'naturalNumber','readOnly':false,'isHide':false,required:true},
             'name':{prop:'name','name':'构件名称','type':'text','readOnly':false,'isHide':false,required:false},
             'caption':{prop:'caption','name':'标题','type':'text','readOnly':false,'isHide':false,required:false},
-            'linkComponentID':{prop:'linkComponentID','name':'关联组件','type':'custom','readOnly':false,'isHide':false,required:false, customMethod:'wof.customWindow.ComponentTreeSelector', customParam:'voucherComponent,voucherGridComponent'},
+            'linkComponentID':{prop:'linkComponentID','name':'关联组件','type':'custom','readOnly':false,'isHide':false,required:false, customMethod:'wof.customWindow.ComponentTreeSelector', customParam:'GridComponent,voucherGridComponent'},
             'colsNum':{prop:'colsNum','name':'列数','type':'naturalNumber','readOnly':false,'isHide':false,required:true},
             'isExpand':{prop:'isExpand','name':'是否展开','type':'yesOrNo','readOnly':false,'isHide':false,required:false}
         },
