@@ -16,10 +16,11 @@ wof.functionWidget.spanner.ViewRecordComponentSpanner = function () {
         'ViewRecordComponent':{
             'functionID':{prop:'functionID','name':'功能ID','type':'text','readOnly':false,'isHide':false},
             'isAutoCommit':{prop:'isAutoCommit','name':'是否自动提交','type':'yesOrNo','readOnly':false,'isHide':false},
-            'bindComponents':{prop:'bindComponents','name':'绑定组件','type':'custom','readOnly':false,'isHide':false,required:false, customMethod:'wof.customWindow.ComponentTreeSelector', customParam:'gridComponent,voucherGridComponent'},
             'commandItemID':{prop:'commandItemID','name':'功能构件ID','type':'text','readOnly':false,'isHide':false},
             'iSPermissionControl':{prop:'iSPermissionControl','name':'是否权限控制','type':'yesOrNo','readOnly':false,'isHide':false},
-            'callItemCaption':{prop:'callItemCaption','name':'显示名称','type':'text','readOnly':false,'isHide':false}
+            'callItemCaption':{prop:'callItemCaption','name':'显示名称','type':'text','readOnly':false,'isHide':false},
+            'gridName':{prop:'gridName','name':'绑定组件','type':'custom','readOnly':false,'isHide':false,required:false, customMethod:'wof.customWindow.ComponentTreeSelector', customParam:'gridComponent,voucherGridComponent'},
+            'formId':{prop:'formId','name':'绑定页面','type':'text','readOnly':false,'isHide':false}
         }
     };
 
@@ -147,8 +148,8 @@ wof.functionWidget.spanner.ViewRecordComponentSpanner.prototype = {
             activeData.onReceiveMessage = this.getPropertys().onReceiveMessage;
             activeData.onSendMessage = this.getPropertys().onSendMessage;
 
-            activeData.isAutoCommit = this.getPropertys().isAutoCommit;
-            activeData.bindComponents = this.getPropertys().bindComponents;
+            activeData.gridName = this.getPropertys().gridName;
+            activeData.formId = this.getPropertys().formId;
             activeData.commandItemID = this.getPropertys().commandItemID;
             activeData.iSPermissionControl = this.getPropertys().iSPermissionControl;
             activeData.functionID = this.getPropertys().functionID;

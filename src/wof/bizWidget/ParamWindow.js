@@ -3,7 +3,6 @@ wof.bizWidget.ParamWindow = function () {
 
     this.getDomInstance().css('overflow','auto');
 
-    this.setCompParamNames(['id']);
 };
 wof.bizWidget.ParamWindow.prototype = {
 

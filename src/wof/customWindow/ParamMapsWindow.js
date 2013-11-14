@@ -23,6 +23,7 @@
                 wof.customWindow.ComponentTreeSelector._paramWindow = paramWindow;
                 wof.customWindow.ParamMapsWindow._initFlag = true;
             }
+            wof.customWindow.ComponentTreeSelector._paramWindow.setCompParamNames(customParam.split(','));
             var val = hidden.val();
             if(val!=null&&val.length>0){
                 var paramMaps = JSON.parse(decodeURIComponent(val));

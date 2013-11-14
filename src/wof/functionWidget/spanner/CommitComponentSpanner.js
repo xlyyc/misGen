@@ -14,14 +14,12 @@ wof.functionWidget.spanner.CommitComponentSpanner = function () {
     this._meta.sendMessages = {'wof.functionWidget.CommitComponent_mousedown':'单击'};
     this._meta.propertys = {
         'CommitComponent':{
-            //'functionID':{prop:'functionID','name':'功能ID','type':'text','readOnly':false,'isHide':false},
-            'functionID':{prop:'functionID','name':'功能ID','type':'custom','readOnly':false,'isHide':false,required:false, customMethod:'wof.customWindow.ParamMapsWindow'},
+            'functionID':{prop:'functionID','name':'功能ID','type':'text','readOnly':false,'isHide':false},
             'isAutoCommit':{prop:'isAutoCommit','name':'是否自动提交','type':'yesOrNo','readOnly':false,'isHide':false},
             'bindComponents':{prop:'bindComponents','name':'绑定组件','type':'custom','readOnly':false,'isHide':false,required:false, customMethod:'wof.customWindow.ComponentTreeSelector', customParam:'voucherComponent,gridComponent,voucherGridComponent'},
             'commandItemID':{prop:'commandItemID','name':'功能构件ID','type':'text','readOnly':false,'isHide':false},
             'iSPermissionControl':{prop:'iSPermissionControl','name':'是否权限控制','type':'yesOrNo','readOnly':false,'isHide':false},
-            'callItemCaption':{prop:'callItemCaption','name':'显示名称','type':'text','readOnly':false,'isHide':false},
-
+            'callItemCaption':{prop:'callItemCaption','name':'显示名称','type':'text','readOnly':false,'isHide':false}
         }
     };
 
@@ -154,6 +152,7 @@ wof.functionWidget.spanner.CommitComponentSpanner.prototype = {
             activeData.commandItemID = this.getPropertys().commandItemID;
             activeData.iSPermissionControl = this.getPropertys().iSPermissionControl;
             activeData.functionID = this.getPropertys().functionID;
+            activeData.paramMaps = this.getPropertys().paramMaps;
             activeData.callItemName = this.getPropertys().callItemName;
             activeData.callItemCaption = this.getPropertys().callItemCaption;
 

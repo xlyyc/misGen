@@ -22,8 +22,8 @@ wof.bizWidget.spanner.VoucherComponentSpanner = function () {
             'hiden':{prop:'hiden','name':'是否隐藏','type':'yesOrNo','readOnly':false,'isHide':false,required:false},
             'scale':{prop:'scale','name':'缩放比例','type':'positiveIntegerOrPositiveDecimal','readOnly':false,'isHide':false,required:true},
             'viewType':{prop:'viewType','name':'展现方式','type':'enum','readOnly':false,'isHide':false, 'enumData':{'group':'分组','tab':'标签页'},required:false},
-            'bindEntityID':{prop:'bindEntityID','name':'绑定实体','type':'custom','readOnly':false,'isHide':false,required:false, customMethod:'wof.customWindow.MetaTreeSelector', customParam:'mainEntity'}
-
+            'bindEntityID':{prop:'bindEntityID','name':'绑定实体','type':'custom','readOnly':false,'isHide':false,required:false, customMethod:'wof.customWindow.MetaTreeSelector', customParam:'mainEntity'},
+            'paramMaps':{prop:'paramMaps','name':'参数','type':'custom','readOnly':false,'isHide':false,required:false, customMethod:'wof.customWindow.ParamMapsWindow', customParam:'dataId'}
         },
         'VoucherItemGroup':{
             'groupCaption':{prop:'groupCaption','name':'标题','type':'text','readOnly':false,'isHide':false,required:false},
@@ -521,6 +521,7 @@ wof.bizWidget.spanner.VoucherComponentSpanner.prototype = {
                 activeData.hiden = voucherComponent.getHiden();
                 activeData.position = voucherComponent.getPosition();
                 activeData.scale = voucherComponent.getScale();
+                activeData.paramMaps = voucherComponent.getParamMaps();
                 activeData.activeVoucherItemGroupIndex = voucherComponent.getActiveVoucherItemGroupIndex();
                 activeData.activeVoucherItemRank = voucherComponent.getActiveVoucherItemRank();
             }
@@ -595,8 +596,16 @@ wof.bizWidget.spanner.VoucherComponentSpanner.prototype = {
             json.viewType = node.getViewType();
             json.width = node.getWidth();
 
+            var paramMaps = [];
+            for(var k in node.getParamMaps()){
+                var param = node.getParamMaps()[k];
+                paramMaps.push(param);
+            }
+            json.paramMaps = paramMaps;
+            console.log('JSON.stringify(json.paramMaps)=========='+JSON.stringify(json.paramMaps));
+
+
             var voucherItemGroups = [];
-            //var childNodes = node.childNodes();
             var childNodes = node._voucherItemGroups;
             for(var i=0;i<childNodes.length;i++){
                 if(childNodes[i].getClassName()=='wof.bizWidget.VoucherItemGroup'){

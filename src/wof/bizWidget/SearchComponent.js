@@ -280,6 +280,7 @@ wof.bizWidget.SearchComponent.prototype = {
     //----------必须实现----------
     getData: function () {
         return {
+            paramMaps: this.getParamMaps(),
             initActionName:this.getInitActionName(),
             itemHeight:this.getItemHeight(),
             name:this.getName(),
@@ -298,6 +299,7 @@ wof.bizWidget.SearchComponent.prototype = {
     },
     //----------必须实现----------
     setData: function (data) {
+        this.setParamMaps(data.paramMaps);
         this.setInitActionName(data.initActionName);
         this.setName(data.name);
         this.setCallStr(data.callStr);
@@ -358,6 +360,9 @@ wof.bizWidget.SearchComponent.prototype = {
             }
             if(searchComponentDataData.isExpand!=null){
                 this.setIsExpand((searchComponentDataData.isExpand=='true'||searchComponentDataData.isExpand==true)?true:false);
+            }
+            if(searchComponentDataData.paramMaps!=null){
+                this.setParamMaps(searchComponentDataData.paramMaps);
             }
         }
     },

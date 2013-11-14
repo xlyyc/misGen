@@ -29,23 +29,36 @@ wof.functionWidget.ViewRecordComponent.prototype = {
 
     _callType: null,    //调用类型。类型包括系统内置菜单命令项、自定义菜单命令项。自定义命令项需提前在Action节点中提前定义.
 
-    //按钮文本
-    _text:null,
-
-    _bindComponents: null, //绑定构件ID
-
-    _isAutoCommit: null,      //是否自动提交
-
     _btn: null,
 
     _initFlag: null,
 
     _paramMaps:null,
 
+    _gridName: null,
+
+    _formId: null,
+
 
     /**
      * get/set 属性方法定义
      */
+
+    getGridName : function (){
+        return this._gridName || '';
+    },
+
+    setGridName : function (gridName){
+        this._gridName = gridName;
+    },
+
+    getFormId : function (){
+        return this._formId || '';
+    },
+
+    setFormId : function (formId){
+        this._formId = formId;
+    },
 
     getParamMaps: function(){
         if(this._paramMaps==null){
@@ -114,22 +127,6 @@ wof.functionWidget.ViewRecordComponent.prototype = {
         this._callType = callType;
     },
 
-    getIsAutoCommit : function (){
-        return this._isAutoCommit || false;
-    },
-
-    setIsAutoCommit : function (isAutoCommit){
-        this._isAutoCommit = isAutoCommit;
-    },
-
-    getBindComponents : function (){
-        return this._bindComponents || '';
-    },
-
-    setBindComponents : function (bindComponents){
-        this._bindComponents = bindComponents;
-    },
-
     /**
      * Render 方法定义
      */
@@ -187,8 +184,9 @@ wof.functionWidget.ViewRecordComponent.prototype = {
     //----------必须实现----------
     getData: function () {
         return {
-            bindComponents: this.getBindComponents(),
-            isAutoCommit: this.getIsAutoCommit(),
+            gridName: this.getGridName(),
+            formId: this.getFormId(),
+            paramMaps: this.getParamMaps(),
             callStr: this.getCallStr(),
             commandItemID: this.getCommandItemID(),
             iSPermissionControl: this.getISPermissionControl(),
@@ -200,8 +198,9 @@ wof.functionWidget.ViewRecordComponent.prototype = {
     },
     //----------必须实现----------
     setData: function (data) {
-        this.setBindComponents(data.bindComponents);
-        this.setIsAutoCommit(data.isAutoCommit);
+        this.setGridName(data.gridName);
+        this.setFormId(data.formId);
+        this.setParamMaps(data.paramMaps);
         this.setCallStr(data.callStr);
         this.setCommandItemID(data.commandItemID);
         this.setISPermissionControl(data.iSPermissionControl);
@@ -227,11 +226,11 @@ wof.functionWidget.ViewRecordComponent.prototype = {
 
     updateViewRecordComponent: function(data){
         if(!jQuery.isEmptyObject(data)){
-            if(data.bindComponents!=null){
-                this.setBindComponents(data.bindComponents);
+            if(data.gridName!=null){
+                this.setGridName(data.gridName);
             }
-            if(data.isAutoCommit!=null){
-                this.setIsAutoCommit((data.isAutoCommit=='true'||data.isAutoCommit==true)?true:false);
+            if(data.formId!=null){
+                this.setFormId(data.formId);
             }
             if(data.commandItemID!=null){
                 this.setCommandItemID(data.commandItemID);
@@ -244,6 +243,9 @@ wof.functionWidget.ViewRecordComponent.prototype = {
             }
             if(data.callItemCaption!=null){
                 this.setCallItemCaption(data.callItemCaption);
+            }
+            if(data.paramMaps!=null){
+                this.setParamMaps(data.paramMaps);
             }
 
         }

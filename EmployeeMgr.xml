@@ -143,10 +143,8 @@
 				</After>
 				<Return />
 				<ParamMaps>
-					<ParamMap MapType="value" CompParamName="gridName"
-						CompParamValue="emGrid" PageParamName="" ChangeExpt=""></ParamMap>
-					<ParamMap MapType="value" CompParamName="formId"
-						CompParamValue="emplyform" PageParamName="" ChangeExpt=""></ParamMap>
+					<ParamMap MapType="value" CompParamName="gridName" CompParamValue="emGrid" PageParamName="" ChangeExpt=""></ParamMap>
+					<ParamMap MapType="value" CompParamName="formId" CompParamValue="emplyform" PageParamName="" ChangeExpt=""></ParamMap>
 				</ParamMaps>
 			</CommandItem>
 			<CommandItem CallType="JS" FunctionID="emap.form"

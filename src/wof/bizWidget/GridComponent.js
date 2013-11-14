@@ -298,6 +298,7 @@ wof.bizWidget.GridComponent.prototype = {
     //----------必须实现----------
     getData: function () {
         return {
+            paramMaps: this.getParamMaps(),
             callStr:this.getCallStr(),
             initActionName:this.getInitActionName(),
             name:this.getName(),
@@ -312,6 +313,7 @@ wof.bizWidget.GridComponent.prototype = {
     },
     //----------必须实现----------
     setData: function (data) {
+        this.setParamMaps(data.paramMaps);
         this.setCallStr(data.callStr);
         this.setInitActionName(data.initActionName);
         this.setName(data.name);
@@ -439,6 +441,9 @@ wof.bizWidget.GridComponent.prototype = {
             }
             if(gridComponentData.onReceiveMessage!=null){
                 this.setOnReceiveMessage(gridComponentData.onReceiveMessage);
+            }
+            if(gridComponentData.paramMaps!=null){
+                this.setParamMaps(gridComponentData.paramMaps);
             }
         }
     },

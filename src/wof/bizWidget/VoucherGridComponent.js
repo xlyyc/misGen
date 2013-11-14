@@ -323,6 +323,7 @@ wof.bizWidget.VoucherGridComponent.prototype = {
     //----------必须实现----------
     getData: function () {
         return {
+            paramMaps: this.getParamMaps(),
             state:this.getState(),
             callStr:this.getCallStr(),
             initActionName:this.getInitActionName(),
@@ -339,6 +340,7 @@ wof.bizWidget.VoucherGridComponent.prototype = {
     },
     //----------必须实现----------
     setData: function (data) {
+        this.setParamMaps(data.paramMaps);
         this.setState(data.state);
         this.setCallStr(data.callStr);
         this.setInitActionName(data.initActionName);
@@ -468,6 +470,9 @@ wof.bizWidget.VoucherGridComponent.prototype = {
             }
             if(voucherGridComponentData.onReceiveMessage!=null){
                 this.setOnReceiveMessage(voucherGridComponentData.onReceiveMessage);
+            }
+            if(voucherGridComponentData.paramMaps!=null){
+                this.setParamMaps(voucherGridComponentData.paramMaps);
             }
         }
     },

@@ -187,6 +187,7 @@ wof.functionWidget.AddRecordComponent.prototype = {
     //----------必须实现----------
     getData: function () {
         return {
+            paramMaps: this.getParamMaps(),
             bindComponents: this.getBindComponents(),
             isAutoCommit: this.getIsAutoCommit(),
             callStr: this.getCallStr(),
@@ -200,6 +201,7 @@ wof.functionWidget.AddRecordComponent.prototype = {
     },
     //----------必须实现----------
     setData: function (data) {
+        this.setParamMaps(data.paramMaps);
         this.setBindComponents(data.bindComponents);
         this.setIsAutoCommit(data.isAutoCommit);
         this.setCallStr(data.callStr);
@@ -244,6 +246,9 @@ wof.functionWidget.AddRecordComponent.prototype = {
             }
             if(data.callItemCaption!=null){
                 this.setCallItemCaption(data.callItemCaption);
+            }
+            if(data.paramMaps!=null){
+                this.setParamMaps(data.paramMaps);
             }
 
         }

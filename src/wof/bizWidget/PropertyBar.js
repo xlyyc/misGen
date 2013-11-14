@@ -180,6 +180,7 @@ wof.bizWidget.PropertyBar.prototype={
                 tr = jQuery('<tr style="height:30px;border:1px inset #a1a1a1;">');
                 tr.append(jQuery('<td style="width:45%;"><span style="width:100px;" title="'+meta.prop+'">'+meta.name+'</span></td>'));
                 var td = jQuery('<td style="width:55%;">');
+                value = encodeURIComponent(JSON.stringify(value));
                 var hidden = jQuery('<input type="hidden" name="'+meta.prop+'" value="'+value+'"/>');
                 td.append(hidden);
                 var button = jQuery('<input type="button" value=" 设置 ">');
@@ -248,6 +249,9 @@ wof.bizWidget.PropertyBar.prototype={
             inputs.each(function(){
                 var name = jQuery(this).attr('name');
                 var val = jQuery(this).val();
+                if(jQuery(this).attr('type')=='hidden'){
+                    val = JSON.parse(decodeURIComponent(val));
+                }
                 propertys[name] = val;
                 var m = meta.propertys[propertys.activeClass][name];
                 if((val==null||val=='') && (m!=null && m.required==true)){

@@ -249,6 +249,7 @@ wof.bizWidget.VoucherComponent.prototype = {
     //----------必须实现----------
     getData: function () {
         return {
+            paramMaps: this.getParamMaps(),
             callStr:this.getCallStr(),
             initActionName:this.getInitActionName(),
             state:this.getState(),
@@ -264,6 +265,7 @@ wof.bizWidget.VoucherComponent.prototype = {
     },
     //----------必须实现----------
     setData: function (data) {
+        this.setParamMaps(data.paramMaps);
         this.setInitActionName(data.initActionName);
         this.setState(data.state);
         this.setCaption(data.caption);
@@ -597,7 +599,9 @@ wof.bizWidget.VoucherComponent.prototype = {
             if(voucherComponentData.caption!=null){
                 this.setCaption(voucherComponentData.caption);
             }
-
+            if(voucherComponentData.paramMaps!=null){
+                this.setParamMaps(voucherComponentData.paramMaps);
+            }
             /*this.setActiveVoucherItemGroupIndex(null);
              this.setActiveItemRank(null);*/
         }
@@ -646,7 +650,6 @@ wof.bizWidget.VoucherComponent.prototype = {
                 if(voucherItemGroupData.isHead!=null){
                     voucherItemGroup.setIsHead((voucherItemGroupData.isHead=='true'||voucherItemGroupData.isHead==true)?true:false);
                 }
-
                 /*this.setActiveVoucherItemGroupIndex(Number(voucherItemGroupData.index));
                  this.setActiveItemRank(null);*/
             }
