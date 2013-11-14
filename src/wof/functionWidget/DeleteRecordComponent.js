@@ -35,9 +35,24 @@ wof.functionWidget.DeleteRecordComponent.prototype = {
 
     _initFlag: null,
 
+    _paramMaps:null,
+
+
     /**
      * get/set 属性方法定义
      */
+
+    getParamMaps: function(){
+        if(this._paramMaps==null){
+            this._paramMaps = {};
+        }
+        return this._paramMaps;
+    },
+
+    setParamMaps: function(paramMaps){
+        this._paramMaps = paramMaps;
+    },
+
     getCallStr : function (){
         return this._callStr || 'DeleteRecordComponent:1.0.0';
     },

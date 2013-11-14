@@ -30,9 +30,6 @@ wof.bizWidget.SearchComponent.prototype = {
 
     _colsNum:null,
 
-
-
-
     _initFlag: null,
 
     _mustInOrder: null,   //各项是否严格遵循次序排列
@@ -49,10 +46,23 @@ wof.bizWidget.SearchComponent.prototype = {
 
     _backgroundImg: null,
 
+    _paramMaps:null,
+
 
     /**
      * get/set 属性方法定义
      */
+
+    getParamMaps: function(){
+        if(this._paramMaps==null){
+            this._paramMaps = {};
+        }
+        return this._paramMaps;
+    },
+
+    setParamMaps: function(paramMaps){
+        this._paramMaps = paramMaps;
+    },
 
     getInitActionName: function(){
         return this._initActionName;
