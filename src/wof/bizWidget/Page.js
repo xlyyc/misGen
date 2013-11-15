@@ -60,12 +60,18 @@ wof.bizWidget.Page.prototype = {
                     var b=false;
                     var draggableObj = wof.util.ObjectManager.get(draggable.attr('oid'));
                     if(draggableObj!=null){
-                        //只能接受FlowLayout和GridLayout
-                        if(draggableObj.getClassName()=='wof.bizWidget.FlowLayout' || draggableObj.getClassName()=='wof.bizWidget.GridLayout'){
-                            b=true;
-                        }else if(draggableObj.getIsInside()==true&&draggableObj.getClassName()=='wof.widget.Label'){
-                            b=true;
-
+                        if(_this.childNodes().length==0){
+                            if(draggableObj.getIsInside()==true&&draggableObj.getClassName()=='wof.widget.Label'){
+                                var parentNode = draggableObj;
+                                while((parentNode=parentNode.parentNode())!=null){
+                                    if(parentNode.getIsInside()!=true){
+                                        break;
+                                    }
+                                }
+                                if(parentNode.getClassName()=='wof.bizWidget.ObjectBar'){
+                                    b=true;
+                                }
+                            }
                         }
                     }
                     return b;
