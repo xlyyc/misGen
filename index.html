@@ -384,14 +384,23 @@ jQuery(function(){
                     with(wof.widget.spanner)
                         with(wof.functionWidget.spanner)
                         with(wof.kernel){
-                            var gridLayout = new GridLayout();
+                           /* var gridLayout = new GridLayout();
                             gridLayout.setOverflow('auto');
                             gridLayout.setWidth(windowWidth-sidebar1Width-sidebar2Width);
                             gridLayout.setHeight(windowHeight-headerHeight-footerHeight);
                             gridLayout.setTop(0);
                             gridLayout.setLeft(0);
                             content.append(gridLayout.getDomInstance());
-                            wof.util.ObjectManager.add(gridLayout.getId(), gridLayout);
+                            wof.util.ObjectManager.add(gridLayout.getId(), gridLayout);*/
+
+                            var page = new Page();
+                            page.setOverflow('auto');
+                            page.setWidth(windowWidth-sidebar1Width-sidebar2Width);
+                            page.setHeight(windowHeight-headerHeight-footerHeight);
+                            page.setTop(0);
+                            page.setLeft(0);
+                            content.append(page.getDomInstance());
+                            wof.util.ObjectManager.add(page.getId(), page);
 
                             /*var itemHeight = 70;
                             var width = 811;
@@ -414,7 +423,7 @@ jQuery(function(){
                             var sectionData1 = {title:'默认分组1',width:width,titleHeight:30,cols:1,itemHeight:500};
                             flowLayout.insertSection(sectionData1);*/
 
-                            gridLayout.render();
+                            page.render();
 
                         }
     }

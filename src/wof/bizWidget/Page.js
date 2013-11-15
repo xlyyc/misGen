@@ -60,12 +60,12 @@ wof.bizWidget.Page.prototype = {
                     var b=false;
                     var draggableObj = wof.util.ObjectManager.get(draggable.attr('oid'));
                     if(draggableObj!=null){
-                        //不能接受FlowLayoutSection和FlowLayoutItem
-                        if(draggableObj.getClassName()!='wof.bizWidget.FlowLayoutSection'&&draggableObj.getClassName()!='wof.bizWidget.FlowLayoutItem'){
-                            //必须没有子节点
-                            if(_this.childNodes().length==0){
-                                b=true;
-                            }
+                        //只能接受FlowLayout和GridLayout
+                        if(draggableObj.getClassName()=='wof.bizWidget.FlowLayout' || draggableObj.getClassName()=='wof.bizWidget.GridLayout'){
+                            b=true;
+                        }else if(draggableObj.getIsInside()==true&&draggableObj.getClassName()=='wof.widget.Label'){
+                            b=true;
+
                         }
                     }
                     return b;
@@ -82,10 +82,6 @@ wof.bizWidget.Page.prototype = {
                             _this.render();
                         }else{
                             console.log('todo .....');
-                           /* var sectionIndex = _this.parentNode().getIndex();
-                            _this.parentNode().parentNode().setActiveSectionIndex(sectionIndex);
-                            _this.parentNode().parentNode().setActiveItemRank({row:_this.getRow(),col:_this.getCol()});
-                            _this.sendMessage('wof.bizWidget.FlowLayoutItem_widgetDrop', {'widgetId':ui.draggable.attr('oid')});*/
                         }
 
                     }
