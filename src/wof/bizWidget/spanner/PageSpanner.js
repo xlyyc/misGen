@@ -10,7 +10,7 @@ wof.bizWidget.spanner.PageSpanner = function () {
     //初始化构件元数据 包括名称、标题、发送的消息
     this._meta = {};
     this._meta.name = 'wof.bizWidget.Page';
-    this._meta.title = '子页面';
+    this._meta.title = '页面';
     this._meta.sendMessages = {'wof.bizWidget.PageSpanner_active':'单击','wof.bizWidget.PageSpanner_render':'重绘'};
     this._meta.propertys = {
         'Page':{

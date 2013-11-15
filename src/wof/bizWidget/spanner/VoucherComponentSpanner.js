@@ -602,8 +602,6 @@ wof.bizWidget.spanner.VoucherComponentSpanner.prototype = {
                 paramMaps.push(param);
             }
             json.paramMaps = paramMaps;
-            console.log('JSON.stringify(json.paramMaps)=========='+JSON.stringify(json.paramMaps));
-
 
             var voucherItemGroups = [];
             var childNodes = node._voucherItemGroups;

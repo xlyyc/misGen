@@ -44,15 +44,15 @@ wof.bizWidget.Page.prototype = {
                 event.stopPropagation();
                 clearTimeout(timeFn);
                 timeFn = setTimeout(function(){
-                    _this.sendMessage('wof.bizWidget.GridLayout_mousedown');
-                    _this.sendMessage('wof.bizWidget.GridLayout_active');
+                    _this.sendMessage('wof.bizWidget.Page_mousedown');
+                    _this.sendMessage('wof.bizWidget.Page_active');
                 },250);
             });
             this.getDomInstance().dblclick(function(event){
                 event.stopPropagation();
                 clearTimeout(timeFn);
-                _this.sendMessage('wof.bizWidget.GridLayout_dblclick');
-                _this.sendMessage('wof.bizWidget.GridLayout_active');
+                _this.sendMessage('wof.bizWidget.Page_dblclick');
+                _this.sendMessage('wof.bizWidget.Page_active');
             });
             this.getDomInstance().droppable({
                 snap:true,
@@ -114,7 +114,7 @@ wof.bizWidget.Page.prototype = {
 
     //选择实现
     afterRender: function () {
-        this.sendMessage('wof.bizWidget.GridLayout_render');
+        this.sendMessage('wof.bizWidget.Page_render');
     },
 
     /**

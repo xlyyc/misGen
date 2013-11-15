@@ -19,7 +19,8 @@ wof.bizWidget.spanner.SearchComponentSpanner = function () {
             'caption':{prop:'caption','name':'标题','type':'text','readOnly':false,'isHide':false,required:false},
             'linkComponentID':{prop:'linkComponentID','name':'关联组件','type':'custom','readOnly':false,'isHide':false,required:false, customMethod:'wof.customWindow.ComponentTreeSelector', customParam:'gridComponent,voucherGridComponent'},
             'colsNum':{prop:'colsNum','name':'列数','type':'naturalNumber','readOnly':false,'isHide':false,required:true},
-            'isExpand':{prop:'isExpand','name':'是否展开','type':'yesOrNo','readOnly':false,'isHide':false,required:false}
+            'isExpand':{prop:'isExpand','name':'是否展开','type':'yesOrNo','readOnly':false,'isHide':false,required:false},
+            'paramMaps':{prop:'paramMaps','name':'参数','type':'custom','readOnly':false,'isHide':false,required:false, customMethod:'wof.customWindow.ParamMapsWindow', customParam:'dataId'}
         },
         'SearchItem':{
             'name':{prop:'name','name':'名称','type':'text','readOnly':false,'isHide':false,required:false},
@@ -369,6 +370,7 @@ wof.bizWidget.spanner.SearchComponentSpanner.prototype = {
                 activeData.rows = searchComponent.getRows();
                 activeData.isExpand = searchComponent.getIsExpand();
                 activeData.activeSearchItemRank = searchComponent.getActiveSearchItemRank();
+                activeData.paramMaps = searchComponent.getParamMaps();
             }
 
             //当前选中的SearchComponent加入拖放 删除操作句柄
@@ -433,6 +435,14 @@ wof.bizWidget.spanner.SearchComponentSpanner.prototype = {
             json.index = node.getIndex();
             json.caption = node.getCaption();
             json.state = node.getState();
+
+            var paramMaps = [];
+            for(var k in node.getParamMaps()){
+                var param = node.getParamMaps()[k];
+                paramMaps.push(param);
+            }
+            json.paramMaps = paramMaps;
+
             var searchItems = [];
             var childNodes = node.childNodes();
             for(var i=0;i<childNodes.length;i++){

@@ -20,7 +20,8 @@ wof.bizWidget.spanner.GridComponentSpanner = function () {
             'rowHeight':{prop:'rowHeight','name':'行高','type':'naturalNumber','readOnly':false,'isHide':false,required:false},
             'numberDisplay':{prop:'numberDisplay','name':'是否显示序号','type':'yesOrNo','readOnly':false,'isHide':false,required:false},
             'useMutiplePage':{prop:'useMutiplePage','name':'是否使用分页','type':'yesOrNo','readOnly':false,'isHide':false,required:false},
-            'rowsCount':{prop:'rowsCount','name':'每页行数','type':'naturalNumber','readOnly':false,'isHide':false,required:false}
+            'rowsCount':{prop:'rowsCount','name':'每页行数','type':'naturalNumber','readOnly':false,'isHide':false,required:false},
+            'paramMaps':{prop:'paramMaps','name':'参数','type':'custom','readOnly':false,'isHide':false,required:false, customMethod:'wof.customWindow.ParamMapsWindow', customParam:'dataId'}
         },
         'GridComponentColumn':{
             'name':{prop:'name','name':'列名','type':'text','readOnly':false,'isHide':false,required:false},
@@ -381,6 +382,7 @@ wof.bizWidget.spanner.GridComponentSpanner.prototype = {
                 activeData.numberDisplay = gridComponent.getNumberDisplay();
                 activeData.useMutiplePage = gridComponent.getUseMutiplePage();
                 activeData.rowsCount = gridComponent.getRowsCount();
+                activeData.paramMaps = gridComponent.getParamMaps();
 
             }
         }
@@ -447,6 +449,13 @@ wof.bizWidget.spanner.GridComponentSpanner.prototype = {
             json.rowHeight = node.getRowHeight();
             json.useMutiplePage = node.getUseMutiplePage();
             json.rowsCount = node.getRowsCount();
+
+            var paramMaps = [];
+            for(var k in node.getParamMaps()){
+                var param = node.getParamMaps()[k];
+                paramMaps.push(param);
+            }
+            json.paramMaps = paramMaps;
 
             var columns = [];
             var childNodes = node.childNodes();

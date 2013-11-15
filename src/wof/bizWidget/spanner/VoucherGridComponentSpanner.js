@@ -20,7 +20,8 @@ wof.bizWidget.spanner.VoucherGridComponentSpanner = function () {
             'rowHeight':{prop:'rowHeight','name':'行高','type':'naturalNumber','readOnly':false,'isHide':false,required:false},
             'numberDisplay':{prop:'numberDisplay','name':'是否显示序号','type':'yesOrNo','readOnly':false,'isHide':false,required:false},
             'useMutiplePage':{prop:'useMutiplePage','name':'是否使用分页','type':'yesOrNo','readOnly':false,'isHide':false,required:false},
-            'rowsCount':{prop:'rowsCount','name':'每页行数','type':'naturalNumber','readOnly':false,'isHide':false,required:false}
+            'rowsCount':{prop:'rowsCount','name':'每页行数','type':'naturalNumber','readOnly':false,'isHide':false,required:false},
+            'paramMaps':{prop:'paramMaps','name':'参数','type':'custom','readOnly':false,'isHide':false,required:false, customMethod:'wof.customWindow.ParamMapsWindow', customParam:'dataId'}
         },
         'VoucherGridComponentColumn':{
             'name':{prop:'name','name':'列名','type':'text','readOnly':false,'isHide':false,required:false},
@@ -381,6 +382,7 @@ wof.bizWidget.spanner.VoucherGridComponentSpanner.prototype = {
                 activeData.numberDisplay = voucherGridComponent.getNumberDisplay();
                 activeData.useMutiplePage = voucherGridComponent.getUseMutiplePage();
                 activeData.rowsCount = voucherGridComponent.getRowsCount();
+                activeData.paramMaps = voucherGridComponent.getParamMaps();
 
             }
         }
@@ -431,6 +433,13 @@ wof.bizWidget.spanner.VoucherGridComponentSpanner.prototype = {
             json.state = node.getState();
             json.caption = node.getCaption();
             json.voucherHeadComponent = node.getVoucherHeadComponent();
+
+            var paramMaps = [];
+            for(var k in node.getParamMaps()){
+                var param = node.getParamMaps()[k];
+                paramMaps.push(param);
+            }
+            json.paramMaps = paramMaps;
 
             var columns = [];
             var childNodes = node.childNodes();

@@ -384,7 +384,7 @@ jQuery(function(){
                     with(wof.widget.spanner)
                         with(wof.functionWidget.spanner)
                         with(wof.kernel){
-                            gridLayout = new GridLayout();
+                            var gridLayout = new GridLayout();
                             gridLayout.setOverflow('auto');
                             gridLayout.setWidth(windowWidth-sidebar1Width-sidebar2Width);
                             gridLayout.setHeight(windowHeight-headerHeight-footerHeight);
@@ -393,7 +393,7 @@ jQuery(function(){
                             content.append(gridLayout.getDomInstance());
                             wof.util.ObjectManager.add(gridLayout.getId(), gridLayout);
 
-                            var itemHeight = 70;
+                            /*var itemHeight = 70;
                             var width = 811;
 
                             var flowLayout = new FlowLayout();
@@ -412,7 +412,7 @@ jQuery(function(){
                             flowLayout.appendTo(gridLayout);
 
                             var sectionData1 = {title:'默认分组1',width:width,titleHeight:30,cols:1,itemHeight:500};
-                            flowLayout.insertSection(sectionData1);
+                            flowLayout.insertSection(sectionData1);*/
 
                             gridLayout.render();
 
