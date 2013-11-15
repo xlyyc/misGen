@@ -40,7 +40,7 @@
                         wof.customWindow.ComponentTreeSelector._tree.setChkDisabled(nodes[i], true);
                     }
                     if( hidden.val().length>0){
-                        var componentIds = hidden.val().split(',');
+                        var componentIds = JSON.parse(decodeURIComponent(hidden.val())).split(',');
                         for(var i=0;i<componentIds.length;i++){
                             wof.customWindow.ComponentTreeSelector._tree.checkNodeByParam('nodeId',componentIds[i]);
                         }
@@ -55,7 +55,7 @@
                                 var node = nodes[i];
                                 componentIds.push(node.nodeId);
                             }
-                            hidden.val(componentIds.join(','));
+                            hidden.val(encodeURIComponent(JSON.stringify(componentIds.join(','))));
                             jQuery(this).dialog('close');
                         }else{
                             alert('请至少选择一个构件');

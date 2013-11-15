@@ -54,14 +54,15 @@
                     for (var i=0;i<nodes.length; i++) {
                         wof.customWindow.MetaTreeSelector._tree.setChkDisabled(nodes[i], true);
                     }
-                    wof.customWindow.MetaTreeSelector._tree.checkNodeByParam('nodeId',hidden.val());
+
+                    wof.customWindow.MetaTreeSelector._tree.checkNodeByParam('nodeId',JSON.parse(decodeURIComponent(hidden.val())));
                 },
                 buttons:{
                     '确定':function(){
                         var nodes = wof.customWindow.MetaTreeSelector._tree.getCheckedNodes();
                         if(nodes.length>0){
                             var node = nodes[0];
-                            hidden.val(node.nodeId);
+                            hidden.val(encodeURIComponent(JSON.stringify(node.nodeId)));
                             jQuery(this).dialog('close');
                         }else{
                             alert('请选择一个属性');
