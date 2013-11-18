@@ -1,17 +1,17 @@
 /**
- * @widgetClass Page class
+ * @widgetClass PageComponent class
  * @package wof.widget
  * @copyright author
  * @Time: 13-8-7 上午10:50
  */
 
-wof.bizWidget.Page = function () {
+wof.bizWidget.PageComponent = function () {
     this._version = '1.0';
 
 
 };
 
-wof.bizWidget.Page.prototype = {
+wof.bizWidget.PageComponent.prototype = {
     /**
      * 属性声明 （private ，用"_"标识）
      */
@@ -44,15 +44,15 @@ wof.bizWidget.Page.prototype = {
                 event.stopPropagation();
                 clearTimeout(timeFn);
                 timeFn = setTimeout(function(){
-                    _this.sendMessage('wof.bizWidget.Page_mousedown');
-                    _this.sendMessage('wof.bizWidget.Page_active');
+                    _this.sendMessage('wof.bizWidget.PageComponent_mousedown');
+                    _this.sendMessage('wof.bizWidget.PageComponent_active');
                 },250);
             });
             this.getDomInstance().dblclick(function(event){
                 event.stopPropagation();
                 clearTimeout(timeFn);
-                _this.sendMessage('wof.bizWidget.Page_dblclick');
-                _this.sendMessage('wof.bizWidget.Page_active');
+                _this.sendMessage('wof.bizWidget.PageComponent_dblclick');
+                _this.sendMessage('wof.bizWidget.PageComponent_active');
             });
             this.getDomInstance().droppable({
                 snap:true,
@@ -116,7 +116,7 @@ wof.bizWidget.Page.prototype = {
 
     //选择实现
     afterRender: function () {
-        this.sendMessage('wof.bizWidget.Page_render');
+        this.sendMessage('wof.bizWidget.PageComponent_render');
     },
 
     /**
@@ -136,7 +136,7 @@ wof.bizWidget.Page.prototype = {
 
     //创建初始化的button
     createSelf: function(width, height){
-        var node = new wof.bizWidget.Page();
+        var node = new wof.bizWidget.PageComponent();
         node.setOverflow('auto');
         node.setWidth(width);
         node.setHeight(height);
