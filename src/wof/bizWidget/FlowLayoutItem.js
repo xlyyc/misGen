@@ -133,6 +133,19 @@ wof.bizWidget.FlowLayoutItem.prototype = {
                                     }
                                 }
                             }
+                            if(b==true){
+                                if(draggableObj.getValue()=='wof.bizWidget.PageComponent'){
+                                    var parentNode = _this;
+                                    while((parentNode=parentNode.parentNode())!=null){
+                                        if(parentNode.getClassName()!='wof.bizWidget.PageComponent'){
+                                            b=true;
+                                        }else{
+                                            b=false;
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                     return b;

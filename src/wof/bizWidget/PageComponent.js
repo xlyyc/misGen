@@ -62,14 +62,16 @@ wof.bizWidget.PageComponent.prototype = {
                     if(draggableObj!=null){
                         if(_this.childNodes().length==0){
                             if(draggableObj.getIsInside()==true&&draggableObj.getClassName()=='wof.widget.Label'){
-                                var parentNode = draggableObj;
-                                while((parentNode=parentNode.parentNode())!=null){
-                                    if(parentNode.getIsInside()!=true){
-                                        break;
+                                if(draggableObj.getValue()!='wof.bizWidget.PageComponent'){
+                                    var parentNode = draggableObj;
+                                    while((parentNode=parentNode.parentNode())!=null){
+                                        if(parentNode.getIsInside()!=true){
+                                            break;
+                                        }
                                     }
-                                }
-                                if(parentNode.getClassName()=='wof.bizWidget.ObjectBar'){
-                                    b=true;
+                                    if(parentNode.getClassName()=='wof.bizWidget.ObjectBar'){
+                                        b=true;
+                                    }
                                 }
                             }
                         }
