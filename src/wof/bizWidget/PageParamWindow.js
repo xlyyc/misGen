@@ -38,6 +38,8 @@ wof.bizWidget.PageParamWindow.prototype = {
     //----------必须实现----------
     render: function () {
         var trs = [];
+        trs.push(this._createTh('类型','标题','名称','值'));
+
         var paramMaps = this.getInputParam();
         for(var name in paramMaps){
             var param = paramMaps[name];
@@ -133,19 +135,51 @@ wof.bizWidget.PageParamWindow.prototype = {
     _createTr: function(dataType, name, caption, value){
         var tr = jQuery('<tr style="height:30px;border:1px inset #a1a1a1;">');
         var sel = this._createSelect({'name':'dataType','value':dataType,options:[{'name':'字符','value':'char'},{'name':'数字','value':'number'},{'name':'时间','value':'time'}]});
-        var td1 = jQuery('<td style="width:30%;">');
+        var td1 = jQuery('<td style="width:25%;">');
         td1.append(sel);
         tr.append(td1);
 
-        var td2 = jQuery('<td style="width:30%;">');
-        var input2 = this._createInput('caption', caption);
+        var td2 = jQuery('<td style="width:25%;">');
+        var input2 = this._createInput('', caption);
         td2.append(input2);
         tr.append(td2);
 
-        var td3 = jQuery('<td style="width:40%;">');
-        var input3 = this._createInput(name, value);
+        var td3 = jQuery('<td style="width:25%;">');
+        var input3 = this._createInput('', name);
         td3.append(input3);
         tr.append(td3);
+
+        var td4 = jQuery('<td style="width:25%;">');
+        var input4 = this._createInput(name, value);
+        td4.append(input4);
+        tr.append(td4);
+
+        return tr;
+    },
+
+    //创建行头
+    _createTh: function(th1, th2, th3, th4){
+        var tr = jQuery('<tr style="height:30px;border:1px inset #a1a1a1;">');
+
+        var td1 = jQuery('<th style="width:20%;">');
+        var label1 = this._createLabel('', th1);
+        td1.append(label1);
+        tr.append(td1);
+
+        var td2 = jQuery('<th style="width:25%;">');
+        var label2 = this._createLabel('', th2);
+        td2.append(label2);
+        tr.append(td2);
+
+        var td3 = jQuery('<th style="width:25%;">');
+        var label3 = this._createLabel('', th3);
+        td3.append(label3);
+        tr.append(td3);
+
+        var td4 = jQuery('<th style="width:25%;">');
+        var label4 = this._createLabel('', th4);
+        td4.append(label4);
+        tr.append(td4);
 
         return tr;
     },
@@ -163,7 +197,7 @@ wof.bizWidget.PageParamWindow.prototype = {
 
     //创建文本框
     _createInput: function(name,value){
-        var input = jQuery('<input type="text" name="'+name+'">');
+        var input = jQuery('<input type="text" name="'+name+'" style="width:100px;">');
         if(value!=null){
             input.val(value);
         }
