@@ -54,7 +54,7 @@ wof.bizWidget.PageComponent.prototype = {
                 _this.sendMessage('wof.bizWidget.PageComponent_dblclick');
                 _this.sendMessage('wof.bizWidget.PageComponent_active');
             });
-            this.getDomInstance().droppable({
+      /*      this.getDomInstance().droppable({
                 snap:true,
                 accept:function(draggable){
                     var b=false;
@@ -94,7 +94,7 @@ wof.bizWidget.PageComponent.prototype = {
 
                     }
                 }
-            });
+            });*/
 
             this._initFlag = true;
         }
