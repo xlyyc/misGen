@@ -79,7 +79,6 @@
 		},
 
         getBizEntities:function(type){
-            console.log('type================='+type);
             //var bizEntity = JSON.parse(getBizEntities());
             var bizEntity = {
                 "childEntity": [{
