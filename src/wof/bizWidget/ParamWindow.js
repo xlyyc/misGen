@@ -128,7 +128,7 @@ wof.bizWidget.ParamWindow.prototype = {
             }else if(mapType=='expression'){
                 changeExpt = paramValue;
             }
-            paramMaps[compParamNameArr[i]] = {'mapType':mapTypeArr[i],'compParamName':compParamName,'compParamValue':compParamValue,'pageParamName':pageParamName,'changeExpt':changeExpt};
+            paramMaps[compParamNameArr[i]] = {'mapType':mapType,'compParamName':compParamName,'compParamValue':compParamValue,'pageParamName':pageParamName,'changeExpt':changeExpt};
         }
         this.setParamMaps(paramMaps);
         return paramMaps;

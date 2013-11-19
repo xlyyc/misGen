@@ -7,7 +7,7 @@
 
         _dialogDiv: null,
 
-		run: function(paramData) {
+		run: function() {
             if(wof.customWindow.PageParamWindow._initFlag==null){
                 var pageParamWindow = new wof.bizWidget.PageParamWindow();
                 pageParamWindow.setIsInside(true);
@@ -23,7 +23,7 @@
                 wof.customWindow.ComponentTreeSelector._pageParamWindow = pageParamWindow;
                 wof.customWindow.PageParamWindow._initFlag = true;
             }
-            wof.customWindow.ComponentTreeSelector._pageParamWindow.setInputParam(paramData);
+            wof.customWindow.ComponentTreeSelector._pageParamWindow.setInputParam(pageInputParam);
             wof.customWindow.ComponentTreeSelector._pageParamWindow.render();
             wof.customWindow.PageParamWindow._dialogDiv.dialog({
                 resizable:false,
@@ -35,8 +35,7 @@
                 },
                 buttons:{
                     '确定':function(){
-                        var paramMaps = wof.customWindow.ComponentTreeSelector._pageParamWindow.receiveCompParamValue();
-                        paramData = paramMaps;
+                        pageInputParam = wof.customWindow.ComponentTreeSelector._pageParamWindow.receiveCompParamValue();
                         jQuery(this).dialog('close');
                     },
                     '关闭':function(){
