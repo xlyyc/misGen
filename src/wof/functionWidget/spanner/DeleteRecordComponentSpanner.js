@@ -224,7 +224,6 @@ wof.functionWidget.spanner.DeleteRecordComponentSpanner.prototype = {
 
             json.paramMaps = paramMaps;
         }
-        console.log(JSON.stringify(json));
         return json;
     }
 
