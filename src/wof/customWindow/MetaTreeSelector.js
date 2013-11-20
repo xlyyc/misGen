@@ -15,7 +15,7 @@
                 tree.setLeft(0);
                 tree.setWidth(420);
                 tree.setHeight(450);
-                tree.setValue(hidden.val());
+                tree.setValue(JSON.parse(decodeURIComponent(hidden.val())));
 
                 wof.customWindow.MetaTreeSelector._dialogDiv = jQuery('<div title="绑定实体属性"></div>');
                 wof.customWindow.MetaTreeSelector._dialogDiv.append(tree.getDomInstance());
