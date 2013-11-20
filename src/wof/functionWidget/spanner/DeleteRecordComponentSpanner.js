@@ -150,6 +150,8 @@ wof.functionWidget.spanner.DeleteRecordComponentSpanner.prototype = {
             activeData.functionID = this.getPropertys().functionID;
             activeData.callItemName = this.getPropertys().callItemName;
             activeData.callItemCaption = this.getPropertys().callItemCaption;
+            activeData.commandItemID = this.getPropertys().commandItemID;
+            activeData.iSPermissionControl = this.getPropertys().iSPermissionControl;
 
             activeData.activeClass = 'DeleteRecordComponent';
 
@@ -205,6 +207,7 @@ wof.functionWidget.spanner.DeleteRecordComponentSpanner.prototype = {
             json.commandItemID = node.getId();
             json.className = node.getClassName();
             json.callStr = node.getCallStr();
+            json.iSPermissionControl = String(node.getISPermissionControl());
             json.functionID = node.getFunctionID();
             json.callItemName = node.getCallItemName();
             json.callItemCaption = node.getCallItemCaption();

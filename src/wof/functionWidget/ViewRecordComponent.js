@@ -39,10 +39,19 @@ wof.functionWidget.ViewRecordComponent.prototype = {
 
     _formId: null,
 
+    _bindComponents: null,
 
     /**
      * get/set 属性方法定义
      */
+
+    getBindComponents : function (){
+        return this._bindComponents || '';
+    },
+
+    setBindComponents : function (bindComponents){
+        this._bindComponents = bindComponents;
+    },
 
     getGridName : function (){
         return this._gridName || '';
@@ -184,6 +193,7 @@ wof.functionWidget.ViewRecordComponent.prototype = {
     //----------必须实现----------
     getData: function () {
         return {
+            bindComponents: this.getBindComponents(),
             gridName: this.getGridName(),
             formId: this.getFormId(),
             paramMaps: this.getParamMaps(),
@@ -198,6 +208,7 @@ wof.functionWidget.ViewRecordComponent.prototype = {
     },
     //----------必须实现----------
     setData: function (data) {
+        this.setBindComponents(data.bindComponents);
         this.setGridName(data.gridName);
         this.setFormId(data.formId);
         this.setParamMaps(data.paramMaps);
