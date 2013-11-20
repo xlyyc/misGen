@@ -208,6 +208,7 @@ wof.functionWidget.spanner.ViewRecordComponentSpanner.prototype = {
          */
         var json = {};
         if(node.getClassName()=='wof.functionWidget.ViewRecordComponent'){
+            json.commandItemID = node.getId();
             json.className = node.getClassName();
             json.callStr = node.getCallStr();
             json.iSPermissionControl = String(node.getISPermissionControl());

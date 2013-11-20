@@ -202,6 +202,7 @@ wof.functionWidget.spanner.DeleteRecordComponentSpanner.prototype = {
          */
         var json = {};
         if(node.getClassName()=='wof.functionWidget.DeleteRecordComponent'){
+            json.commandItemID = node.getId();
             json.className = node.getClassName();
             json.callStr = node.getCallStr();
             json.functionID = node.getFunctionID();
