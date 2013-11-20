@@ -411,11 +411,11 @@ jQuery(function(){
                             try{
                                 pageMetas = JSON.parse(getPageMetas());
 
-
                             }catch(e){
                                 alert(e);
                             }
-                            if(pageMetas.layout!=null&&pageMetas.layout>10){
+
+                            if(!jQuery.isEmptyObject(pageMetas)){
                                 pageInputParam = pageMetas.inputParam;
                                 var node = eval('(new '+pageMetas.layout.className+'())');
                                 node.setData(pageMetas.layout);
