@@ -407,31 +407,48 @@ jQuery(function(){
                             content.append(pageComponent.getDomInstance());
                             wof.util.ObjectManager.add(pageComponent.getId(), pageComponent);*/
 
-                            var itemHeight = 70;
-                            var width = 811;
+                            var pageMetas = {};
+                            try{
+                                pageMetas = JSON.parse(getPageMetas());
 
-                            var flowLayout = new FlowLayout();
-                            flowLayout.setLeft(0);
-                            flowLayout.setTop(0);
-                            flowLayout.setWidth(width);
-                            flowLayout.setCols(4);
-                            flowLayout.setItemHeight(60);
-                            /*var method = 'var layout = this.clone();'
-                                    + '\n layout.setTop(300);'
-                                    + '\n layout.appendTo(this.parentNode());'
-                                    + '\n layout.render();'
-                                    +'\n return false;';
-                            flowLayout.setOnReceiveMessage([{id:'wof.widget.Button_mousedown',priority:50,method:method}]);
-                            flowLayout.setOnSendMessage([{id:'wof.bizWidget.FlowLayout_render',method:'console.log(this.getCols());'}]);*/
 
-                            var sectionData1 = {title:'默认分组1',width:width,titleHeight:30,cols:1,itemHeight:300};
-                            flowLayout.insertSection(sectionData1);
+                            }catch(e){
+                                alert(e);
+                            }
+                            if(pageMetas.layout!=null&&pageMetas.layout>10){
+                                pageInputParam = pageMetas.inputParam;
+                                var node = eval('(new '+pageMetas.layout.className+'())');
+                                node.setData(pageMetas.layout);
+                                content.append(node.getDomInstance());
+                                wof.util.ObjectManager.add(node.getId(), node);
 
-                            content.append(flowLayout.getDomInstance());
-                            wof.util.ObjectManager.add(flowLayout.getId(), flowLayout);
+                                node.render();
+                            }else{
+                                var itemHeight = 70;
+                                var width = 811;
 
-                            flowLayout.render();
+                                var flowLayout = new FlowLayout();
+                                flowLayout.setLeft(0);
+                                flowLayout.setTop(0);
+                                flowLayout.setWidth(width);
+                                flowLayout.setCols(4);
+                                flowLayout.setItemHeight(60);
+                                /*var method = 'var layout = this.clone();'
+                                 + '\n layout.setTop(300);'
+                                 + '\n layout.appendTo(this.parentNode());'
+                                 + '\n layout.render();'
+                                 +'\n return false;';
+                                 flowLayout.setOnReceiveMessage([{id:'wof.widget.Button_mousedown',priority:50,method:method}]);
+                                 flowLayout.setOnSendMessage([{id:'wof.bizWidget.FlowLayout_render',method:'console.log(this.getCols());'}]);*/
 
+                                var sectionData1 = {title:'默认分组1',width:width,titleHeight:30,cols:1,itemHeight:300};
+                                flowLayout.insertSection(sectionData1);
+
+                                content.append(flowLayout.getDomInstance());
+                                wof.util.ObjectManager.add(flowLayout.getId(), flowLayout);
+
+                                flowLayout.render();
+                            }
                         }
     }
 	//重设工作区
