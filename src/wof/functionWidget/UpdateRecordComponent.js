@@ -34,18 +34,25 @@ wof.functionWidget.UpdateRecordComponent.prototype = {
 
     _bindComponents: null, //绑定构件ID
 
-    _isAutoCommit: null,      //是否自动提交
-
     _btn: null,
 
     _initFlag: null,
 
     _paramMaps:null,
 
+    _formId:null,
 
     /**
      * get/set 属性方法定义
      */
+
+    getFormId : function (){
+        return this._formId || '';
+    },
+
+    setFormId : function (formId){
+        this._formId = formId;
+    },
 
     getParamMaps: function(){
         if(this._paramMaps==null){
@@ -91,7 +98,7 @@ wof.functionWidget.UpdateRecordComponent.prototype = {
     },
 
     getCallItemName : function (){
-        return this._callItemName || 'commitEntity';
+        return this._callItemName || 'updateRecord';
     },
 
     setCallItemName : function (callItemName){
@@ -112,14 +119,6 @@ wof.functionWidget.UpdateRecordComponent.prototype = {
 
     setCallType : function (callType){
         this._callType = callType;
-    },
-
-    getIsAutoCommit : function (){
-        return this._isAutoCommit || false;
-    },
-
-    setIsAutoCommit : function (isAutoCommit){
-        this._isAutoCommit = isAutoCommit;
     },
 
     getBindComponents : function (){
@@ -188,8 +187,8 @@ wof.functionWidget.UpdateRecordComponent.prototype = {
     getData: function () {
         return {
             paramMaps: this.getParamMaps(),
+            formId: this.getFormId(),
             bindComponents: this.getBindComponents(),
-            isAutoCommit: this.getIsAutoCommit(),
             callStr: this.getCallStr(),
             commandItemID: this.getCommandItemID(),
             iSPermissionControl: this.getISPermissionControl(),
@@ -202,8 +201,8 @@ wof.functionWidget.UpdateRecordComponent.prototype = {
     //----------必须实现----------
     setData: function (data) {
         this.setParamMaps(data.paramMaps);
+        this.setFormId(data.formId);
         this.setBindComponents(data.bindComponents);
-        this.setIsAutoCommit(data.isAutoCommit);
         this.setCallStr(data.callStr);
         this.setCommandItemID(data.commandItemID);
         this.setISPermissionControl(data.iSPermissionControl);
@@ -232,8 +231,8 @@ wof.functionWidget.UpdateRecordComponent.prototype = {
             if(data.bindComponents!=null){
                 this.setBindComponents(data.bindComponents);
             }
-            if(data.isAutoCommit!=null){
-                this.setIsAutoCommit((data.isAutoCommit=='true'||data.isAutoCommit==true)?true:false);
+            if(data.formId!=null){
+                this.setFormId(data.formId);
             }
             if(data.commandItemID!=null){
                 this.setCommandItemID(data.commandItemID);

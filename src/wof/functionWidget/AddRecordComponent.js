@@ -42,10 +42,19 @@ wof.functionWidget.AddRecordComponent.prototype = {
 
     _paramMaps:null,
 
+    _formId:null,
 
     /**
      * get/set 属性方法定义
      */
+
+    getFormId : function (){
+        return this._formId || '';
+    },
+
+    setFormId : function (formId){
+        this._formId = formId;
+    },
 
     getParamMaps: function(){
         if(this._paramMaps==null){
@@ -187,6 +196,7 @@ wof.functionWidget.AddRecordComponent.prototype = {
     //----------必须实现----------
     getData: function () {
         return {
+            formId: this.getFormId(),
             paramMaps: this.getParamMaps(),
             bindComponents: this.getBindComponents(),
             isAutoCommit: this.getIsAutoCommit(),
@@ -201,6 +211,7 @@ wof.functionWidget.AddRecordComponent.prototype = {
     },
     //----------必须实现----------
     setData: function (data) {
+        this.setFormId(data.formId);
         this.setParamMaps(data.paramMaps);
         this.setBindComponents(data.bindComponents);
         this.setIsAutoCommit(data.isAutoCommit);
@@ -232,8 +243,8 @@ wof.functionWidget.AddRecordComponent.prototype = {
             if(data.bindComponents!=null){
                 this.setBindComponents(data.bindComponents);
             }
-            if(data.isAutoCommit!=null){
-                this.setIsAutoCommit((data.isAutoCommit=='true'||data.isAutoCommit==true)?true:false);
+            if(data.formId!=null){
+                this.setFormId(data.formId);
             }
             if(data.commandItemID!=null){
                 this.setCommandItemID(data.commandItemID);

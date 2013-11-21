@@ -91,7 +91,7 @@ wof.functionWidget.CommitComponent.prototype = {
     },
 
     getCallItemName : function (){
-        return this._callItemName || 'commitEntity';
+        return this._callItemName || 'commitRecord';
     },
 
     setCallItemName : function (callItemName){

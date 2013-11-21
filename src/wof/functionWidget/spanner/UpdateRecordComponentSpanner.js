@@ -15,7 +15,7 @@ wof.functionWidget.spanner.UpdateRecordComponentSpanner = function () {
     this._meta.propertys = {
         'UpdateRecordComponent':{
             'functionID':{prop:'functionID','name':'功能ID','type':'text','readOnly':false,'isHide':false},
-            'isAutoCommit':{prop:'isAutoCommit','name':'是否自动提交','type':'yesOrNo','readOnly':false,'isHide':false},
+            'formId':{prop:'formId','name':'绑定页面','type':'custom','readOnly':false,'isHide':false,required:false, customMethod:'wof.customWindow.PageFormSelector', customParam:''},
             'bindComponents':{prop:'bindComponents','name':'绑定组件','type':'custom','readOnly':false,'isHide':false,required:false, customMethod:'wof.customWindow.ComponentTreeSelector', customParam:'voucherComponent,gridComponent,voucherGridComponent'},
             'commandItemID':{prop:'commandItemID','name':'功能构件ID','type':'text','readOnly':false,'isHide':false},
             'iSPermissionControl':{prop:'iSPermissionControl','name':'是否权限控制','type':'yesOrNo','readOnly':false,'isHide':false},
@@ -147,8 +147,8 @@ wof.functionWidget.spanner.UpdateRecordComponentSpanner.prototype = {
             activeData.onReceiveMessage = this.getPropertys().onReceiveMessage;
             activeData.onSendMessage = this.getPropertys().onSendMessage;
 
-            activeData.isAutoCommit = this.getPropertys().isAutoCommit;
             activeData.bindComponents = this.getPropertys().bindComponents;
+            activeData.formId = this.getPropertys().formId;
             activeData.commandItemID = this.getPropertys().commandItemID;
             activeData.iSPermissionControl = this.getPropertys().iSPermissionControl;
             activeData.functionID = this.getPropertys().functionID;
@@ -227,8 +227,8 @@ wof.functionWidget.spanner.UpdateRecordComponentSpanner.prototype = {
 
             var paramMap2 = {};
             paramMap2.mapType = 'value';
-            paramMap2.compParamName = 'isAutoCommit';
-            paramMap2.compParamValue = String(node.getIsAutoCommit());
+            paramMap2.compParamName = 'formId';
+            paramMap2.compParamValue = node.getFormId();
             paramMap2.pageParamName = '';
             paramMap2.changeExpt = '';
             paramMaps.push(paramMap2);

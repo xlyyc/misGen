@@ -113,7 +113,7 @@ wof.functionWidget.ViewRecordComponent.prototype = {
     },
 
     getCallItemName : function (){
-        return this._callItemName || 'ViewRecord';
+        return this._callItemName || 'viewRecord';
     },
 
     setCallItemName : function (callItemName){

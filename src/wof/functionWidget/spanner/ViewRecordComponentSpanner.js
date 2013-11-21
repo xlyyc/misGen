@@ -225,6 +225,14 @@ wof.functionWidget.spanner.ViewRecordComponentSpanner.prototype = {
             paramMap1.changeExpt = '';
             paramMaps.push(paramMap1);
 
+            var paramMap2 = {};
+            paramMap2.mapType = 'value';
+            paramMap2.compParamName = 'formId';
+            paramMap2.compParamValue = node.getFormId();
+            paramMap2.pageParamName = '';
+            paramMap2.changeExpt = '';
+            paramMaps.push(paramMap2);
+
             json.paramMaps = paramMaps;
         }
         console.log(JSON.stringify(json));
