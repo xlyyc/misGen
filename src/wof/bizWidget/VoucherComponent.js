@@ -118,7 +118,7 @@ wof.bizWidget.VoucherComponent.prototype = {
 
     getViewType: function(){
         if(this._viewType==null){
-            this._viewType = 'group';
+            this._viewType = 'tab';
         }
         return this._viewType;
     },
