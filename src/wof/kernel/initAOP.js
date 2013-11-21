@@ -8,12 +8,37 @@ var wof$_aop = (function(){
         s[16] = hexDigits.substr((s[16] & 0x3) | 0x8, 1);
         return s.join("");
     }
+    function caption(s){
+        var a = s.split('');
+        a[0] = a[0].toUpperCase();
+        return a.join('');
+    }
     function aopChildren(objName){
         var obj = eval(objName);
         for(var o in obj){
             if(typeof(obj[o])=='function'){
                 if(obj[o]['getClassName']==null){
                     //todo disable
+
+                    for(var p in obj[o]['prototype']){
+                        if(typeof(obj[o]['prototype'][p])!='function'&&p.indexOf('_')!=0){
+                            (function(proto,p){
+                                var cp = caption(p);
+                                if(proto['set'+cp]==null){
+                                    proto['set'+cp]=function(val){
+                                        this[p] = val;
+                                    };
+                                }
+                                if(proto['get'+cp]==null){
+                                    proto['get'+cp]=function(){
+                                        return this[p];
+                                    };
+                                }
+                            })(obj[o]['prototype'],p);
+                        }
+                    }
+
+
                     obj[o].prototype._version = null;
                     obj[o].prototype.getVersion = function(){
                         if(this._version==null){
