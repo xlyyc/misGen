@@ -30,6 +30,7 @@ wof.bizWidget.FlowLayout.prototype = {
     /**
      * get/set 属性方法定义
      */
+
     getItemHeight: function(){
         if(this._itemHeight==null){
             this._itemHeight = 70;

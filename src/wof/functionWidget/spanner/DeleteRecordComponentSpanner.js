@@ -204,7 +204,7 @@ wof.functionWidget.spanner.DeleteRecordComponentSpanner.prototype = {
          */
         var json = {};
         if(node.getClassName()=='wof.functionWidget.DeleteRecordComponent'){
-            json.commandItemID = node.getId();
+            json.commandItemID = node.getComponentId();
             json.className = node.getClassName();
             json.callStr = node.getCallStr();
             json.iSPermissionControl = String(node.getISPermissionControl());

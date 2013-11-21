@@ -426,7 +426,7 @@ wof.bizWidget.spanner.SearchComponentSpanner.prototype = {
         if(node.getClassName()=='wof.bizWidget.SearchComponent'){
             json.className = node.getClassName();
             json.linkComponentID = node.getLinkComponentID();
-            json.id = node.getId();
+            json.id = node.getComponentId();
             json.initActionName = node.getInitActionName();
             json.colsNum = node.getColsNum();
             json.itemHeight = node.getItemHeight();

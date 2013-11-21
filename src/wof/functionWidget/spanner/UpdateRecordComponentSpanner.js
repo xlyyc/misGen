@@ -207,7 +207,7 @@ wof.functionWidget.spanner.UpdateRecordComponentSpanner.prototype = {
          */
         var json = {};
         if(node.getClassName()=='wof.functionWidget.UpdateRecordComponent'){
-            json.commandItemID = node.getId();
+            json.commandItemID = node.getComponentId();
             json.className = node.getClassName();
             json.callStr = node.getCallStr();
             json.iSPermissionControl = String(node.getISPermissionControl());

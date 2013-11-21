@@ -77,9 +77,22 @@ wof.bizWidget.GridComponent.prototype = {
     _paramMaps:null,
 
 
+    _componentId:null,
+
     /**
      * get/set 属性方法定义
      */
+
+    getComponentId: function(){
+        if(this._componentId==null){
+            this._componentId=this.getId();
+        }
+        return this._componentId;
+    },
+
+    setComponentId: function(componentId){
+        this._componentId = componentId;
+    },
 
     getParamMaps: function(){
         if(this._paramMaps==null){
@@ -298,6 +311,7 @@ wof.bizWidget.GridComponent.prototype = {
     //----------必须实现----------
     getData: function () {
         return {
+            componentId: this.getComponentId(),
             paramMaps: this.getParamMaps(),
             callStr:this.getCallStr(),
             initActionName:this.getInitActionName(),
@@ -314,6 +328,7 @@ wof.bizWidget.GridComponent.prototype = {
     //----------必须实现----------
     setData: function (data) {
         this.setParamMaps(data.paramMaps);
+        this.setComponentId(data.componentId);
         this.setCallStr(data.callStr);
         this.setInitActionName(data.initActionName);
         this.setName(data.name);

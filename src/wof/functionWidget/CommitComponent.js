@@ -43,9 +43,22 @@ wof.functionWidget.CommitComponent.prototype = {
     _paramMaps:null,
 
 
+    _componentId:null,
+
     /**
      * get/set 属性方法定义
      */
+
+    getComponentId: function(){
+        if(this._componentId==null){
+            this._componentId=this.getId();
+        }
+        return this._componentId;
+    },
+
+    setComponentId: function(componentId){
+        this._componentId = componentId;
+    },
 
     getParamMaps: function(){
         if(this._paramMaps==null){
@@ -187,6 +200,7 @@ wof.functionWidget.CommitComponent.prototype = {
     //----------必须实现----------
     getData: function () {
         return {
+            componentId: this.getComponentId(),
             paramMaps: this.getParamMaps(),
             bindComponents: this.getBindComponents(),
             isAutoCommit: this.getIsAutoCommit(),
@@ -201,6 +215,7 @@ wof.functionWidget.CommitComponent.prototype = {
     },
     //----------必须实现----------
     setData: function (data) {
+        this.setComponentId(data.componentId);
         this.setParamMaps(data.paramMaps);
         this.setBindComponents(data.bindComponents);
         this.setIsAutoCommit(data.isAutoCommit);
