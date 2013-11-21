@@ -79,7 +79,7 @@ wof.functionWidget.UpdateRecordComponent.prototype = {
     },
 
     getCallStr : function (){
-        return this._callStr || 'UpdateRecordComponent:1.0.0';
+        return this._callStr || 'updateRecordCmd:0_0_1';
     },
 
     setCallStr : function (callStr){

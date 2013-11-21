@@ -67,7 +67,7 @@ wof.functionWidget.DeleteRecordComponent.prototype = {
     },
 
     getCallStr : function (){
-        return this._callStr || 'DeleteRecordComponent:1.0.0';
+        return this._callStr || 'deleteRecordCmd:0_0_1';
     },
 
     setCallStr : function (callStr){

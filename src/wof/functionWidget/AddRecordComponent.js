@@ -81,7 +81,7 @@ wof.functionWidget.AddRecordComponent.prototype = {
     },
 
     getCallStr : function (){
-        return this._callStr || 'AddRecordComponent:1.0.0';
+        return this._callStr || 'addRecordCmd:0_0_1';
     },
 
     setCallStr : function (callStr){

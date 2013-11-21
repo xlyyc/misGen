@@ -72,7 +72,7 @@ wof.functionWidget.CommitComponent.prototype = {
     },
 
     getCallStr : function (){
-        return this._callStr || 'CommitComponent:1.0.0';
+        return this._callStr || 'commitRecordCmd:0_0_1';
     },
 
     setCallStr : function (callStr){

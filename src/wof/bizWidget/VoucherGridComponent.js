@@ -180,7 +180,7 @@ wof.bizWidget.VoucherGridComponent.prototype = {
 
     getCallStr: function(){
         if(this._callStr==null){
-            this._callStr = 'VoucherGridComponent:1.0.0';
+            this._callStr = 'voucherGridComponent:0_0_1';
         }
         return this._callStr;
     },

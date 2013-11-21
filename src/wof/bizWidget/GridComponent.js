@@ -148,7 +148,7 @@ wof.bizWidget.GridComponent.prototype = {
 
     getCallStr: function(){
         if(this._callStr==null){
-            this._callStr = 'gridcomponent:1.0.0';
+            this._callStr = 'gridComponent:0_0_1';
         }
         return this._callStr;
     },

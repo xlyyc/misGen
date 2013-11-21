@@ -94,7 +94,7 @@ wof.functionWidget.ViewRecordComponent.prototype = {
     },
 
     getCallStr : function (){
-        return this._callStr || 'ViewRecordComponent:1.0.0';
+        return this._callStr || 'viewRecordCmd:0_0_1';
     },
 
     setCallStr : function (callStr){
