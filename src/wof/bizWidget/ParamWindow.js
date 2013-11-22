@@ -51,6 +51,9 @@ wof.bizWidget.ParamWindow.prototype = {
     //----------必须实现----------
     render: function () {
         var trs = [];
+
+        trs.push(this._createTh('类型','名称','值'));
+
         var paramMaps = this.getParamMaps();
         var compParamNames = this.getCompParamNames();
         for(var i=0;i<compParamNames.length;i++){
@@ -172,6 +175,28 @@ wof.bizWidget.ParamWindow.prototype = {
         }
         var input = this._createInput('paramValue',paramValue);
         td3.append(input);
+        tr.append(td3);
+
+        return tr;
+    },
+
+    //创建行头
+    _createTh: function(th1, th2, th3){
+        var tr = jQuery('<tr style="height:30px;border:1px inset #a1a1a1;">');
+
+        var td1 = jQuery('<th style="width:30%;">');
+        var label1 = this._createLabel('', th1);
+        td1.append(label1);
+        tr.append(td1);
+
+        var td2 = jQuery('<th style="width:30%;">');
+        var label2 = this._createLabel('', th2);
+        td2.append(label2);
+        tr.append(td2);
+
+        var td3 = jQuery('<th style="width:40%;">');
+        var label3 = this._createLabel('', th3);
+        td3.append(label3);
         tr.append(td3);
 
         return tr;

@@ -11,6 +11,7 @@
             if(wof.customWindow.PageParamWindow._initFlag==null){
                 var pageParamWindow = new wof.bizWidget.PageParamWindow();
                 pageParamWindow.setIsInside(true);
+                pageParamWindow.setContextParams(wof.customWindow.PageParamWindow.getContextParams());
                 pageParamWindow.setTop(0);
                 pageParamWindow.setLeft(0);
                 pageParamWindow.setWidth(420);
@@ -46,7 +47,14 @@
                 }
             });
 
-		}
+		},
+
+        getContextParams: function(){
+            var json = [];
+            json.push({"dataType":"char","name":"userId","caption":"用户ID"});
+            json.push({"dataType":"char","name":"userName","caption":"用户名称"});
+            return json;
+        }
 		
 	};
 }

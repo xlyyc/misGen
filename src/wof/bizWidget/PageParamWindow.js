@@ -10,6 +10,19 @@ wof.bizWidget.PageParamWindow.prototype = {
 
     _inputParam : null,
 
+    contextParams : null,
+
+    getContextParams: function(){
+        if(this.contextParams==null){
+            this.contextParams = [];
+        }
+        return this.contextParams;
+    },
+
+    setContextParams: function(contextParams){
+        this.contextParams = contextParams;
+    },
+
     getInputParam: function(){
         if(this._inputParam==null){
             this._inputParam = {};
@@ -40,6 +53,34 @@ wof.bizWidget.PageParamWindow.prototype = {
         var trs = [];
         trs.push(this._createTh('类型','标题','名称','值','',''));
 
+        var contextParams = this.getContextParams();
+        for(var i=0;i<contextParams.length;i++){
+            var param = contextParams[i];
+            var tr = jQuery('<tr style="height:30px;border:1px inset #a1a1a1;">');
+            var td1 = jQuery('<th style="width:20%;">');
+            td1.append(this._createLabel('', param.dataType));
+            tr.append(td1);
+
+            var td2 = jQuery('<th style="width:20%;">');
+            td2.append(this._createLabel('', param.caption));
+            tr.append(td2);
+
+            var td3 = jQuery('<th style="width:20%;">');
+            td3.append(this._createLabel('', param.name));
+            tr.append(td3);
+
+            var td4 = jQuery('<th style="width:20%;">');
+            tr.append(td4);
+
+            var td5 = jQuery('<th style="width:10%;">');
+            tr.append(td5);
+
+            var td6 = jQuery('<th style="width:10%;">');
+            tr.append(td6);
+
+            trs.push(tr);
+        }
+
         var paramMaps = this.getInputParam();
         for(var name in paramMaps){
             var param = paramMaps[name];
@@ -47,7 +88,7 @@ wof.bizWidget.PageParamWindow.prototype = {
                 trs.push(this._createTr(param.dataType,param.name,param.caption,param.value));
             }
         }
-        if(trs.length==1){
+        if(trs.length==(contextParams.length+1)){
             trs.push(this._createTr('char','','',''));
         }
         var table = this._createTable(trs);
