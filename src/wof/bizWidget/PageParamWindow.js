@@ -58,7 +58,7 @@ wof.bizWidget.PageParamWindow.prototype = {
             var param = contextParams[i];
             var tr = jQuery('<tr style="height:30px;border:1px inset #a1a1a1;">');
             var td1 = jQuery('<th style="width:20%;">');
-            td1.append(this._createLabel('', param.dataType));
+            td1.append(this._createLabel('', this.dataTypeToString(param.dataType)));
             tr.append(td1);
 
             var td2 = jQuery('<th style="width:20%;">');
@@ -116,6 +116,18 @@ wof.bizWidget.PageParamWindow.prototype = {
     setData: function (data) {
         this.setInputParam(data.inputParam);
 
+    },
+
+    dataTypeToString: function(dataType){
+        var str = '';
+        if(dataType=='char'){
+            str = '字符';
+        }else if(dataType=='number'){
+            str = '数字';
+        }else if(dataType=='time'){
+            str = '时间';
+        }
+        return str;
     },
 
     //获得设置值
