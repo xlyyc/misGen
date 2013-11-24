@@ -43,6 +43,8 @@ wof.bizWidget.FlowLayoutSection.prototype = {
 
     _initFlag: null,
 
+    _maxItemScrollHeight: null,
+
     /**
      * get/set 属性方法定义
      */
@@ -457,19 +459,28 @@ wof.bizWidget.FlowLayoutSection.prototype = {
 			label.appendTo(this);
         }
 	},
-	
-	//找到所有item
-	findItems: function(){
-		 var items = [];
-		 var childNodes = this.childNodes();
-		 for(var i=0;i<childNodes.length;i++){
-			 var node = childNodes[i];
-			 if(node.getClassName()=='wof.bizWidget.FlowLayoutItem'){
-			 	items.push(node);
-             }
-		 }
-		 return items;
-	},
+
+    //找到所有item
+    findItems: function(){
+        this._maxItemScrollHeight = 0;
+        var items = [];
+        var childNodes = this.childNodes();
+        for(var i=0;i<childNodes.length;i++){
+            var node = childNodes[i];
+            if(node.getClassName()=='wof.bizWidget.FlowLayoutItem'){
+                var ns = node.childNodes();
+                if(ns.length>0){
+                    var itemHeight = ns[0].getHeight();
+                    if(this._maxItemScrollHeight<itemHeight){
+                        this._maxItemScrollHeight = itemHeight;
+                    }
+                }
+                items.push(node);
+            }
+        }
+
+        return items;
+    },
 
 	//获得所有item 并且重设item行列号
 	_getItems: function(){
@@ -592,6 +603,14 @@ wof.bizWidget.FlowLayoutSection.prototype = {
             return rows;
         }
         items = this.findItems();
+
+        //todo 增加是否随内容高度自适应属性
+        if(this._maxItemScrollHeight>0){
+            this.setItemHeight(this._maxItemScrollHeight+4);
+        }
+
+
+
         if(items.length>0){
             itemHeight = this.getItemHeight();
             itemWidth = Math.floor(this.getWidth()/this.getCols());
