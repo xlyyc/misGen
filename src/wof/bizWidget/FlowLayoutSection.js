@@ -45,9 +45,21 @@ wof.bizWidget.FlowLayoutSection.prototype = {
 
     _maxItemScrollHeight: null,
 
+    _isAutoExt: null,
+
     /**
      * get/set 属性方法定义
      */
+    getIsAutoExt: function(){
+        if(this._isAutoExt==null){
+            this._isAutoExt = false;
+        }
+        return this._isAutoExt;
+    },
+
+    setIsAutoExt: function(isAutoExt){
+        this._isAutoExt = isAutoExt;
+    },
 
     getMustInOrder: function(){
         if(this._mustInOrder==null){
@@ -253,6 +265,7 @@ wof.bizWidget.FlowLayoutSection.prototype = {
     //----------必须实现----------
     getData: function () {
         return {
+            isAutoExt: this.getIsAutoExt(),
             mustInOrder: this.getMustInOrder(),
 			title: this.getTitle(),
 			titleHeight: this.getTitleHeight(),
@@ -266,6 +279,7 @@ wof.bizWidget.FlowLayoutSection.prototype = {
 
     //----------必须实现----------
     setData: function (data) {
+        this.setIsAutoExt(data.isAutoExt);
         this.setMustInOrder(data.mustInOrder);
 		this.setTitle(data.title);
 		this.setTitleHeight(data.titleHeight);
@@ -283,7 +297,18 @@ wof.bizWidget.FlowLayoutSection.prototype = {
             var item = wof.util.ObjectManager.get(message.sender.id);
             insertItem.remove();
             insertItem.beforeTo(item);
+
             this.parentNode().render();
+
+            if(this.getIsAutoExt()==true){
+                var parentNode = this;
+                while(parentNode.parentNode()!=null){
+                    parentNode = parentNode.parentNode();
+                }
+                parentNode.render();
+            }
+
+
             this.parentNode().sendMessage('wof.bizWidget.FlowLayout_active');
             return false;
         }
@@ -471,8 +496,9 @@ wof.bizWidget.FlowLayoutSection.prototype = {
                 var ns = node.childNodes();
                 if(ns.length>0){
                     var itemHeight = ns[0].getHeight();
-                    if(this._maxItemScrollHeight<itemHeight){
-                        this._maxItemScrollHeight = itemHeight;
+                    var rowspan = node.getRowspan();
+                    if(this._maxItemScrollHeight<Math.ceil(itemHeight/rowspan)){
+                        this._maxItemScrollHeight = Math.ceil(itemHeight/rowspan);
                     }
                 }
                 items.push(node);
@@ -604,12 +630,12 @@ wof.bizWidget.FlowLayoutSection.prototype = {
         }
         items = this.findItems();
 
-        //todo 增加是否随内容高度自适应属性
-        if(this._maxItemScrollHeight>0){
-            this.setItemHeight(this._maxItemScrollHeight+4);
+        if(this.getIsAutoExt()==true){
+            //是否随内容高度自适应高度
+            if(this._maxItemScrollHeight>0){
+                this.setItemHeight(this._maxItemScrollHeight+6);
+            }
         }
-
-
 
         if(items.length>0){
             itemHeight = this.getItemHeight();

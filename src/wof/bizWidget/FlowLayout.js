@@ -143,7 +143,22 @@ wof.bizWidget.FlowLayout.prototype = {
             console.log(message.id+'   '+this.getClassName());
             var obj = wof.util.ObjectManager.get(message.data.widgetId);
             this.insertNode(obj);
+
+
             this.render();
+
+            var activeSection = this.findSectionByIndex(this.getActiveSectionIndex());
+            if(activeSection!=null){
+                if(activeSection.getIsAutoExt()==true){
+                    var parentNode = this;
+                    while(parentNode.parentNode()!=null){
+                        parentNode = parentNode.parentNode();
+                    }
+                    parentNode.render();
+                }
+            }
+
+
             this.sendMessage('wof.bizWidget.FlowLayout_active');
             return false;
         },
@@ -169,7 +184,20 @@ wof.bizWidget.FlowLayout.prototype = {
                 node = eval('(new '+obj.getValue()+'()).createSelf('+item.getWidth()+','+item.getHeight()+');');
             }
             this.insertNode(node);
+
             this.render();
+
+            var activeSection = this.findSectionByIndex(this.getActiveSectionIndex());
+            if(activeSection!=null){
+                if(activeSection.getIsAutoExt()==true){
+                    var parentNode = this;
+                    while(parentNode.parentNode()!=null){
+                        parentNode = parentNode.parentNode();
+                    }
+                    parentNode.render();
+                }
+            }
+
             this.sendMessage('wof.bizWidget.FlowLayout_active');
             return false;
         },
@@ -180,6 +208,18 @@ wof.bizWidget.FlowLayout.prototype = {
             this.setActiveSectionIndex(sectionIndex);
             this.setActiveItemRank(null);
             this.render();
+
+            var activeSection = this.findSectionByIndex(this.getActiveSectionIndex());
+            if(activeSection!=null){
+                if(activeSection.getIsAutoExt()==true){
+                    var parentNode = this;
+                    while(parentNode.parentNode()!=null){
+                        parentNode = parentNode.parentNode();
+                    }
+                    parentNode.render();
+                }
+            }
+
             this.sendMessage('wof.bizWidget.FlowLayout_active');
             return false;
         },
@@ -189,7 +229,20 @@ wof.bizWidget.FlowLayout.prototype = {
             var sectionIndex = section.getIndex();
             this.setActiveSectionIndex(sectionIndex);
             this.setActiveItemRank(null);
+
             this.render();
+
+            var activeSection = this.findSectionByIndex(this.getActiveSectionIndex());
+            if(activeSection!=null){
+                if(activeSection.getIsAutoExt()==true){
+                    var parentNode = this;
+                    while(parentNode.parentNode()!=null){
+                        parentNode = parentNode.parentNode();
+                    }
+                    parentNode.render();
+                }
+            }
+
             this.sendMessage('wof.bizWidget.FlowLayout_active');
             return false;
         },
@@ -200,6 +253,18 @@ wof.bizWidget.FlowLayout.prototype = {
             this.setActiveSectionIndex(sectionIndex);
             this.setActiveItemRank({row:item.getRow(),col:item.getCol()});
             this.render();
+
+            var activeSection = this.findSectionByIndex(this.getActiveSectionIndex());
+            if(activeSection!=null){
+                if(activeSection.getIsAutoExt()==true){
+                    var parentNode = this;
+                    while(parentNode.parentNode()!=null){
+                        parentNode = parentNode.parentNode();
+                    }
+                    parentNode.render();
+                }
+            }
+
             this.sendMessage('wof.bizWidget.FlowLayout_active');
             return false;
         },
@@ -210,6 +275,18 @@ wof.bizWidget.FlowLayout.prototype = {
             this.setActiveSectionIndex(sectionIndex);
             this.setActiveItemRank({row:item.getRow(),col:item.getCol()});
             this.render();
+
+            var activeSection = this.findSectionByIndex(this.getActiveSectionIndex());
+            if(activeSection!=null){
+                if(activeSection.getIsAutoExt()==true){
+                    var parentNode = this;
+                    while(parentNode.parentNode()!=null){
+                        parentNode = parentNode.parentNode();
+                    }
+                    parentNode.render();
+                }
+            }
+
             this.sendMessage('wof.bizWidget.FlowLayout_active');
             return false;
         },
@@ -223,6 +300,18 @@ wof.bizWidget.FlowLayout.prototype = {
             this.setActiveSectionIndex(insertSectionIndex);
             this.setActiveItemRank(null);
             this.render();
+
+            var activeSection = this.findSectionByIndex(this.getActiveSectionIndex());
+            if(activeSection!=null){
+                if(activeSection.getIsAutoExt()==true){
+                    var parentNode = this;
+                    while(parentNode.parentNode()!=null){
+                        parentNode = parentNode.parentNode();
+                    }
+                    parentNode.render();
+                }
+            }
+
             this.sendMessage('wof.bizWidget.FlowLayout_active');
             return false;
         }
@@ -454,6 +543,10 @@ wof.bizWidget.FlowLayout.prototype = {
                 if(sectionData.mustInOrder!=null){
                     section.setMustInOrder((sectionData.mustInOrder=='true'||sectionData.mustInOrder==true)?true:false);
                 }
+                if(sectionData.isAutoExt!=null){
+                    section.setIsAutoExt((sectionData.isAutoExt=='true'||sectionData.isAutoExt==true)?true:false);
+                }
+
                 /*this.setActiveSectionIndex(Number(sectionData.index));
                 this.setActiveItemRank(null);*/
             }

@@ -542,6 +542,7 @@ var wof$_aop = (function(){
                             this.getDomInstance().css('zIndex', this.getZIndex());
                             this.getDomInstance().addClass(this.getCss());    //todo 有bug
                             this._render();
+
                             for(var i=0; i<this.childNodes().length; i++){
                                 this.childNodes()[i].render();
                             }

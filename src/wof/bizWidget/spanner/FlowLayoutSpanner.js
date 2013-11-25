@@ -28,6 +28,7 @@ wof.bizWidget.spanner.FlowLayoutSpanner = function () {
             'cols':{prop:'cols','name':'列数','type':'naturalNumber','readOnly':false,'isHide':false,required:true},
             'itemHeight':{prop:'itemHeight','name':'行高','type':'naturalNumber','readOnly':false,'isHide':false,required:true},
             'isExpand':{prop:'isExpand','name':'是否展开','type':'yesOrNo','readOnly':false,'isHide':false,required:false},
+            'isAutoExt':{prop:'isAutoExt','name':'是否适应内容','type':'yesOrNo','readOnly':false,'isHide':false,required:false},
             'mustInOrder':{prop:'mustInOrder','name':'保持顺序','type':'yesOrNo','readOnly':false,'isHide':false,required:false}
         },
         'FlowLayoutItem':{
@@ -237,9 +238,28 @@ wof.bizWidget.spanner.FlowLayoutSpanner.prototype = {
                     modal: true,
                     buttons:{
                         '确定':function(){
+                            var isAutoExt = false;
                             var activeSectionIndex = _this.getPropertys().activeSectionIndex;
+                            var activeSection = flowLayout.findSectionByIndex(activeSectionIndex);
+                            if(activeSection!=null){
+                                if(activeSection.getIsAutoExt()==true){
+                                    isAutoExt = true;
+                                }
+                            }
+
                             flowLayout.deleteSection(activeSectionIndex);
+
                             flowLayout.render();
+
+                            if(isAutoExt==true){
+                                var parentNode = flowLayout;
+                                while(parentNode.parentNode()!=null){
+                                    parentNode = parentNode.parentNode();
+                                }
+                                parentNode.render();
+                            }
+
+
                             flowLayout.sendMessage('wof.bizWidget.FlowLayout_active');
                             jQuery(this).dialog('close');
                             jQuery(this).remove();
@@ -258,7 +278,20 @@ wof.bizWidget.spanner.FlowLayoutSpanner.prototype = {
             var activeSectionIndex = _this.getPropertys().activeSectionIndex;
             var sectionData = {title:'未命名分组'};
             flowLayout.insertSection(sectionData,activeSectionIndex);
+
             flowLayout.render();
+
+            var activeSection = flowLayout.findSectionByIndex(activeSectionIndex);
+            if(activeSection!=null){
+                if(activeSection.getIsAutoExt()==true){
+                    var parentNode = flowLayout;
+                    while(parentNode.parentNode()!=null){
+                        parentNode = parentNode.parentNode();
+                    }
+                    parentNode.render();
+                }
+            }
+
             flowLayout.sendMessage('wof.bizWidget.FlowLayout_active');
         });
         this._upSectionIco.mousedown(function(event){
@@ -285,7 +318,20 @@ wof.bizWidget.spanner.FlowLayoutSpanner.prototype = {
             var activeItemRank = _this.getPropertys().activeItemRank;
             flowLayout.addItemColspan(activeItemRank, activeSectionIndex);
             flowLayout.setActiveItemRank(null);
+
             flowLayout.render();
+
+            var activeSection = flowLayout.findSectionByIndex(activeSectionIndex);
+            if(activeSection!=null){
+                if(activeSection.getIsAutoExt()==true){
+                    var parentNode = flowLayout;
+                    while(parentNode.parentNode()!=null){
+                        parentNode = parentNode.parentNode();
+                    }
+                    parentNode.render();
+                }
+            }
+
             flowLayout.sendMessage('wof.bizWidget.FlowLayout_active');
         });
         this._splitItemArrow.mousedown(function(event){
@@ -295,7 +341,20 @@ wof.bizWidget.spanner.FlowLayoutSpanner.prototype = {
             var activeItemRank = _this.getPropertys().activeItemRank;
             flowLayout.reduceItemColspan(activeItemRank, activeSectionIndex);
             flowLayout.setActiveItemRank(null);
+
             flowLayout.render();
+
+            var activeSection = flowLayout.findSectionByIndex(activeSectionIndex);
+            if(activeSection!=null){
+                if(activeSection.getIsAutoExt()==true){
+                    var parentNode = flowLayout;
+                    while(parentNode.parentNode()!=null){
+                        parentNode = parentNode.parentNode();
+                    }
+                    parentNode.render();
+                }
+            }
+
             flowLayout.sendMessage('wof.bizWidget.FlowLayout_active');
         });
         this._reduceItemRowspanArrow.mousedown(function(event){
@@ -305,7 +364,20 @@ wof.bizWidget.spanner.FlowLayoutSpanner.prototype = {
             var activeItemRank = _this.getPropertys().activeItemRank;
             flowLayout.reduceItemRowspan(activeItemRank, activeSectionIndex);
             flowLayout.setActiveItemRank(null);
+
             flowLayout.render();
+
+            var activeSection = flowLayout.findSectionByIndex(activeSectionIndex);
+            if(activeSection!=null){
+                if(activeSection.getIsAutoExt()==true){
+                    var parentNode = flowLayout;
+                    while(parentNode.parentNode()!=null){
+                        parentNode = parentNode.parentNode();
+                    }
+                    parentNode.render();
+                }
+            }
+
             flowLayout.sendMessage('wof.bizWidget.FlowLayout_active');
         });
         this._addItemRowspanArrow.mousedown(function(event){
@@ -315,7 +387,20 @@ wof.bizWidget.spanner.FlowLayoutSpanner.prototype = {
             var activeItemRank = _this.getPropertys().activeItemRank;
             flowLayout.addItemRowspan(activeItemRank, activeSectionIndex);
             flowLayout.setActiveItemRank(null);
+
             flowLayout.render();
+
+            var activeSection = flowLayout.findSectionByIndex(activeSectionIndex);
+            if(activeSection!=null){
+                if(activeSection.getIsAutoExt()==true){
+                    var parentNode = flowLayout;
+                    while(parentNode.parentNode()!=null){
+                        parentNode = parentNode.parentNode();
+                    }
+                    parentNode.render();
+                }
+            }
+
             flowLayout.sendMessage('wof.bizWidget.FlowLayout_active');
         });
 
@@ -359,7 +444,20 @@ wof.bizWidget.spanner.FlowLayoutSpanner.prototype = {
                             newObj.setComponentId(null);
                             flowLayout.insertNode(newObj, activeItemRank, activeSectionIndex);
                             flowLayout.setActiveItemRank(null);
+
                             flowLayout.render();
+
+                            var activeSection = flowLayout.findSectionByIndex(activeSectionIndex);
+                            if(activeSection!=null){
+                                if(activeSection.getIsAutoExt()==true){
+                                    var parentNode = flowLayout;
+                                    while(parentNode.parentNode()!=null){
+                                        parentNode = parentNode.parentNode();
+                                    }
+                                    parentNode.render();
+                                }
+                            }
+
                             flowLayout.sendMessage('wof.bizWidget.FlowLayout_active');
                         }
                         jQuery(this).dialog('close');
@@ -375,7 +473,20 @@ wof.bizWidget.spanner.FlowLayoutSpanner.prototype = {
                             var activeItemRank = _this.getPropertys().activeItemRank;
                             flowLayout.insertNode(obj, activeItemRank, activeSectionIndex);
                             flowLayout.setActiveItemRank(null);
+
                             flowLayout.render();
+
+                            var activeSection = flowLayout.findSectionByIndex(activeSectionIndex);
+                            if(activeSection!=null){
+                                if(activeSection.getIsAutoExt()==true){
+                                    var parentNode = flowLayout;
+                                    while(parentNode.parentNode()!=null){
+                                        parentNode = parentNode.parentNode();
+                                    }
+                                    parentNode.render();
+                                }
+                            }
+
                             flowLayout.sendMessage('wof.bizWidget.FlowLayout_active');
                         }
                         jQuery(this).dialog('close');
@@ -407,7 +518,20 @@ wof.bizWidget.spanner.FlowLayoutSpanner.prototype = {
                             flowLayout.deleteItem(activeItemRank, activeSectionIndex);
                             flowLayout.setActiveSectionIndex(null);
                             flowLayout.setActiveItemRank(null);
+
                             flowLayout.render();
+
+                            var activeSection = flowLayout.findSectionByIndex(activeSectionIndex);
+                            if(activeSection!=null){
+                                if(activeSection.getIsAutoExt()==true){
+                                    var parentNode = flowLayout;
+                                    while(parentNode.parentNode()!=null){
+                                        parentNode = parentNode.parentNode();
+                                    }
+                                    parentNode.render();
+                                }
+                            }
+
                             flowLayout.sendMessage('wof.bizWidget.FlowLayout_active');
                             jQuery(this).dialog('close');
                             jQuery(this).remove();
@@ -422,7 +546,20 @@ wof.bizWidget.spanner.FlowLayoutSpanner.prototype = {
                 flowLayout.deleteItem(activeItemRank, activeSectionIndex);
                 flowLayout.setActiveSectionIndex(null);
                 flowLayout.setActiveItemRank(null);
+
                 flowLayout.render();
+
+                var activeSection = flowLayout.findSectionByIndex(activeSectionIndex);
+                if(activeSection!=null){
+                    if(activeSection.getIsAutoExt()==true){
+                        var parentNode = flowLayout;
+                        while(parentNode.parentNode()!=null){
+                            parentNode = parentNode.parentNode();
+                        }
+                        parentNode.render();
+                    }
+                }
+
                 flowLayout.sendMessage('wof.bizWidget.FlowLayout_active');
             }
         });
@@ -490,6 +627,7 @@ wof.bizWidget.spanner.FlowLayoutSpanner.prototype = {
                     activeData.isExpand = activeSection.getIsExpand();
                     activeData.mustInOrder = activeSection.getMustInOrder();
                     activeData.index = activeSection.getIndex();
+                    activeData.isAutoExt = activeSection.getIsAutoExt();
                 }
                 //当前激活section加入上移 下移 插入 删除操作句柄
                 if(activeSectionIndex>1){
