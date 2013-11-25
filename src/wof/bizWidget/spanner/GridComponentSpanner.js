@@ -274,6 +274,7 @@ wof.bizWidget.spanner.GridComponentSpanner.prototype = {
                         var gridComponent = wof.util.ObjectManager.get(_this.getPropertys().id);
                         gridComponent.removeChildren(true);
                         gridComponent.remove(true);
+
                         jQuery(this).dialog('close');
                         jQuery(this).remove();
                     },
