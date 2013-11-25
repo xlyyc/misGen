@@ -244,17 +244,19 @@ wof.bizWidget.FlowLayoutSection.prototype = {
 
             this._initFlag = true;
         }
+        this._appendLabel();
+        this._flowLayout();
     },
 
     //----------必须实现----------
     render: function () {
-		this._appendLabel();
-		this._flowLayout();
+
+        this._resetStyle();
     },
 
     //选择实现
     afterRender: function () {
-        this._resetStyle();
+
 
     },
 

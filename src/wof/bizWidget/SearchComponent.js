@@ -272,12 +272,14 @@ wof.bizWidget.SearchComponent.prototype = {
 
             this._initFlag = true;
         }
+
+        this._appendLabel();
+        this._flowLayout();
     },
 
     //----------必须实现----------
     render: function () {
-        this._appendLabel();
-        this._flowLayout();
+
     },
 
     //选择实现

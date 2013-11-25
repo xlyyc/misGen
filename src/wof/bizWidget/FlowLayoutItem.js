@@ -189,10 +189,7 @@ wof.bizWidget.FlowLayoutItem.prototype = {
             });
             this._initFlag = true;
         }
-    },
 
-    //----------必须实现----------
-    render: function () {
         var childNodes = this.childNodes();
         if(childNodes.length>0){
             var child = childNodes[0];
@@ -203,6 +200,12 @@ wof.bizWidget.FlowLayoutItem.prototype = {
                 child.setHeight(this.getHeight());
             }
         }
+
+    },
+
+    //----------必须实现----------
+    render: function () {
+
     },
 
     //选择实现

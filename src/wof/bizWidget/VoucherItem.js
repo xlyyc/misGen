@@ -410,10 +410,7 @@ wof.bizWidget.VoucherItem.prototype = {
             });
             this._initFlag = true;
         }
-    },
 
-    //----------必须实现----------
-    render: function () {
         this.getDomInstance().children().remove();
         if(this.getItemLabel()!=''&&this.getVisbleType()!=''){
             var label = jQuery('<label style="width:'+this.getLabelWidth()+'px;">'+(this.getItemLabel()==''?'&nbsp;':this.getItemLabel())+(this.getDataField()==''?'':'('+this.getDataField()+')')+'</label>');
@@ -425,6 +422,11 @@ wof.bizWidget.VoucherItem.prototype = {
             var bgImg = jQuery('<img src="src/img/backgroud.gif" style="position:absolute;cursor:pointer;top:0px;left:0px;opacity:0;filter:alpha(opacity=0);width:100%;height:100%;">');
             this.getDomInstance().append(bgImg);
         }
+    },
+
+    //----------必须实现----------
+    render: function () {
+
     },
 
     //选择实现
