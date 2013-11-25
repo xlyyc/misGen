@@ -207,7 +207,7 @@ wof.bizWidget.FlowLayout.prototype = {
             var sectionIndex = section.getIndex();
             this.setActiveSectionIndex(sectionIndex);
             this.setActiveItemRank(null);
-            this.render();
+            //this.render();
 
             var activeSection = this.findSectionByIndex(this.getActiveSectionIndex());
             if(activeSection!=null){
