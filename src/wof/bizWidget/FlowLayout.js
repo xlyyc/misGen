@@ -7,6 +7,24 @@
 wof.bizWidget.FlowLayout = function () {
     this._version = '1.0';
 
+    var method = 'var obj=wof.util.ObjectManager.get(message.sender.id);'+
+    'if(obj!=null&&obj.parentNode()!=null){'+
+        'var parentNode = obj.parentNode();'+
+        'if(parentNode.getClassName()=="wof.bizWidget.FlowLayoutItem"){'+
+            'if(parentNode.parentNode().getIsAutoExt()==true){'+
+                'while(parentNode.parentNode()!=null){'+
+                    'parentNode = parentNode.parentNode();'+
+                '}'+
+                'if(parentNode.getId()==this.getId()){'+
+        'console.log(obj.getHeight()+" tttttttttttttt==="+this.getId()+"  "+this.getClassName());'+
+                    'parentNode.render();'+
+
+                '}'+
+            '}'+
+        '}'+
+    '}';
+    this.setOnReceiveMessage([{id:'wof_object_resize',priority:50,method:method}]);
+
 };
 wof.bizWidget.FlowLayout.prototype = {
     /**
@@ -157,7 +175,6 @@ wof.bizWidget.FlowLayout.prototype = {
                     parentNode.render();
                 }
             }
-
 
             this.sendMessage('wof.bizWidget.FlowLayout_active');
             return false;
@@ -729,6 +746,7 @@ wof.bizWidget.FlowLayout.prototype = {
             section.getDomInstance().css('top', section.getTop()*this.getScale()+'px');
         }
         this.setHeight(height);
+        console.log(this.getId()+'          '+height);
         this.getDomInstance().css('height',(this.getHeight()*this.getScale())+'px');
         this.getDomInstance().css('width', (this.getWidth()*this.getScale())+'px');
 

@@ -347,6 +347,7 @@ wof.bizWidget.spanner.VoucherComponentSpanner.prototype = {
             voucherComponent.addVoucherItemRowspan(activeVoucherItemRank, activeVoucherItemGroupIndex);
             voucherComponent.setActiveVoucherItemRank(null);
             voucherComponent.render();
+            voucherComponent.sendMessage('wof_object_resize');
             voucherComponent.sendMessage('wof.bizWidget.VoucherComponent_active');
         });
 

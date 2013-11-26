@@ -526,13 +526,9 @@ var wof$_aop = (function(){
                             if(this.beforeRender!=null){
                                 this.beforeRender();
                             }
-
-
                             for(var i=0; i<this.childNodes().length; i++){
                                 this.childNodes()[i].render();
                             }
-
-
                             if(this._left!=null){
                                 this.getDomInstance().css('left', (this._left*this.getScale())+'px');
                             }
@@ -549,8 +545,6 @@ var wof$_aop = (function(){
                             this.getDomInstance().css('zIndex', this.getZIndex());
                             this.getDomInstance().addClass(this.getCss());    //todo 有bug
                             this._render();
-
-
                             if(this.afterRender!=null){
                                 this.afterRender();
                             }
