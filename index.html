@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>业务设计器</title>
-<link href="lib/jquery.ui/themes/sunny/jquery-ui.min.css" rel="stylesheet">
+<link href="lib/jquery.ui/themes/redmond/jquery-ui.min.css" rel="stylesheet">
 <link href="lib/jquery.ui.multiselect/css/jquery.multiselect.css" rel="stylesheet">
 <link href="lib/jquery.ui.multiselect/css/jquery.multiselect.filter.css" rel="stylesheet">
 <link href="lib/jquery.ztree/css/zTreeStyle/zTreeStyle.css" rel="stylesheet">
@@ -284,6 +284,23 @@ jQuery(function(){
 		var windowHeight = jQuery(window).height();
 		with(wof.widget)
             with(wof.bizWidget){
+
+                var messageIds = [
+                    'wof.bizWidget.spanner.FlowLayoutSpanner_render',
+                    'wof.widget.spanner.ButtonSpanner_render',
+                    'wof.bizWidget.spanner.GridLayoutSpanner_render',
+                    'wof.bizWidget.spanner.VoucherComponentSpanner_render',
+                    'wof.bizWidget.spanner.SearchComponentSpanner_render',
+                    'wof.bizWidget.spanner.VoucherGridComponentSpanner_render',
+                    'wof.bizWidget.spanner.GridComponentSpanner_render',
+                    'wof.bizWidget.spanner.PageComponentSpanner_render',
+                    'wof.functionWidget.spanner.CommitComponentSpanner_render',
+                    'wof.functionWidget.spanner.ViewRecordComponentSpanner_render',
+                    'wof.functionWidget.spanner.UpdateRecordComponentSpanner_render',
+                    'wof.functionWidget.spanner.DeleteRecordComponentSpanner_render',
+                    'wof.functionWidget.spanner.AddRecordComponentSpanner_render'
+                ];
+
                 var tab = new Tab();
                 tab.setOnSendMessage([{id:'wof.widget.Tab_active',method:'return false;'}]);
                 tab.setWidth(sidebar2Width-7);
@@ -300,19 +317,9 @@ jQuery(function(){
                 propertyBar.setHeight(windowHeight-headerHeight-footerHeight-51);
                 var method = 'if(!jQuery.isEmptyObject(message.sender.activeData)){this.setPropertys(message.sender.activeData);this.setMeta(message.sender.meta);this.render();}';
                 var onReceiveMessage = [];
-                onReceiveMessage.push({id:'wof.bizWidget.spanner.FlowLayoutSpanner_render',method:method});
-                onReceiveMessage.push({id:'wof.widget.spanner.ButtonSpanner_render',method:method});
-                onReceiveMessage.push({id:'wof.bizWidget.spanner.GridLayoutSpanner_render',method:method});
-                onReceiveMessage.push({id:'wof.bizWidget.spanner.VoucherComponentSpanner_render',method:method});
-                onReceiveMessage.push({id:'wof.bizWidget.spanner.SearchComponentSpanner_render',method:method});
-                onReceiveMessage.push({id:'wof.bizWidget.spanner.VoucherGridComponentSpanner_render',method:method});
-                onReceiveMessage.push({id:'wof.bizWidget.spanner.GridComponentSpanner_render',method:method});
-                onReceiveMessage.push({id:'wof.bizWidget.spanner.PageComponentSpanner_render',method:method});
-                onReceiveMessage.push({id:'wof.functionWidget.spanner.CommitComponentSpanner_render',method:method});
-                onReceiveMessage.push({id:'wof.functionWidget.spanner.ViewRecordComponentSpanner_render',method:method});
-                onReceiveMessage.push({id:'wof.functionWidget.spanner.UpdateRecordComponentSpanner_render',method:method});
-                onReceiveMessage.push({id:'wof.functionWidget.spanner.DeleteRecordComponentSpanner_render',method:method});
-                onReceiveMessage.push({id:'wof.functionWidget.spanner.AddRecordComponentSpanner_render',method:method});
+                for(var i=0;i<messageIds.length;i++){
+                    onReceiveMessage.push({id:messageIds[i],method:method});
+                }
                 propertyBar.setOnReceiveMessage(onReceiveMessage);
                 propertyBar.setTop(0);
                 propertyBar.setLeft(4);
@@ -324,19 +331,9 @@ jQuery(function(){
                 onSendMessageBar.setHeight(windowHeight-headerHeight-footerHeight-51);
                 var meth = 'if(!jQuery.isEmptyObject(message.sender.activeData)){this.setPropertys(message.sender.activeData);this.setSendMessages(message.sender.meta.sendMessages);this.render();}';
                 var receives = [];
-                receives.push({id:'wof.bizWidget.spanner.FlowLayoutSpanner_render',method:meth});
-                receives.push({id:'wof.widget.spanner.ButtonSpanner_render',method:meth});
-                receives.push({id:'wof.bizWidget.spanner.GridLayoutSpanner_render',method:meth});
-                receives.push({id:'wof.bizWidget.spanner.VoucherComponentSpanner_render',method:meth});
-                receives.push({id:'wof.bizWidget.spanner.SearchComponentSpanner_render',method:meth});
-                receives.push({id:'wof.bizWidget.spanner.VoucherGridComponentSpanner_render',method:meth});
-                receives.push({id:'wof.bizWidget.spanner.GridComponentSpanner_render',method:meth});
-                receives.push({id:'wof.bizWidget.spanner.PageComponentSpanner_render',method:meth});
-                receives.push({id:'wof.functionWidget.spanner.CommitComponentSpanner_render',method:meth});
-                receives.push({id:'wof.functionWidget.spanner.ViewRecordComponentSpanner_render',method:meth});
-                receives.push({id:'wof.functionWidget.spanner.UpdateRecordComponentSpanner_render',method:meth});
-                receives.push({id:'wof.functionWidget.spanner.DeleteRecordComponentSpanner_render',method:meth});
-                receives.push({id:'wof.functionWidget.spanner.AddRecordComponentSpanner_render',method:meth});
+                for(var i=0;i<messageIds.length;i++){
+                    receives.push({id:messageIds[i],method:meth});
+                }
                 onSendMessageBar.setOnReceiveMessage(receives);
                 onSendMessageBar.setTop(0);
                 onSendMessageBar.setLeft(4);
@@ -348,19 +345,9 @@ jQuery(function(){
                 onReceiveMessageBar.setHeight(windowHeight-headerHeight-footerHeight-51);
                 var met = 'if(!jQuery.isEmptyObject(message.sender.activeData)){this.setPropertys(message.sender.activeData);this.render();}';
                 var receiv = [];
-                receiv.push({id:'wof.bizWidget.spanner.FlowLayoutSpanner_render',method:met});
-                receiv.push({id:'wof.widget.spanner.ButtonSpanner_render',method:met});
-                receiv.push({id:'wof.bizWidget.spanner.GridLayoutSpanner_render',method:met});
-                receiv.push({id:'wof.bizWidget.spanner.VoucherComponentSpanner_render',method:met});
-                receiv.push({id:'wof.bizWidget.spanner.SearchComponentSpanner_render',method:met});
-                receiv.push({id:'wof.bizWidget.spanner.VoucherGridComponentSpanner_render',method:met});
-                receiv.push({id:'wof.bizWidget.spanner.GridComponentSpanner_render',method:met});
-                receiv.push({id:'wof.bizWidget.spanner.PageComponentSpanner_render',method:met});
-                receiv.push({id:'wof.functionWidget.spanner.CommitComponentSpanner_render',method:met});
-                receiv.push({id:'wof.functionWidget.spanner.ViewRecordComponentSpanner_render',method:met});
-                receiv.push({id:'wof.functionWidget.spanner.UpdateRecordComponentSpanner_render',method:met});
-                receiv.push({id:'wof.functionWidget.spanner.DeleteRecordComponentSpanner_render',method:met});
-                receiv.push({id:'wof.functionWidget.spanner.AddRecordComponentSpanner_render',method:met});
+                for(var i=0;i<messageIds.length;i++){
+                    receiv.push({id:messageIds[i],method:met});
+                }
                 onReceiveMessageBar.setOnReceiveMessage(receiv);
                 onReceiveMessageBar.setTop(0);
                 onReceiveMessageBar.setLeft(4);
@@ -571,6 +558,7 @@ window.getContentLayout = function(){
     return wof.util.ObjectManager.get(jQuery('#content').children('div[oid]').first().attr('oid'));
 }
 var pageInputParam = {};
+
 </script>
 </head>
 <body>
