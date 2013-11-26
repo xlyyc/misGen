@@ -16,7 +16,6 @@ wof.bizWidget.FlowLayout = function () {
                     'parentNode = parentNode.parentNode();'+
                 '}'+
                 'if(parentNode.getId()==this.getId()){'+
-        'console.log(obj.getHeight()+" tttttttttttttt==="+this.getId()+"  "+this.getClassName());'+
                     'parentNode.render();'+
 
                 '}'+
