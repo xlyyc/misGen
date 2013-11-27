@@ -43,8 +43,6 @@ wof.bizWidget.FlowLayoutSection.prototype = {
 
     _initFlag: null,
 
-    _maxItemScrollHeight: null,
-
     _isAutoExt: null,
 
     /**
@@ -489,20 +487,11 @@ wof.bizWidget.FlowLayoutSection.prototype = {
 
     //找到所有item
     findItems: function(){
-        this._maxItemScrollHeight = 0;
         var items = [];
         var childNodes = this.childNodes();
         for(var i=0;i<childNodes.length;i++){
             var node = childNodes[i];
             if(node.getClassName()=='wof.bizWidget.FlowLayoutItem'){
-                var ns = node.childNodes();
-                if(ns.length>0){
-                    var itemHeight = ns[0].getHeight();
-                    var rowspan = node.getRowspan();
-                    if(this._maxItemScrollHeight<Math.ceil(itemHeight/rowspan)){
-                        this._maxItemScrollHeight = Math.ceil(itemHeight/rowspan);
-                    }
-                }
                 items.push(node);
             }
         }
@@ -635,15 +624,20 @@ wof.bizWidget.FlowLayoutSection.prototype = {
 
         //是否随内容高度自适应高度
         if(this.getIsAutoExt()==true){
+            var maxItemScrollHeight = 0;
             for(var i=0;i<items.length;i++){
                 var ns = items[i].childNodes();
                 if(ns.length>0){
                     ns[0].render();
+                    var itemHeight = ns[0].getHeight();
+                    var rowspan = items[i].getRowspan();
+                    if(maxItemScrollHeight<Math.ceil(itemHeight/rowspan)){
+                        maxItemScrollHeight = Math.ceil(itemHeight/rowspan);
+                    }
                 }
             }
-            items = this.findItems();
-            if(this._maxItemScrollHeight>0){
-                this.setItemHeight(this._maxItemScrollHeight+6);
+            if(maxItemScrollHeight>0){
+                this.setItemHeight(maxItemScrollHeight+6);
             }
         }
 
