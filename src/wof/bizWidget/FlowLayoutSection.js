@@ -300,15 +300,7 @@ wof.bizWidget.FlowLayoutSection.prototype = {
 
             this.parentNode().render();
 
-            if(this.getIsAutoExt()==true){
-                var parentNode = this;
-                while(parentNode.parentNode()!=null){
-                    parentNode = parentNode.parentNode();
-                }
-                parentNode.render();
-            }
-
-
+            this.parentNode().sendMessage('wof_object_resize');
             this.parentNode().sendMessage('wof.bizWidget.FlowLayout_active');
             return false;
         }

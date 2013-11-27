@@ -248,9 +248,9 @@ wof.bizWidget.SearchComponent.prototype = {
                 }else{
                     _this.setIsExpand(true);
                 }
-                _this.sendMessage('wof.bizWidget.SearchComponent_dblclick');
                 _this.setActiveSearchItemRank(null);
                 _this.render();
+                _this.sendMessage('wof_object_resize');
                 _this.sendMessage('wof.bizWidget.SearchComponent_active');
             });
             //如果是clone过来的 会直接创建一个label对象 需要先移除
@@ -341,6 +341,8 @@ wof.bizWidget.SearchComponent.prototype = {
             insertSearchItem.remove();
             insertSearchItem.beforeTo(searchItem);
             this.render();
+
+            this.sendMessage('wof_object_resize');
             this.sendMessage('wof.bizWidget.SearchComponent_active');
             return false;
         },

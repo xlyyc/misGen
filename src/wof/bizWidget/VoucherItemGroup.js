@@ -311,6 +311,8 @@ wof.bizWidget.VoucherItemGroup.prototype = {
             insertVoucherItem.remove();
             insertVoucherItem.beforeTo(voucherItem);
             this.getVoucherComponent().render();
+
+            this.getVoucherComponent().sendMessage('wof_object_resize');
             this.getVoucherComponent().sendMessage('wof.bizWidget.VoucherComponent_active');
             return false;
         }

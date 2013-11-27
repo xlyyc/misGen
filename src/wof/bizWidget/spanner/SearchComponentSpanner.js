@@ -208,6 +208,8 @@ wof.bizWidget.spanner.SearchComponentSpanner.prototype = {
             searchComponent.addSearchItemColspan(activeSearchItemRank);
             searchComponent.setActiveSearchItemRank(null);
             searchComponent.render();
+
+            searchComponent.sendMessage('wof_object_resize');
             searchComponent.sendMessage('wof.bizWidget.SearchComponent_active');
         });
         this._splitSearchItemArrow.mousedown(function(event){
@@ -217,6 +219,8 @@ wof.bizWidget.spanner.SearchComponentSpanner.prototype = {
             searchComponent.reduceSearchItemColspan(activeSearchItemRank);
             searchComponent.setActiveSearchItemRank(null);
             searchComponent.render();
+
+            searchComponent.sendMessage('wof_object_resize');
             searchComponent.sendMessage('wof.bizWidget.SearchComponent_active');
         });
         this._reduceSearchItemRowspanArrow.mousedown(function(event){
@@ -226,6 +230,8 @@ wof.bizWidget.spanner.SearchComponentSpanner.prototype = {
             searchComponent.reduceSearchItemRowspan(activeSearchItemRank);
             searchComponent.setActiveSearchItemRank(null);
             searchComponent.render();
+
+            searchComponent.sendMessage('wof_object_resize');
             searchComponent.sendMessage('wof.bizWidget.SearchComponent_active');
         });
         this._addSearchItemRowspanArrow.mousedown(function(event){
@@ -235,6 +241,8 @@ wof.bizWidget.spanner.SearchComponentSpanner.prototype = {
             searchComponent.addSearchItemRowspan(activeSearchItemRank);
             searchComponent.setActiveSearchItemRank(null);
             searchComponent.render();
+
+            searchComponent.sendMessage('wof_object_resize');
             searchComponent.sendMessage('wof.bizWidget.SearchComponent_active');
         });
 
@@ -260,34 +268,12 @@ wof.bizWidget.spanner.SearchComponentSpanner.prototype = {
             event.stopPropagation();
             var searchComponent = wof.util.ObjectManager.get(_this.getPropertys().id);
             var activeSearchItemRank = _this.getPropertys().activeSearchItemRank;
-            var activeSearchItem = searchComponent.findSearchItemByRank(activeSearchItemRank);
-            if(activeSearchItem!=null&&activeSearchItem.childNodes().length>0){
-                var dialogDiv = jQuery('<div title="提示"><p><span class="ui-icon ui-icon-alert" style="float:left;margin:0 7px 20px 0;"></span>该单元格包含对象,确定要删除该单元格吗?</p></div>');
-                dialogDiv.dialog({
-                    resizable:false,
-                    height:200,
-                    modal: true,
-                    buttons:{
-                        '确定':function(){
-                            searchComponent.deleteSearchItem(activeSearchItemRank);
-                            searchComponent.setActiveSearchItemRank(null);
-                            searchComponent.render();
-                            searchComponent.sendMessage('wof.bizWidget.SearchComponent_active');
-                            jQuery(this).dialog('close');
-                            jQuery(this).remove();
-                        },
-                        '关闭':function(){
-                            jQuery(this).dialog('close');
-                            jQuery(this).remove();
-                        }
-                    }
-                });
-            }else{
-                searchComponent.deleteSearchItem(activeSearchItemRank);
-                searchComponent.setActiveSearchItemRank(null);
-                searchComponent.render();
-                searchComponent.sendMessage('wof.bizWidget.SearchComponent_active');
-            }
+            searchComponent.deleteSearchItem(activeSearchItemRank);
+            searchComponent.setActiveSearchItemRank(null);
+            searchComponent.render();
+
+            searchComponent.sendMessage('wof_object_resize');
+            searchComponent.sendMessage('wof.bizWidget.SearchComponent_active');
         });
     },
 

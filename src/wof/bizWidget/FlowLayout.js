@@ -164,17 +164,7 @@ wof.bizWidget.FlowLayout.prototype = {
 
             this.render();
 
-            var activeSection = this.findSectionByIndex(this.getActiveSectionIndex());
-            if(activeSection!=null){
-                if(activeSection.getIsAutoExt()==true){
-                    var parentNode = this;
-                    while(parentNode.parentNode()!=null){
-                        parentNode = parentNode.parentNode();
-                    }
-                    parentNode.render();
-                }
-            }
-
+            this.sendMessage('wof_object_resize');
             this.sendMessage('wof.bizWidget.FlowLayout_active');
             return false;
         },
@@ -203,17 +193,7 @@ wof.bizWidget.FlowLayout.prototype = {
 
             this.render();
 
-            var activeSection = this.findSectionByIndex(this.getActiveSectionIndex());
-            if(activeSection!=null){
-                if(activeSection.getIsAutoExt()==true){
-                    var parentNode = this;
-                    while(parentNode.parentNode()!=null){
-                        parentNode = parentNode.parentNode();
-                    }
-                    parentNode.render();
-                }
-            }
-
+            this.sendMessage('wof_object_resize');
             this.sendMessage('wof.bizWidget.FlowLayout_active');
             return false;
         },
@@ -223,18 +203,7 @@ wof.bizWidget.FlowLayout.prototype = {
             var sectionIndex = section.getIndex();
             this.setActiveSectionIndex(sectionIndex);
             this.setActiveItemRank(null);
-            //this.render();
-
-            var activeSection = this.findSectionByIndex(this.getActiveSectionIndex());
-            if(activeSection!=null){
-                if(activeSection.getIsAutoExt()==true){
-                    var parentNode = this;
-                    while(parentNode.parentNode()!=null){
-                        parentNode = parentNode.parentNode();
-                    }
-                    parentNode.render();
-                }
-            }
+            this.render();
 
             this.sendMessage('wof.bizWidget.FlowLayout_active');
             return false;
@@ -248,17 +217,7 @@ wof.bizWidget.FlowLayout.prototype = {
 
             this.render();
 
-            var activeSection = this.findSectionByIndex(this.getActiveSectionIndex());
-            if(activeSection!=null){
-                if(activeSection.getIsAutoExt()==true){
-                    var parentNode = this;
-                    while(parentNode.parentNode()!=null){
-                        parentNode = parentNode.parentNode();
-                    }
-                    parentNode.render();
-                }
-            }
-
+            this.sendMessage('wof_object_resize');
             this.sendMessage('wof.bizWidget.FlowLayout_active');
             return false;
         },
@@ -270,17 +229,6 @@ wof.bizWidget.FlowLayout.prototype = {
             this.setActiveItemRank({row:item.getRow(),col:item.getCol()});
             this.render();
 
-            var activeSection = this.findSectionByIndex(this.getActiveSectionIndex());
-            if(activeSection!=null){
-                if(activeSection.getIsAutoExt()==true){
-                    var parentNode = this;
-                    while(parentNode.parentNode()!=null){
-                        parentNode = parentNode.parentNode();
-                    }
-                    parentNode.render();
-                }
-            }
-
             this.sendMessage('wof.bizWidget.FlowLayout_active');
             return false;
         },
@@ -291,17 +239,6 @@ wof.bizWidget.FlowLayout.prototype = {
             this.setActiveSectionIndex(sectionIndex);
             this.setActiveItemRank({row:item.getRow(),col:item.getCol()});
             this.render();
-
-            var activeSection = this.findSectionByIndex(this.getActiveSectionIndex());
-            if(activeSection!=null){
-                if(activeSection.getIsAutoExt()==true){
-                    var parentNode = this;
-                    while(parentNode.parentNode()!=null){
-                        parentNode = parentNode.parentNode();
-                    }
-                    parentNode.render();
-                }
-            }
 
             this.sendMessage('wof.bizWidget.FlowLayout_active');
             return false;
@@ -316,17 +253,6 @@ wof.bizWidget.FlowLayout.prototype = {
             this.setActiveSectionIndex(insertSectionIndex);
             this.setActiveItemRank(null);
             this.render();
-
-            var activeSection = this.findSectionByIndex(this.getActiveSectionIndex());
-            if(activeSection!=null){
-                if(activeSection.getIsAutoExt()==true){
-                    var parentNode = this;
-                    while(parentNode.parentNode()!=null){
-                        parentNode = parentNode.parentNode();
-                    }
-                    parentNode.render();
-                }
-            }
 
             this.sendMessage('wof.bizWidget.FlowLayout_active');
             return false;

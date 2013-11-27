@@ -293,24 +293,6 @@ wof.bizWidget.VoucherComponent.prototype = {
     },
 
     _insideOnReceiveMessage:{
-        'wof.bizWidget.VoucherItem_widgetDrop':function(message){
-            console.log(message.id+'   '+this.getClassName());
-            var obj = wof.util.ObjectManager.get(message.data.widgetId);
-            this.insertNode(obj);
-            this.render();
-            this.sendMessage('wof.bizWidget.VoucherComponent_active');
-            return false;
-        },
-        'wof.bizWidget.VoucherItem_newWidgetDrop':function(message){
-            console.log(message.id+'   '+this.getClassName());
-            var obj = wof.util.ObjectManager.get(message.data.widgetId);
-            var voucherItem = wof.util.ObjectManager.get(message.sender.id);
-            var node = eval('(new '+obj.getValue()+'()).createSelf('+voucherItem.getWidth()+','+voucherItem.getHeight()+');');
-            this.insertNode(node);
-            this.render();
-            this.sendMessage('wof.bizWidget.VoucherComponent_active');
-            return false;
-        },
         'wof.bizWidget.VoucherItemGroup_mousedown':function(message){
             console.log(message.id+'   '+this.getClassName());
             var voucherItemGroup = wof.util.ObjectManager.get(message.sender.id);
@@ -328,6 +310,8 @@ wof.bizWidget.VoucherComponent.prototype = {
             this.setActiveVoucherItemGroupIndex(voucherItemGroupIndex);
             this.setActiveVoucherItemRank(null);
             this.render();
+
+            this.sendMessage('wof_object_resize');
             this.sendMessage('wof.bizWidget.VoucherComponent_active');
             return false;
         },
@@ -348,6 +332,7 @@ wof.bizWidget.VoucherComponent.prototype = {
             this.setActiveVoucherItemGroupIndex(voucherItemGroupIndex);
             this.setActiveVoucherItemRank({rowNum:voucherItem.getRowNum(),colNum:voucherItem.getColNum()});
             this.render();
+
             this.sendMessage('wof.bizWidget.VoucherComponent_active');
             return false;
         },
@@ -370,6 +355,7 @@ wof.bizWidget.VoucherComponent.prototype = {
             }
 
             this.render();
+
             this.sendMessage('wof.bizWidget.VoucherComponent_active');
             return false;
         }

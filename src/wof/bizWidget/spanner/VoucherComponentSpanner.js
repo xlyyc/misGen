@@ -271,6 +271,8 @@ wof.bizWidget.spanner.VoucherComponentSpanner.prototype = {
                             var activeVoucherItemGroupIndex = _this.getPropertys().activeVoucherItemGroupIndex;
                             voucherComponent.deleteVoucherItemGroup(activeVoucherItemGroupIndex);
                             voucherComponent.render();
+
+                            voucherComponent.sendMessage('wof_object_resize');
                             voucherComponent.sendMessage('wof.bizWidget.VoucherComponent_active');
                             jQuery(this).dialog('close');
                             jQuery(this).remove();
@@ -290,6 +292,8 @@ wof.bizWidget.spanner.VoucherComponentSpanner.prototype = {
             var sectionData = {groupCaption:'未命名分组'};
             voucherComponent.insertVoucherItemGroup(sectionData,activeVoucherItemGroupIndex);
             voucherComponent.render();
+
+            voucherComponent.sendMessage('wof_object_resize');
             voucherComponent.sendMessage('wof.bizWidget.VoucherComponent_active');
         });
         this._upVoucherItemGroupIco.mousedown(function(event){
@@ -317,6 +321,8 @@ wof.bizWidget.spanner.VoucherComponentSpanner.prototype = {
             voucherComponent.addVoucherItemColspan(activeVoucherItemRank, activeVoucherItemGroupIndex);
             voucherComponent.setActiveVoucherItemRank(null);
             voucherComponent.render();
+
+            voucherComponent.sendMessage('wof_object_resize');
             voucherComponent.sendMessage('wof.bizWidget.VoucherComponent_active');
         });
         this._splitVoucherItemArrow.mousedown(function(event){
@@ -327,6 +333,8 @@ wof.bizWidget.spanner.VoucherComponentSpanner.prototype = {
             voucherComponent.reduceVoucherItemColspan(activeVoucherItemRank, activeVoucherItemGroupIndex);
             voucherComponent.setActiveVoucherItemRank(null);
             voucherComponent.render();
+
+            voucherComponent.sendMessage('wof_object_resize');
             voucherComponent.sendMessage('wof.bizWidget.VoucherComponent_active');
         });
         this._reduceVoucherItemRowspanArrow.mousedown(function(event){
@@ -337,6 +345,7 @@ wof.bizWidget.spanner.VoucherComponentSpanner.prototype = {
             voucherComponent.reduceVoucherItemRowspan(activeVoucherItemRank, activeVoucherItemGroupIndex);
             voucherComponent.setActiveVoucherItemRank(null);
             voucherComponent.render();
+            voucherComponent.sendMessage('wof_object_resize');
             voucherComponent.sendMessage('wof.bizWidget.VoucherComponent_active');
         });
         this._addVoucherItemRowspanArrow.mousedown(function(event){
@@ -375,38 +384,14 @@ wof.bizWidget.spanner.VoucherComponentSpanner.prototype = {
             event.stopPropagation();
             var voucherComponent = wof.util.ObjectManager.get(_this.getPropertys().id);
             var activeVoucherItemGroupIndex = _this.getPropertys().activeVoucherItemGroupIndex;
-            var section = voucherComponent.findVoucherItemGroupByIndex(activeVoucherItemGroupIndex);
             var activeVoucherItemRank = _this.getPropertys().activeVoucherItemRank;
-            var activeVoucherItem = section.findVoucherItemByRank(activeVoucherItemRank);
-            if(activeVoucherItem!=null&&activeVoucherItem.childNodes().length>0){
-                var dialogDiv = jQuery('<div title="提示"><p><span class="ui-icon ui-icon-alert" style="float:left;margin:0 7px 20px 0;"></span>该单元格包含对象,确定要删除该单元格吗?</p></div>');
-                dialogDiv.dialog({
-                    resizable:false,
-                    height:200,
-                    modal: true,
-                    buttons:{
-                        '确定':function(){
-                            voucherComponent.deleteVoucherItem(activeVoucherItemRank, activeVoucherItemGroupIndex);
-                            voucherComponent.setActiveVoucherItemGroupIndex(null);
-                            voucherComponent.setActiveVoucherItemRank(null);
-                            voucherComponent.render();
-                            voucherComponent.sendMessage('wof.bizWidget.VoucherComponent_active');
-                            jQuery(this).dialog('close');
-                            jQuery(this).remove();
-                        },
-                        '关闭':function(){
-                            jQuery(this).dialog('close');
-                            jQuery(this).remove();
-                        }
-                    }
-                });
-            }else{
-                voucherComponent.deleteVoucherItem(activeVoucherItemRank, activeVoucherItemGroupIndex);
-                voucherComponent.setActiveVoucherItemGroupIndex(null);
-                voucherComponent.setActiveVoucherItemRank(null);
-                voucherComponent.render();
-                voucherComponent.sendMessage('wof.bizWidget.VoucherComponent_active');
-            }
+            voucherComponent.deleteVoucherItem(activeVoucherItemRank, activeVoucherItemGroupIndex);
+            voucherComponent.setActiveVoucherItemGroupIndex(null);
+            voucherComponent.setActiveVoucherItemRank(null);
+            voucherComponent.render();
+
+            voucherComponent.sendMessage('wof_object_resize');
+            voucherComponent.sendMessage('wof.bizWidget.VoucherComponent_active');
         });
     },
 

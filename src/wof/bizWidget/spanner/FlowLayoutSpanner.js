@@ -251,15 +251,7 @@ wof.bizWidget.spanner.FlowLayoutSpanner.prototype = {
 
                             flowLayout.render();
 
-                            if(isAutoExt==true){
-                                var parentNode = flowLayout;
-                                while(parentNode.parentNode()!=null){
-                                    parentNode = parentNode.parentNode();
-                                }
-                                parentNode.render();
-                            }
-
-
+                            flowLayout.sendMessage('wof_object_resize');
                             flowLayout.sendMessage('wof.bizWidget.FlowLayout_active');
                             jQuery(this).dialog('close');
                             jQuery(this).remove();
@@ -281,17 +273,7 @@ wof.bizWidget.spanner.FlowLayoutSpanner.prototype = {
 
             flowLayout.render();
 
-            var activeSection = flowLayout.findSectionByIndex(activeSectionIndex);
-            if(activeSection!=null){
-                if(activeSection.getIsAutoExt()==true){
-                    var parentNode = flowLayout;
-                    while(parentNode.parentNode()!=null){
-                        parentNode = parentNode.parentNode();
-                    }
-                    parentNode.render();
-                }
-            }
-
+            flowLayout.sendMessage('wof_object_resize');
             flowLayout.sendMessage('wof.bizWidget.FlowLayout_active');
         });
         this._upSectionIco.mousedown(function(event){
@@ -321,17 +303,7 @@ wof.bizWidget.spanner.FlowLayoutSpanner.prototype = {
 
             flowLayout.render();
 
-            var activeSection = flowLayout.findSectionByIndex(activeSectionIndex);
-            if(activeSection!=null){
-                if(activeSection.getIsAutoExt()==true){
-                    var parentNode = flowLayout;
-                    while(parentNode.parentNode()!=null){
-                        parentNode = parentNode.parentNode();
-                    }
-                    parentNode.render();
-                }
-            }
-
+            flowLayout.sendMessage('wof_object_resize');
             flowLayout.sendMessage('wof.bizWidget.FlowLayout_active');
         });
         this._splitItemArrow.mousedown(function(event){
@@ -344,17 +316,7 @@ wof.bizWidget.spanner.FlowLayoutSpanner.prototype = {
 
             flowLayout.render();
 
-            var activeSection = flowLayout.findSectionByIndex(activeSectionIndex);
-            if(activeSection!=null){
-                if(activeSection.getIsAutoExt()==true){
-                    var parentNode = flowLayout;
-                    while(parentNode.parentNode()!=null){
-                        parentNode = parentNode.parentNode();
-                    }
-                    parentNode.render();
-                }
-            }
-
+            flowLayout.sendMessage('wof_object_resize');
             flowLayout.sendMessage('wof.bizWidget.FlowLayout_active');
         });
         this._reduceItemRowspanArrow.mousedown(function(event){
@@ -367,17 +329,7 @@ wof.bizWidget.spanner.FlowLayoutSpanner.prototype = {
 
             flowLayout.render();
 
-            var activeSection = flowLayout.findSectionByIndex(activeSectionIndex);
-            if(activeSection!=null){
-                if(activeSection.getIsAutoExt()==true){
-                    var parentNode = flowLayout;
-                    while(parentNode.parentNode()!=null){
-                        parentNode = parentNode.parentNode();
-                    }
-                    parentNode.render();
-                }
-            }
-
+            flowLayout.sendMessage('wof_object_resize');
             flowLayout.sendMessage('wof.bizWidget.FlowLayout_active');
         });
         this._addItemRowspanArrow.mousedown(function(event){
@@ -390,17 +342,7 @@ wof.bizWidget.spanner.FlowLayoutSpanner.prototype = {
 
             flowLayout.render();
 
-            var activeSection = flowLayout.findSectionByIndex(activeSectionIndex);
-            if(activeSection!=null){
-                if(activeSection.getIsAutoExt()==true){
-                    var parentNode = flowLayout;
-                    while(parentNode.parentNode()!=null){
-                        parentNode = parentNode.parentNode();
-                    }
-                    parentNode.render();
-                }
-            }
-
+            flowLayout.sendMessage('wof_object_resize');
             flowLayout.sendMessage('wof.bizWidget.FlowLayout_active');
         });
 
@@ -447,17 +389,7 @@ wof.bizWidget.spanner.FlowLayoutSpanner.prototype = {
 
                             flowLayout.render();
 
-                            var activeSection = flowLayout.findSectionByIndex(activeSectionIndex);
-                            if(activeSection!=null){
-                                if(activeSection.getIsAutoExt()==true){
-                                    var parentNode = flowLayout;
-                                    while(parentNode.parentNode()!=null){
-                                        parentNode = parentNode.parentNode();
-                                    }
-                                    parentNode.render();
-                                }
-                            }
-
+                            flowLayout.sendMessage('wof_object_resize');
                             flowLayout.sendMessage('wof.bizWidget.FlowLayout_active');
                         }
                         jQuery(this).dialog('close');
@@ -476,17 +408,7 @@ wof.bizWidget.spanner.FlowLayoutSpanner.prototype = {
 
                             flowLayout.render();
 
-                            var activeSection = flowLayout.findSectionByIndex(activeSectionIndex);
-                            if(activeSection!=null){
-                                if(activeSection.getIsAutoExt()==true){
-                                    var parentNode = flowLayout;
-                                    while(parentNode.parentNode()!=null){
-                                        parentNode = parentNode.parentNode();
-                                    }
-                                    parentNode.render();
-                                }
-                            }
-
+                            flowLayout.sendMessage('wof_object_resize');
                             flowLayout.sendMessage('wof.bizWidget.FlowLayout_active');
                         }
                         jQuery(this).dialog('close');
@@ -521,17 +443,7 @@ wof.bizWidget.spanner.FlowLayoutSpanner.prototype = {
 
                             flowLayout.render();
 
-                            var activeSection = flowLayout.findSectionByIndex(activeSectionIndex);
-                            if(activeSection!=null){
-                                if(activeSection.getIsAutoExt()==true){
-                                    var parentNode = flowLayout;
-                                    while(parentNode.parentNode()!=null){
-                                        parentNode = parentNode.parentNode();
-                                    }
-                                    parentNode.render();
-                                }
-                            }
-
+                            flowLayout.sendMessage('wof_object_resize');
                             flowLayout.sendMessage('wof.bizWidget.FlowLayout_active');
                             jQuery(this).dialog('close');
                             jQuery(this).remove();
@@ -549,17 +461,7 @@ wof.bizWidget.spanner.FlowLayoutSpanner.prototype = {
 
                 flowLayout.render();
 
-                var activeSection = flowLayout.findSectionByIndex(activeSectionIndex);
-                if(activeSection!=null){
-                    if(activeSection.getIsAutoExt()==true){
-                        var parentNode = flowLayout;
-                        while(parentNode.parentNode()!=null){
-                            parentNode = parentNode.parentNode();
-                        }
-                        parentNode.render();
-                    }
-                }
-
+                flowLayout.sendMessage('wof_object_resize');
                 flowLayout.sendMessage('wof.bizWidget.FlowLayout_active');
             }
         });
