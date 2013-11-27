@@ -745,7 +745,6 @@ wof.bizWidget.FlowLayout.prototype = {
             section.getDomInstance().css('top', section.getTop()*this.getScale()+'px');
         }
         this.setHeight(height);
-        console.log(this.getId()+'          '+height);
         this.getDomInstance().css('height',(this.getHeight()*this.getScale())+'px');
         this.getDomInstance().css('width', (this.getWidth()*this.getScale())+'px');
 

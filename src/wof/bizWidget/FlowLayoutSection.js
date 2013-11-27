@@ -630,10 +630,18 @@ wof.bizWidget.FlowLayoutSection.prototype = {
             }
             return rows;
         }
+
         items = this.findItems();
 
+        //是否随内容高度自适应高度
         if(this.getIsAutoExt()==true){
-            //是否随内容高度自适应高度
+            for(var i=0;i<items.length;i++){
+                var ns = items[i].childNodes();
+                if(ns.length>0){
+                    ns[0].render();
+                }
+            }
+            items = this.findItems();
             if(this._maxItemScrollHeight>0){
                 this.setItemHeight(this._maxItemScrollHeight+6);
             }
