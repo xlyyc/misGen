@@ -516,7 +516,6 @@
                     var link = {"nodeId": "", "name":"对等实体", "nocheck":true, "children":[] };
                     for(var i=0; i<ents.length; i++){
                         var ent = ents[i];
-                        //var linkEnt = {"nodeId":ent.alias, "name":ent.alias+"("+ent.name+")", "nocheck":true , "children":[]};
                         var linkEnt = {"nodeId":ent.alias, "name":ent.alias+"("+ent.name+")", "nodeType":"linkEntity", "children":[]};
                         link.children.push(linkEnt);
                         for(var t=0; t<ent.properties.length; t++){
