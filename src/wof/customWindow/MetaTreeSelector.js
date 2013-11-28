@@ -79,6 +79,8 @@
 		},
 
         getBizEntities:function(type){
+            //var bizEntity = JSON.parse(getBizEntities());
+
             var bizEntity = {
                 "childEntity": [{
                     "ID": "XXJL",
