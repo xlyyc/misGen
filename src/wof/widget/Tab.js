@@ -66,22 +66,24 @@ wof.widget.Tab.prototype = {
             this._initFlag = true;
         }
         this.getDomInstance().children('ul').remove();
+
+        var ul = jQuery('<ul>');
+        this.getDomInstance().prepend(ul);
+        for(var i=0; i<this.childNodes().length; i++){
+            var child = this.childNodes()[i];
+            var li = jQuery('<li>');
+            var a = jQuery('<a href="#'+child.getId()+'">'+child.getTitle()+'</a>');
+            li.append(a);
+            ul.append(li);
+
+            child.childNodes()[0].setWidth(this.getWidth()-4);
+            child.childNodes()[0].setHeight(this.getHeight()-52);
+        }
     },
 
     //----------必须实现----------
     render: function () {
-		var ul = jQuery('<ul>');
-		this.getDomInstance().prepend(ul);
-		for(var i=0; i<this.childNodes().length; i++){
-            var child = this.childNodes()[i];
-			var li = jQuery('<li>');
-			var a = jQuery('<a href="#'+child.getId()+'">'+child.getTitle()+'</a>');
-			li.append(a);
-			ul.append(li);
 
-            child.childNodes()[0].setWidth(this.getWidth()-4);
-            child.childNodes()[0].setHeight(this.getHeight()-52);
-		}
     },
 
     //选择实现
