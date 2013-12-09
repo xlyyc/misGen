@@ -38,11 +38,11 @@
                 var val = jQuery(this).val();
                 wof.customWindow.PageFormSelector._currAppId = val;
 
-                wof.customWindow.PageFormSelector._tree.setNodes(wof.customWindow.PageFormSelector.getPageFormsByAppId(wof.customWindow.PageFormSelector._currPageFormId));
+                wof.customWindow.PageFormSelector._tree.setNodes(wof.customWindow.PageFormSelector.getPageFormsByAppId(wof.customWindow.PageFormSelector._currAppId));
                 wof.customWindow.PageFormSelector._tree.render();
             });
 
-            wof.customWindow.PageFormSelector._tree.setNodes(wof.customWindow.PageFormSelector.getPageFormsByAppId(wof.customWindow.PageFormSelector._currPageFormId));
+            wof.customWindow.PageFormSelector._tree.setNodes(wof.customWindow.PageFormSelector.getPageFormsByAppId(wof.customWindow.PageFormSelector._currAppId));
             wof.customWindow.PageFormSelector._tree.render();
 
             var dialogDiv = jQuery('<div title="绑定页面"></div>');
@@ -94,44 +94,45 @@
         },
 
         getAppList: function(){
+            //var json = JSON.parse(getAppList());
             var json = [
                 {"id":"app1","label":"应用1"},
                 {"id":"app2","label":"应用2"},
                 {"id":"app3","label":"应用3"},
                 {"id":"app4","label":"应用4"}
             ];
+
+
             return json;
         },
 
-        getPageFormsByAppId : function(appId){
-           var json = {
-                "pageForms":[
-                    {"id":"id1","name":"name1","caption":"caption1","moduleCode":"code1"},
-                    {"id":"id2","name":"name2","caption":"caption2","moduleCode":"code2"},
-                    {"id":"id3","name":"name3","caption":"caption3","moduleCode":"code3"},
-                    {"id":"id4","name":"name4","caption":"caption4","moduleCode":"code5"},
-                    {"id":"id5","name":"name5","caption":"caption5","moduleCode":"code5"}
-                ],
-                "modules":[
-                    {"code":"code1","displayName":"模块1",parentId:""},
-                    {"code":"code2","displayName":"模块2",parentId:"code1"},
-                    {"code":"code3","displayName":"模块3",parentId:"code1"},
-                    {"code":"code4","displayName":"模块4",parentId:"code2"},
-                    {"code":"code5","displayName":"模块5",parentId:"code4"}
-                ]
-            };
+            getPageFormsByAppId : function(appId){
+                //var json =  JSON.parse(getPageFormsByAppId(appId));
+                var json = {
+                    "pageForms": [
+                        {"id": "JBXXLB","name": "JBXXLB","caption": "基本信息列表","functionId": "346708216040013824","moduleId": "344666175227445249"},
+                        {"id": "ZDCS","name": "ZDCS","caption": "字典测试","functionId": "346761353350234112","moduleId": "346761307212890112"},
+                        {"id": "XBZD","name": "XBZD","caption": "性别字典","functionId": "346761418231922688","moduleId": "346761307212890112"},
+                        {"id": "SHS","name": "SHS","caption": "三好生","functionId": "346761507163750400","moduleId": "344666175227445212"}
+                    ],
+                    "modules": [
+                        {"code": "XGXT_modules","displayName": "学工系统_模块","id": "344666175227445212","parentId": ""},
+                        {"code": "JBXXYM","displayName": "基本信息页面","id": "344666175227445249","parentId": "344666175227445212"},
+                        {"code": "ZDYM","displayName": "字典页面","id": "346761307212890112","parentId": "344666175227445249"}
+                    ]
+                };
 
             var tempPageFormTable = {};
             for(var i=0; i<json.pageForms.length; i++){
                 var page = json.pageForms[i];
-                if(tempPageFormTable[page.moduleCode]==null){
-                    tempPageFormTable[page.moduleCode] = [page];
+                if(tempPageFormTable[page.moduleId]==null){
+                    tempPageFormTable[page.moduleId] = [page];
                 }else{
-                    tempPageFormTable[page.moduleCode].push(page);
+                    tempPageFormTable[page.moduleId].push(page);
                 }
             }
-            function findPageFormByModuleCode(code){
-                return tempPageFormTable[code];
+            function findPageFormByModuleCode(id){
+                return tempPageFormTable[id];
             }
 
             var tempModuleTable = {};
@@ -152,13 +153,13 @@
                 if(modules!=null){
                     for(var i=0; i<modules.length; i++){
                         var mod = modules[i];
-                        var child = {"nodeId":mod.code, "name":mod.displayName,  "nocheck":true, "children":[]};
+                        var child = {"nodeId":mod.id, "name":mod.displayName,  "nocheck":true, "children":[]};
 
                         var pages = findPageFormByModuleCode(child.nodeId);
                         if(pages!=null){
                             for(var t=0;t<pages.length;t++){
                                 var page = pages[t];
-                                child.children.push({"nodeId": page.id, "name":page.caption, "nocheck":false, "nodeType":"pageForm", "children":[] });
+                                child.children.push({"nodeId": page.functionId, "name":page.caption, "nocheck":false, "nodeType":"pageForm", "children":[] });
                             }
                         }
 
@@ -171,7 +172,7 @@
                 }
             }
             var root = json.modules[0];
-            var moduData = {"nodeId": root.code, "name":root.displayName, "nocheck":true, "children":[] };
+            var moduData = {"nodeId": root.id, "name":root.displayName, "nocheck":true, "children":[] };
             moduleData(moduData);
             return moduData;
         }
