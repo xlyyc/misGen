@@ -228,7 +228,7 @@ wof.functionWidget.spanner.UpdateRecordComponentSpanner.prototype = {
             var paramMap2 = {};
             paramMap2.mapType = 'value';
             paramMap2.compParamName = 'formFunctionId';
-            paramMap2.compParamValue = node.getFormFunctionId();
+            paramMap2.compParamValue = node.getFormFunctionId().formFunctionId;
             paramMap2.pageParamName = '';
             paramMap2.changeExpt = '';
             paramMaps.push(paramMap2);

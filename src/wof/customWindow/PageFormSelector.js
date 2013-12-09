@@ -32,6 +32,7 @@
                 selData.value = wof.customWindow.PageFormSelector._currAppId;
             }else{
                 selData.value = defultAppId;
+                wof.customWindow.PageFormSelector._currAppId = defultAppId;
             }
             var appList = apps.apps;
 

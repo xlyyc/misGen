@@ -35,8 +35,6 @@ wof.functionWidget.ViewRecordComponent.prototype = {
 
     _paramMaps:null,
 
-    _gridName: null,
-
     _formFunctionId: null,
 
     _bindComponents: null,
@@ -64,14 +62,6 @@ wof.functionWidget.ViewRecordComponent.prototype = {
 
     setBindComponents : function (bindComponents){
         this._bindComponents = bindComponents;
-    },
-
-    getGridName : function (){
-        return this._gridName || '';
-    },
-
-    setGridName : function (gridName){
-        this._gridName = gridName;
     },
 
     getFormFunctionId : function (){
@@ -208,7 +198,6 @@ wof.functionWidget.ViewRecordComponent.prototype = {
         return {
             componentId: this.getComponentId(),
             bindComponents: this.getBindComponents(),
-            gridName: this.getGridName(),
             formFunctionId: this.getFormFunctionId(),
             paramMaps: this.getParamMaps(),
             callStr: this.getCallStr(),
@@ -224,7 +213,6 @@ wof.functionWidget.ViewRecordComponent.prototype = {
     setData: function (data) {
         this.setComponentId(data.componentId);
         this.setBindComponents(data.bindComponents);
-        this.setGridName(data.gridName);
         this.setFormFunctionId(data.formFunctionId);
         this.setParamMaps(data.paramMaps);
         this.setCallStr(data.callStr);
@@ -252,8 +240,8 @@ wof.functionWidget.ViewRecordComponent.prototype = {
 
     updateViewRecordComponent: function(data){
         if(!jQuery.isEmptyObject(data)){
-            if(data.gridName!=null){
-                this.setGridName(data.gridName);
+            if(data.bindComponents!=null){
+                this.setBindComponents(data.bindComponents);
             }
             if(data.formFunctionId!=null){
                 this.setFormFunctionId(data.formFunctionId);
