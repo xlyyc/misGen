@@ -5,7 +5,7 @@
 
         _tree:null,
 
-        _currPageFormId: null,
+        _currFormFunctionId: null,
 
 		run: function(hidden, customParam) {
             if(wof.customWindow.PageFormSelector._initFlag ==null){
@@ -24,11 +24,17 @@
             var selData = {"name":"appList","options":[]};
             var data = JSON.parse(decodeURIComponent(hidden.val()));
             wof.customWindow.PageFormSelector._currAppId = data.appId;
-            wof.customWindow.PageFormSelector._currPageFormId = data.pageFormId;
+            wof.customWindow.PageFormSelector._currFormFunctionId = data.formFunctionId;
 
-            selData.value = wof.customWindow.PageFormSelector._currAppId;
+            var apps = wof.customWindow.PageFormSelector.getAppList();
+            var defultAppId = apps.defultAppId;
+            if(wof.customWindow.PageFormSelector._currAppId!=null){
+                selData.value = wof.customWindow.PageFormSelector._currAppId;
+            }else{
+                selData.value = defultAppId;
+            }
+            var appList = apps.apps;
 
-            var appList = wof.customWindow.PageFormSelector.getAppList();
             for(var i=0;i<appList.length;i++){
                 var app = appList[i];
                 selData.options.push({"name":app.label,"value":app.id});
@@ -55,16 +61,16 @@
                 height:550,
                 modal: true,
                 open: function(event, ui){
-                    console.log('wof.customWindow.PageFormSelector._currPageFormId='+wof.customWindow.PageFormSelector._currPageFormId);
-                    wof.customWindow.PageFormSelector._tree.checkNodeByParam('nodeId',wof.customWindow.PageFormSelector._currPageFormId);
+                    console.log('wof.customWindow.PageFormSelector._currFormFunctionId='+wof.customWindow.PageFormSelector._currFormFunctionId);
+                    wof.customWindow.PageFormSelector._tree.checkNodeByParam('nodeId',wof.customWindow.PageFormSelector._currFormFunctionId);
                 },
                 buttons:{
                     '确定':function(){
                         var nodes = wof.customWindow.PageFormSelector._tree.getCheckedNodes();
                         if(nodes.length>0){
                             var node = nodes[0];
-                            wof.customWindow.PageFormSelector._currPageFormId = node.nodeId;
-                            hidden.val(encodeURIComponent(JSON.stringify({"appId":wof.customWindow.PageFormSelector._currAppId,"pageFormId":wof.customWindow.PageFormSelector._currPageFormId})));
+                            wof.customWindow.PageFormSelector._currFormFunctionId = node.nodeId;
+                            hidden.val(encodeURIComponent(JSON.stringify({"appId":wof.customWindow.PageFormSelector._currAppId,"formFunctionId":wof.customWindow.PageFormSelector._currFormFunctionId})));
                             jQuery(this).dialog('close');
                         }else{
                             alert('请选择一个属性');
@@ -95,13 +101,21 @@
 
         getAppList: function(){
             //var json = JSON.parse(getAppList());
-            var json = [
+            /*var json = [
                 {"id":"app1","label":"应用1"},
                 {"id":"app2","label":"应用2"},
                 {"id":"app3","label":"应用3"},
                 {"id":"app4","label":"应用4"}
-            ];
+            ];*/
 
+
+            var json = {
+                "defultAppId": "RSXT",
+                "apps": [
+                    {"id": "XGXT","label": "学工系统"},
+                    {"id": "RSXT","label": "人事系统"}
+                ]
+            };
 
             return json;
         },
