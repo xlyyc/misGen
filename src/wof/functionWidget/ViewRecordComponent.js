@@ -37,7 +37,7 @@ wof.functionWidget.ViewRecordComponent.prototype = {
 
     _gridName: null,
 
-    _formId: null,
+    _formFunctionId: null,
 
     _bindComponents: null,
 
@@ -74,12 +74,12 @@ wof.functionWidget.ViewRecordComponent.prototype = {
         this._gridName = gridName;
     },
 
-    getFormId : function (){
-        return this._formId || '';
+    getFormFunctionId : function (){
+        return this._formFunctionId || '';
     },
 
-    setFormId : function (formId){
-        this._formId = formId;
+    setFormFunctionId : function (formFunctionId){
+        this._formFunctionId = formFunctionId;
     },
 
     getParamMaps: function(){
@@ -209,7 +209,7 @@ wof.functionWidget.ViewRecordComponent.prototype = {
             componentId: this.getComponentId(),
             bindComponents: this.getBindComponents(),
             gridName: this.getGridName(),
-            formId: this.getFormId(),
+            formFunctionId: this.getFormFunctionId(),
             paramMaps: this.getParamMaps(),
             callStr: this.getCallStr(),
             commandItemID: this.getCommandItemID(),
@@ -225,7 +225,7 @@ wof.functionWidget.ViewRecordComponent.prototype = {
         this.setComponentId(data.componentId);
         this.setBindComponents(data.bindComponents);
         this.setGridName(data.gridName);
-        this.setFormId(data.formId);
+        this.setFormFunctionId(data.formFunctionId);
         this.setParamMaps(data.paramMaps);
         this.setCallStr(data.callStr);
         this.setCommandItemID(data.commandItemID);
@@ -255,8 +255,8 @@ wof.functionWidget.ViewRecordComponent.prototype = {
             if(data.gridName!=null){
                 this.setGridName(data.gridName);
             }
-            if(data.formId!=null){
-                this.setFormId(data.formId);
+            if(data.formFunctionId!=null){
+                this.setFormFunctionId(data.formFunctionId);
             }
             if(data.commandItemID!=null){
                 this.setCommandItemID(data.commandItemID);

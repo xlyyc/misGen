@@ -40,7 +40,7 @@ wof.functionWidget.UpdateRecordComponent.prototype = {
 
     _paramMaps:null,
 
-    _formId:null,
+    _formFunctionId:null,
 
     _componentId:null,
 
@@ -59,12 +59,12 @@ wof.functionWidget.UpdateRecordComponent.prototype = {
         this._componentId = componentId;
     },
 
-    getFormId : function (){
-        return this._formId || '';
+    getFormFunctionId : function (){
+        return this._formFunctionId || '';
     },
 
-    setFormId : function (formId){
-        this._formId = formId;
+    setFormFunctionId : function (formFunctionId){
+        this._formFunctionId = formFunctionId;
     },
 
     getParamMaps: function(){
@@ -201,7 +201,7 @@ wof.functionWidget.UpdateRecordComponent.prototype = {
         return {
             componentId: this.getComponentId(),
             paramMaps: this.getParamMaps(),
-            formId: this.getFormId(),
+            formFunctionId: this.getFormFunctionId(),
             bindComponents: this.getBindComponents(),
             callStr: this.getCallStr(),
             commandItemID: this.getCommandItemID(),
@@ -216,7 +216,7 @@ wof.functionWidget.UpdateRecordComponent.prototype = {
     setData: function (data) {
         this.setComponentId(data.componentId);
         this.setParamMaps(data.paramMaps);
-        this.setFormId(data.formId);
+        this.setFormFunctionId(data.formFunctionId);
         this.setBindComponents(data.bindComponents);
         this.setCallStr(data.callStr);
         this.setCommandItemID(data.commandItemID);
@@ -246,8 +246,8 @@ wof.functionWidget.UpdateRecordComponent.prototype = {
             if(data.bindComponents!=null){
                 this.setBindComponents(data.bindComponents);
             }
-            if(data.formId!=null){
-                this.setFormId(data.formId);
+            if(data.formFunctionId!=null){
+                this.setFormFunctionId(data.formFunctionId);
             }
             if(data.commandItemID!=null){
                 this.setCommandItemID(data.commandItemID);

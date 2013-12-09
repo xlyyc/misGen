@@ -42,7 +42,7 @@ wof.functionWidget.AddRecordComponent.prototype = {
 
     _paramMaps:null,
 
-    _formId:null,
+    _formFunctionId:null,
 
     _componentId:null,
 
@@ -61,12 +61,12 @@ wof.functionWidget.AddRecordComponent.prototype = {
         this._componentId = componentId;
     },
 
-    getFormId : function (){
-        return this._formId || '';
+    getFormFunctionId : function (){
+        return this._formFunctionId || '';
     },
 
-    setFormId : function (formId){
-        this._formId = formId;
+    setFormFunctionId : function (formFunctionId){
+        this._formFunctionId = formFunctionId;
     },
 
     getParamMaps: function(){
@@ -210,7 +210,7 @@ wof.functionWidget.AddRecordComponent.prototype = {
     getData: function () {
         return {
             componentId: this.getComponentId(),
-            formId: this.getFormId(),
+            formFunctionId: this.getFormFunctionId(),
             paramMaps: this.getParamMaps(),
             bindComponents: this.getBindComponents(),
             isAutoCommit: this.getIsAutoCommit(),
@@ -226,7 +226,7 @@ wof.functionWidget.AddRecordComponent.prototype = {
     //----------必须实现----------
     setData: function (data) {
         this.setComponentId(data.componentId);
-        this.setFormId(data.formId);
+        this.setFormFunctionId(data.formFunctionId);
         this.setParamMaps(data.paramMaps);
         this.setBindComponents(data.bindComponents);
         this.setIsAutoCommit(data.isAutoCommit);
@@ -258,8 +258,8 @@ wof.functionWidget.AddRecordComponent.prototype = {
             if(data.bindComponents!=null){
                 this.setBindComponents(data.bindComponents);
             }
-            if(data.formId!=null){
-                this.setFormId(data.formId);
+            if(data.formFunctionId!=null){
+                this.setFormFunctionId(data.formFunctionId);
             }
             if(data.commandItemID!=null){
                 this.setCommandItemID(data.commandItemID);

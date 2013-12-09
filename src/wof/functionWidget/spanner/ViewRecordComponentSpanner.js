@@ -19,7 +19,7 @@ wof.functionWidget.spanner.ViewRecordComponentSpanner = function () {
             'iSPermissionControl':{prop:'iSPermissionControl','name':'是否权限控制','type':'yesOrNo','readOnly':false,'isHide':false},
             'callItemCaption':{prop:'callItemCaption','name':'显示名称','type':'text','readOnly':false,'isHide':false},
             'gridName':{prop:'gridName','name':'绑定组件','type':'custom','readOnly':false,'isHide':false,required:false, customMethod:'wof.customWindow.ComponentTreeSelector', customParam:'gridComponent,voucherGridComponent'},
-            'formId':{prop:'formId','name':'绑定页面','type':'custom','readOnly':false,'isHide':false,required:false, customMethod:'wof.customWindow.PageFormSelector', customParam:''}
+            'formFunctionId':{prop:'formFunctionId','name':'绑定页面','type':'custom','readOnly':false,'isHide':false,required:false, customMethod:'wof.customWindow.PageFormSelector', customParam:''}
         }
     };
 
@@ -148,7 +148,7 @@ wof.functionWidget.spanner.ViewRecordComponentSpanner.prototype = {
             activeData.onSendMessage = this.getPropertys().onSendMessage;
 
             activeData.gridName = this.getPropertys().gridName;
-            activeData.formId = this.getPropertys().formId;
+            activeData.formFunctionId = this.getPropertys().formFunctionId;
             activeData.commandItemID = this.getPropertys().commandItemID;
             activeData.iSPermissionControl = this.getPropertys().iSPermissionControl;
             activeData.functionID = this.getPropertys().functionID;
@@ -201,7 +201,7 @@ wof.functionWidget.spanner.ViewRecordComponentSpanner.prototype = {
          <Return />
          <ParamMaps>
              <ParamMap MapType="value" CompParamName="gridName" CompParamValue="emGrid" PageParamName="" ChangeExpt=""></ParamMap>
-             <ParamMap MapType="value" CompParamName="formId" CompParamValue="emplyform" PageParamName="" ChangeExpt=""></ParamMap>
+             <ParamMap MapType="value" CompParamName="formFunctionId" CompParamValue="emplyform" PageParamName="" ChangeExpt=""></ParamMap>
          </ParamMaps>
          </CommandItem>
          */
@@ -227,8 +227,8 @@ wof.functionWidget.spanner.ViewRecordComponentSpanner.prototype = {
 
             var paramMap2 = {};
             paramMap2.mapType = 'value';
-            paramMap2.compParamName = 'formId';
-            paramMap2.compParamValue = node.getFormId();
+            paramMap2.compParamName = 'formFunctionId';
+            paramMap2.compParamValue = node.getFormFunctionId();
             paramMap2.pageParamName = '';
             paramMap2.changeExpt = '';
             paramMaps.push(paramMap2);
