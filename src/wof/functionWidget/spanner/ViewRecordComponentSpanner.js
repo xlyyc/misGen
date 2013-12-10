@@ -26,7 +26,7 @@ wof.functionWidget.spanner.ViewRecordComponentSpanner = function () {
     var onReceiveMessage = [];
     onReceiveMessage.push({id:'wof.bizWidget.Spanner_render',method:'var propertys=message.sender.propertys;if(propertys.className=="wof.functionWidget.ViewRecordComponent"){this.setPropertys(propertys);}else{this.setPropertys(null)}this.render();'});
     var method = 'var data=message.sender.propertys; '
-        +'if(data.id==this.getPropertys().id){ '
+        +'if(data.componentId==this.getPropertys().componentId){ '
         +' var node=wof.util.ObjectManager.get(data.id); '
         +' node.updateViewRecordComponent(data); '
         +' node.render();'
@@ -142,7 +142,7 @@ wof.functionWidget.spanner.ViewRecordComponentSpanner.prototype = {
         var activeData = {};
         var viewRecordComponent = wof.util.ObjectManager.get(this.getPropertys().id);
         if(viewRecordComponent!=null){
-            activeData.id = this.getPropertys().id;
+            activeData.componentId = this.getPropertys().componentId;
             activeData.className = this.getPropertys().className;
             activeData.onReceiveMessage = this.getPropertys().onReceiveMessage;
             activeData.onSendMessage = this.getPropertys().onSendMessage;

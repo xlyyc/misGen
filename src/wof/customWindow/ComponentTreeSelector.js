@@ -85,13 +85,13 @@
             json.push(searchComponents);
             function findComponent(d){
                 if(d.className=='wof.bizWidget.VoucherComponent'){
-                    voucherComponents.children.push({"nodeId": d.id, nodeType:'voucherComponent', "name": d.caption});
+                    voucherComponents.children.push({"nodeId": d.componentId, nodeType:'voucherComponent', "name": d.caption});
                 } else if(d.className=='wof.bizWidget.GridComponent'){
-                    gridComponents.children.push({"nodeId": d.id, nodeType:'gridComponent', "name": d.name});
+                    gridComponents.children.push({"nodeId": d.componentId, nodeType:'gridComponent', "name": d.name});
                 } else if(d.className=='wof.bizWidget.VoucherGridComponent'){
-                    voucherGridComponents.children.push({"nodeId": d.id, nodeType:'voucherGridComponent', "name": d.name});
+                    voucherGridComponents.children.push({"nodeId": d.componentId, nodeType:'voucherGridComponent', "name": d.name});
                 } else if(d.className=='wof.bizWidget.SearchComponent'){
-                    searchComponents.children.push({"nodeId": d.id, nodeType:'searchComponent', "name": d.caption});
+                    searchComponents.children.push({"nodeId": d.componentId, nodeType:'searchComponent', "name": d.caption});
                 }
                 var cds = d.childNodes;
                 for(var i=0; i<cds.length; i++){
