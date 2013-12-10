@@ -200,7 +200,7 @@ wof.functionWidget.spanner.UpdateRecordComponentSpanner.prototype = {
          </After>
          <Return />
          <ParamMaps>
-            <ParamMap MapType="value" CompParamName="gridName" CompParamValue="emGrid" PageParamName="" ChangeExpt=""></ParamMap>
+            <ParamMap MapType="value" CompParamName="bindComponents" CompParamValue="emGrid" PageParamName="" ChangeExpt=""></ParamMap>
             <ParamMap MapType="value" CompParamName="formFunctionId" CompParamValue="emplyform" PageParamName="" ChangeExpt=""></ParamMap>
          </ParamMaps>
          </CommandItem>

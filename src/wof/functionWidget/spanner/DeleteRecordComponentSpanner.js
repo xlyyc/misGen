@@ -198,7 +198,7 @@ wof.functionWidget.spanner.DeleteRecordComponentSpanner.prototype = {
              </After>
              <Return />
              <ParamMaps>
-                <ParamMap MapType="value" CompParamName="gridName" CompParamValue="emGrid" PageParamName="" ChangeExpt=""></ParamMap>
+                <ParamMap MapType="value" CompParamName="bindComponents" CompParamValue="emGrid" PageParamName="" ChangeExpt=""></ParamMap>
              </ParamMaps>
          </CommandItem>
          */
@@ -216,7 +216,7 @@ wof.functionWidget.spanner.DeleteRecordComponentSpanner.prototype = {
             var paramMaps = [];
             var paramMap = {};
             paramMap.mapType = 'value';
-            paramMap.compParamName = 'gridName';
+            paramMap.compParamName = 'bindComponents';
             paramMap.compParamValue = node.getBindComponents();
             paramMap.pageParamName = '';
             paramMap.changeExpt = '';
