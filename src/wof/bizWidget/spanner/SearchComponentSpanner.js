@@ -58,7 +58,7 @@ wof.bizWidget.spanner.SearchComponentSpanner = function () {
     var onReceiveMessage = [];
     onReceiveMessage.push({id:'wof.bizWidget.Spanner_render',method:'var propertys=message.sender.propertys;if(propertys.className=="wof.bizWidget.SearchComponent"){this.setPropertys(propertys);}else{this.setPropertys(null)}this.render();'});
     var method = 'var data=message.sender.propertys; '
-        +' if(data.componentId==this.getPropertys().componentId){ '
+        +'if(data.id==this.getPropertys().id){ '
         +' var searchComponent=wof.util.ObjectManager.get(data.id); '
         +' if(data.activeClass=="SearchComponent"){ '
         +'   searchComponent.updateSearchComponent(data); '
@@ -282,6 +282,7 @@ wof.bizWidget.spanner.SearchComponentSpanner.prototype = {
         var activeData = {};
         var searchComponent = wof.util.ObjectManager.get(this.getPropertys().id);
         if(searchComponent!=null){
+            activeData.id = this.getPropertys().id;
             activeData.componentId = this.getPropertys().componentId;
             activeData.className = this.getPropertys().className;
             activeData.onReceiveMessage = this.getPropertys().onReceiveMessage;

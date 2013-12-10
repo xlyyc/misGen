@@ -26,7 +26,7 @@ wof.functionWidget.spanner.CommitComponentSpanner = function () {
     var onReceiveMessage = [];
     onReceiveMessage.push({id:'wof.bizWidget.Spanner_render',method:'var propertys=message.sender.propertys;if(propertys.className=="wof.functionWidget.CommitComponent"){this.setPropertys(propertys);}else{this.setPropertys(null)}this.render();'});
     var method = 'var data=message.sender.propertys; '
-        +'if(data.componentId==this.getPropertys().componentId){ '
+        +'if(data.id==this.getPropertys().id){ '
         +' var node=wof.util.ObjectManager.get(data.id); '
         +' node.updateCommitComponent(data); '
         +' node.render();'
@@ -142,6 +142,7 @@ wof.functionWidget.spanner.CommitComponentSpanner.prototype = {
         var activeData = {};
         var commitComponent = wof.util.ObjectManager.get(this.getPropertys().id);
         if(commitComponent!=null){
+            activeData.id = this.getPropertys().id;
             activeData.componentId = this.getPropertys().componentId;
             activeData.className = this.getPropertys().className;
             activeData.onReceiveMessage = this.getPropertys().onReceiveMessage;
