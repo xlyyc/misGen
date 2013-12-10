@@ -62,7 +62,7 @@ wof.functionWidget.AddRecordComponent.prototype = {
     },
 
     getFormFunctionId : function (){
-        return this._formFunctionId || '';
+        return this._formFunctionId || {};
     },
 
     setFormFunctionId : function (formFunctionId){
