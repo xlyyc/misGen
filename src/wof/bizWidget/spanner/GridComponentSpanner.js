@@ -97,7 +97,7 @@ wof.bizWidget.spanner.GridComponentSpanner = function () {
     var onReceiveMessage = [];
     onReceiveMessage.push({id:'wof.bizWidget.Spanner_render',method:'var propertys=message.sender.propertys;if(propertys.className=="wof.bizWidget.GridComponent"){this.setPropertys(propertys);}else{this.setPropertys(null)}this.render();'});
     var method = 'var data=message.sender.propertys; '
-        +' if(data.id==this.getPropertys().id){ '
+        +' if(data.componentId==this.getPropertys().componentId){ '
         +'    var gridComponent=wof.util.ObjectManager.get(data.id); '
         +'    if(data.activeClass=="GridComponent"){ '
         +'      gridComponent.updateGridComponent(data); '
@@ -298,7 +298,7 @@ wof.bizWidget.spanner.GridComponentSpanner.prototype = {
         var activeData = {};
         var gridComponent = wof.util.ObjectManager.get(this.getPropertys().id);
         if(gridComponent!=null){
-            activeData.id = this.getPropertys().id;
+            activeData.componentId = this.getPropertys().componentId;
             activeData.className = this.getPropertys().className;
             activeData.onReceiveMessage = this.getPropertys().onReceiveMessage;
             activeData.onSendMessage = this.getPropertys().onSendMessage;

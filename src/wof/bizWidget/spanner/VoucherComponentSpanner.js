@@ -79,7 +79,7 @@ wof.bizWidget.spanner.VoucherComponentSpanner = function () {
     var onReceiveMessage = [];
     onReceiveMessage.push({id:'wof.bizWidget.Spanner_render',method:'var propertys=message.sender.propertys;if(propertys.className=="wof.bizWidget.VoucherComponent"){this.setPropertys(propertys);}else{this.setPropertys(null)}this.render();'});
     var method = 'var data=message.sender.propertys; '
-        +' if(data.id==this.getPropertys().id){ '
+        +' if(data.componentId==this.getPropertys().componentId){ '
         +' var voucherComponent=wof.util.ObjectManager.get(data.id); '
         +' if(data.activeClass=="VoucherItemGroup"){ '
         +'   voucherComponent.updateVoucherItemGroup(data); '
@@ -400,7 +400,7 @@ wof.bizWidget.spanner.VoucherComponentSpanner.prototype = {
         var activeData = {};
         var voucherComponent = wof.util.ObjectManager.get(this.getPropertys().id);
         if(voucherComponent!=null){
-            activeData.id = this.getPropertys().id;
+            activeData.id = this.getPropertys().componentId;
             activeData.className = this.getPropertys().className;
             activeData.onReceiveMessage = this.getPropertys().onReceiveMessage;
             activeData.onSendMessage = this.getPropertys().onSendMessage;
