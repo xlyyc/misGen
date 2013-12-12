@@ -118,6 +118,8 @@ wof.bizWidget.spanner.VoucherComponentSpanner = function () {
     this._deleteVoucherItemIco = jQuery('<img style="position:absolute;width:16px;height:16px;z-index:90;" src="src/img/deleteVoucherItem.png">');
     this._lockVoucherItemIco = jQuery('<img style="position:absolute;width:16px;height:16px;z-index:90;" src="src/img/lock.png">');
     this._unlockVoucherItemIco = jQuery('<img style="position:absolute;width:16px;height:16px;z-index:90;" src="src/img/unlock.png">');
+
+    this._highlightBorder = jQuery('<div style="position: absolute;top:0px;left:0px;border:1px solid #FF0033">');
 };
 wof.bizWidget.spanner.VoucherComponentSpanner.prototype = {
     /**
@@ -131,6 +133,8 @@ wof.bizWidget.spanner.VoucherComponentSpanner.prototype = {
     _propertys: null,
 
     _activeData: null,
+
+    _highlightBorder: null,
 
     _mergeVoucherItemArrow:null,
 
@@ -208,6 +212,8 @@ wof.bizWidget.spanner.VoucherComponentSpanner.prototype = {
         this._deleteVoucherItemIco.remove();
         this._lockVoucherItemIco.remove();
         this._unlockVoucherItemIco.remove();
+
+        this._highlightBorder.remove();
 
         var _this = this;
         this._selectVoucherComponentIco.mousedown(function(event){
@@ -443,6 +449,10 @@ wof.bizWidget.spanner.VoucherComponentSpanner.prototype = {
                         this._addVoucherItemRowspanArrow.css('top',activeVoucherItem.getHeight()*activeVoucherItem.getScale()-this._addVoucherItemRowspanArrow.height()-2).css('left',activeVoucherItem.getWidth()*activeVoucherItem.getScale()/2-this._addVoucherItemRowspanArrow.width()/2);
                         activeVoucherItem.getDomInstance().append(this._addVoucherItemRowspanArrow);
                     }
+
+                /*    this._highlightBorder.css('height',(activeVoucherItem.getHeight()-6)+'px').css('width',(activeVoucherItem.getWidth()-6)+'px');
+                    activeVoucherItem.getDomInstance().append(this._highlightBorder);*/
+
                     activeData.activeClass = 'VoucherItem';
                     activeData.rowNum = activeVoucherItem.getRowNum();
                     activeData.colNum = activeVoucherItem.getColNum();
@@ -479,6 +489,9 @@ wof.bizWidget.spanner.VoucherComponentSpanner.prototype = {
                     activeData.mustInOrder = activeVoucherItemGroup.getMustInOrder();
                     activeData.isHead = activeVoucherItemGroup.getIsHead();
                     activeData.index = activeVoucherItemGroup.getIndex();
+
+/*                    this._highlightBorder.css('height',(activeVoucherItemGroup.getHeight()-2)+'px').css('width',(activeVoucherItemGroup.getWidth()-2)+'px');
+                    activeVoucherItemGroup.getDomInstance().append(this._highlightBorder);*/
                 }
                 //当前激活VoucherItemGroup加入上移 下移 插入 删除操作句柄
                 if(activeVoucherItemGroupIndex>1){
@@ -493,6 +506,7 @@ wof.bizWidget.spanner.VoucherComponentSpanner.prototype = {
                     this._downVoucherItemGroupIco.css('top',5).css('left',activeVoucherItemGroup.getWidth()*activeVoucherItemGroup.getScale()-this._downVoucherItemGroupIco.width()-4);
                     activeVoucherItemGroup.getDomInstance().append(this._downVoucherItemGroupIco);
                 }
+
             }else{
                 activeData.activeClass = 'VoucherComponent';
                 activeData.bindEntityID = voucherComponent.getBindEntityID();
