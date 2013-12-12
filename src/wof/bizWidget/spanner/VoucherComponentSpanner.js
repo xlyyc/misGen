@@ -79,24 +79,8 @@ wof.bizWidget.spanner.VoucherComponentSpanner = function () {
     };
 
     var onReceiveMessage = [];
-    onReceiveMessage.push({id:'wof.bizWidget.Spanner_render',method:'var propertys=message.sender.propertys;if(propertys.className=="wof.bizWidget.VoucherComponent"){this.setPropertys(propertys);}else{this.setPropertys(null)}this.render();'});
-    var method = 'var data=message.sender.propertys; '
-        +'if(data.id==this.getPropertys().id){ '
-        +' var voucherComponent=wof.util.ObjectManager.get(data.id); '
-        +' if(data.activeClass=="VoucherItemGroup"){ '
-        +'   voucherComponent.updateVoucherItemGroup(data); '
-        +'   voucherComponent.render(); '
-        +'   voucherComponent.sendMessage("wof.bizWidget.VoucherComponent_active");'
-        +' }else if(data.activeClass=="VoucherItem"){ '
-        +'     voucherComponent.updateVoucherItem(data); '
-        +'     voucherComponent.render(); '
-        +'     voucherComponent.sendMessage("wof.bizWidget.VoucherComponent_active");'
-        +'   }else if(data.activeClass=="VoucherComponent"){ '
-        +'       voucherComponent.updateVoucherComponent(data); '
-        +'       voucherComponent.render();'
-        +'       voucherComponent.sendMessage("wof.bizWidget.VoucherComponent_active");'
-        +'    } '
-        +'}';
+    onReceiveMessage.push({id:'wof.bizWidget.Spanner_render',method:'this._processAndSendData(message.sender.propertys);'});
+    var method = 'this._receiveAndProcessData(message.sender.propertys);';
     onReceiveMessage.push({id:'wof.bizWidget.PropertyBar_apply',method:method});
     onReceiveMessage.push({id:'wof.bizWidget.OnSendMessageBar_apply',method:method});
     onReceiveMessage.push({id:'wof.bizWidget.OnReceiveMessageBar_apply',method:method});
@@ -561,6 +545,37 @@ wof.bizWidget.spanner.VoucherComponentSpanner.prototype = {
     setData:function(data){
         this.setPropertys(data.propertys);
         this.setActiveData(data.activeData);
+    },
+
+
+    //加工并发送数据
+    _processAndSendData:function(data){
+        if(data.className=="wof.bizWidget.VoucherComponent"){
+            this.setPropertys(data);
+        }else{
+            this.setPropertys(null)
+        }
+        this.render();
+    },
+
+    //接收并处理数据
+    _receiveAndProcessData:function(data){
+        if(data.id==this.getPropertys().id){
+            var voucherComponent=wof.util.ObjectManager.get(data.id);
+            if(data.activeClass=="VoucherItemGroup"){
+                voucherComponent.updateVoucherItemGroup(data);
+                voucherComponent.render();
+                voucherComponent.sendMessage("wof.bizWidget.VoucherComponent_active");
+            }else if(data.activeClass=="VoucherItem"){
+                voucherComponent.updateVoucherItem(data);
+                voucherComponent.render();
+                voucherComponent.sendMessage("wof.bizWidget.VoucherComponent_active");
+            }else if(data.activeClass=="VoucherComponent"){
+                voucherComponent.updateVoucherComponent(data);
+                voucherComponent.render();
+                voucherComponent.sendMessage("wof.bizWidget.VoucherComponent_active");
+            }
+        }
     },
 
     //静态方法 导出数据(只有需要给运行时解析的叶子节点才需要定义此方法)
