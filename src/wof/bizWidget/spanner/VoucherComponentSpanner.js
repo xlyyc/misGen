@@ -43,7 +43,9 @@ wof.bizWidget.spanner.VoucherComponentSpanner = function () {
             'visiable':{prop:'visiable','name':'表单项是否显示','type':'yesOrNo','readOnly':false,'isHide':false,required:false},
             'itemLabel':{prop:'itemLabel','name':'显示名称','type':'text','readOnly':false,'isHide':false,required:false},
             'dataField':{prop:'dataField','name':'绑定实体属性','type':'custom','readOnly':false,'isHide':false,required:false, customMethod:'wof.customWindow.MetaTreeSelector', customParam:'field'},
-            'dateTimeBoxFormat':{prop:'dateTimeBoxFormat','name':'时间格式','type':'enum','readOnly':false,'isHide':false,enumData:{'YYYY-MM-DD hh:mm:ss':'YYYY-MM-DD hh:mm:ss','YYYY-MM':'YYYY-MM','MM-DD':'MM-DD','YYYY-MM-DD':'YYYY-MM-DD','hh:mm:ss':'hh:mm:ss','hh:mm':'hh:mm'},required:false},
+            'dateTimeBoxFormat':{prop:'dateTimeBoxFormat','name':'时间格式','type':'enum','readOnly':false,'isHide':false,enumData:{
+                'yyyy-MM-dd HH:mm:ss':'yyyy-MM-dd HH:mm:ss','yyyy-MM':'yyyy-MM','MM-dd':'MM-dd','yyyy-MM-dd':'yyyy-MM-dd','HH:mm:ss':'HH:mm:ss','HH:mm':'HH:mm'
+            },required:false},
             'readOnly':{prop:'readOnly','name':'是否只读','type':'yesOrNo','yesOrNo':false,'isHide':false,required:false},
             'required':{prop:'required','name':'是否必填','type':'yesOrNo','yesOrNo':false,'isHide':false,required:false},
             'length':{prop:'length','name':'字符长度','type':'naturalNumber','readOnly':false,'isHide':false,required:false},
