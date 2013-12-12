@@ -280,11 +280,14 @@ wof.bizWidget.SearchComponent.prototype = {
     //----------必须实现----------
     render: function () {
 
+
+
     },
 
     //选择实现
     afterRender: function () {
         this._resetStyle();
+        this.sendMessage('wof.bizWidget.SearchComponent_render');
 
     },
 

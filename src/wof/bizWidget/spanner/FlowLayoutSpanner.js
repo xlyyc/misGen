@@ -40,30 +40,14 @@ wof.bizWidget.spanner.FlowLayoutSpanner = function () {
         }
     };
 
-
     var onReceiveMessage = [];
-    onReceiveMessage.push({id:'wof.bizWidget.Spanner_render',method:'var propertys=message.sender.propertys;if(propertys.className=="wof.bizWidget.FlowLayout"){this.setPropertys(propertys);}else{this.setPropertys(null)}this.render();'});
-    var method = 'var data=message.sender.propertys; '
-        +' if(data.id==this.getPropertys().id){ '
-        +' var flowLayout=wof.util.ObjectManager.get(data.id); '
-        +' if(data.activeClass=="FlowLayoutSection"){ '
-        +'   flowLayout.updateSection(data); '
-        +'   flowLayout.render(); '
-        +'   flowLayout.sendMessage("wof.bizWidget.FlowLayout_active");'
-        +' }else if(data.activeClass=="FlowLayoutItem"){ '
-        +'     flowLayout.updateItem(data); '
-        +'     flowLayout.render(); '
-        +'     flowLayout.sendMessage("wof.bizWidget.FlowLayout_active");'
-        +'   }else if(data.activeClass=="FlowLayout"){ '
-        +'       flowLayout.updateFlowLayout(data); '
-        +'       flowLayout.render();'
-        +'       flowLayout.sendMessage("wof.bizWidget.FlowLayout_active");'
-        +'    } '
-        +'}';
+    onReceiveMessage.push({id:'wof.bizWidget.Spanner_render',method:'this._processAndSendData(message.sender.propertys);'});
+    var method = 'this._receiveAndProcessData(message.sender.propertys);';
     onReceiveMessage.push({id:'wof.bizWidget.PropertyBar_apply',method:method});
     onReceiveMessage.push({id:'wof.bizWidget.OnSendMessageBar_apply',method:method});
     onReceiveMessage.push({id:'wof.bizWidget.OnReceiveMessageBar_apply',method:method});
     this.setOnReceiveMessage(onReceiveMessage);
+
 
     this._selectFlowLayoutIco = jQuery('<img style="position:absolute;width:16px;height:16px;z-index:90;" src="src/img/selectFlowLayout.png">');
     this._deleteFlowLayoutIco = jQuery('<img style="position:absolute;width:16px;height:16px;z-index:90;" src="src/img/deleteFlowLayout.png">');
@@ -592,6 +576,36 @@ wof.bizWidget.spanner.FlowLayoutSpanner.prototype = {
         this.setPropertys(data.propertys);
         this.setActiveData(data.activeData);
 
+    },
+
+    //加工并发送数据
+    _processAndSendData:function(data){
+        if(data.className=="wof.bizWidget.FlowLayout"){
+            this.setPropertys(data);
+        }else{
+            this.setPropertys(null);
+        }
+        this.render();
+    },
+
+    //接收并处理数据
+    _receiveAndProcessData:function(data){
+        if(data.id==this.getPropertys().id){
+            var flowLayout=wof.util.ObjectManager.get(data.id);
+            if(data.activeClass=="FlowLayoutSection"){
+                flowLayout.updateSection(data);
+                flowLayout.render();
+                flowLayout.sendMessage("wof.bizWidget.FlowLayout_active");
+            }else if(data.activeClass=="FlowLayoutItem"){
+                flowLayout.updateItem(data);
+                flowLayout.render();
+                flowLayout.sendMessage("wof.bizWidget.FlowLayout_active");
+            }else if(data.activeClass=="FlowLayout"){
+                flowLayout.updateFlowLayout(data);
+                flowLayout.render();
+                flowLayout.sendMessage("wof.bizWidget.FlowLayout_active");
+            }
+        }
     }
 
 };

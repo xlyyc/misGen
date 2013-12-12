@@ -20,13 +20,8 @@ wof.bizWidget.spanner.PageComponentSpanner = function () {
     };
 
     var onReceiveMessage = [];
-    onReceiveMessage.push({id:'wof.bizWidget.Spanner_render',method:'var propertys=message.sender.propertys;if(propertys.className=="wof.bizWidget.PageComponent"){this.setPropertys(propertys);}else{this.setPropertys(null)}this.render();'});
-    var method = 'var data=message.sender.propertys; '
-        +'if(data.id==this.getPropertys().id){ '
-        +' var node=wof.util.ObjectManager.get(data.id); '
-        +' node.setData(data); '
-        +' node.render();'
-        +'}';
+    onReceiveMessage.push({id:'wof.bizWidget.Spanner_render',method:'this._processAndSendData(message.sender.propertys);'});
+    var method = 'this._receiveAndProcessData(message.sender.propertys);';
     onReceiveMessage.push({id:'wof.bizWidget.PropertyBar_apply',method:method});
     onReceiveMessage.push({id:'wof.bizWidget.OnSendMessageBar_apply',method:method});
     onReceiveMessage.push({id:'wof.bizWidget.OnReceiveMessageBar_apply',method:method});
@@ -173,6 +168,26 @@ wof.bizWidget.spanner.PageComponentSpanner.prototype = {
     setData:function(data){
         this.setPropertys(data.propertys);
         this.setActiveData(data.activeData);
+    },
+
+    //加工并发送数据
+    _processAndSendData:function(data){
+        if(data.className=="wof.bizWidget.PageComponent"){
+            this.setPropertys(data);
+        }else{
+            this.setPropertys(null);
+        }
+        this.render();
+    },
+
+    //接收并处理数据
+    _receiveAndProcessData:function(data){
+        if(data.id==this.getPropertys().id){
+            var pageComponent=wof.util.ObjectManager.get(data.id);
+            pageComponent.setData(data);
+            pageComponent.render();
+        }
     }
+
 
 };

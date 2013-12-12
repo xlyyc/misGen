@@ -95,20 +95,8 @@ wof.bizWidget.spanner.VoucherGridComponentSpanner = function () {
     };
 
     var onReceiveMessage = [];
-    onReceiveMessage.push({id:'wof.bizWidget.Spanner_render',method:'var propertys=message.sender.propertys;if(propertys.className=="wof.bizWidget.VoucherGridComponent"){this.setPropertys(propertys);}else{this.setPropertys(null)}this.render();'});
-    var method = 'var data=message.sender.propertys; '
-        +'if(data.id==this.getPropertys().id){ '
-        +'    var voucherGridComponent=wof.util.ObjectManager.get(data.id); '
-        +'    if(data.activeClass=="VoucherGridComponent"){ '
-        +'      voucherGridComponent.updateVoucherGridComponent(data); '
-        +'      voucherGridComponent.render(); '
-        +'      voucherGridComponent.sendMessage("wof.bizWidget.VoucherGridComponent_active"); '
-        +'    }else if(data.activeClass=="VoucherGridComponentColumn"){ '
-        +'      voucherGridComponent.updateVoucherGridComponentColumn(data); '
-        +'      voucherGridComponent.render(); '
-        +'      voucherGridComponent.sendMessage("wof.bizWidget.VoucherGridComponent_active"); '
-        +'    } '
-        +' } ';
+    onReceiveMessage.push({id:'wof.bizWidget.Spanner_render',method:'this._processAndSendData(message.sender.propertys);'});
+    var method = 'this._receiveAndProcessData(message.sender.propertys);';
     onReceiveMessage.push({id:'wof.bizWidget.PropertyBar_apply',method:method});
     onReceiveMessage.push({id:'wof.bizWidget.OnSendMessageBar_apply',method:method});
     onReceiveMessage.push({id:'wof.bizWidget.OnReceiveMessageBar_apply',method:method});
@@ -479,6 +467,33 @@ wof.bizWidget.spanner.VoucherGridComponentSpanner.prototype = {
             json.columns = columns;
         }
         return json;
+    },
+
+    //加工并发送数据
+    _processAndSendData:function(data){
+        if(data.className=="wof.bizWidget.VoucherGridComponent"){
+            this.setPropertys(data);
+        }else{
+            this.setPropertys(null);
+        }
+        this.render();
+    },
+
+    //接收并处理数据
+    _receiveAndProcessData:function(data){
+        if(data.id==this.getPropertys().id){
+            var voucherGridComponent=wof.util.ObjectManager.get(data.id);
+            if(data.activeClass=="VoucherGridComponent"){
+                voucherGridComponent.updateVoucherGridComponent(data);
+                voucherGridComponent.render();
+                voucherGridComponent.sendMessage("wof.bizWidget.VoucherGridComponent_active");
+            }else if(data.activeClass=="VoucherGridComponentColumn"){
+                voucherGridComponent.updateVoucherGridComponentColumn(data);
+                voucherGridComponent.render();
+                voucherGridComponent.sendMessage("wof.bizWidget.VoucherGridComponent_active");
+            }
+        }
     }
+
 
 };

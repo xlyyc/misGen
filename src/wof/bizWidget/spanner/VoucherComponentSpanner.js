@@ -553,7 +553,7 @@ wof.bizWidget.spanner.VoucherComponentSpanner.prototype = {
         if(data.className=="wof.bizWidget.VoucherComponent"){
             this.setPropertys(data);
         }else{
-            this.setPropertys(null)
+            this.setPropertys(null);
         }
         this.render();
     },

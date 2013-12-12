@@ -95,20 +95,8 @@ wof.bizWidget.spanner.GridComponentSpanner = function () {
     };
 
     var onReceiveMessage = [];
-    onReceiveMessage.push({id:'wof.bizWidget.Spanner_render',method:'var propertys=message.sender.propertys;if(propertys.className=="wof.bizWidget.GridComponent"){this.setPropertys(propertys);}else{this.setPropertys(null)}this.render();'});
-    var method = 'var data=message.sender.propertys; '
-        +'if(data.id==this.getPropertys().id){ '
-        +'    var gridComponent=wof.util.ObjectManager.get(data.id); '
-        +'    if(data.activeClass=="GridComponent"){ '
-        +'      gridComponent.updateGridComponent(data); '
-        +'      gridComponent.render(); '
-        +'      gridComponent.sendMessage("wof.bizWidget.GridComponent_active"); '
-        +'    }else if(data.activeClass=="GridComponentColumn"){ '
-        +'      gridComponent.updateGridComponentColumn(data); '
-        +'      gridComponent.render(); '
-        +'      gridComponent.sendMessage("wof.bizWidget.GridComponent_active"); '
-        +'    } '
-        +' } ';
+    onReceiveMessage.push({id:'wof.bizWidget.Spanner_render',method:'this._processAndSendData(message.sender.propertys);'});
+    var method = 'this._receiveAndProcessData(message.sender.propertys);';
     onReceiveMessage.push({id:'wof.bizWidget.PropertyBar_apply',method:method});
     onReceiveMessage.push({id:'wof.bizWidget.OnSendMessageBar_apply',method:method});
     onReceiveMessage.push({id:'wof.bizWidget.OnReceiveMessageBar_apply',method:method});
@@ -496,6 +484,33 @@ wof.bizWidget.spanner.GridComponentSpanner.prototype = {
             json.columns = columns;
         }
         return json;
+    },
+
+    //加工并发送数据
+    _processAndSendData:function(data){
+        if(data.className=="wof.bizWidget.GridComponent"){
+            this.setPropertys(data);
+        }else{
+            this.setPropertys(null);
+        }
+        this.render();
+    },
+
+    //接收并处理数据
+    _receiveAndProcessData:function(data){
+        if(data.id==this.getPropertys().id){
+            var gridComponent=wof.util.ObjectManager.get(data.id);
+            if(data.activeClass=="GridComponent"){
+                gridComponent.updateGridComponent(data);
+                gridComponent.render();
+                gridComponent.sendMessage("wof.bizWidget.GridComponent_active");
+            }else if(data.activeClass=="GridComponentColumn"){
+                gridComponent.updateGridComponentColumn(data);
+                gridComponent.render();
+                gridComponent.sendMessage("wof.bizWidget.GridComponent_active");
+            }
+        }
     }
+
 
 };
