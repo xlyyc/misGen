@@ -581,6 +581,8 @@ wof.bizWidget.spanner.FlowLayoutSpanner.prototype = {
     //加工并发送数据
     _processAndSendData:function(data){
         if(data.className=="wof.bizWidget.FlowLayout"){
+            //todo 加工data
+            console.log('_processAndSendData:'+JSON.stringify(data));
             this.setPropertys(data);
         }else{
             this.setPropertys(null);
@@ -590,6 +592,8 @@ wof.bizWidget.spanner.FlowLayoutSpanner.prototype = {
 
     //接收并处理数据
     _receiveAndProcessData:function(data){
+        //todo 处理数据
+        console.log('_receiveAndProcessData:'+JSON.stringify(data));
         if(data.id==this.getPropertys().id){
             var flowLayout=wof.util.ObjectManager.get(data.id);
             if(data.activeClass=="FlowLayoutSection"){
