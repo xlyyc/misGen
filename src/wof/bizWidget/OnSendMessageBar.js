@@ -90,7 +90,6 @@ wof.bizWidget.OnSendMessageBar.prototype={
 	render: function(){
         var sendMessages = this.getSendMessages();
 		if(!jQuery.isEmptyObject(sendMessages)){
-            var onSendMessage = this.getPropertys().onSendMessage;
             var trs = [];
             for(var name in sendMessages){
                 var label = sendMessages[name];
