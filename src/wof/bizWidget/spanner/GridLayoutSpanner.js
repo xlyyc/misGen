@@ -127,6 +127,8 @@ wof.bizWidget.spanner.GridLayoutSpanner.prototype = {
         if(propertys.className=="wof.bizWidget.GridLayout"){
             var parameters = propertys;
             this.setParameters(parameters);
+            //todo 需要移除
+            this.setPropertys(parameters);
         }else{
             this.setParameters(null);
         }

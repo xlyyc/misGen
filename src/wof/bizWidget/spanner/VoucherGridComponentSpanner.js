@@ -490,6 +490,8 @@ wof.bizWidget.spanner.VoucherGridComponentSpanner.prototype = {
         if(propertys.className=="wof.bizWidget.VoucherGridComponent"){
             var parameters = propertys;
             this.setParameters(parameters);
+            //todo 需要移除
+            this.setPropertys(parameters);
         }else{
             this.setParameters(null);
         }

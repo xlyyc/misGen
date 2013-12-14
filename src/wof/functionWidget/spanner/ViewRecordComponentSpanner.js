@@ -23,18 +23,15 @@ wof.functionWidget.spanner.ViewRecordComponentSpanner = function () {
         }
     };
 
+
     var onReceiveMessage = [];
-    onReceiveMessage.push({id:'wof.bizWidget.Spanner_render',method:'var propertys=message.sender.propertys;if(propertys.className=="wof.functionWidget.ViewRecordComponent"){this.setPropertys(propertys);}else{this.setPropertys(null)}this.render();'});
-    var method = 'var data=message.sender.propertys; '
-        +'if(data.id==this.getPropertys().id){ '
-        +' var node=wof.util.ObjectManager.get(data.id); '
-        +' node.updateViewRecordComponent(data); '
-        +' node.render();'
-        +'}';
+    onReceiveMessage.push({id:'wof.bizWidget.Spanner_render',method:'this._processAndSendParameters(message.sender.propertys);'});
+    var method = 'this._receiveAndProcessParameters(message.sender.propertys);';
     onReceiveMessage.push({id:'wof.bizWidget.PropertyBar_apply',method:method});
     onReceiveMessage.push({id:'wof.bizWidget.OnSendMessageBar_apply',method:method});
     onReceiveMessage.push({id:'wof.bizWidget.OnReceiveMessageBar_apply',method:method});
     this.setOnReceiveMessage(onReceiveMessage);
+
 
     this._selectObjectIco = jQuery('<img style="position:absolute;width:16px;height:16px;z-index:90;" src="src/img/selectObject.png">');
     this._deleteObjectIco = jQuery('<img style="position:absolute;width:16px;height:16px;z-index:90;" src="src/img/deleteObject.png">');
@@ -48,6 +45,8 @@ wof.functionWidget.spanner.ViewRecordComponentSpanner.prototype = {
 
     //属性
     _meta: null,  //构件元数据   定义了构件的名称、类路径、对外暴露的属性和消息
+
+    _parameters:null,
 
     _propertys: null,
 
@@ -251,6 +250,35 @@ wof.functionWidget.spanner.ViewRecordComponentSpanner.prototype = {
         }
         console.log(JSON.stringify(json));
         return json;
+    },
+
+
+
+    //加工并发送数据
+    _processAndSendParameters:function(propertys){
+        if(propertys.className=="wof.functionWidget.ViewRecordComponent"){
+            console.log('_processAndSendParameters:'+JSON.stringify(propertys));
+            var parameters = propertys;
+            this.setParameters(parameters);
+            //todo 需要移除
+            this.setPropertys(parameters);
+        }else{
+            this.setParameters(null);
+        }
+        this.render();
+    },
+
+    //接收并处理数据
+    _receiveAndProcessParameters:function(parameters){
+        //todo 处理数据
+        var propertys = parameters;
+        console.log('_receiveAndProcessParameters:'+JSON.stringify(propertys));
+        if(propertys.id==this.getPropertys().id){
+            var node=wof.util.ObjectManager.get(propertys.id);
+            node.updateViewRecordComponent(propertys);
+            node.render();
+        }
     }
+
 
 };

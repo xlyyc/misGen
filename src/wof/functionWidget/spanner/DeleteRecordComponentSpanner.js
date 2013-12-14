@@ -22,14 +22,11 @@ wof.functionWidget.spanner.DeleteRecordComponentSpanner = function () {
         }
     };
 
+
+
     var onReceiveMessage = [];
-    onReceiveMessage.push({id:'wof.bizWidget.Spanner_render',method:'var propertys=message.sender.propertys;if(propertys.className=="wof.functionWidget.DeleteRecordComponent"){this.setPropertys(propertys);}else{this.setPropertys(null)}this.render();'});
-    var method = 'var data=message.sender.propertys; '
-        +'if(data.id==this.getPropertys().id){ '
-        +' var node=wof.util.ObjectManager.get(data.id); '
-        +' node.updateDeleteRecordComponent(data); '
-        +' node.render();'
-        +'}';
+    onReceiveMessage.push({id:'wof.bizWidget.Spanner_render',method:'this._processAndSendParameters(message.sender.propertys);'});
+    var method = 'this._receiveAndProcessParameters(message.sender.propertys);';
     onReceiveMessage.push({id:'wof.bizWidget.PropertyBar_apply',method:method});
     onReceiveMessage.push({id:'wof.bizWidget.OnSendMessageBar_apply',method:method});
     onReceiveMessage.push({id:'wof.bizWidget.OnReceiveMessageBar_apply',method:method});
@@ -241,6 +238,34 @@ wof.functionWidget.spanner.DeleteRecordComponentSpanner.prototype = {
             json.paramMaps = paramMaps;
         }
         return json;
+    },
+
+
+    //加工并发送数据
+    _processAndSendParameters:function(propertys){
+        if(propertys.className=="wof.functionWidget.DeleteRecordComponent"){
+            console.log('_processAndSendParameters:'+JSON.stringify(propertys));
+            var parameters = propertys;
+            this.setParameters(parameters);
+            //todo 需要移除
+            this.setPropertys(parameters);
+        }else{
+            this.setParameters(null);
+        }
+        this.render();
+    },
+
+    //接收并处理数据
+    _receiveAndProcessParameters:function(parameters){
+        //todo 处理数据
+        var propertys = parameters;
+        console.log('_receiveAndProcessParameters:'+JSON.stringify(propertys));
+        if(propertys.id==this.getPropertys().id){
+            var node=wof.util.ObjectManager.get(propertys.id);
+            node.updateDeleteRecordComponent(propertys);
+            node.render();
+        }
     }
+
 
 };

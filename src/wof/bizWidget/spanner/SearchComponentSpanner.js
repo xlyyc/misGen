@@ -59,8 +59,8 @@ wof.bizWidget.spanner.SearchComponentSpanner = function () {
     };
 
     var onReceiveMessage = [];
-    onReceiveMessage.push({id:'wof.bizWidget.Spanner_render',method:'this._processAndSendData(message.sender.propertys);'});
-    var method = 'this._receiveAndProcessData(message.sender.propertys);';
+    onReceiveMessage.push({id:'wof.bizWidget.Spanner_render',method:'this._processAndSendParameters(message.sender.propertys);'});
+    var method = 'this._receiveAndProcessParameters(message.sender.propertys);';
     onReceiveMessage.push({id:'wof.bizWidget.PropertyBar_apply',method:method});
     onReceiveMessage.push({id:'wof.bizWidget.OnSendMessageBar_apply',method:method});
     onReceiveMessage.push({id:'wof.bizWidget.OnReceiveMessageBar_apply',method:method});
@@ -89,6 +89,8 @@ wof.bizWidget.spanner.SearchComponentSpanner.prototype = {
     _meta: null,  //构件元数据   定义了构件的名称、类路径、对外暴露的属性和消息
 
     _propertys: null,
+
+    _parameters: null,
 
     _activeData: null,
 
@@ -466,26 +468,35 @@ wof.bizWidget.spanner.SearchComponentSpanner.prototype = {
         return json;
     },
 
+
     //加工并发送数据
-    _processAndSendData:function(data){
-        if(data.className=="wof.bizWidget.SearchComponent"){
-            this.setPropertys(data);
+    _processAndSendParameters:function(propertys){
+        if(propertys.className=="wof.bizWidget.SearchComponent"){
+            console.log('_processAndSendParameters:'+JSON.stringify(propertys));
+            var parameters = propertys;
+            this.setParameters(parameters);
+            //todo 需要移除
+            this.setPropertys(parameters);
         }else{
-            this.setPropertys(null);
+            this.setParameters(null);
         }
         this.render();
     },
 
+
+
     //接收并处理数据
-    _receiveAndProcessData:function(data){
-        if(data.id==this.getPropertys().id){
-            var searchComponent=wof.util.ObjectManager.get(data.id);
-            if(data.activeClass=="SearchComponent"){
-                searchComponent.updateSearchComponent(data);
+    _receiveAndProcessParameters:function(parameters){
+        //todo 处理数据
+        var propertys = parameters;
+        if(propertys.id==this.getPropertys().id){
+            var searchComponent=wof.util.ObjectManager.get(propertys.id);
+            if(propertys.activeClass=="SearchComponent"){
+                searchComponent.updateSearchComponent(propertys);
                 searchComponent.render();
                 searchComponent.sendMessage("wof.bizWidget.SearchComponent_active");
-            }else if(data.activeClass=="SearchItem"){
-                searchComponent.updateSearchItem(data);
+            }else if(propertys.activeClass=="SearchItem"){
+                searchComponent.updateSearchItem(propertys);
                 searchComponent.render();
                 searchComponent.sendMessage("wof.bizWidget.SearchComponent_active");
             }
