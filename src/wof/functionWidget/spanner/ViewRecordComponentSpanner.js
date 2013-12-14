@@ -66,6 +66,17 @@ wof.functionWidget.spanner.ViewRecordComponentSpanner.prototype = {
         return this._meta;
     },
 
+    setParameters:function(parameters){
+        this._parameters = parameters;
+    },
+
+    getParameters: function(){
+        if(this._parameters==null){
+            this._parameters = {};
+        }
+        return this._parameters;
+    },
+
     setPropertys:function(propertys){
         this._propertys = propertys;
     },
@@ -177,16 +188,18 @@ wof.functionWidget.spanner.ViewRecordComponentSpanner.prototype = {
     //必须实现
     getData:function(){
         return {
+            parameters: this.getParameters(),
             propertys: this.getPropertys(),
             activeData: this.getActiveData(),
             meta: this.getMeta()
         };
     },
-
     //必须实现
     setData:function(data){
+        this.setParameters(data.parameters);
         this.setPropertys(data.propertys);
         this.setActiveData(data.activeData);
+
     },
 
     //静态方法 导出数据(只有需要给运行时解析的叶子节点才需要定义此方法)

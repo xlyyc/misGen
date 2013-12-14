@@ -95,8 +95,8 @@ wof.bizWidget.spanner.VoucherGridComponentSpanner = function () {
     };
 
     var onReceiveMessage = [];
-    onReceiveMessage.push({id:'wof.bizWidget.Spanner_render',method:'this._processAndSendData(message.sender.propertys);'});
-    var method = 'this._receiveAndProcessData(message.sender.propertys);';
+    onReceiveMessage.push({id:'wof.bizWidget.Spanner_render',method:'this._processAndSendParameters(message.sender.propertys);'});
+    var method = 'this._receiveAndProcessParameters(message.sender.propertys);';
     onReceiveMessage.push({id:'wof.bizWidget.PropertyBar_apply',method:method});
     onReceiveMessage.push({id:'wof.bizWidget.OnSendMessageBar_apply',method:method});
     onReceiveMessage.push({id:'wof.bizWidget.OnReceiveMessageBar_apply',method:method});
@@ -122,6 +122,8 @@ wof.bizWidget.spanner.VoucherGridComponentSpanner.prototype = {
     //属性
 
     _meta: null,  //构件元数据   定义了构件的名称、类路径、对外暴露的属性和消息
+
+    _parameters: null,
 
     _propertys: null,
 
@@ -151,6 +153,17 @@ wof.bizWidget.spanner.VoucherGridComponentSpanner.prototype = {
      */
     getMeta: function(){
         return this._meta;
+    },
+
+    setParameters:function(parameters){
+        this._parameters = parameters;
+    },
+
+    getParameters: function(){
+        if(this._parameters==null){
+            this._parameters = {};
+        }
+        return this._parameters;
     },
 
     setPropertys:function(propertys){
@@ -391,6 +404,7 @@ wof.bizWidget.spanner.VoucherGridComponentSpanner.prototype = {
     //必须实现
     getData:function(){
         return {
+            parameters: this.getParameters(),
             propertys: this.getPropertys(),
             activeData: this.getActiveData(),
             meta: this.getMeta()
@@ -398,8 +412,10 @@ wof.bizWidget.spanner.VoucherGridComponentSpanner.prototype = {
     },
     //必须实现
     setData:function(data){
+        this.setParameters(data.parameters);
         this.setPropertys(data.propertys);
         this.setActiveData(data.activeData);
+
     },
 
     //静态方法 导出数据(只有需要给运行时解析的叶子节点才需要定义此方法)
@@ -470,30 +486,31 @@ wof.bizWidget.spanner.VoucherGridComponentSpanner.prototype = {
     },
 
     //加工并发送数据
-    _processAndSendData:function(data){
-        if(data.className=="wof.bizWidget.VoucherGridComponent"){
-            this.setPropertys(data);
+    _processAndSendParameters:function(propertys){
+        if(propertys.className=="wof.bizWidget.VoucherGridComponent"){
+            var parameters = propertys;
+            this.setParameters(parameters);
         }else{
-            this.setPropertys(null);
+            this.setParameters(null);
         }
         this.render();
     },
 
     //接收并处理数据
-    _receiveAndProcessData:function(data){
-        if(data.id==this.getPropertys().id){
-            var voucherGridComponent=wof.util.ObjectManager.get(data.id);
-            if(data.activeClass=="VoucherGridComponent"){
-                voucherGridComponent.updateVoucherGridComponent(data);
+    _receiveAndProcessParameters:function(parameters){
+        var propertys = parameters;
+        if(propertys.id==this.getPropertys().id){
+            var voucherGridComponent=wof.util.ObjectManager.get(propertys.id);
+            if(propertys.activeClass=="VoucherGridComponent"){
+                voucherGridComponent.updateVoucherGridComponent(propertys);
                 voucherGridComponent.render();
                 voucherGridComponent.sendMessage("wof.bizWidget.VoucherGridComponent_active");
-            }else if(data.activeClass=="VoucherGridComponentColumn"){
-                voucherGridComponent.updateVoucherGridComponentColumn(data);
+            }else if(propertys.activeClass=="VoucherGridComponentColumn"){
+                voucherGridComponent.updateVoucherGridComponentColumn(propertys);
                 voucherGridComponent.render();
                 voucherGridComponent.sendMessage("wof.bizWidget.VoucherGridComponent_active");
             }
         }
     }
-
 
 };

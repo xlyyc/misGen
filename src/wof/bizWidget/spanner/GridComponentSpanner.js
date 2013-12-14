@@ -95,8 +95,8 @@ wof.bizWidget.spanner.GridComponentSpanner = function () {
     };
 
     var onReceiveMessage = [];
-    onReceiveMessage.push({id:'wof.bizWidget.Spanner_render',method:'this._processAndSendData(message.sender.propertys);'});
-    var method = 'this._receiveAndProcessData(message.sender.propertys);';
+    onReceiveMessage.push({id:'wof.bizWidget.Spanner_render',method:'this._processAndSendParameters(message.sender.propertys);'});
+    var method = 'this._receiveAndProcessParameters(message.sender.propertys);';
     onReceiveMessage.push({id:'wof.bizWidget.PropertyBar_apply',method:method});
     onReceiveMessage.push({id:'wof.bizWidget.OnSendMessageBar_apply',method:method});
     onReceiveMessage.push({id:'wof.bizWidget.OnReceiveMessageBar_apply',method:method});
@@ -122,6 +122,8 @@ wof.bizWidget.spanner.GridComponentSpanner.prototype = {
     //属性
 
     _meta: null,  //构件元数据   定义了构件的名称、类路径、对外暴露的属性和消息
+
+    _parameters: null,
 
     _propertys: null,
 
@@ -151,6 +153,17 @@ wof.bizWidget.spanner.GridComponentSpanner.prototype = {
      */
     getMeta: function(){
         return this._meta;
+    },
+
+    setParameters:function(parameters){
+        this._parameters = parameters;
+    },
+
+    getParameters: function(){
+        if(this._parameters==null){
+            this._parameters = {};
+        }
+        return this._parameters;
     },
 
     setPropertys:function(propertys){
@@ -487,25 +500,27 @@ wof.bizWidget.spanner.GridComponentSpanner.prototype = {
     },
 
     //加工并发送数据
-    _processAndSendData:function(data){
-        if(data.className=="wof.bizWidget.GridComponent"){
-            this.setPropertys(data);
+    _processAndSendParameters:function(propertys){
+        if(propertys.className=="wof.bizWidget.GridComponent"){
+            var parameters = propertys;
+            this.setParameters(parameters);
         }else{
-            this.setPropertys(null);
+            this.setParameters(null);
         }
         this.render();
     },
 
     //接收并处理数据
-    _receiveAndProcessData:function(data){
-        if(data.id==this.getPropertys().id){
-            var gridComponent=wof.util.ObjectManager.get(data.id);
-            if(data.activeClass=="GridComponent"){
-                gridComponent.updateGridComponent(data);
+    _receiveAndProcessParameters:function(parameters){
+        var propertys = parameters;
+        if(propertys.id==this.getPropertys().id){
+            var gridComponent=wof.util.ObjectManager.get(propertys.id);
+            if(propertys.activeClass=="GridComponent"){
+                gridComponent.updateGridComponent(propertys);
                 gridComponent.render();
                 gridComponent.sendMessage("wof.bizWidget.GridComponent_active");
-            }else if(data.activeClass=="GridComponentColumn"){
-                gridComponent.updateGridComponentColumn(data);
+            }else if(propertys.activeClass=="GridComponentColumn"){
+                gridComponent.updateGridComponentColumn(propertys);
                 gridComponent.render();
                 gridComponent.sendMessage("wof.bizWidget.GridComponent_active");
             }

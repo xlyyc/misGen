@@ -41,8 +41,8 @@ wof.bizWidget.spanner.FlowLayoutSpanner = function () {
     };
 
     var onReceiveMessage = [];
-    onReceiveMessage.push({id:'wof.bizWidget.Spanner_render',method:'this._processAndSendData(message.sender.propertys);'});
-    var method = 'this._receiveAndProcessData(message.sender.propertys);';
+    onReceiveMessage.push({id:'wof.bizWidget.Spanner_render',method:'this._processAndSendParameters(message.sender.propertys);'});
+    var method = 'this._receiveAndProcessParameters(message.sender.propertys);';
     onReceiveMessage.push({id:'wof.bizWidget.PropertyBar_apply',method:method});
     onReceiveMessage.push({id:'wof.bizWidget.OnSendMessageBar_apply',method:method});
     onReceiveMessage.push({id:'wof.bizWidget.OnReceiveMessageBar_apply',method:method});
@@ -77,6 +77,8 @@ wof.bizWidget.spanner.FlowLayoutSpanner.prototype = {
     _meta: null,  //构件元数据   定义了构件的名称、类路径、对外暴露的属性和消息
 
     _propertys: null,
+
+    _parameters: null,
 
     _activeData: null,
 
@@ -117,6 +119,17 @@ wof.bizWidget.spanner.FlowLayoutSpanner.prototype = {
 
     getMeta: function(){
         return this._meta;
+    },
+
+    setParameters:function(parameters){
+        this._parameters = parameters;
+    },
+
+    getParameters: function(){
+        if(this._parameters==null){
+            this._parameters = {};
+        }
+        return this._parameters;
     },
 
     setPropertys:function(propertys){
@@ -566,6 +579,7 @@ wof.bizWidget.spanner.FlowLayoutSpanner.prototype = {
     //必须实现
     getData:function(){
         return {
+            parameters: this.getParameters(),
             propertys: this.getPropertys(),
             activeData: this.getActiveData(),
             meta: this.getMeta()
@@ -573,39 +587,43 @@ wof.bizWidget.spanner.FlowLayoutSpanner.prototype = {
     },
     //必须实现
     setData:function(data){
+        this.setParameters(data.parameters);
         this.setPropertys(data.propertys);
         this.setActiveData(data.activeData);
 
     },
 
     //加工并发送数据
-    _processAndSendData:function(data){
-        if(data.className=="wof.bizWidget.FlowLayout"){
-            //todo 加工data
-            console.log('_processAndSendData:'+JSON.stringify(data));
-            this.setPropertys(data);
+    _processAndSendParameters:function(propertys){
+        if(propertys.className=="wof.bizWidget.FlowLayout"){
+            console.log('_processAndSendParameters:'+JSON.stringify(propertys));
+            var parameters = propertys;
+            this.setParameters(parameters);
+            //todo 需要移除
+            this.setPropertys(parameters);
         }else{
-            this.setPropertys(null);
+            this.setParameters(null);
         }
         this.render();
     },
 
     //接收并处理数据
-    _receiveAndProcessData:function(data){
+    _receiveAndProcessParameters:function(parameters){
         //todo 处理数据
-        console.log('_receiveAndProcessData:'+JSON.stringify(data));
-        if(data.id==this.getPropertys().id){
-            var flowLayout=wof.util.ObjectManager.get(data.id);
-            if(data.activeClass=="FlowLayoutSection"){
-                flowLayout.updateSection(data);
+        var propertys = parameters;
+        console.log('_receiveAndProcessParameters:'+JSON.stringify(propertys));
+        if(propertys.id==this.getPropertys().id){
+            var flowLayout=wof.util.ObjectManager.get(propertys.id);
+            if(propertys.activeClass=="FlowLayoutSection"){
+                flowLayout.updateSection(propertys);
                 flowLayout.render();
                 flowLayout.sendMessage("wof.bizWidget.FlowLayout_active");
-            }else if(data.activeClass=="FlowLayoutItem"){
-                flowLayout.updateItem(data);
+            }else if(propertys.activeClass=="FlowLayoutItem"){
+                flowLayout.updateItem(propertys);
                 flowLayout.render();
                 flowLayout.sendMessage("wof.bizWidget.FlowLayout_active");
-            }else if(data.activeClass=="FlowLayout"){
-                flowLayout.updateFlowLayout(data);
+            }else if(propertys.activeClass=="FlowLayout"){
+                flowLayout.updateFlowLayout(propertys);
                 flowLayout.render();
                 flowLayout.sendMessage("wof.bizWidget.FlowLayout_active");
             }

@@ -20,8 +20,8 @@ wof.bizWidget.spanner.PageComponentSpanner = function () {
     };
 
     var onReceiveMessage = [];
-    onReceiveMessage.push({id:'wof.bizWidget.Spanner_render',method:'this._processAndSendData(message.sender.propertys);'});
-    var method = 'this._receiveAndProcessData(message.sender.propertys);';
+    onReceiveMessage.push({id:'wof.bizWidget.Spanner_render',method:'this._processAndSendParameters(message.sender.propertys);'});
+    var method = 'this._receiveAndProcessParameters(message.sender.propertys);';
     onReceiveMessage.push({id:'wof.bizWidget.PropertyBar_apply',method:method});
     onReceiveMessage.push({id:'wof.bizWidget.OnSendMessageBar_apply',method:method});
     onReceiveMessage.push({id:'wof.bizWidget.OnReceiveMessageBar_apply',method:method});
@@ -39,6 +39,9 @@ wof.bizWidget.spanner.PageComponentSpanner.prototype = {
      */
 
     //属性
+    _meta: null,
+
+    _parameters: null,
 
     _propertys: null,
 
@@ -55,6 +58,17 @@ wof.bizWidget.spanner.PageComponentSpanner.prototype = {
      */
     getMeta: function(){
         return this._meta;
+    },
+
+    setParameters:function(parameters){
+        this._parameters = parameters;
+    },
+
+    getParameters: function(){
+        if(this._parameters==null){
+            this._parameters = {};
+        }
+        return this._parameters;
     },
 
     setPropertys:function(propertys){
@@ -159,6 +173,7 @@ wof.bizWidget.spanner.PageComponentSpanner.prototype = {
     //必须实现
     getData:function(){
         return {
+            parameters: this.getParameters(),
             propertys: this.getPropertys(),
             activeData: this.getActiveData(),
             meta: this.getMeta()
@@ -166,25 +181,29 @@ wof.bizWidget.spanner.PageComponentSpanner.prototype = {
     },
     //必须实现
     setData:function(data){
+        this.setParameters(data.parameters);
         this.setPropertys(data.propertys);
         this.setActiveData(data.activeData);
+
     },
 
     //加工并发送数据
-    _processAndSendData:function(data){
-        if(data.className=="wof.bizWidget.PageComponent"){
-            this.setPropertys(data);
+    _processAndSendParameters:function(propertys){
+        if(propertys.className=="wof.bizWidget.PageComponent"){
+            var parameters = propertys;
+            this.setParameters(parameters);
         }else{
-            this.setPropertys(null);
+            this.setParameters(null);
         }
         this.render();
     },
 
     //接收并处理数据
-    _receiveAndProcessData:function(data){
-        if(data.id==this.getPropertys().id){
+    _receiveAndProcessParameters:function(parameters){
+        var propertys = parameters;
+        if(propertys.id==this.getPropertys().id){
             var pageComponent=wof.util.ObjectManager.get(data.id);
-            pageComponent.setData(data);
+            pageComponent.setData(propertys);
             pageComponent.render();
         }
     }
