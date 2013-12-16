@@ -24,7 +24,7 @@ wof.functionWidget.spanner.CommitComponentSpanner = function () {
     };
 
     var onReceiveMessage = [];
-    onReceiveMessage.push({id:'wof.bizWidget.Spanner_render',method:'this._processAndSendParameters(message.sender.propertys);'});
+    onReceiveMessage.push({id:'wof.bizWidget.Spanner_render',method:'this._receivePropertysAndRenderSelf(message.sender.propertys);'});
     var method = 'this._receiveAndProcessParameters(message.sender.parameters);';
     onReceiveMessage.push({id:'wof.bizWidget.PropertyBar_apply',method:method});
     onReceiveMessage.push({id:'wof.bizWidget.OnSendMessageBar_apply',method:method});
@@ -253,13 +253,9 @@ wof.functionWidget.spanner.CommitComponentSpanner.prototype = {
 
 
     //加工并发送数据
-    _processAndSendParameters:function(propertys){
+    _receivePropertysAndRenderSelf:function(propertys){
         if(propertys.className=="wof.functionWidget.CommitComponent"){
-            console.log('_processAndSendParameters:'+JSON.stringify(propertys));
-            var parameters = propertys;
-            this.setParameters(parameters);
-            //todo 需要移除
-            this.setPropertys(parameters);
+            this.setPropertys(propertys);
         }else{
             this.setParameters(null);
         }
