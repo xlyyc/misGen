@@ -22,10 +22,10 @@
             }
 
             var selData = {"name":"appList","options":[]};
-            var formFunctionId = JSON.parse(decodeURIComponent(hidden.val()));
+            var formFunctionId = decodeURIComponent(hidden.val());
             wof.customWindow.PageFormSelector._currFormFunctionId = formFunctionId;
             if(formFunctionId!=null){
-                wof.customWindow.PageFormSelector._currAppId = wof.customWindow.PageFormSelector.getAppByFunctionId(formFunctionId);
+                wof.customWindow.PageFormSelector._currAppId = wof.customWindow.PageFormSelector.getAppByFunctionId(formFunctionId).id;
             }
 
             var apps = wof.customWindow.PageFormSelector.getAppList();
@@ -62,7 +62,6 @@
                 height:550,
                 modal: true,
                 open: function(event, ui){
-                    console.log('wof.customWindow.PageFormSelector._currFormFunctionId='+wof.customWindow.PageFormSelector._currFormFunctionId);
                     wof.customWindow.PageFormSelector._tree.checkNodeByParam('nodeId',wof.customWindow.PageFormSelector._currFormFunctionId);
                 },
                 buttons:{
@@ -71,7 +70,7 @@
                         if(nodes.length>0){
                             var node = nodes[0];
                             wof.customWindow.PageFormSelector._currFormFunctionId = node.nodeId;
-                            hidden.val(encodeURIComponent(JSON.stringify(wof.customWindow.PageFormSelector._currFormFunctionId)));
+                            hidden.val(encodeURIComponent(wof.customWindow.PageFormSelector._currFormFunctionId));
                             jQuery(this).dialog('close');
                         }else{
                             alert('请选择一个属性');
@@ -112,7 +111,7 @@
 
 
             var json = {
-                "defultAppId": "RSXT",
+                "defultAppId": "XGXT",
                 "apps": [
                     {"id": "XGXT","label": "学工系统"},
                     {"id": "RSXT","label": "人事系统"}

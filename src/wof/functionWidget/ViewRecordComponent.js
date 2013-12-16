@@ -65,7 +65,7 @@ wof.functionWidget.ViewRecordComponent.prototype = {
     },
 
     getFormFunctionId : function (){
-        return this._formFunctionId || {};
+        return this._formFunctionId;
     },
 
     setFormFunctionId : function (formFunctionId){
