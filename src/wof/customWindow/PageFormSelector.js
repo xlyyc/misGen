@@ -22,20 +22,20 @@
             }
 
             var selData = {"name":"appList","options":[]};
-            var data = JSON.parse(decodeURIComponent(hidden.val()));
-            wof.customWindow.PageFormSelector._currAppId = data.appId;
-            wof.customWindow.PageFormSelector._currFormFunctionId = data.formFunctionId;
+            var formFunctionId = JSON.parse(decodeURIComponent(hidden.val()));
+            wof.customWindow.PageFormSelector._currFormFunctionId = formFunctionId;
+            if(formFunctionId!=null){
+                wof.customWindow.PageFormSelector._currAppId = wof.customWindow.PageFormSelector.getAppByFunctionId(formFunctionId);
+            }
 
             var apps = wof.customWindow.PageFormSelector.getAppList();
-            var defultAppId = apps.defultAppId;
             if(wof.customWindow.PageFormSelector._currAppId!=null){
                 selData.value = wof.customWindow.PageFormSelector._currAppId;
             }else{
-                selData.value = defultAppId;
-                wof.customWindow.PageFormSelector._currAppId = defultAppId;
+                selData.value = apps.defultAppId;
+                wof.customWindow.PageFormSelector._currAppId = apps.defultAppId;
             }
             var appList = apps.apps;
-
             for(var i=0;i<appList.length;i++){
                 var app = appList[i];
                 selData.options.push({"name":app.label,"value":app.id});
@@ -71,7 +71,7 @@
                         if(nodes.length>0){
                             var node = nodes[0];
                             wof.customWindow.PageFormSelector._currFormFunctionId = node.nodeId;
-                            hidden.val(encodeURIComponent(JSON.stringify({"appId":wof.customWindow.PageFormSelector._currAppId,"formFunctionId":wof.customWindow.PageFormSelector._currFormFunctionId})));
+                            hidden.val(encodeURIComponent(JSON.stringify(wof.customWindow.PageFormSelector._currFormFunctionId)));
                             jQuery(this).dialog('close');
                         }else{
                             alert('请选择一个属性');
@@ -100,14 +100,15 @@
             return sel;
         },
 
+        getAppByFunctionId: function(functionId){
+            //var json = JSON.parse(getAppByFunctionId(functionId));
+            var json = {"id":"RSXT","label":"人事系统"};
+
+            return json;
+        },
+
         getAppList: function(){
             //var json = JSON.parse(getAppList());
-            /*var json = [
-                {"id":"app1","label":"应用1"},
-                {"id":"app2","label":"应用2"},
-                {"id":"app3","label":"应用3"},
-                {"id":"app4","label":"应用4"}
-            ];*/
 
 
             var json = {
