@@ -25,7 +25,7 @@ wof.functionWidget.spanner.AddRecordComponentSpanner = function () {
 
     var onReceiveMessage = [];
     onReceiveMessage.push({id:'wof.bizWidget.Spanner_render',method:'this._processAndSendParameters(message.sender.propertys);'});
-    var method = 'this._receiveAndProcessParameters(message.sender.propertys);';
+    var method = 'this._receiveAndProcessParameters(message.sender.parameters);';
     onReceiveMessage.push({id:'wof.bizWidget.PropertyBar_apply',method:method});
     onReceiveMessage.push({id:'wof.bizWidget.OnSendMessageBar_apply',method:method});
     onReceiveMessage.push({id:'wof.bizWidget.OnReceiveMessageBar_apply',method:method});

@@ -74,8 +74,8 @@
 
 };
 wof.bizWidget.PropertyBar.prototype={
-	
-	_propertys: null,
+
+    _parameters: null,
 
     _meta: null,  //构件元数据
 
@@ -89,16 +89,17 @@ wof.bizWidget.PropertyBar.prototype={
         this._meta = meta;
     },
 
-    setPropertys:function(propertys){
-        this._propertys = propertys;
+    setParameters:function(parameters){
+        this._parameters = parameters;
     },
-	
-    getPropertys: function(){
-		if(this._propertys==null){
-            this._propertys = {};
+
+    getParameters: function(){
+        if(this._parameters==null){
+            this._parameters = {};
         }
-        return this._propertys;
+        return this._parameters;
     },
+
 	//创建表
 	_createTable: function(trs){
 		var table = jQuery('<table id="propertyTable" style="border-collapse:collapse;text-align:left;width:96%;">');
@@ -225,14 +226,14 @@ wof.bizWidget.PropertyBar.prototype={
 	//必须实现
 	render: function(){
 		var _this = this;
-        var propertys = this.getPropertys();
+        var parameters = this.getParameters();
         var meta = this.getMeta();
-		if(!jQuery.isEmptyObject(propertys)){
+		if(!jQuery.isEmptyObject(parameters)){
             var trs = [];
-            for(var name in propertys){
-                var m = meta.propertys[propertys.activeClass][name];
+            for(var name in parameters){
+                var m = meta.propertys[parameters.activeClass][name];
                 if(m!=null){
-                    var value = propertys[name];
+                    var value = parameters[name];
                     trs.push(this._createTr(m,value));
                 }
             }
@@ -245,15 +246,15 @@ wof.bizWidget.PropertyBar.prototype={
             event.stopPropagation();
             var f = true;
             var inputs = jQuery('table[id="propertyTable"] > tbody > tr > td > input');
-            var propertys = _this.getPropertys();
+            var parameters = _this.getParameters();
             inputs.each(function(){
                 var name = jQuery(this).attr('name');
                 var val = jQuery(this).val();
                 if(jQuery(this).attr('type')=='hidden'){
                     val = JSON.parse(decodeURIComponent(val));
                 }
-                propertys[name] = val;
-                var m = meta.propertys[propertys.activeClass][name];
+                parameters[name] = val;
+                var m = meta.propertys[parameters.activeClass][name];
                 if((val==null||val=='') && (m!=null && m.required==true)){
                     alert('请输入必填项');
                     jQuery(this).focus();
@@ -266,8 +267,8 @@ wof.bizWidget.PropertyBar.prototype={
                 sels.each(function(){
                     var name = jQuery(this).attr('name');
                     var val = jQuery(this).val();
-                    propertys[name] = val;
-                    var m = meta.propertys[propertys.activeClass][name];
+                    parameters[name] = val;
+                    var m = meta.propertys[parameters.activeClass][name];
                     if((val==null||val=='') && (m!=null && m.required==true)){
                         alert('请输入必填项');
                         jQuery(this).focus();
@@ -284,13 +285,13 @@ wof.bizWidget.PropertyBar.prototype={
 	//必须实现
 	getData:function(){
 		return {
-			propertys: this.getPropertys(),
+            parameters: this.getParameters(),
             meta: this.getMeta()
 		};
 	},
 	//必须实现
 	setData:function(data){
-		this.setPropertys(data.propertys);
+		this.setParameters(data.parameters);
         this.setMeta(data.meta);
 	}
 	

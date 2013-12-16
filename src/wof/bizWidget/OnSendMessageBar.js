@@ -8,8 +8,8 @@
 	});
 };
 wof.bizWidget.OnSendMessageBar.prototype={
-	
-	_propertys: null,
+
+    _parameters: null,
 
     _sendMessages: null,
 
@@ -21,15 +21,15 @@ wof.bizWidget.OnSendMessageBar.prototype={
         return this._sendMessages;
     },
 
-    setPropertys:function(propertys){
-        this._propertys = propertys;
+    setParameters:function(parameters){
+        this._parameters = parameters;
     },
-	
-    getPropertys: function(){
-		if(this._propertys==null){
-            this._propertys = {};
+
+    getParameters: function(){
+        if(this._parameters==null){
+            this._parameters = {};
         }
-        return this._propertys;
+        return this._parameters;
     },
     //创建表
     _createTable: function(trs){
@@ -107,19 +107,19 @@ wof.bizWidget.OnSendMessageBar.prototype={
 	//必须实现
 	getData:function(){
 		return {
-			propertys: this.getPropertys(),
+            parameters: this.getParameters(),
             sendMessages: this.getSendMessages()
 		};
 	},
 	//必须实现
 	setData:function(data){
-		this.setPropertys(data.propertys);
+		this.setParameters(data.parameters);
         this.setSendMessages(data.sendMessages);
 	},
 
     getMethodByName:function(name){
         var method = null;
-        var messages = this.getPropertys()['onSendMessage'];
+        var messages = this.getParameters()['onSendMessage'];
         for(var i=0;messages!=null&&i<messages.length;i++){
             var msg = messages[i];
             if(msg.id==name){
@@ -131,7 +131,7 @@ wof.bizWidget.OnSendMessageBar.prototype={
     },
 
     setMethodByName:function(name, method){
-        var messages = this.getPropertys()['onSendMessage'];
+        var messages = this.getParameters()['onSendMessage'];
         for(var i=0;i<messages.length;i++){
             if( messages[i].id==name){
                 messages.splice(i,1);

@@ -4,8 +4,6 @@
 };
 wof.bizWidget.Spanner.prototype={
 
-    _activeSpannerId: null,
-
     _propertys: null,
 
     _components: null,

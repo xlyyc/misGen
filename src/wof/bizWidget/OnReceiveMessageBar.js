@@ -8,18 +8,18 @@
 	});
 };
 wof.bizWidget.OnReceiveMessageBar.prototype={
-	
-	_propertys: null,
 
-    setPropertys:function(propertys){
-        this._propertys = propertys;
+    _parameters: null,
+
+    setParameters:function(parameters){
+        this._parameters = parameters;
     },
-	
-    getPropertys: function(){
-		if(this._propertys==null){
-            this._propertys = {};
+
+    getParameters: function(){
+        if(this._parameters==null){
+            this._parameters = {};
         }
-        return this._propertys;
+        return this._parameters;
     },
     //创建表
     _createTable: function(trs){
@@ -84,9 +84,9 @@ wof.bizWidget.OnReceiveMessageBar.prototype={
 	//必须实现
 	render: function(){
 		var _this = this;
-        var propertys = this.getPropertys();
-		if(!jQuery.isEmptyObject(propertys.onReceiveMessage)){
-            var onReceiveMessage = propertys.onReceiveMessage;
+        var parameters = this.getParameters();
+		if(!jQuery.isEmptyObject(parameters.onReceiveMessage)){
+            var onReceiveMessage = parameters.onReceiveMessage;
             var trs = [];
             for(var i=0;i<onReceiveMessage.length;i++){
                 var message = onReceiveMessage[i];
@@ -127,17 +127,17 @@ wof.bizWidget.OnReceiveMessageBar.prototype={
 	//必须实现
 	getData:function(){
 		return {
-			propertys: this.getPropertys()
+            parameters: this.getParameters()
 		};
 	},
 	//必须实现
 	setData:function(data){
-		this.setPropertys(data.propertys);
+		this.setParameters(data.parameters);
 	},
 
     getMethodByName:function(name){
         var method = null;
-        var messages = this.getPropertys()['onReceiveMessage'];
+        var messages = this.getParameters()['onReceiveMessage'];
         for(var i=0;i<messages.length;i++){
             var msg = messages[i];
             if(msg.id==name){
@@ -150,7 +150,7 @@ wof.bizWidget.OnReceiveMessageBar.prototype={
 
     getPriorityByName:function(name){
         var priority = null;
-        var messages = this.getPropertys()['onReceiveMessage'];
+        var messages = this.getParameters()['onReceiveMessage'];
         for(var i=0;i<messages.length;i++){
             var msg = messages[i];
             if(msg.id==name){
@@ -162,7 +162,7 @@ wof.bizWidget.OnReceiveMessageBar.prototype={
     },
 
     setMethodByName:function(name, method, priority){
-        var messages = this.getPropertys()['onReceiveMessage'];
+        var messages = this.getParameters()['onReceiveMessage'];
         for(var i=0;i<messages.length;i++){
             if( messages[i].id==name){
                 messages.splice(i,1);
