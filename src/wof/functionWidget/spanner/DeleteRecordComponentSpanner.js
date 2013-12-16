@@ -246,19 +246,16 @@ wof.functionWidget.spanner.DeleteRecordComponentSpanner.prototype = {
         if(propertys.className=="wof.functionWidget.DeleteRecordComponent"){
             this.setPropertys(propertys);
         }else{
-            this.setParameters(null);
+            this.setPropertys(null);
         }
         this.render();
     },
 
     //接收并处理数据
     _receiveAndProcessParameters:function(parameters){
-        //todo 处理数据
-        var propertys = parameters;
-        console.log('_receiveAndProcessParameters:'+JSON.stringify(propertys));
-        if(propertys.id==this.getPropertys().id){
-            var node=wof.util.ObjectManager.get(propertys.id);
-            node.updateDeleteRecordComponent(propertys);
+        if(parameters.id==this.getPropertys().id){
+            var node=wof.util.ObjectManager.get(parameters.id);
+            node.updateDeleteRecordComponent(parameters);
             node.render();
         }
     }

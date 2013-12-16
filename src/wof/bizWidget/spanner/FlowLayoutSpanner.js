@@ -605,21 +605,19 @@ wof.bizWidget.spanner.FlowLayoutSpanner.prototype = {
 
     //接收并处理数据
     _receiveAndProcessParameters:function(parameters){
-        //todo 处理数据
-        var propertys = parameters;
-        console.log('_receiveAndProcessParameters:'+JSON.stringify(propertys));
-        if(propertys.id==this.getPropertys().id){
-            var flowLayout=wof.util.ObjectManager.get(propertys.id);
-            if(propertys.activeClass=="FlowLayoutSection"){
-                flowLayout.updateSection(propertys);
+        console.log('_receiveAndProcessParameters:'+JSON.stringify(parameters));
+        if(parameters.id==this.getPropertys().id){
+            var flowLayout=wof.util.ObjectManager.get(parameters.id);
+            if(parameters.activeClass=="FlowLayoutSection"){
+                flowLayout.updateSection(parameters);
                 flowLayout.render();
                 flowLayout.sendMessage("wof.bizWidget.FlowLayout_active");
-            }else if(propertys.activeClass=="FlowLayoutItem"){
-                flowLayout.updateItem(propertys);
+            }else if(parameters.activeClass=="FlowLayoutItem"){
+                flowLayout.updateItem(parameters);
                 flowLayout.render();
                 flowLayout.sendMessage("wof.bizWidget.FlowLayout_active");
-            }else if(propertys.activeClass=="FlowLayout"){
-                flowLayout.updateFlowLayout(propertys);
+            }else if(parameters.activeClass=="FlowLayout"){
+                flowLayout.updateFlowLayout(parameters);
                 flowLayout.render();
                 flowLayout.sendMessage("wof.bizWidget.FlowLayout_active");
             }

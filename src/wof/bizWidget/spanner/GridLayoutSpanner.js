@@ -127,17 +127,16 @@ wof.bizWidget.spanner.GridLayoutSpanner.prototype = {
         if(propertys.className=="wof.bizWidget.GridLayout"){
             this.setPropertys(propertys);
         }else{
-            this.setParameters(null);
+            this.setPropertys(null);
         }
         this.render();
     },
 
     //接收并处理数据
     _receiveAndProcessParameters:function(parameters){
-        var propertys = parameters;
-        if(propertys.id==this.getPropertys().id){
-            var gridLayout=wof.util.ObjectManager.get(propertys.id);
-            gridLayout.setData(propertys);
+        if(parameters.id==this.getPropertys().id){
+            var gridLayout=wof.util.ObjectManager.get(parameters.id);
+            gridLayout.setData(parameters);
             gridLayout.render();
         }
     }

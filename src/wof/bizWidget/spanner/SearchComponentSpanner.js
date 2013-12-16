@@ -474,7 +474,7 @@ wof.bizWidget.spanner.SearchComponentSpanner.prototype = {
         if(propertys.className=="wof.bizWidget.SearchComponent"){
             this.setPropertys(propertys);
         }else{
-            this.setParameters(null);
+            this.setPropertys(null);
         }
         this.render();
     },
@@ -483,16 +483,14 @@ wof.bizWidget.spanner.SearchComponentSpanner.prototype = {
 
     //接收并处理数据
     _receiveAndProcessParameters:function(parameters){
-        //todo 处理数据
-        var propertys = parameters;
-        if(propertys.id==this.getPropertys().id){
-            var searchComponent=wof.util.ObjectManager.get(propertys.id);
-            if(propertys.activeClass=="SearchComponent"){
-                searchComponent.updateSearchComponent(propertys);
+        if(parameters.id==this.getPropertys().id){
+            var searchComponent=wof.util.ObjectManager.get(parameters.id);
+            if(parameters.activeClass=="SearchComponent"){
+                searchComponent.updateSearchComponent(parameters);
                 searchComponent.render();
                 searchComponent.sendMessage("wof.bizWidget.SearchComponent_active");
-            }else if(propertys.activeClass=="SearchItem"){
-                searchComponent.updateSearchItem(propertys);
+            }else if(parameters.activeClass=="SearchItem"){
+                searchComponent.updateSearchItem(parameters);
                 searchComponent.render();
                 searchComponent.sendMessage("wof.bizWidget.SearchComponent_active");
             }

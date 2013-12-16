@@ -504,22 +504,21 @@ wof.bizWidget.spanner.GridComponentSpanner.prototype = {
         if(propertys.className=="wof.bizWidget.GridComponent"){
             this.setPropertys(propertys);
         }else{
-            this.setParameters(null);
+            this.setPropertys(null);
         }
         this.render();
     },
 
     //接收并处理数据
     _receiveAndProcessParameters:function(parameters){
-        var propertys = parameters;
-        if(propertys.id==this.getPropertys().id){
-            var gridComponent=wof.util.ObjectManager.get(propertys.id);
-            if(propertys.activeClass=="GridComponent"){
-                gridComponent.updateGridComponent(propertys);
+        if(parameters.id==this.getPropertys().id){
+            var gridComponent=wof.util.ObjectManager.get(parameters.id);
+            if(parameters.activeClass=="GridComponent"){
+                gridComponent.updateGridComponent(parameters);
                 gridComponent.render();
                 gridComponent.sendMessage("wof.bizWidget.GridComponent_active");
-            }else if(propertys.activeClass=="GridComponentColumn"){
-                gridComponent.updateGridComponentColumn(propertys);
+            }else if(parameters.activeClass=="GridComponentColumn"){
+                gridComponent.updateGridComponentColumn(parameters);
                 gridComponent.render();
                 gridComponent.sendMessage("wof.bizWidget.GridComponent_active");
             }

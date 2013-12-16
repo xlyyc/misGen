@@ -257,19 +257,16 @@ wof.functionWidget.spanner.AddRecordComponentSpanner.prototype = {
         if(propertys.className=="wof.functionWidget.AddRecordComponent"){
             this.setPropertys(propertys);
         }else{
-            this.setParameters(null);
+            this.setPropertys(null);
         }
         this.render();
     },
 
     //接收并处理数据
     _receiveAndProcessParameters:function(parameters){
-        //todo 处理数据
-        var propertys = parameters;
-        console.log('_receiveAndProcessParameters:'+JSON.stringify(propertys));
-        if(propertys.id==this.getPropertys().id){
-            var node=wof.util.ObjectManager.get(propertys.id);
-            node.updateAddRecordComponent(propertys);
+        if(parameters.id==this.getPropertys().id){
+            var node=wof.util.ObjectManager.get(parameters.id);
+            node.updateAddRecordComponent(parameters);
             node.render();
         }
     }

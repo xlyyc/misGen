@@ -568,26 +568,25 @@ wof.bizWidget.spanner.VoucherComponentSpanner.prototype = {
         if(propertys.className=="wof.bizWidget.VoucherComponent"){
             this.setPropertys(propertys);
         }else{
-            this.setParameters(null);
+            this.setPropertys(null);
         }
         this.render();
     },
 
     //接收并处理数据
     _receiveAndProcessParameters:function(parameters){
-        var propertys = parameters;
-        if(propertys.id==this.getPropertys().id){
-            var voucherComponent=wof.util.ObjectManager.get(propertys.id);
-            if(propertys.activeClass=="VoucherItemGroup"){
-                voucherComponent.updateVoucherItemGroup(propertys);
+        if(parameters.id==this.getPropertys().id){
+            var voucherComponent=wof.util.ObjectManager.get(parameters.id);
+            if(parameters.activeClass=="VoucherItemGroup"){
+                voucherComponent.updateVoucherItemGroup(parameters);
                 voucherComponent.render();
                 voucherComponent.sendMessage("wof.bizWidget.VoucherComponent_active");
-            }else if(propertys.activeClass=="VoucherItem"){
-                voucherComponent.updateVoucherItem(propertys);
+            }else if(parameters.activeClass=="VoucherItem"){
+                voucherComponent.updateVoucherItem(parameters);
                 voucherComponent.render();
                 voucherComponent.sendMessage("wof.bizWidget.VoucherComponent_active");
-            }else if(propertys.activeClass=="VoucherComponent"){
-                voucherComponent.updateVoucherComponent(propertys);
+            }else if(parameters.activeClass=="VoucherComponent"){
+                voucherComponent.updateVoucherComponent(parameters);
                 voucherComponent.render();
                 voucherComponent.sendMessage("wof.bizWidget.VoucherComponent_active");
             }

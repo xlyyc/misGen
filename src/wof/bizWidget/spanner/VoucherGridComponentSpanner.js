@@ -490,22 +490,21 @@ wof.bizWidget.spanner.VoucherGridComponentSpanner.prototype = {
         if(propertys.className=="wof.bizWidget.VoucherGridComponent"){
             this.setPropertys(propertys);
         }else{
-            this.setParameters(null);
+            this.setPropertys(null);
         }
         this.render();
     },
 
     //接收并处理数据
     _receiveAndProcessParameters:function(parameters){
-        var propertys = parameters;
-        if(propertys.id==this.getPropertys().id){
-            var voucherGridComponent=wof.util.ObjectManager.get(propertys.id);
-            if(propertys.activeClass=="VoucherGridComponent"){
-                voucherGridComponent.updateVoucherGridComponent(propertys);
+        if(parameters.id==this.getPropertys().id){
+            var voucherGridComponent=wof.util.ObjectManager.get(parameters.id);
+            if(parameters.activeClass=="VoucherGridComponent"){
+                voucherGridComponent.updateVoucherGridComponent(parameters);
                 voucherGridComponent.render();
                 voucherGridComponent.sendMessage("wof.bizWidget.VoucherGridComponent_active");
-            }else if(propertys.activeClass=="VoucherGridComponentColumn"){
-                voucherGridComponent.updateVoucherGridComponentColumn(propertys);
+            }else if(parameters.activeClass=="VoucherGridComponentColumn"){
+                voucherGridComponent.updateVoucherGridComponentColumn(parameters);
                 voucherGridComponent.render();
                 voucherGridComponent.sendMessage("wof.bizWidget.VoucherGridComponent_active");
             }

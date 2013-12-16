@@ -192,17 +192,16 @@ wof.bizWidget.spanner.PageComponentSpanner.prototype = {
         if(propertys.className=="wof.bizWidget.PageComponent"){
             this.setPropertys(propertys);
         }else{
-            this.setParameters(null);
+            this.setPropertys(null);
         }
         this.render();
     },
 
     //接收并处理数据
     _receiveAndProcessParameters:function(parameters){
-        var propertys = parameters;
-        if(propertys.id==this.getPropertys().id){
+        if(parameters.id==this.getPropertys().id){
             var pageComponent=wof.util.ObjectManager.get(data.id);
-            pageComponent.setData(propertys);
+            pageComponent.setData(parameters);
             pageComponent.render();
         }
     }
