@@ -78,8 +78,6 @@ wof.bizWidget.spanner.FlowLayoutSpanner.prototype = {
 
     _propertys: null,
 
-    _parameters: null,
-
     _activeData: null,
 
     _mergeItemArrow:null,
@@ -119,17 +117,6 @@ wof.bizWidget.spanner.FlowLayoutSpanner.prototype = {
 
     getMeta: function(){
         return this._meta;
-    },
-
-    setParameters:function(parameters){
-        this._parameters = parameters;
-    },
-
-    getParameters: function(){
-        if(this._parameters==null){
-            this._parameters = {};
-        }
-        return this._parameters;
     },
 
     setPropertys:function(propertys){
@@ -579,7 +566,6 @@ wof.bizWidget.spanner.FlowLayoutSpanner.prototype = {
     //必须实现
     getData:function(){
         return {
-            parameters: this.getParameters(),
             propertys: this.getPropertys(),
             activeData: this.getActiveData(),
             meta: this.getMeta()
@@ -587,7 +573,6 @@ wof.bizWidget.spanner.FlowLayoutSpanner.prototype = {
     },
     //必须实现
     setData:function(data){
-        this.setParameters(data.parameters);
         this.setPropertys(data.propertys);
         this.setActiveData(data.activeData);
 

@@ -123,8 +123,6 @@ wof.bizWidget.spanner.GridComponentSpanner.prototype = {
 
     _meta: null,  //构件元数据   定义了构件的名称、类路径、对外暴露的属性和消息
 
-    _parameters: null,
-
     _propertys: null,
 
     _activeData: null,
@@ -153,17 +151,6 @@ wof.bizWidget.spanner.GridComponentSpanner.prototype = {
      */
     getMeta: function(){
         return this._meta;
-    },
-
-    setParameters:function(parameters){
-        this._parameters = parameters;
-    },
-
-    getParameters: function(){
-        if(this._parameters==null){
-            this._parameters = {};
-        }
-        return this._parameters;
     },
 
     setPropertys:function(propertys){
