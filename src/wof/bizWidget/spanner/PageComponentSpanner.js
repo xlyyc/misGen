@@ -43,7 +43,7 @@ wof.bizWidget.spanner.PageComponentSpanner.prototype = {
 
     _propertys: null,
 
-    _activeData: null,
+    _parameters: null,
 
     _selectObjectIco : null,
 
@@ -69,12 +69,12 @@ wof.bizWidget.spanner.PageComponentSpanner.prototype = {
         return this._propertys;
     },
 
-    getActiveData:function(){
-        return this._activeData;
+    getParameters:function(){
+        return this._parameters;
     },
 
-    setActiveData:function(activeData){
-        this._activeData = activeData;
+    setParameters:function(parameters){
+        this._parameters = parameters;
     },
 
     /**
@@ -124,13 +124,13 @@ wof.bizWidget.spanner.PageComponentSpanner.prototype = {
 
     //----------必须实现----------
     render: function () {
-        var activeData = {};
+        var parameters = {};
         var pageComponent = wof.util.ObjectManager.get(this.getPropertys().id);
         if(pageComponent!=null){
-            activeData.id = this.getPropertys().id;
-            activeData.className = this.getPropertys().className;
-            activeData.onReceiveMessage = this.getPropertys().onReceiveMessage;
-            activeData.onSendMessage = this.getPropertys().onSendMessage;
+            parameters.id = this.getPropertys().id;
+            parameters.className = this.getPropertys().className;
+            parameters.onReceiveMessage = this.getPropertys().onReceiveMessage;
+            parameters.onSendMessage = this.getPropertys().onSendMessage;
 
 
             this._selectObjectIco.css('top','0px').css('left','0px');
@@ -142,9 +142,9 @@ wof.bizWidget.spanner.PageComponentSpanner.prototype = {
             this._cutIco.css('top',0).css('left',this._deleteObjectIco.width()*2+4);
             pageComponent.getDomInstance().append(this._cutIco);
 
-            activeData.activeClass = 'PageComponent';
+            parameters.activeClass = 'PageComponent';
         }
-        this.setActiveData(activeData);
+        this.setParameters(parameters);
         this.sendMessage('wof.bizWidget.spanner.PageComponentSpanner_render');
     },
 
@@ -161,14 +161,14 @@ wof.bizWidget.spanner.PageComponentSpanner.prototype = {
     getData:function(){
         return {
             propertys: this.getPropertys(),
-            activeData: this.getActiveData(),
+            parameters: this.getParameters(),
             meta: this.getMeta()
         };
     },
     //必须实现
     setData:function(data){
         this.setPropertys(data.propertys);
-        this.setActiveData(data.activeData);
+        this.setParameters(data.parameters);
 
     },
 

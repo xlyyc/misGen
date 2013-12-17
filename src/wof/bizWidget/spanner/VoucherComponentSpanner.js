@@ -116,7 +116,7 @@ wof.bizWidget.spanner.VoucherComponentSpanner.prototype = {
 
     _propertys: null,
 
-    _activeData: null,
+    _parameters: null,
 
     _highlightBorder: null,
 
@@ -168,12 +168,12 @@ wof.bizWidget.spanner.VoucherComponentSpanner.prototype = {
         return this._propertys;
     },
 
-    getActiveData:function(){
-        return this._activeData;
+    getParameters:function(){
+        return this._parameters;
     },
 
-    setActiveData:function(activeData){
-        this._activeData = activeData;
+    setParameters:function(parameters){
+        this._parameters = parameters;
     },
 
     /**
@@ -389,14 +389,14 @@ wof.bizWidget.spanner.VoucherComponentSpanner.prototype = {
 
     //----------必须实现----------
     render: function () {
-        var activeData = {};
+        var parameters = {};
         var voucherComponent = wof.util.ObjectManager.get(this.getPropertys().id);
         if(voucherComponent!=null){
-            activeData.id = this.getPropertys().id;
-            activeData.componentId = this.getPropertys().componentId;
-            activeData.className = this.getPropertys().className;
-            activeData.onReceiveMessage = this.getPropertys().onReceiveMessage;
-            activeData.onSendMessage = this.getPropertys().onSendMessage;
+            parameters.id = this.getPropertys().id;
+            parameters.componentId = this.getPropertys().componentId;
+            parameters.className = this.getPropertys().className;
+            parameters.onReceiveMessage = this.getPropertys().onReceiveMessage;
+            parameters.onSendMessage = this.getPropertys().onSendMessage;
             var activeVoucherItemGroupIndex = this.getPropertys().activeVoucherItemGroupIndex;
             var activeVoucherItemGroup = voucherComponent.findVoucherItemGroupByIndex(activeVoucherItemGroupIndex);
             if(activeVoucherItemGroup!=null){
@@ -437,42 +437,42 @@ wof.bizWidget.spanner.VoucherComponentSpanner.prototype = {
                 /*    this._highlightBorder.css('height',(activeVoucherItem.getHeight()-6)+'px').css('width',(activeVoucherItem.getWidth()-6)+'px');
                     activeVoucherItem.getDomInstance().append(this._highlightBorder);*/
 
-                    activeData.activeClass = 'VoucherItem';
-                    activeData.rowNum = activeVoucherItem.getRowNum();
-                    activeData.colNum = activeVoucherItem.getColNum();
-                    activeData.colspan = activeVoucherItem.getColspan();
-                    activeData.rowspan = activeVoucherItem.getRowspan();
-                    activeData.isFixItem = activeVoucherItem.getIsFixItem();
-                    activeData.itemName = activeVoucherItem.getItemName();
-                    activeData.visiable = activeVoucherItem.getVisiable();
-                    activeData.itemLabel = activeVoucherItem.getItemLabel();
-                    activeData.dataField = activeVoucherItem.getDataField();
-                    activeData.dateTimeBoxFormat = activeVoucherItem.getDateTimeBoxFormat();
-                    activeData.readOnly = activeVoucherItem.getReadOnly();
-                    activeData.required = activeVoucherItem.getRequired();
-                    activeData.length = activeVoucherItem.getLength();
-                    activeData.min = activeVoucherItem.getMin();
-                    activeData.max = activeVoucherItem.getMax();
-                    activeData.regExp = activeVoucherItem.getRegExp();
-                    activeData.checkErrorInfo = activeVoucherItem.getCheckErrorInfo();
-                    activeData.selectPattern = activeVoucherItem.getSelectPattern();
-                    activeData.useMultiSelect = activeVoucherItem.getUseMultiSelect();
-                    activeData.visbleType = activeVoucherItem.getVisbleType();
-                    activeData.labelWidth = activeVoucherItem.getLabelWidth();
-                    activeData.inputWidth = activeVoucherItem.getInputWidth();
-                    activeData.inputHeight = activeVoucherItem.getInputHeight();
-                    activeData.linkageItem = activeVoucherItem.getLinkageItem();
-                    activeData.tipValue = activeVoucherItem.getTipValue();
-                    activeData.voucherItemGroupIndex = activeVoucherItemGroup.getIndex();
+                    parameters.activeClass = 'VoucherItem';
+                    parameters.rowNum = activeVoucherItem.getRowNum();
+                    parameters.colNum = activeVoucherItem.getColNum();
+                    parameters.colspan = activeVoucherItem.getColspan();
+                    parameters.rowspan = activeVoucherItem.getRowspan();
+                    parameters.isFixItem = activeVoucherItem.getIsFixItem();
+                    parameters.itemName = activeVoucherItem.getItemName();
+                    parameters.visiable = activeVoucherItem.getVisiable();
+                    parameters.itemLabel = activeVoucherItem.getItemLabel();
+                    parameters.dataField = activeVoucherItem.getDataField();
+                    parameters.dateTimeBoxFormat = activeVoucherItem.getDateTimeBoxFormat();
+                    parameters.readOnly = activeVoucherItem.getReadOnly();
+                    parameters.required = activeVoucherItem.getRequired();
+                    parameters.length = activeVoucherItem.getLength();
+                    parameters.min = activeVoucherItem.getMin();
+                    parameters.max = activeVoucherItem.getMax();
+                    parameters.regExp = activeVoucherItem.getRegExp();
+                    parameters.checkErrorInfo = activeVoucherItem.getCheckErrorInfo();
+                    parameters.selectPattern = activeVoucherItem.getSelectPattern();
+                    parameters.useMultiSelect = activeVoucherItem.getUseMultiSelect();
+                    parameters.visbleType = activeVoucherItem.getVisbleType();
+                    parameters.labelWidth = activeVoucherItem.getLabelWidth();
+                    parameters.inputWidth = activeVoucherItem.getInputWidth();
+                    parameters.inputHeight = activeVoucherItem.getInputHeight();
+                    parameters.linkageItem = activeVoucherItem.getLinkageItem();
+                    parameters.tipValue = activeVoucherItem.getTipValue();
+                    parameters.voucherItemGroupIndex = activeVoucherItemGroup.getIndex();
                 }else{
-                    activeData.activeClass = 'VoucherItemGroup';
-                    activeData.groupCaption = activeVoucherItemGroup.getGroupCaption();
-                    activeData.colsNum = activeVoucherItemGroup.getColsNum();
-                    activeData.itemHeight = activeVoucherItemGroup.getItemHeight();
-                    activeData.isExpand = activeVoucherItemGroup.getIsExpand();
-                    activeData.mustInOrder = activeVoucherItemGroup.getMustInOrder();
-                    activeData.isHead = activeVoucherItemGroup.getIsHead();
-                    activeData.index = activeVoucherItemGroup.getIndex();
+                    parameters.activeClass = 'VoucherItemGroup';
+                    parameters.groupCaption = activeVoucherItemGroup.getGroupCaption();
+                    parameters.colsNum = activeVoucherItemGroup.getColsNum();
+                    parameters.itemHeight = activeVoucherItemGroup.getItemHeight();
+                    parameters.isExpand = activeVoucherItemGroup.getIsExpand();
+                    parameters.mustInOrder = activeVoucherItemGroup.getMustInOrder();
+                    parameters.isHead = activeVoucherItemGroup.getIsHead();
+                    parameters.index = activeVoucherItemGroup.getIndex();
 
 /*                    this._highlightBorder.css('height',(activeVoucherItemGroup.getHeight()-2)+'px').css('width',(activeVoucherItemGroup.getWidth()-2)+'px');
                     activeVoucherItemGroup.getDomInstance().append(this._highlightBorder);*/
@@ -492,25 +492,25 @@ wof.bizWidget.spanner.VoucherComponentSpanner.prototype = {
                 }
 
             }else{
-                activeData.activeClass = 'VoucherComponent';
-                activeData.bindEntityID = voucherComponent.getBindEntityID();
-                activeData.caption = voucherComponent.getCaption();
-                activeData.callStr = voucherComponent.getCallStr();
-                activeData.initActionName = voucherComponent.getInitActionName();
-                activeData.state = voucherComponent.getState();
-                activeData.viewType = voucherComponent.getViewType();
-                activeData.itemHeight = voucherComponent.getItemHeight();
-                activeData.width = voucherComponent.getWidth();
-                activeData.height = voucherComponent.getHeight();
-                activeData.left = voucherComponent.getLeft();
-                activeData.top = voucherComponent.getTop();
-                activeData.zIndex = voucherComponent.getZIndex();
-                activeData.hiden = voucherComponent.getHiden();
-                activeData.position = voucherComponent.getPosition();
-                activeData.scale = voucherComponent.getScale();
-                activeData.paramMaps = voucherComponent.getParamMaps();
-                activeData.activeVoucherItemGroupIndex = voucherComponent.getActiveVoucherItemGroupIndex();
-                activeData.activeVoucherItemRank = voucherComponent.getActiveVoucherItemRank();
+                parameters.activeClass = 'VoucherComponent';
+                parameters.bindEntityID = voucherComponent.getBindEntityID();
+                parameters.caption = voucherComponent.getCaption();
+                parameters.callStr = voucherComponent.getCallStr();
+                parameters.initActionName = voucherComponent.getInitActionName();
+                parameters.state = voucherComponent.getState();
+                parameters.viewType = voucherComponent.getViewType();
+                parameters.itemHeight = voucherComponent.getItemHeight();
+                parameters.width = voucherComponent.getWidth();
+                parameters.height = voucherComponent.getHeight();
+                parameters.left = voucherComponent.getLeft();
+                parameters.top = voucherComponent.getTop();
+                parameters.zIndex = voucherComponent.getZIndex();
+                parameters.hiden = voucherComponent.getHiden();
+                parameters.position = voucherComponent.getPosition();
+                parameters.scale = voucherComponent.getScale();
+                parameters.paramMaps = voucherComponent.getParamMaps();
+                parameters.activeVoucherItemGroupIndex = voucherComponent.getActiveVoucherItemGroupIndex();
+                parameters.activeVoucherItemRank = voucherComponent.getActiveVoucherItemRank();
             }
             //当前选中的VoucherComponent加入拖放 删除操作句柄
             this._selectVoucherComponentIco.css('top',0).css('left',0);
@@ -520,7 +520,7 @@ wof.bizWidget.spanner.VoucherComponentSpanner.prototype = {
             this._cutVoucherComponentIco.css('top',0).css('left',this._deleteVoucherComponentIco.width()*2+4);
             voucherComponent.getDomInstance().append(this._cutVoucherComponentIco);
         }
-        this.setActiveData(activeData);
+        this.setParameters(parameters);
         this.sendMessage('wof.bizWidget.spanner.VoucherComponentSpanner_render');
     },
 
@@ -537,14 +537,14 @@ wof.bizWidget.spanner.VoucherComponentSpanner.prototype = {
     getData:function(){
         return {
             propertys: this.getPropertys(),
-            activeData: this.getActiveData(),
+            parameters: this.getParameters(),
             meta: this.getMeta()
         };
     },
     //必须实现
     setData:function(data){
         this.setPropertys(data.propertys);
-        this.setActiveData(data.activeData);
+        this.setParameters(data.parameters);
 
     },
 

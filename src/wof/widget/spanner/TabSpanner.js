@@ -43,7 +43,7 @@ wof.widget.spanner.TabSpanner.prototype = {
 
     _propertys: null,
 
-    _setActiveData: null,
+    _parameters: null,
 
     /**
      * get/set 属性方法定义
@@ -63,12 +63,12 @@ wof.widget.spanner.TabSpanner.prototype = {
         return this._propertys;
     },
 
-    getActiveData:function(){
-        return this._activeData;
+    getParameters:function(){
+        return this._parameters;
     },
 
-    setActiveData:function(activeData){
-        this._activeData = activeData;
+    setParameters:function(parameters){
+        this._parameters = parameters;
     },
 
     /**
@@ -90,7 +90,7 @@ wof.widget.spanner.TabSpanner.prototype = {
         if(!jQuery.isEmptyObject(this.getPropertys())){
             this.getPropertys().activeClass = 'Tab';
         }
-        this.setActiveData(this.getPropertys());
+        this.setParameters(this.getPropertys());
         this.sendMessage('wof.widget.spanner.TabSpanner_render');
     },
 
@@ -102,7 +102,7 @@ wof.widget.spanner.TabSpanner.prototype = {
     getData:function(){
         return {
             propertys: this.getPropertys(),
-            activeData: this.getActiveData(),
+            parameters: this.getParameters(),
             meta: this.getMeta()
         };
     },
@@ -110,7 +110,7 @@ wof.widget.spanner.TabSpanner.prototype = {
     //必须实现
     setData:function(data){
         this.setPropertys(data.propertys);
-        this.setActiveData(data.activeData);
+        this.setParameters(data.parameters);
     }
 
 };

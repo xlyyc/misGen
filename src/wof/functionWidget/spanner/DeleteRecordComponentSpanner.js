@@ -47,7 +47,7 @@ wof.functionWidget.spanner.DeleteRecordComponentSpanner.prototype = {
 
     _propertys: null,
 
-    _setActiveData: null,
+    _parameters: null,
 
     _selectObjectIco : null,
 
@@ -73,12 +73,12 @@ wof.functionWidget.spanner.DeleteRecordComponentSpanner.prototype = {
         return this._propertys;
     },
 
-    getActiveData:function(){
-        return this._activeData;
+    getParameters:function(){
+        return this._parameters;
     },
 
-    setActiveData:function(activeData){
-        this._activeData = activeData;
+    setParameters:function(parameters){
+        this._parameters = parameters;
     },
 
     /**
@@ -135,23 +135,23 @@ wof.functionWidget.spanner.DeleteRecordComponentSpanner.prototype = {
 
     //选择实现
     afterRender: function () {
-        var activeData = {};
+        var parameters = {};
         var deleteRecordComponent = wof.util.ObjectManager.get(this.getPropertys().id);
         if(deleteRecordComponent!=null){
-            activeData.id = this.getPropertys().id;
-            activeData.componentId = this.getPropertys().componentId;
-            activeData.className = this.getPropertys().className;
-            activeData.onReceiveMessage = this.getPropertys().onReceiveMessage;
-            activeData.onSendMessage = this.getPropertys().onSendMessage;
+            parameters.id = this.getPropertys().id;
+            parameters.componentId = this.getPropertys().componentId;
+            parameters.className = this.getPropertys().className;
+            parameters.onReceiveMessage = this.getPropertys().onReceiveMessage;
+            parameters.onSendMessage = this.getPropertys().onSendMessage;
 
-            activeData.bindComponents = this.getPropertys().bindComponents;
-            activeData.functionID = this.getPropertys().functionID;
-            activeData.callItemName = this.getPropertys().callItemName;
-            activeData.callItemCaption = this.getPropertys().callItemCaption;
-            activeData.commandItemID = this.getPropertys().commandItemID;
-            activeData.iSPermissionControl = this.getPropertys().iSPermissionControl;
+            parameters.bindComponents = this.getPropertys().bindComponents;
+            parameters.functionID = this.getPropertys().functionID;
+            parameters.callItemName = this.getPropertys().callItemName;
+            parameters.callItemCaption = this.getPropertys().callItemCaption;
+            parameters.commandItemID = this.getPropertys().commandItemID;
+            parameters.iSPermissionControl = this.getPropertys().iSPermissionControl;
 
-            activeData.activeClass = 'DeleteRecordComponent';
+            parameters.activeClass = 'DeleteRecordComponent';
 
             //加入拖放 删除 剪切操作句柄
             this._selectObjectIco.css('top',0).css('left',0);
@@ -161,7 +161,7 @@ wof.functionWidget.spanner.DeleteRecordComponentSpanner.prototype = {
             this._cutObjectIco.css('top',0).css('left',this._deleteObjectIco.width()*2+4);
             deleteRecordComponent.getDomInstance().append(this._cutObjectIco);
         }
-        this.setActiveData(activeData);
+        this.setParameters(parameters);
         this.sendMessage('wof.functionWidget.spanner.DeleteRecordComponentSpanner_render');
     },
 
@@ -173,14 +173,14 @@ wof.functionWidget.spanner.DeleteRecordComponentSpanner.prototype = {
     getData:function(){
         return {
             propertys: this.getPropertys(),
-            activeData: this.getActiveData(),
+            parameters: this.getParameters(),
             meta: this.getMeta()
         };
     },
     //必须实现
     setData:function(data){
         this.setPropertys(data.propertys);
-        this.setActiveData(data.activeData);
+        this.setParameters(data.parameters);
 
     },
 

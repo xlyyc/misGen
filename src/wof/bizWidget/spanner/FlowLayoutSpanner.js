@@ -78,7 +78,7 @@ wof.bizWidget.spanner.FlowLayoutSpanner.prototype = {
 
     _propertys: null,
 
-    _activeData: null,
+    _parameters: null,
 
     _mergeItemArrow:null,
 
@@ -130,12 +130,12 @@ wof.bizWidget.spanner.FlowLayoutSpanner.prototype = {
         return this._propertys;
     },
 
-    getActiveData:function(){
-        return this._activeData;
+    getParameters:function(){
+        return this._parameters;
     },
 
-    setActiveData:function(activeData){
-        this._activeData = activeData;
+    setParameters:function(parameters){
+        this._parameters = parameters;
     },
 
     /**
@@ -452,13 +452,13 @@ wof.bizWidget.spanner.FlowLayoutSpanner.prototype = {
 
     //----------必须实现----------
     render: function () {
-        var activeData = {};
+        var parameters = {};
         var flowLayout = wof.util.ObjectManager.get(this.getPropertys().id);
         if(flowLayout!=null){
-            activeData.id = this.getPropertys().id;
-            activeData.className = this.getPropertys().className;
-            activeData.onReceiveMessage = this.getPropertys().onReceiveMessage;
-            activeData.onSendMessage = this.getPropertys().onSendMessage;
+            parameters.id = this.getPropertys().id;
+            parameters.className = this.getPropertys().className;
+            parameters.onReceiveMessage = this.getPropertys().onReceiveMessage;
+            parameters.onSendMessage = this.getPropertys().onSendMessage;
             var activeSectionIndex = this.getPropertys().activeSectionIndex;
             var activeSection = flowLayout.findSectionByIndex(activeSectionIndex);
             if(activeSection!=null){
@@ -497,22 +497,22 @@ wof.bizWidget.spanner.FlowLayoutSpanner.prototype = {
                         this._addItemRowspanArrow.css('top',activeItem.getHeight()*activeItem.getScale()-this._addItemRowspanArrow.height()-2).css('left',activeItem.getWidth()*activeItem.getScale()/2-this._addItemRowspanArrow.width()/2);
                         activeItem.getDomInstance().append(this._addItemRowspanArrow);
                     }
-                    activeData.activeClass = 'FlowLayoutItem';
-                    activeData.row = activeItem.getRow();
-                    activeData.col = activeItem.getCol();
-                    activeData.colspan = activeItem.getColspan();
-                    activeData.isFixItem = activeItem.getIsFixItem();
-                    activeData.rowspan = activeItem.getRowspan();
-                    activeData.sectionIndex = activeSection.getIndex();
+                    parameters.activeClass = 'FlowLayoutItem';
+                    parameters.row = activeItem.getRow();
+                    parameters.col = activeItem.getCol();
+                    parameters.colspan = activeItem.getColspan();
+                    parameters.isFixItem = activeItem.getIsFixItem();
+                    parameters.rowspan = activeItem.getRowspan();
+                    parameters.sectionIndex = activeSection.getIndex();
                 }else{
-                    activeData.activeClass = 'FlowLayoutSection';
-                    activeData.title = activeSection.getTitle();
-                    activeData.cols = activeSection.getCols();
-                    activeData.itemHeight = activeSection.getItemHeight();
-                    activeData.isExpand = activeSection.getIsExpand();
-                    activeData.mustInOrder = activeSection.getMustInOrder();
-                    activeData.index = activeSection.getIndex();
-                    activeData.isAutoExt = activeSection.getIsAutoExt();
+                    parameters.activeClass = 'FlowLayoutSection';
+                    parameters.title = activeSection.getTitle();
+                    parameters.cols = activeSection.getCols();
+                    parameters.itemHeight = activeSection.getItemHeight();
+                    parameters.isExpand = activeSection.getIsExpand();
+                    parameters.mustInOrder = activeSection.getMustInOrder();
+                    parameters.index = activeSection.getIndex();
+                    parameters.isAutoExt = activeSection.getIsAutoExt();
                 }
                 //当前激活section加入上移 下移 插入 删除操作句柄
                 if(activeSectionIndex>1){
@@ -528,19 +528,19 @@ wof.bizWidget.spanner.FlowLayoutSpanner.prototype = {
                     activeSection.getDomInstance().append(this._downSectionIco);
                 }
             }else{
-                activeData.activeClass = 'FlowLayout';
-                activeData.cols = flowLayout.getCols();
-                activeData.itemHeight = flowLayout.getItemHeight();
-                activeData.width = flowLayout.getWidth();
-                activeData.height = flowLayout.getHeight();
-                activeData.left = flowLayout.getLeft();
-                activeData.top = flowLayout.getTop();
-                activeData.zIndex = flowLayout.getZIndex();
-                activeData.hiden = flowLayout.getHiden();
-                activeData.position = flowLayout.getPosition();
-                activeData.scale = flowLayout.getScale();
-                activeData.activeSectionIndex = flowLayout.getActiveSectionIndex();
-                activeData.activeItemRank = flowLayout.getActiveItemRank();
+                parameters.activeClass = 'FlowLayout';
+                parameters.cols = flowLayout.getCols();
+                parameters.itemHeight = flowLayout.getItemHeight();
+                parameters.width = flowLayout.getWidth();
+                parameters.height = flowLayout.getHeight();
+                parameters.left = flowLayout.getLeft();
+                parameters.top = flowLayout.getTop();
+                parameters.zIndex = flowLayout.getZIndex();
+                parameters.hiden = flowLayout.getHiden();
+                parameters.position = flowLayout.getPosition();
+                parameters.scale = flowLayout.getScale();
+                parameters.activeSectionIndex = flowLayout.getActiveSectionIndex();
+                parameters.activeItemRank = flowLayout.getActiveItemRank();
             }
             //当前选中的flowLayout加入拖放 删除 剪切操作句柄
             this._selectFlowLayoutIco.css('top',0).css('left',0);
@@ -550,7 +550,7 @@ wof.bizWidget.spanner.FlowLayoutSpanner.prototype = {
             this._cutFlowLayoutIco.css('top',0).css('left',this._deleteFlowLayoutIco.width()*2+4);
             flowLayout.getDomInstance().append(this._cutFlowLayoutIco);
         }
-        this.setActiveData(activeData);
+        this.setParameters(parameters);
         this.sendMessage('wof.bizWidget.spanner.FlowLayoutSpanner_render');
     },
 
@@ -567,14 +567,14 @@ wof.bizWidget.spanner.FlowLayoutSpanner.prototype = {
     getData:function(){
         return {
             propertys: this.getPropertys(),
-            activeData: this.getActiveData(),
+            parameters: this.getParameters(),
             meta: this.getMeta()
         };
     },
     //必须实现
     setData:function(data){
         this.setPropertys(data.propertys);
-        this.setActiveData(data.activeData);
+        this.setParameters(data.parameters);
 
     },
 

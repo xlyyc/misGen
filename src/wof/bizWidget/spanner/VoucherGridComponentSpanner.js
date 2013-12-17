@@ -125,7 +125,7 @@ wof.bizWidget.spanner.VoucherGridComponentSpanner.prototype = {
 
     _propertys: null,
 
-    _activeData: null,
+    _parameters: null,
 
     _pinColumnIco :null,
 
@@ -164,12 +164,12 @@ wof.bizWidget.spanner.VoucherGridComponentSpanner.prototype = {
         return this._propertys;
     },
 
-    getActiveData:function(){
-        return this._activeData;
+    getParameters:function(){
+        return this._parameters;
     },
 
-    setActiveData:function(activeData){
-        this._activeData = activeData;
+    setParameters:function(parameters){
+        this._parameters = parameters;
     },
 
     /**
@@ -282,14 +282,14 @@ wof.bizWidget.spanner.VoucherGridComponentSpanner.prototype = {
 
     //----------必须实现----------
     render: function () {
-        var activeData = {};
+        var parameters = {};
         var voucherGridComponent = wof.util.ObjectManager.get(this.getPropertys().id);
         if(voucherGridComponent!=null){
-            activeData.id = this.getPropertys().id;
-            activeData.componentId = this.getPropertys().componentId;
-            activeData.className = this.getPropertys().className;
-            activeData.onReceiveMessage = this.getPropertys().onReceiveMessage;
-            activeData.onSendMessage = this.getPropertys().onSendMessage;
+            parameters.id = this.getPropertys().id;
+            parameters.componentId = this.getPropertys().componentId;
+            parameters.className = this.getPropertys().className;
+            parameters.onReceiveMessage = this.getPropertys().onReceiveMessage;
+            parameters.onSendMessage = this.getPropertys().onSendMessage;
 
             this._selectGridIco.css('top','0px').css('left','0px');
             voucherGridComponent.getDomInstance().append(this._selectGridIco);
@@ -333,49 +333,49 @@ wof.bizWidget.spanner.VoucherGridComponentSpanner.prototype = {
                     div.append(this._gridColumnMoveLeftIco);
                 }
 
-                activeData.activeClass = 'VoucherGridComponentColumn';
-                activeData.index = column.getIndex();
-                activeData.name = column.getName();
-                activeData.useMultiSelect = column.getUseMultiSelect();
-                activeData.columnType = column.getColumnType();
-                activeData.caption = column.getCaption();
-                activeData.columnWidth = column.getColumnWidth();
-                activeData.bindDataField = column.getBindDataField();
-                activeData.gridId = column.getGridId();
-                activeData.display = column.getDisplay();
-                activeData.isPin = column.getIsPin();
-                activeData.dateTimeFormat = column.getDateTimeFormat();
-                activeData.editor = column.getEditor();
-                activeData.picUrl = column.getPicUrl();
-                activeData.selectPattern = column.getSelectPattern();
-                activeData.visbleType = column.getVisbleType();
-                activeData.readOnly = column.getReadOnly();
-                activeData.required = column.getRequired();
-                activeData.orderByType = column.getOrderByType();
-                activeData.canSearch = column.getCanSearch();
-                activeData.length = column.getLength();
-                activeData.min = column.getMin();
-                activeData.max = column.getMax();
-                activeData.intLength = column.getIntLength();
-                activeData.scaleLength = column.getScaleLength();
-                activeData.regExp = column.getRegExp();
-                activeData.refSearchCondition = column.getRefSearchCondition();
-                activeData.checkErrorInfo = column.getCheckErrorInfo();
-                activeData.linkForm = column.getLinkForm();
+                parameters.activeClass = 'VoucherGridComponentColumn';
+                parameters.index = column.getIndex();
+                parameters.name = column.getName();
+                parameters.useMultiSelect = column.getUseMultiSelect();
+                parameters.columnType = column.getColumnType();
+                parameters.caption = column.getCaption();
+                parameters.columnWidth = column.getColumnWidth();
+                parameters.bindDataField = column.getBindDataField();
+                parameters.gridId = column.getGridId();
+                parameters.display = column.getDisplay();
+                parameters.isPin = column.getIsPin();
+                parameters.dateTimeFormat = column.getDateTimeFormat();
+                parameters.editor = column.getEditor();
+                parameters.picUrl = column.getPicUrl();
+                parameters.selectPattern = column.getSelectPattern();
+                parameters.visbleType = column.getVisbleType();
+                parameters.readOnly = column.getReadOnly();
+                parameters.required = column.getRequired();
+                parameters.orderByType = column.getOrderByType();
+                parameters.canSearch = column.getCanSearch();
+                parameters.length = column.getLength();
+                parameters.min = column.getMin();
+                parameters.max = column.getMax();
+                parameters.intLength = column.getIntLength();
+                parameters.scaleLength = column.getScaleLength();
+                parameters.regExp = column.getRegExp();
+                parameters.refSearchCondition = column.getRefSearchCondition();
+                parameters.checkErrorInfo = column.getCheckErrorInfo();
+                parameters.linkForm = column.getLinkForm();
             }else{
-                activeData.activeClass = 'VoucherGridComponent';
-                activeData.name = voucherGridComponent.getName();
-                activeData.bindEntityID = voucherGridComponent.getBindEntityID();
-                activeData.headerHeight = voucherGridComponent.getHeaderHeight();
-                activeData.rowHeight = voucherGridComponent.getRowHeight();
-                activeData.numberDisplay = voucherGridComponent.getNumberDisplay();
-                activeData.useMutiplePage = voucherGridComponent.getUseMutiplePage();
-                activeData.rowsCount = voucherGridComponent.getRowsCount();
-                activeData.paramMaps = voucherGridComponent.getParamMaps();
+                parameters.activeClass = 'VoucherGridComponent';
+                parameters.name = voucherGridComponent.getName();
+                parameters.bindEntityID = voucherGridComponent.getBindEntityID();
+                parameters.headerHeight = voucherGridComponent.getHeaderHeight();
+                parameters.rowHeight = voucherGridComponent.getRowHeight();
+                parameters.numberDisplay = voucherGridComponent.getNumberDisplay();
+                parameters.useMutiplePage = voucherGridComponent.getUseMutiplePage();
+                parameters.rowsCount = voucherGridComponent.getRowsCount();
+                parameters.paramMaps = voucherGridComponent.getParamMaps();
 
             }
         }
-        this.setActiveData(activeData);
+        this.setParameters(parameters);
         this.sendMessage('wof.bizWidget.spanner.VoucherGridComponentSpanner_render');
     },
 
@@ -392,14 +392,14 @@ wof.bizWidget.spanner.VoucherGridComponentSpanner.prototype = {
     getData:function(){
         return {
             propertys: this.getPropertys(),
-            activeData: this.getActiveData(),
+            parameters: this.getParameters(),
             meta: this.getMeta()
         };
     },
     //必须实现
     setData:function(data){
         this.setPropertys(data.propertys);
-        this.setActiveData(data.activeData);
+        this.setParameters(data.parameters);
 
     },
 

@@ -125,7 +125,7 @@ wof.bizWidget.spanner.GridComponentSpanner.prototype = {
 
     _propertys: null,
 
-    _activeData: null,
+    _parameters: null,
 
     _pinColumnIco :null,
 
@@ -164,12 +164,12 @@ wof.bizWidget.spanner.GridComponentSpanner.prototype = {
         return this._propertys;
     },
 
-    getActiveData:function(){
-        return this._activeData;
+    getParameters:function(){
+        return this._parameters;
     },
 
-    setActiveData:function(activeData){
-        this._activeData = activeData;
+    setParameters:function(parameters){
+        this._parameters = parameters;
     },
 
     /**
@@ -283,14 +283,14 @@ wof.bizWidget.spanner.GridComponentSpanner.prototype = {
 
     //----------必须实现----------
     render: function () {
-        var activeData = {};
+        var parameters = {};
         var gridComponent = wof.util.ObjectManager.get(this.getPropertys().id);
         if(gridComponent!=null){
-            activeData.id = this.getPropertys().id;
-            activeData.componentId = this.getPropertys().componentId;
-            activeData.className = this.getPropertys().className;
-            activeData.onReceiveMessage = this.getPropertys().onReceiveMessage;
-            activeData.onSendMessage = this.getPropertys().onSendMessage;
+            parameters.id = this.getPropertys().id;
+            parameters.componentId = this.getPropertys().componentId;
+            parameters.className = this.getPropertys().className;
+            parameters.onReceiveMessage = this.getPropertys().onReceiveMessage;
+            parameters.onSendMessage = this.getPropertys().onSendMessage;
 
             this._selectGridIco.css('top','0px').css('left','0px');
             gridComponent.getDomInstance().append(this._selectGridIco);
@@ -334,49 +334,49 @@ wof.bizWidget.spanner.GridComponentSpanner.prototype = {
                     div.append(this._gridColumnMoveLeftIco);
                 }
 
-                activeData.activeClass = 'GridComponentColumn';
-                activeData.index = column.getIndex();
-                activeData.name = column.getName();
-                activeData.useMultiSelect = column.getUseMultiSelect();
-                activeData.columnType = column.getColumnType();
-                activeData.caption = column.getCaption();
-                activeData.columnWidth = column.getColumnWidth();
-                activeData.bindDataField = column.getBindDataField();
-                activeData.gridId = column.getGridId();
-                activeData.display = column.getDisplay();
-                activeData.isPin = column.getIsPin();
-                activeData.dateTimeFormat = column.getDateTimeFormat();
-                activeData.editor = column.getEditor();
-                activeData.picUrl = column.getPicUrl();
-                activeData.selectPattern = column.getSelectPattern();
-                activeData.visbleType = column.getVisbleType();
-                activeData.readOnly = column.getReadOnly();
-                activeData.required = column.getRequired();
-                activeData.orderByType = column.getOrderByType();
-                activeData.canSearch = column.getCanSearch();
-                activeData.length = column.getLength();
-                activeData.min = column.getMin();
-                activeData.max = column.getMax();
-                activeData.intLength = column.getIntLength();
-                activeData.scaleLength = column.getScaleLength();
-                activeData.regExp = column.getRegExp();
-                activeData.refSearchCondition = column.getRefSearchCondition();
-                activeData.checkErrorInfo = column.getCheckErrorInfo();
-                activeData.linkForm = column.getLinkForm();
+                parameters.activeClass = 'GridComponentColumn';
+                parameters.index = column.getIndex();
+                parameters.name = column.getName();
+                parameters.useMultiSelect = column.getUseMultiSelect();
+                parameters.columnType = column.getColumnType();
+                parameters.caption = column.getCaption();
+                parameters.columnWidth = column.getColumnWidth();
+                parameters.bindDataField = column.getBindDataField();
+                parameters.gridId = column.getGridId();
+                parameters.display = column.getDisplay();
+                parameters.isPin = column.getIsPin();
+                parameters.dateTimeFormat = column.getDateTimeFormat();
+                parameters.editor = column.getEditor();
+                parameters.picUrl = column.getPicUrl();
+                parameters.selectPattern = column.getSelectPattern();
+                parameters.visbleType = column.getVisbleType();
+                parameters.readOnly = column.getReadOnly();
+                parameters.required = column.getRequired();
+                parameters.orderByType = column.getOrderByType();
+                parameters.canSearch = column.getCanSearch();
+                parameters.length = column.getLength();
+                parameters.min = column.getMin();
+                parameters.max = column.getMax();
+                parameters.intLength = column.getIntLength();
+                parameters.scaleLength = column.getScaleLength();
+                parameters.regExp = column.getRegExp();
+                parameters.refSearchCondition = column.getRefSearchCondition();
+                parameters.checkErrorInfo = column.getCheckErrorInfo();
+                parameters.linkForm = column.getLinkForm();
             }else{
-                activeData.activeClass = 'GridComponent';
-                activeData.name = gridComponent.getName();
-                activeData.bindEntityID = gridComponent.getBindEntityID();
-                activeData.headerHeight = gridComponent.getHeaderHeight();
-                activeData.rowHeight = gridComponent.getRowHeight();
-                activeData.numberDisplay = gridComponent.getNumberDisplay();
-                activeData.useMutiplePage = gridComponent.getUseMutiplePage();
-                activeData.rowsCount = gridComponent.getRowsCount();
-                activeData.paramMaps = gridComponent.getParamMaps();
+                parameters.activeClass = 'GridComponent';
+                parameters.name = gridComponent.getName();
+                parameters.bindEntityID = gridComponent.getBindEntityID();
+                parameters.headerHeight = gridComponent.getHeaderHeight();
+                parameters.rowHeight = gridComponent.getRowHeight();
+                parameters.numberDisplay = gridComponent.getNumberDisplay();
+                parameters.useMutiplePage = gridComponent.getUseMutiplePage();
+                parameters.rowsCount = gridComponent.getRowsCount();
+                parameters.paramMaps = gridComponent.getParamMaps();
 
             }
         }
-        this.setActiveData(activeData);
+        this.setParameters(parameters);
         this.sendMessage('wof.bizWidget.spanner.GridComponentSpanner_render');
     },
 
@@ -393,14 +393,14 @@ wof.bizWidget.spanner.GridComponentSpanner.prototype = {
     getData:function(){
         return {
             propertys: this.getPropertys(),
-            activeData: this.getActiveData(),
+            parameters: this.getParameters(),
             meta: this.getMeta()
         };
     },
     //必须实现
     setData:function(data){
         this.setPropertys(data.propertys);
-        this.setActiveData(data.activeData);
+        this.setParameters(data.parameters);
     },
 
     //静态方法 导出数据(只有需要给运行时解析的叶子节点才需要定义此方法)

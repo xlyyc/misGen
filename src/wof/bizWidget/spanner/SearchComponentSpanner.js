@@ -90,7 +90,7 @@ wof.bizWidget.spanner.SearchComponentSpanner.prototype = {
 
     _propertys: null,
 
-    _activeData: null,
+    _parameters: null,
 
     _mergeSearchItemArrow:null,
 
@@ -130,12 +130,12 @@ wof.bizWidget.spanner.SearchComponentSpanner.prototype = {
         return this._propertys;
     },
 
-    getActiveData:function(){
-        return this._activeData;
+    getParameters:function(){
+        return this._parameters;
     },
 
-    setActiveData:function(activeData){
-        this._activeData = activeData;
+    setParameters:function(parameters){
+        this._parameters = parameters;
     },
 
 
@@ -270,14 +270,14 @@ wof.bizWidget.spanner.SearchComponentSpanner.prototype = {
 
     //----------必须实现----------
     render: function () {
-        var activeData = {};
+        var parameters = {};
         var searchComponent = wof.util.ObjectManager.get(this.getPropertys().id);
         if(searchComponent!=null){
-            activeData.id = this.getPropertys().id;
-            activeData.componentId = this.getPropertys().componentId;
-            activeData.className = this.getPropertys().className;
-            activeData.onReceiveMessage = this.getPropertys().onReceiveMessage;
-            activeData.onSendMessage = this.getPropertys().onSendMessage;
+            parameters.id = this.getPropertys().id;
+            parameters.componentId = this.getPropertys().componentId;
+            parameters.className = this.getPropertys().className;
+            parameters.onReceiveMessage = this.getPropertys().onReceiveMessage;
+            parameters.onSendMessage = this.getPropertys().onSendMessage;
 
             var activeSearchItemRank = this.getPropertys().activeSearchItemRank;
             var activeSearchItem = searchComponent.findSearchItemByRank(activeSearchItemRank);
@@ -312,43 +312,43 @@ wof.bizWidget.spanner.SearchComponentSpanner.prototype = {
                     this._addSearchItemRowspanArrow.css('top',activeSearchItem.getHeight()*activeSearchItem.getScale()-this._addSearchItemRowspanArrow.height()-2).css('left',activeSearchItem.getWidth()*activeSearchItem.getScale()/2-this._addSearchItemRowspanArrow.width()/2);
                     activeSearchItem.getDomInstance().append(this._addSearchItemRowspanArrow);
                 }
-                activeData.activeClass = 'SearchItem';
-                activeData.name = activeSearchItem.getName();
-                activeData.index = activeSearchItem.getIndex();
-                activeData.colNum = activeSearchItem.getColNum();
-                activeData.rowNum = activeSearchItem.getRowNum();
-                activeData.isFixItem = activeSearchItem.getIsFixItem();
-                activeData.rowspan = activeSearchItem.getRowspan();
-                activeData.caption = activeSearchItem.getCaption();
-                activeData.dataField = activeSearchItem.getDataField();
-                activeData.dateTimeBoxFormat = activeSearchItem.getDateTimeBoxFormat();
-                activeData.selectPattern = activeSearchItem.getSelectPattern();
-                activeData.useMultiSelect = activeSearchItem.getUseMultiSelect();
-                activeData.visbleType = activeSearchItem.getVisbleType();
-                activeData.fromTo = activeSearchItem.getFromTo();
-                activeData.labelWidth = activeSearchItem.getLabelWidth();
-                activeData.inputWidth = activeSearchItem.getInputWidth();
-                activeData.inputHeight = activeSearchItem.getInputHeight();
-                activeData.colspan = activeSearchItem.getColspan();
-                activeData.tipValue = activeSearchItem.getTipValue();
-                activeData.linkageItem = activeSearchItem.getLinkageItem();
+                parameters.activeClass = 'SearchItem';
+                parameters.name = activeSearchItem.getName();
+                parameters.index = activeSearchItem.getIndex();
+                parameters.colNum = activeSearchItem.getColNum();
+                parameters.rowNum = activeSearchItem.getRowNum();
+                parameters.isFixItem = activeSearchItem.getIsFixItem();
+                parameters.rowspan = activeSearchItem.getRowspan();
+                parameters.caption = activeSearchItem.getCaption();
+                parameters.dataField = activeSearchItem.getDataField();
+                parameters.dateTimeBoxFormat = activeSearchItem.getDateTimeBoxFormat();
+                parameters.selectPattern = activeSearchItem.getSelectPattern();
+                parameters.useMultiSelect = activeSearchItem.getUseMultiSelect();
+                parameters.visbleType = activeSearchItem.getVisbleType();
+                parameters.fromTo = activeSearchItem.getFromTo();
+                parameters.labelWidth = activeSearchItem.getLabelWidth();
+                parameters.inputWidth = activeSearchItem.getInputWidth();
+                parameters.inputHeight = activeSearchItem.getInputHeight();
+                parameters.colspan = activeSearchItem.getColspan();
+                parameters.tipValue = activeSearchItem.getTipValue();
+                parameters.linkageItem = activeSearchItem.getLinkageItem();
             }else{
-                activeData.activeClass = 'SearchComponent';
-                activeData.initActionName = searchComponent.getInitActionName();
-                activeData.itemHeight = searchComponent.getItemHeight();
-                activeData.name = searchComponent.getName();
-                activeData.callStr = searchComponent.getCallStr();
-                activeData.index = searchComponent.getIndex();
-                activeData.caption = searchComponent.getCaption();
-                activeData.linkComponentID = searchComponent.getLinkComponentID();
-                activeData.state = searchComponent.getState();
-                activeData.mustInOrder = searchComponent.getMustInOrder();
-                activeData.colsNum = searchComponent.getColsNum();
-                activeData.titleHeight = searchComponent.getTitleHeight();
-                activeData.rows = searchComponent.getRows();
-                activeData.isExpand = searchComponent.getIsExpand();
-                activeData.activeSearchItemRank = searchComponent.getActiveSearchItemRank();
-                activeData.paramMaps = searchComponent.getParamMaps();
+                parameters.activeClass = 'SearchComponent';
+                parameters.initActionName = searchComponent.getInitActionName();
+                parameters.itemHeight = searchComponent.getItemHeight();
+                parameters.name = searchComponent.getName();
+                parameters.callStr = searchComponent.getCallStr();
+                parameters.index = searchComponent.getIndex();
+                parameters.caption = searchComponent.getCaption();
+                parameters.linkComponentID = searchComponent.getLinkComponentID();
+                parameters.state = searchComponent.getState();
+                parameters.mustInOrder = searchComponent.getMustInOrder();
+                parameters.colsNum = searchComponent.getColsNum();
+                parameters.titleHeight = searchComponent.getTitleHeight();
+                parameters.rows = searchComponent.getRows();
+                parameters.isExpand = searchComponent.getIsExpand();
+                parameters.activeSearchItemRank = searchComponent.getActiveSearchItemRank();
+                parameters.paramMaps = searchComponent.getParamMaps();
             }
 
             //当前选中的SearchComponent加入拖放 删除操作句柄
@@ -359,7 +359,7 @@ wof.bizWidget.spanner.SearchComponentSpanner.prototype = {
             this._cutSearchComponentIco.css('top',0).css('left',this._deleteSearchComponentIco.width()*2+4);
             searchComponent.getDomInstance().append(this._cutSearchComponentIco);
         }
-        this.setActiveData(activeData);
+        this.setParameters(parameters);
         this.sendMessage('wof.bizWidget.spanner.SearchComponentSpanner_render');
     },
 
@@ -375,14 +375,14 @@ wof.bizWidget.spanner.SearchComponentSpanner.prototype = {
     getData:function(){
         return {
             propertys: this.getPropertys(),
-            activeData: this.getActiveData(),
+            parameters: this.getParameters(),
             meta: this.getMeta()
         };
     },
     //必须实现
     setData:function(data){
         this.setPropertys(data.propertys);
-        this.setActiveData(data.activeData);
+        this.setParameters(data.parameters);
 
     },
 
