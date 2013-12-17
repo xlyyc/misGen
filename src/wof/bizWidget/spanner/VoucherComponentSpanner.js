@@ -57,7 +57,6 @@ wof.bizWidget.spanner.VoucherComponentSpanner = function () {
             'useMultiSelect':{prop:'useMultiSelect','name':'下拉框是否多选','type':'yesOrNo','readOnly':false,'isHide':false,required:false},
             'visbleType':{prop:'visbleType','name':'显示类型','type':'enum','readOnly':false,'isHide':false,
                 enumData:{
-                    id:'Id',
                     text:'文本框',
                     textArea:'文本域',
                     richTextArea:'文本编辑器',
@@ -72,7 +71,7 @@ wof.bizWidget.spanner.VoucherComponentSpanner = function () {
             'labelWidth':{prop:'labelWidth','name':'Label宽度','type':'naturalNumber','readOnly':false,'isHide':false,required:false},
             'inputWidth':{prop:'inputWidth','name':'输入框宽度','type':'naturalNumber','readOnly':false,'isHide':false,required:false},
             'inputHeight':{prop:'inputHeight','name':'输入框高度','type':'naturalNumber','readOnly':false,'isHide':false,required:false},
-            'linkageItem':{prop:'linkageItem','name':'关联联动项','type':'text','readOnly':false,'isHide':false,required:false},
+            'linkageItem':{prop:'linkageItem','name':'关联联动项','type':'custom','readOnly':false,'isHide':false,required:false, customMethod:'wof.customWindow.MetaTreeSelector', customParam:'field'},
             'tipValue':{prop:'tipValue','name':'提示信息','type':'text','readOnly':false,'isHide':false,required:false},
             'voucherItemGroupIndex':{prop:'voucherItemGroupIndex','name':'当前分组序号','type':'text','readOnly':true,'isHide':true,required:true}
         }
@@ -471,7 +470,9 @@ wof.bizWidget.spanner.VoucherComponentSpanner.prototype = {
                     parameters.itemHeight = activeVoucherItemGroup.getItemHeight();
                     parameters.isExpand = activeVoucherItemGroup.getIsExpand();
                     parameters.mustInOrder = activeVoucherItemGroup.getMustInOrder();
-                    parameters.isHead = activeVoucherItemGroup.getIsHead();
+                    if(voucherComponent.getViewType()=='tab'){ //如果不是标签页 不用设置isHead属性
+                        parameters.isHead = activeVoucherItemGroup.getIsHead();
+                    }
                     parameters.index = activeVoucherItemGroup.getIndex();
 
 /*                    this._highlightBorder.css('height',(activeVoucherItemGroup.getHeight()-2)+'px').css('width',(activeVoucherItemGroup.getWidth()-2)+'px');
