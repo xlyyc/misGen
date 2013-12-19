@@ -22,7 +22,7 @@
             }
 
             var selData = {"name":"appList","options":[]};
-            var formFunctionId = decodeURIComponent(hidden.val());
+            var formFunctionId = JSON.parse(decodeURIComponent(hidden.val()));
             wof.customWindow.PageFormSelector._currFormFunctionId = formFunctionId;
             if(formFunctionId!=null){
                 wof.customWindow.PageFormSelector._currAppId = wof.customWindow.PageFormSelector.getAppByFunctionId(formFunctionId).id;
@@ -70,7 +70,8 @@
                         if(nodes.length>0){
                             var node = nodes[0];
                             wof.customWindow.PageFormSelector._currFormFunctionId = node.nodeId;
-                            hidden.val(encodeURIComponent(wof.customWindow.PageFormSelector._currFormFunctionId));
+                            //hidden.val(JSON.parse(encodeURIComponent(wof.customWindow.PageFormSelector._currFormFunctionId)));
+                            hidden.val(encodeURIComponent(JSON.stringify(wof.customWindow.PageFormSelector._currFormFunctionId)));
                             jQuery(this).dialog('close');
                         }else{
                             alert('请选择一个属性');
@@ -101,6 +102,7 @@
 
         getAppByFunctionId: function(functionId){
             //var json = JSON.parse(getAppByFunctionId(functionId));
+
             var json = {"id":"RSXT","label":"人事系统"};
 
             return json;
