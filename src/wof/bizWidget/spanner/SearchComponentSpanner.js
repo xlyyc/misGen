@@ -48,7 +48,7 @@ wof.bizWidget.spanner.SearchComponentSpanner = function () {
                     file:'文件选择框',
                     number:'数字'
                 },required:false},
-            'fromTo':{prop:'fromTo','name':'是否范围搜索','type':'yesOrNo','yesOrNo':false,'isHide':false,required:false},
+            'fromTo':{prop:'fromTo','name':'是否范围搜索','type':'yesOrNo','readOnly':false,'isHide':false,required:false},
             'labelWidth':{prop:'labelWidth','name':'Label宽度','type':'naturalNumber','readOnly':false,'isHide':false,required:false},
             'inputWidth':{prop:'inputWidth','name':'输入框宽度','type':'naturalNumber','readOnly':false,'isHide':false,required:false},
             'inputHeight':{prop:'inputHeight','name':'输入框高度','type':'naturalNumber','readOnly':false,'isHide':false,required:false},

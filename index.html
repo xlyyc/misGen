@@ -533,6 +533,8 @@ jQuery(function(){
                                 compositeComponentsData.push({'name':name, 'data':layout.getData()});
                             }
                             window.localStorage.setItem('compositeComponentsData', JSON.stringify(compositeComponentsData));
+
+                            //savePageComponentTemplate(id, label, contextStr);       //todo
                         }
                         jQuery(this).dialog('close');
                     },

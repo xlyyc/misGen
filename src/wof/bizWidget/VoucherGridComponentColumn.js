@@ -184,7 +184,7 @@ wof.bizWidget.VoucherGridComponentColumn.prototype = {
 
     getEditor: function(){
         if(this._editor==null){
-            this._editor = false;
+            this._editor = true;
         }
         return this._editor;
     },

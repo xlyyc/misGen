@@ -146,6 +146,9 @@ wof.bizWidget.VoucherItem.prototype = {
     },
 
     getReadOnly: function(){
+        if(this._readOnly==null){
+            this._readOnly = false;
+        }
         return this._readOnly;
     },
 
@@ -154,6 +157,9 @@ wof.bizWidget.VoucherItem.prototype = {
     },
 
     getRequired: function(){
+        if(this._required==null){
+            this._required = false;
+        }
         return this._required;
     },
 

@@ -43,17 +43,35 @@ wof.bizWidget.spanner.VoucherComponentSpanner = function () {
             'visiable':{prop:'visiable','name':'表单项是否显示','type':'yesOrNo','readOnly':false,'isHide':false,required:false},
             'itemLabel':{prop:'itemLabel','name':'显示名称','type':'text','readOnly':false,'isHide':false,required:false},
             'dataField':{prop:'dataField','name':'绑定实体属性','type':'custom','readOnly':false,'isHide':false,required:false, customMethod:'wof.customWindow.MetaTreeSelector', customParam:'field'},
-            'dateTimeBoxFormat':{prop:'dateTimeBoxFormat','name':'时间格式','type':'enum','readOnly':false,'isHide':false,enumData:{
-                'yyyy-MM-dd HH:mm:ss':'yyyy-MM-dd HH:mm:ss','yyyy-MM':'yyyy-MM','MM-dd':'MM-dd','yyyy-MM-dd':'yyyy-MM-dd','HH:mm:ss':'HH:mm:ss','HH:mm':'HH:mm'
-            },required:false},
-            'readOnly':{prop:'readOnly','name':'是否只读','type':'yesOrNo','yesOrNo':false,'isHide':false,required:false},
-            'required':{prop:'required','name':'是否必填','type':'yesOrNo','yesOrNo':false,'isHide':false,required:false},
+            'dateTimeBoxFormat':{prop:'dateTimeBoxFormat','name':'时间格式','type':'enum','readOnly':false,'isHide':false,
+                enumData:{
+                    'yyyy-MM-dd HH:mm:ss':'yyyy-MM-dd HH:mm:ss',
+                    'yyyy-MM':'yyyy-MM',
+                    'MM-dd':'MM-dd',
+                    'yyyy-MM-dd':'yyyy-MM-dd',
+                    'HH:mm:ss':'HH:mm:ss',
+                    'HH:mm':'HH:mm'
+                },
+                required:false},
+            'readOnly':{prop:'readOnly','name':'是否只读','type':'yesOrNo','readOnly':false,'isHide':false,required:false,
+                disabledComponents:{
+                    enums:'true',
+                    components:'length,min,max,regExp,checkErrorInfo,visbleType,selectPattern,useMultiSelect,inputWidth,inputHeight,linkageItem'
+                }
+            },
+            'required':{prop:'required','name':'是否必填','type':'yesOrNo','readOnly':false,'isHide':false,required:false},
             'length':{prop:'length','name':'字符长度','type':'naturalNumber','readOnly':false,'isHide':false,required:false},
             'min':{prop:'min','name':'数值最小值','type':'naturalNumber','readOnly':false,'isHide':false,required:false},
             'max':{prop:'max','name':'数值最大值','type':'naturalNumber','readOnly':false,'isHide':false,required:false},
             'regExp':{prop:'regExp','name':'校验正则表达式','type':'text','readOnly':false,'isHide':false,required:false},
             'checkErrorInfo':{prop:'checkErrorInfo','name':'校验失败提示','type':'text','readOnly':false,'isHide':false,required:false},
-            'selectPattern':{prop:'selectPattern','name':'下拉框显示模式','type':'enum','readOnly':false,'isHide':false, 'enumData':{'normal':'普通','tree':'树形','grid':'列表'},required:false},
+            'selectPattern':{prop:'selectPattern','name':'下拉框显示模式','type':'enum','readOnly':false,'isHide':false,
+                'enumData':{
+                    'normal':'普通',
+                    'tree':'树形',
+                    'grid':'列表'
+                },
+                required:false},
             'useMultiSelect':{prop:'useMultiSelect','name':'下拉框是否多选','type':'yesOrNo','readOnly':false,'isHide':false,required:false},
             'visbleType':{prop:'visbleType','name':'显示类型','type':'enum','readOnly':false,'isHide':false,
                 enumData:{
@@ -67,7 +85,12 @@ wof.bizWidget.spanner.VoucherComponentSpanner = function () {
                     file:'文件选择框',
                     number:'数字'
                 },
-                required:false},
+                required:false,
+                disabledComponents:{
+                    enums:'text,textArea,richTextArea,checkBox,date,radio,file,number',
+                    components:'selectPattern,useMultiSelect'
+                }
+            },
             'labelWidth':{prop:'labelWidth','name':'Label宽度','type':'naturalNumber','readOnly':false,'isHide':false,required:false},
             'inputWidth':{prop:'inputWidth','name':'输入框宽度','type':'naturalNumber','readOnly':false,'isHide':false,required:false},
             'inputHeight':{prop:'inputHeight','name':'输入框高度','type':'naturalNumber','readOnly':false,'isHide':false,required:false},
@@ -454,9 +477,9 @@ wof.bizWidget.spanner.VoucherComponentSpanner.prototype = {
                     parameters.max = activeVoucherItem.getMax();
                     parameters.regExp = activeVoucherItem.getRegExp();
                     parameters.checkErrorInfo = activeVoucherItem.getCheckErrorInfo();
+                    parameters.visbleType = activeVoucherItem.getVisbleType();
                     parameters.selectPattern = activeVoucherItem.getSelectPattern();
                     parameters.useMultiSelect = activeVoucherItem.getUseMultiSelect();
-                    parameters.visbleType = activeVoucherItem.getVisbleType();
                     parameters.labelWidth = activeVoucherItem.getLabelWidth();
                     parameters.inputWidth = activeVoucherItem.getInputWidth();
                     parameters.inputHeight = activeVoucherItem.getInputHeight();

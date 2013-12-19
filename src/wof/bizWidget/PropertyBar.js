@@ -141,8 +141,8 @@ wof.bizWidget.PropertyBar.prototype={
                 tr.append(td);
             }else if(meta.type=='yesOrNo'){ //是否类型
                 var sel =jQuery('<select name="'+meta.prop+'">');
-                sel.append(jQuery('<option value="true" '+(value==true?'selected':'')+'>是</option>'));
-                sel.append(jQuery('<option value="false" '+(value==false?'selected':'')+'>否</option>'));
+                sel.append(jQuery('<option value="true" '+(value=='true'?'selected':'')+'>是</option>'));
+                sel.append(jQuery('<option value="false" '+(value=='false'?'selected':'')+'>否</option>'));
                 var td = jQuery('<td style="width:55%;">');
                 td.append(sel);
                 tr.append(td);
@@ -184,7 +184,7 @@ wof.bizWidget.PropertyBar.prototype={
                 value = encodeURIComponent(JSON.stringify(value));
                 var hidden = jQuery('<input type="hidden" name="'+meta.prop+'" value="'+value+'"/>');
                 td.append(hidden);
-                var button = jQuery('<input type="button" value=" 设置 ">');
+                var button = jQuery('<input type="button" name="'+meta.prop+'_button" value=" 设置 ">');
                 td.append(button);
                 var _this = this;
                 button.mousedown(function(event){
@@ -229,16 +229,45 @@ wof.bizWidget.PropertyBar.prototype={
         var parameters = this.getParameters();
         var meta = this.getMeta();
 		if(!jQuery.isEmptyObject(parameters)){
+            var disabledComponents = [];
             var trs = [];
             for(var name in parameters){
                 var m = meta.propertys[parameters.activeClass][name];
                 if(m!=null){
-                    var value = parameters[name];
+                    var value = String(parameters[name]);
                     trs.push(this._createTr(m,value));
+                    if(m.disabledComponents!=null){
+                        var enums = m.disabledComponents.enums.split(',');
+                        var idx=jQuery.inArray(String(value), enums);
+                        if(idx>=0){
+                            disabledComponents = jQuery.merge(disabledComponents, m.disabledComponents.components.split(','));
+                        }
+                    }
                 }
             }
             var table = this._createTable(trs);
             this.getDomInstance().append(table);
+
+            var sels = jQuery('table[id="propertyTable"] > tbody > tr > td > select');
+            sels.each(function(){
+                jQuery(this).on('change', function() {
+                    var name = jQuery(this).attr('name');
+                    var val = String(jQuery(this).val());
+                    parameters[name] = val;
+                    _this.render();
+                });
+            });
+
+            //禁用相关的控件
+            for(var i=0;i<disabledComponents.length;i++){
+                var component = jQuery('table[id="propertyTable"] > tbody > tr > td > *[name="'+disabledComponents[i]+'"]');
+                if(component!=null){
+                    if(component.attr('type')=='hidden'){
+                        component = jQuery('table[id="propertyTable"] > tbody > tr > td > *[name="'+disabledComponents[i]+'_button"]');
+                    }
+                    component.attr("disabled", true);
+                }
+            }
 		}
         var applyBtn = jQuery('<input type="button" value=" 应用 ">');
         this.getDomInstance().append(applyBtn);
@@ -249,7 +278,7 @@ wof.bizWidget.PropertyBar.prototype={
             var parameters = _this.getParameters();
             inputs.each(function(){
                 var name = jQuery(this).attr('name');
-                var val = jQuery(this).val();
+                var val = String(jQuery(this).val());
                 if(jQuery(this).attr('type')=='hidden'){
                     val = JSON.parse(decodeURIComponent(val));
                 }
@@ -266,7 +295,7 @@ wof.bizWidget.PropertyBar.prototype={
                 var sels = jQuery('table[id="propertyTable"] > tbody > tr > td > select');
                 sels.each(function(){
                     var name = jQuery(this).attr('name');
-                    var val = jQuery(this).val();
+                    var val = String(jQuery(this).val());
                     parameters[name] = val;
                     var m = meta.propertys[parameters.activeClass][name];
                     if((val==null||val=='') && (m!=null && m.required==true)){
