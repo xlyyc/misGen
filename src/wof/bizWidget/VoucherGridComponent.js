@@ -554,19 +554,19 @@ wof.bizWidget.VoucherGridComponent.prototype = {
                     voucherGridComponentColumn.setCanSearch((voucherGridComponentColumnData.canSearch=='true'||voucherGridComponentColumnData.canSearch==true)?true:false);
                 }
                 if(voucherGridComponentColumnData.length!=null){
-                    voucherGridComponentColumn.setLength(Number(voucherGridComponentColumnData.length));
+                    voucherGridComponentColumn.setLength(voucherGridComponentColumnData.length==''?'':Number(voucherGridComponentColumnData.length));
                 }
                 if(voucherGridComponentColumnData.min!=null){
-                    voucherGridComponentColumn.setMin(Number(voucherGridComponentColumnData.min));
+                    voucherGridComponentColumn.setMin(voucherGridComponentColumnData.min==''?'':Number(voucherGridComponentColumnData.min));
                 }
                 if(voucherGridComponentColumnData.max!=null){
-                    voucherGridComponentColumn.setMax(Number(voucherGridComponentColumnData.max));
+                    voucherGridComponentColumn.setMax(voucherGridComponentColumnData.max==''?'':Number(voucherGridComponentColumnData.max));
                 }
                 if(voucherGridComponentColumnData.intLength!=null){
-                    voucherGridComponentColumn.setIntLength(Number(voucherGridComponentColumnData.intLength));
+                    voucherGridComponentColumn.setIntLength(voucherGridComponentColumnData.intLength==''?'':Number(voucherGridComponentColumnData.intLength));
                 }
                 if(voucherGridComponentColumnData.scaleLength!=null){
-                    voucherGridComponentColumn.setScaleLength(Number(voucherGridComponentColumnData.scaleLength));
+                    voucherGridComponentColumn.setScaleLength(voucherGridComponentColumnData.scaleLength==''?'':Number(voucherGridComponentColumnData.scaleLength));
                 }
                 if(voucherGridComponentColumnData.regExp!=null){
                     voucherGridComponentColumn.setRegExp(voucherGridComponentColumnData.regExp);
@@ -789,18 +789,10 @@ wof.bizWidget.VoucherGridComponent.prototype = {
         node.setTop(2);
         node.setLeft(2);
         node.setUseMutiplePage(true);
-        for(var i=0;i<15;i++){
+        for(var i=0;i<4;i++){
             var column = new wof.bizWidget.VoucherGridComponentColumn();
             column.setCaption('列'+(i+1));
-            if(i==2){
-                column.setColumnWidth(120);
-            }
-            if(i==0){
-                column.setColumnWidth(55);
-            }
-            if(i==5){
-                column.setDisplay(false);
-            }
+            column.setColumnWidth(120);
             column.appendTo(node);
         }
         return node;

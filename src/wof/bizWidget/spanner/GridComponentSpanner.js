@@ -56,12 +56,12 @@ wof.bizWidget.spanner.GridComponentSpanner = function () {
             'isPin':{prop:'isPin','name':'是否钉住','type':'yesOrNo','readOnly':false,'isHide':false,required:false},
             'dateTimeFormat':{prop:'dateTimeFormat','name':'时间格式','type':'enum','readOnly':false,'isHide':false,
                 enumData:{
-                    'YYYY-MM-DD hh:mm:ss':'YYYY-MM-DD hh:mm:ss',
-                    'YYYY-MM':'YYYY-MM',
-                    'MM-DD':'MM-DD',
-                    'YYYY-MM-DD':'YYYY-MM-DD',
-                    'hh:mm:ss':'hh:mm:ss',
-                    'hh:mm':'hh:mm'
+                    'yyyy-MM-dd HH:mm:ss':'yyyy-MM-dd HH:mm:ss',
+                    'yyyy-MM':'yyyy-MM',
+                    'MM-dd':'MM-dd',
+                    'yyyy-MM-dd':'yyyy-MM-dd',
+                    'HH:mm:ss':'HH:mm:ss',
+                    'HH:mm':'HH:mm'
                 },required:false},
             'editor':{prop:'editor','name':'是否行编辑','type':'yesOrNo','readOnly':false,'isHide':false,required:false},
             'picUrl':{prop:'picUrl','name':'图片地址','type':'text','readOnly':false,'isHide':false,required:false},

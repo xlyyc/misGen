@@ -526,19 +526,19 @@ wof.bizWidget.GridComponent.prototype = {
                     gridComponentColumn.setCanSearch((gridComponentColumnData.canSearch=='true'||gridComponentColumnData.canSearch==true)?true:false);
                 }
                 if(gridComponentColumnData.length!=null){
-                    gridComponentColumn.setLength(Number(gridComponentColumnData.length));
+                    gridComponentColumn.setLength(gridComponentColumnData.length==''?'':Number(gridComponentColumnData.length));
                 }
                 if(gridComponentColumnData.min!=null){
-                    gridComponentColumn.setMin(Number(gridComponentColumnData.min));
+                    gridComponentColumn.setMin(gridComponentColumnData.min==''?'':Number(gridComponentColumnData.min));
                 }
                 if(gridComponentColumnData.max!=null){
-                    gridComponentColumn.setMax(Number(gridComponentColumnData.max));
+                    gridComponentColumn.setMax(gridComponentColumnData.max==''?'':Number(gridComponentColumnData.max));
                 }
                 if(gridComponentColumnData.intLength!=null){
-                    gridComponentColumn.setIntLength(Number(gridComponentColumnData.intLength));
+                    gridComponentColumn.setIntLength(gridComponentColumnData.intLength==''?'':Number(gridComponentColumnData.intLength));
                 }
                 if(gridComponentColumnData.scaleLength!=null){
-                    gridComponentColumn.setScaleLength(Number(gridComponentColumnData.scaleLength));
+                    gridComponentColumn.setScaleLength(gridComponentColumnData.scaleLength==''?'':Number(gridComponentColumnData.scaleLength));
                 }
                 if(gridComponentColumnData.regExp!=null){
                     gridComponentColumn.setRegExp(gridComponentColumnData.regExp);
@@ -760,18 +760,10 @@ wof.bizWidget.GridComponent.prototype = {
         node.setTop(2);
         node.setLeft(2);
         node.setUseMutiplePage(true);
-        for(var i=0;i<15;i++){
+        for(var i=0;i<4;i++){
             var column = new wof.bizWidget.GridComponentColumn();
             column.setCaption('列'+(i+1));
-            if(i==2){
-                column.setColumnWidth(120);
-            }
-            if(i==0){
-                column.setColumnWidth(55);
-            }
-            if(i==5){
-                column.setDisplay(false);
-            }
+            column.setColumnWidth(120);
             column.appendTo(node);
         }
         return node;

@@ -173,7 +173,7 @@ wof.bizWidget.GridComponentColumn.prototype = {
 
     getDateTimeFormat: function(){
         if(this._dateTimeFormat==null){
-            this._dateTimeFormat = 'YYYY-MM-DD';
+            this._dateTimeFormat = 'yyyy-MM-dd';
         }
         return this._dateTimeFormat;
     },

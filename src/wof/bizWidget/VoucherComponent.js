@@ -31,7 +31,6 @@ wof.bizWidget.VoucherComponent.prototype = {
 
     _viewType: null, //展现方式  GROUP  分组展示  垂直展示，支持收缩 TAB  完全tab展示 HEAD_TAB 不完全tab 支持一个head单独展示，其他在一个tab组中展示
 
-
     _itemHeight: null,         //voucherItem高度
 
     _activeVoucherItemGroupIndex: null,   //聚焦VoucherItemGroup序号(从1开始)
@@ -134,8 +133,6 @@ wof.bizWidget.VoucherComponent.prototype = {
     setIndex: function(index){
         this._index = index;
     },
-
-
 
     getItemHeight: function(){
         if(this._itemHeight==null){

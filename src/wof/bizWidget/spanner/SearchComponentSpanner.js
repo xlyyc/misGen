@@ -32,7 +32,12 @@ wof.bizWidget.spanner.SearchComponentSpanner = function () {
             'dataField':{prop:'dataField','name':'绑定实体属性','type':'custom','readOnly':false,'isHide':false,required:false, customMethod:'wof.customWindow.MetaTreeSelector', customParam:'field'},
             'dateTimeBoxFormat':{prop:'dateTimeBoxFormat','name':'时间格式','type':'enum','readOnly':false,'isHide':false,
                 enumData:{
-                    'yyyy-MM-dd HH:mm:ss':'yyyy-MM-dd HH:mm:ss','yyyy-MM':'yyyy-MM','MM-dd':'MM-dd','yyyy-MM-dd':'yyyy-MM-dd','HH:mm:ss':'HH:mm:ss','HH:mm':'HH:mm'
+                    'yyyy-MM-dd HH:mm:ss':'yyyy-MM-dd HH:mm:ss',
+                    'yyyy-MM':'yyyy-MM',
+                    'MM-dd':'MM-dd',
+                    'yyyy-MM-dd':'yyyy-MM-dd',
+                    'HH:mm:ss':'HH:mm:ss',
+                    'HH:mm':'HH:mm'
                 },required:false},
             'selectPattern':{prop:'selectPattern','name':'下拉框显示模式','type':'enum','readOnly':false,'isHide':false, 'enumData':{'normal':'普通','tree':'树形','grid':'列表'},required:false},
             'useMultiSelect':{prop:'useMultiSelect','name':'下拉框是否多选','type':'yesOrNo','readOnly':false,'isHide':false,required:false},

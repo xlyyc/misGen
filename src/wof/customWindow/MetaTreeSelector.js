@@ -79,9 +79,9 @@
 		},
 
         getBizEntities:function(type){
-            //var bizEntity = JSON.parse(getBizEntities());
+            var bizEntity = JSON.parse(getBizEntities());
 
-            var bizEntity = {
+           /* var bizEntity = {
                 "childEntity": [{
                     "ID": "XXJL",
                     "alias": "XXZC",
@@ -475,8 +475,7 @@
                         "uniqueName": ""
                     }]
                 }
-            };
-
+            };*/
             var tempLinkEntityTable = {};
             for(var i=0; i<bizEntity.linkEntity.length; i++){
                 var ent = bizEntity.linkEntity[i];
@@ -504,11 +503,11 @@
                 children.push({"nodeId":(mainEntity.alias+"."+mainEntity.properties[i].name), "name":mainEntity.properties[i].label});
             }
 
-            var caculateFiled = {"nodeId":"", "name":"计算列", "nocheck":true, "children":[]};
-            for(var i=0;i<mainEntity.caculateFiled.length;i++){
-                caculateFiled.children.push({"nodeId":(mainEntity.alias+"."+mainEntity.caculateFiled[i].fieldID), "name":mainEntity.caculateFiled[i].fieldCaption});
+            var calculateFiled = {"nodeId":"", "name":"计算列", "nocheck":true, "children":[]};
+            for(var i=0;i<mainEntity.calculateFiled.length;i++){
+                calculateFiled.children.push({"nodeId":(mainEntity.alias+"."+mainEntity.calculateFiled[i].fieldID), "name":mainEntity.calculateFiled[i].fieldCaption});
             }
-            children.push(caculateFiled);
+            children.push(calculateFiled);
 
             function linkEntities(alias){
                 var ents = findEntityByTargetEntityIDFromLinkEntity(alias);
@@ -540,11 +539,11 @@
                 childEntity.children.push(childNode);
 
 
-                var caculateFiled = {"nodeId":"", "name":"计算列", "nocheck":true, "children":[]};
-                for(var i=0;i<child.caculateFiled.length;i++){
-                    caculateFiled.children.push({"nodeId":(child.alias+"."+child.caculateFiled[i].fieldID), "name":child.caculateFiled[i].fieldCaption});
+                var calculateFiled = {"nodeId":"", "name":"计算列", "nocheck":true, "children":[]};
+                for(var i=0;i<child.calculateFiled.length;i++){
+                    calculateFiled.children.push({"nodeId":(child.alias+"."+child.calculateFiled[i].fieldID), "name":child.calculateFiled[i].fieldCaption});
                 }
-                childEntity.children.push(caculateFiled);
+                childEntity.children.push(calculateFiled);
 
                 var link = linkEntities(child.alias);
                 if(link!=null){

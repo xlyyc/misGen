@@ -1,5 +1,5 @@
 ﻿if (!wof.customWindow.PageFormSelector) {
-	wof.customWindow.PageFormSelector = {
+    wof.customWindow.PageFormSelector = {
 
         _currAppId: null,
 
@@ -7,7 +7,7 @@
 
         _currFormFunctionId: null,
 
-		run: function(hidden, customParam) {
+        run: function(hidden, customParam) {
             if(wof.customWindow.PageFormSelector._initFlag ==null){
                 var tree = new wof.bizWidget.PageFormTree();
                 tree.setIsInside(true);
@@ -70,7 +70,6 @@
                         if(nodes.length>0){
                             var node = nodes[0];
                             wof.customWindow.PageFormSelector._currFormFunctionId = node.nodeId;
-                            //hidden.val(JSON.parse(encodeURIComponent(wof.customWindow.PageFormSelector._currFormFunctionId)));
                             hidden.val(encodeURIComponent(JSON.stringify(wof.customWindow.PageFormSelector._currFormFunctionId)));
                             jQuery(this).dialog('close');
                         }else{
@@ -87,7 +86,7 @@
                 }
             });
 
-		},
+        },
 
         //创建下拉框
         _createSelect: function(selectData){
@@ -101,43 +100,42 @@
         },
 
         getAppByFunctionId: function(functionId){
-            //var json = JSON.parse(getAppByFunctionId(functionId));
+            var json = JSON.parse(getAppByFunctionId(functionId));
 
-            var json = {"id":"RSXT","label":"人事系统"};
+            //var json = {"id":"JZGGL","label":"教职工管理"};
 
             return json;
         },
 
         getAppList: function(){
-            //var json = JSON.parse(getAppList());
+            var json = JSON.parse(getAppList());
 
 
-            var json = {
-                "defultAppId": "XGXT",
-                "apps": [
-                    {"id": "XGXT","label": "学工系统"},
-                    {"id": "RSXT","label": "人事系统"}
-                ]
-            };
-
+             /* var json = {
+             "defultAppId": "XGXT",
+             "apps": [
+             {"id": "XGXT","label": "学工系统"},
+             {"id": "JZGGL","label": "教职工管理"}
+             ]
+             };*/
             return json;
         },
 
-            getPageFormsByAppId : function(appId){
-                //var json =  JSON.parse(getPageFormsByAppId(appId));
-                var json = {
-                    "pageForms": [
-                        {"id": "JBXXLB","name": "JBXXLB","caption": "基本信息列表","functionId": "346708216040013824","moduleId": "344666175227445249"},
-                        {"id": "ZDCS","name": "ZDCS","caption": "字典测试","functionId": "346761353350234112","moduleId": "346761307212890112"},
-                        {"id": "XBZD","name": "XBZD","caption": "性别字典","functionId": "346761418231922688","moduleId": "346761307212890112"},
-                        {"id": "SHS","name": "SHS","caption": "三好生","functionId": "346761507163750400","moduleId": "344666175227445212"}
-                    ],
-                    "modules": [
-                        {"code": "XGXT_modules","displayName": "学工系统_模块","id": "344666175227445212","parentId": ""},
-                        {"code": "JBXXYM","displayName": "基本信息页面","id": "344666175227445249","parentId": "344666175227445212"},
-                        {"code": "ZDYM","displayName": "字典页面","id": "346761307212890112","parentId": "344666175227445249"}
-                    ]
-                };
+        getPageFormsByAppId : function(appId){
+            var json =  JSON.parse(getPageFormsByAppId(appId));
+              /*  var json = {
+             "pageForms": [
+             {"id": "JBXXLB","name": "JBXXLB","caption": "基本信息列表","functionId": "346708216040013824","moduleId": "344666175227445249"},
+             {"id": "ZDCS","name": "ZDCS","caption": "字典测试","functionId": "346761353350234112","moduleId": "346761307212890112"},
+             {"id": "XBZD","name": "XBZD","caption": "性别字典","functionId": "346761418231922688","moduleId": "346761307212890112"},
+             {"id": "SHS","name": "SHS","caption": "三好生","functionId": "346761507163750400","moduleId": "344666175227445212"}
+             ],
+             "modules": [
+             {"code": "XGXT_modules","displayName": "学工系统_模块","id": "344666175227445212","parentId": ""},
+             {"code": "JBXXYM","displayName": "基本信息页面","id": "344666175227445249","parentId": "344666175227445212"},
+             {"code": "ZDYM","displayName": "字典页面","id": "346761307212890112","parentId": "344666175227445249"}
+             ]
+             };*/
 
             var tempPageFormTable = {};
             for(var i=0; i<json.pageForms.length; i++){
@@ -195,6 +193,6 @@
         }
 
 
-		
-	};
+
+    };
 }

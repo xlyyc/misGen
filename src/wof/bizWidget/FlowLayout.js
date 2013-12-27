@@ -175,18 +175,14 @@ wof.bizWidget.FlowLayout.prototype = {
             var node = null;
             if(obj.getType()=='composite'){
                 var json = {};
-                var compositeComponentsData = JSON.parse(window.localStorage.getItem('compositeComponentsData'));
-                for(var i=0;i<compositeComponentsData.length;i++){
-                    var compositeComponentData = compositeComponentsData[i];
-                    if(compositeComponentData.name==obj.getValue()){
-                        json = compositeComponentData.data;
-                        break;
-                    }
+                try{
+                    json = JSON.parse(getPageComponentTemplateById(obj.getValue()));
+                    node = eval('(new '+json.className+'())');
+                    node.setData(json);
+                }catch(e){
+                    alert(e);
                 }
-                node = eval('(new '+json.className+'())');
-                node.setData(json);
             }else{
-                console.log('obj.getValue()='+obj.getValue());
                 node = eval('(new '+obj.getValue()+'()).createSelf('+item.getWidth()+','+item.getHeight()+');');
             }
             this.insertNode(node);

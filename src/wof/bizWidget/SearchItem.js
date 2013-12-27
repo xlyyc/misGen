@@ -120,7 +120,7 @@ wof.bizWidget.SearchItem.prototype = {
 
     getDateTimeBoxFormat: function(){
         if(this._dateTimeBoxFormat==null){
-            this._dateTimeBoxFormat = 'YYYY-MM-DD hh:mm:ss';
+            this._dateTimeBoxFormat = 'yyyy-MM-dd';
         }
         return this._dateTimeBoxFormat;
     },

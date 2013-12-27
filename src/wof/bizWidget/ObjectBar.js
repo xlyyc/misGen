@@ -200,8 +200,8 @@ wof.bizWidget.ObjectBar.prototype={
                     label.setWidth(130);
                     label.setHeight(25);
                     label.setType('composite');
-                    label.setValue(compositeComponent.name);
-                    label.setText(compositeComponent.name);
+                    label.setValue(compositeComponent.id);
+                    label.setText(compositeComponent.label);
                     label.appendTo(toolbarItem3);
                     label.getDomInstance().draggable({
                         cursor:"move",

@@ -35,6 +35,7 @@
 <script src="src/wof/util/Selector.js"></script>
 <script src="src/wof/util/SelectorList.js"></script>
 <script src="src/wof/util/GlobalObject.js"></script>
+<script src="src/wof/util/Tool.js"></script>
 
 <script src="src/wof/widget/Mediator.js"></script>
 
@@ -252,8 +253,12 @@ jQuery(function(){
                             widgetComponents.push(deleteRecordComponentSpanner);
                             components.push(deleteRecordComponentSpanner);
 
-                            var compositeComponentsData = JSON.parse(window.localStorage.getItem('compositeComponentsData'));
 
+                            var compositeComponentsData = [];
+                            try{
+                                compositeComponentsData = JSON.parse(pageComponentTemplateList());
+                            }catch(e){
+                            }
                             var objectBar = new ObjectBar();
                             objectBar.setCompositeComponents(compositeComponentsData);
                             objectBar.setLayoutComponents(layoutComponents);
@@ -393,7 +398,7 @@ jQuery(function(){
                                 pageMetas = JSON.parse(getPageMetas());
 
                             }catch(e){
-                                alert(e);
+                                //alert(e);
                             }
 
                             if(!jQuery.isEmptyObject(pageMetas)){
@@ -455,12 +460,17 @@ jQuery(function(){
 		resizeSidebar2();
         resizeContent();
 	});
-	jQuery("#pageParamBtn,#saveBtn,#saveToCompositeComponentBtn,#cancelBtn").button().click(function(event){
+	jQuery("#pageParamBtn,#saveBtn,#saveToCompositeComponentBtn").button().click(function(event){
 		event.preventDefault();
 		var id = jQuery(event.target).attr('id');
         if(id=='pageParamBtn'){
             wof.customWindow.PageParamWindow.run();
         }else if(id=='saveBtn'){
+
+         /*   var xmldoc = wof.util.Tool.stringToXml('<node id="node1">测试XML数据</node>');
+            alert(wof.util.Tool.xmlToString(xmldoc));*/
+
+
             var json = {};
 			var layout = getContentLayout();
 
@@ -497,12 +507,10 @@ jQuery(function(){
             json.components = _leafsData;
             json.layout = layout.getData();
 
-            console.log(JSON.stringify(json));
-
             try{
                 setPageMetas(JSON.stringify(json));
             }catch(e){
-                alert(e);
+                //alert(e);
             }
 		}else if(id=='saveToCompositeComponentBtn'){
             jQuery('#dialog-form').dialog({
@@ -514,27 +522,24 @@ jQuery(function(){
                     '保存':function(){
                         var name = jQuery('#dialog_form_name').val();
                         if(name!=null&&name.length>0){
-                            var compositeComponentsData = window.localStorage.getItem('compositeComponentsData');
-                            if(compositeComponentsData==null){
-                                compositeComponentsData = [];
-                            }else{
-                                compositeComponentsData = JSON.parse(window.localStorage.getItem('compositeComponentsData'));
-                            }
-                            var layout = getContentLayout();
-
+                            var templateData = null;
                             var obj = wof.util.ObjectManager.get(wof.util.GlobalObject.get('cutObjectId'));
                             if(obj!=null){
                                 if(window.confirm('是否只保存剪切板中的内容？')){
-                                    compositeComponentsData.push({'name':name, 'data':obj.getData()});
+                                    templateData = obj.getData();
                                 }else{
-                                    compositeComponentsData.push({'name':name, 'data':layout.getData()});
+                                    templateData = getContentLayout().getData();
                                 }
                             }else{
-                                compositeComponentsData.push({'name':name, 'data':layout.getData()});
+                                templateData = getContentLayout().getData();
                             }
-                            window.localStorage.setItem('compositeComponentsData', JSON.stringify(compositeComponentsData));
 
-                            //savePageComponentTemplate(id, label, contextStr);       //todo
+                            try{
+                                savePageComponentTemplate(wof.util.Tool.uuid(), name, JSON.stringify({'templateData':templateData}));
+                            }catch(e){
+                                //alert(e);
+                            }
+
                         }
                         jQuery(this).dialog('close');
                     },
@@ -544,8 +549,6 @@ jQuery(function(){
                 }
             });
             jQuery('#dialog-form').dialog('open');
-        }else{
-            window.localStorage.removeItem('compositeComponentsData');
         }
 	});
 });
@@ -562,8 +565,7 @@ var pageInputParam = {};
 	<div id="header" style="position:absolute;background-color:#fff;border-bottom:1px solid black;z-index:90000">
         <input type="button" id="pageParamBtn" value="页面参数" />
         <input type="button" id="saveBtn" value="保存" />
-        <input type="button" id="saveToCompositeComponentBtn" value="保存为构件组合" />
-        <input type="button" id="cancelBtn" value="取消" />
+        <input type="button" id="saveToCompositeComponentBtn" value="保存为模板" />
     </div>
 	<div id="sidebar1" style="position:absolute;z-index:90000;">
     	
@@ -576,8 +578,8 @@ var pageInputParam = {};
     </div>
 </div>
 
-<div id="dialog-form" title="保存为构件组合">
-    <p class="validateTips">构件组合名称</p>
+<div id="dialog-form" title="保存为模板">
+    <p class="validateTips">名称</p>
     <p><input type="text" id="dialog_form_name" class="text" /></p>
 </div>
 </body>

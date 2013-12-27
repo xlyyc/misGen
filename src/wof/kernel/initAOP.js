@@ -1,13 +1,4 @@
 var wof$_aop = (function(){
-    function uuid() {
-        var s = [];
-        var hexDigits = "0123456789ABCDEF";
-        for (var i = 0; i < 32; i++)
-            s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
-        s[12] = "4";
-        s[16] = hexDigits.substr((s[16] & 0x3) | 0x8, 1);
-        return s.join("");
-    }
     function caption(s){
         var a = s.split('');
         a[0] = a[0].toUpperCase();
@@ -129,7 +120,7 @@ var wof$_aop = (function(){
                     };
                     obj[o].prototype._id = null;
                     obj[o].prototype.getId = function(){
-                        return (this._id==null)?(this._id=uuid()):this._id;
+                        return (this._id==null)?(this._id=wof.util.Tool.uuid()):this._id;
                     };
                     obj[o].prototype._domInstance = null;
                     obj[o].prototype.getDomInstance = function(){

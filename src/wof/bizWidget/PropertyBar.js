@@ -116,7 +116,7 @@ wof.bizWidget.PropertyBar.prototype={
         if(meta.isHide==true){
             tr = jQuery('<tr style="height:0px;">');
             tr.append(jQuery('<td style="height:0px;"></td>'));
-            var td = jQuery('<td style="height:0px;"><input type="hidden" name="'+meta.prop+'" value="'+value+'"/></td>');
+            var td = jQuery('<td style="height:0px;"><input type="hidden" name="'+meta.prop+'" value="'+String(value)+'"/></td>');
             tr.append(td);
         }else{
             tr = jQuery('<tr style="height:30px;border:1px inset #a1a1a1;">');
@@ -124,10 +124,10 @@ wof.bizWidget.PropertyBar.prototype={
             if(meta.type=='text'){  //文本类型
                 var td = null;
                 if(meta.readOnly==true){
-                    td = jQuery('<td style="width:55%;"><input type="input" style="width:100px;border:0px;border-bottom:1px solid black;background-color:transparent;"'+(meta.readOnly==true?'readonly':'')+' name="'+meta.prop+'" value="'+value+'"/></td>');
+                    td = jQuery('<td style="width:55%;"><input type="text" style="width:100px;border:0px;border-bottom:1px solid black;background-color:transparent;"'+(meta.readOnly==true?'readonly':'')+' name="'+meta.prop+'" value="'+String(value)+'"/></td>');
                 }else{
                     td = jQuery('<td style="width:55%;">');
-                    var input = jQuery('<input type="input" style="width:100px;" name="'+meta.prop+'" value="'+value+'"/>');
+                    var input = jQuery('<input type="text" style="width:100px;" name="'+meta.prop+'" value="'+String(value)+'"/>');
                     td.append(input);
                     if(meta.required==true){
                         input.bind("blur", function(){
@@ -141,18 +141,18 @@ wof.bizWidget.PropertyBar.prototype={
                 tr.append(td);
             }else if(meta.type=='yesOrNo'){ //是否类型
                 var sel =jQuery('<select name="'+meta.prop+'">');
-                sel.append(jQuery('<option value="true" '+(value=='true'?'selected':'')+'>是</option>'));
-                sel.append(jQuery('<option value="false" '+(value=='false'?'selected':'')+'>否</option>'));
+                sel.append(jQuery('<option value="true" '+(String(value)=='true'?'selected':'')+'>是</option>'));
+                sel.append(jQuery('<option value="false" '+(String(value)=='false'?'selected':'')+'>否</option>'));
                 var td = jQuery('<td style="width:55%;">');
                 td.append(sel);
                 tr.append(td);
             }else if(meta.type=='naturalNumber'){ //自然数类型
                 var td = null;
                 if(meta.readOnly==true){
-                    td = jQuery('<td style="width:55%;"><input type="input" style="width:100px;border:0px;border-bottom:1px solid black;background-color:transparent;"'+(meta.readOnly==true?'readonly':'')+' name="'+meta.prop+'" value="'+value+'"/></td>');
+                    td = jQuery('<td style="width:55%;"><input type="text" style="width:100px;border:0px;border-bottom:1px solid black;background-color:transparent;"'+(meta.readOnly==true?'readonly':'')+' name="'+meta.prop+'" value="'+String(value)+'"/></td>');
                 }else{
                     td = jQuery('<td style="width:55%;">');
-                    var input = jQuery('<input type="text" style="width:100px;"  name="'+meta.prop+'" value="'+value+'"/>');
+                    var input = jQuery('<input type="text" style="width:100px;"  name="'+meta.prop+'" value="'+String(value)+'"/>');
                     input.naturalNumber(meta.required);
                     td.append(input);
                 }
@@ -160,10 +160,10 @@ wof.bizWidget.PropertyBar.prototype={
             }else if(meta.type=='positiveIntegerOrPositiveDecimal'){  //自然数(包括0)或者非负小数类型
                 var td = null;
                 if(meta.readOnly==true){
-                    td = jQuery('<td style="width:55%;"><input type="input" style="width:100px;border:0px;border-bottom:1px solid black;background-color:transparent;"'+(meta.readOnly==true?'readonly':'')+' name="'+meta.prop+'" value="'+value+'"/></td>');
+                    td = jQuery('<td style="width:55%;"><input type="text" style="width:100px;border:0px;border-bottom:1px solid black;background-color:transparent;"'+(meta.readOnly==true?'readonly':'')+' name="'+meta.prop+'" value="'+String(value)+'"/></td>');
                 }else{
                     td = jQuery('<td style="width:55%;">');
-                    var input = jQuery('<input type="text" style="width:100px;"  name="'+meta.prop+'" value="'+value+'"/>');
+                    var input = jQuery('<input type="text" style="width:100px;"  name="'+meta.prop+'" value="'+String(value)+'"/>');
                     input.positiveIntegerOrPositiveDecimal(meta.required);
                     td.append(input);
                 }
@@ -172,7 +172,7 @@ wof.bizWidget.PropertyBar.prototype={
                 var enumData = meta.enumData;
                 var sel =jQuery('<select  style="width:100px;" name="'+meta.prop+'">');
                 for(var e in enumData){
-                    sel.append(jQuery('<option value="'+e+'" '+(e==value?'selected':'')+'>'+enumData[e]+'</option>'));
+                    sel.append(jQuery('<option value="'+e+'" '+(e==String(value)?'selected':'')+'>'+enumData[e]+'</option>'));
                 }
                 var td = jQuery('<td style="width:55%;">');
                 td.append(sel);
@@ -182,7 +182,7 @@ wof.bizWidget.PropertyBar.prototype={
                 tr.append(jQuery('<td style="width:45%;"><span style="width:100px;" title="'+meta.prop+'">'+meta.name+'</span></td>'));
                 var td = jQuery('<td style="width:55%;">');
                 value = encodeURIComponent(JSON.stringify(value));
-                var hidden = jQuery('<input type="hidden" name="'+meta.prop+'" value="'+value+'"/>');
+                var hidden = jQuery('<input type="hidden" name="'+meta.prop+'" value="'+String(value)+'"/>');
                 td.append(hidden);
                 var button = jQuery('<input type="button" name="'+meta.prop+'_button" value=" 设置 ">');
                 td.append(button);
@@ -234,7 +234,7 @@ wof.bizWidget.PropertyBar.prototype={
             for(var name in parameters){
                 var m = meta.propertys[parameters.activeClass][name];
                 if(m!=null){
-                    var value = String(parameters[name]);
+                    var value = parameters[name];
                     trs.push(this._createTr(m,value));
                     if(m.disabledComponents!=null){
                         var enums = m.disabledComponents.enums.split(',');
@@ -247,6 +247,15 @@ wof.bizWidget.PropertyBar.prototype={
             }
             var table = this._createTable(trs);
             this.getDomInstance().append(table);
+
+            var texts = jQuery('table[id="propertyTable"] > tbody > tr > td > input[type="text"]');
+            texts.each(function(){
+                 jQuery(this).bind("blur", function(){
+                    var name = jQuery(this).attr('name');
+                    var val = String(jQuery(this).val());
+                    parameters[name] = val;
+                });
+            });
 
             var sels = jQuery('table[id="propertyTable"] > tbody > tr > td > select');
             sels.each(function(){
