@@ -7,21 +7,7 @@
 wof.bizWidget.FlowLayout = function () {
     this._version = '1.0';
 
-    var method = 'var obj=wof.util.ObjectManager.get(message.sender.id);'+
-    'if(obj!=null&&obj.parentNode()!=null){'+
-        'var parentNode = obj.parentNode();'+
-        'if(parentNode.getClassName()=="wof.bizWidget.FlowLayoutItem"){'+
-            'if(parentNode.parentNode().getIsAutoExt()==true){'+
-                'while(parentNode.parentNode()!=null){'+
-                    'parentNode = parentNode.parentNode();'+
-                '}'+
-                'if(parentNode.getId()==this.getId()){'+
-                    'parentNode.render();'+
-
-                '}'+
-            '}'+
-        '}'+
-    '}';
+    var method = 'this.autoExt(message);';
     this.setOnReceiveMessage([{id:'wof_object_resize',priority:50,method:method}]);
 
 };
@@ -681,6 +667,23 @@ wof.bizWidget.FlowLayout.prototype = {
             }
         }
 
+    },
+
+    autoExt: function(message){
+        var obj=wof.util.ObjectManager.get(message.sender.id);
+        if(obj!=null&&obj.parentNode()!=null){
+            var parentNode = obj.parentNode();
+            if(parentNode.getClassName()=="wof.bizWidget.FlowLayoutItem"){
+                if(parentNode.parentNode().getIsAutoExt()==true){
+                    while(parentNode.parentNode()!=null){
+                        parentNode = parentNode.parentNode();
+                    }
+                    if(parentNode.getId()==this.getId()){
+                        parentNode.render();
+                    }
+                }
+            }
+        }
     },
 
     //创建新的FlowLayout

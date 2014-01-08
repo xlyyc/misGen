@@ -16,7 +16,7 @@ wof.functionWidget.spanner.CommitComponentSpanner = function () {
         'CommitComponent':{
             'functionID':{prop:'functionID','name':'功能ID','type':'text','readOnly':false,'isHide':false},
             'isAutoCommit':{prop:'isAutoCommit','name':'是否自动提交','type':'yesOrNo','readOnly':false,'isHide':false},
-            'bindComponents':{prop:'bindComponents','name':'绑定组件','type':'custom','readOnly':false,'isHide':false,required:false, customMethod:'wof.customWindow.ComponentTreeSelector', customParam:'voucherComponent,gridComponent,voucherGridComponent'},
+            'bindComponents':{prop:'bindComponents','name':'绑定构件','type':'custom','readOnly':false,'isHide':false,required:false, customMethod:'wof.customWindow.ComponentTreeSelector', customParam:'voucherComponent,gridComponent,voucherGridComponent'},
             'commandItemID':{prop:'commandItemID','name':'功能构件ID','type':'text','readOnly':false,'isHide':false},
             'iSPermissionControl':{prop:'iSPermissionControl','name':'是否权限控制','type':'yesOrNo','readOnly':false,'isHide':false},
             'callItemCaption':{prop:'callItemCaption','name':'显示名称','type':'text','readOnly':false,'isHide':false}
@@ -24,7 +24,9 @@ wof.functionWidget.spanner.CommitComponentSpanner = function () {
     };
 
     var onReceiveMessage = [];
-    onReceiveMessage.push({id:'wof.bizWidget.Spanner_render',method:'this._receivePropertysAndRenderSelf(message.sender.propertys);'});
+    onReceiveMessage.push({id:'wof.functionWidget.CommitComponent_active',method:'this._receivePropertysAndRenderSelf(message.sender);'});
+
+
     var method = 'this._receiveAndProcessParameters(message.sender.parameters);';
     onReceiveMessage.push({id:'wof.bizWidget.PropertyBar_apply',method:method});
     onReceiveMessage.push({id:'wof.bizWidget.OnSendMessageBar_apply',method:method});
@@ -187,6 +189,7 @@ wof.functionWidget.spanner.CommitComponentSpanner.prototype = {
 
     //静态方法 导出数据(只有需要给运行时解析的叶子节点才需要定义此方法)
     exportData: function(node){
+
         /**
          <CommandItem CallType="JS" FunctionID="手动填写" CallItemCaption="addRecord" CallItemName="新增" CallStr="addcmd:0_0_1">
              <Before CanStop="true">
@@ -202,6 +205,54 @@ wof.functionWidget.spanner.CommitComponentSpanner.prototype = {
              </ParamMaps>
          </CommandItem>
          */
+
+        if(node.getClassName()=='wof.functionWidget.CommitComponent'){
+            var tool = wof.util.Tool;
+            var root = tool.stringToXml("<CommandItem></CommandItem>");
+            var rootElement = root.documentElement;
+            tool.setAttribute(rootElement,"CallType",node.getCallType());
+            tool.setAttribute(rootElement,"CallItemCaption",node.getCallItemCaption());
+            tool.setAttribute(rootElement,"CallItemName",node.getCallItemName());
+            tool.setAttribute(rootElement,"FunctionID",node.getFunctionID());
+            tool.setAttribute(rootElement,"ISPermissionControl",node.getISPermissionControl());
+            tool.setAttribute(rootElement,"CommandItemID",node.getCommandItemID());
+            tool.setAttribute(rootElement,"CallStr",node.getCallStr());
+
+            var paramMapsElement = tool.createElement(root,'ParamMaps');
+            var paramMapElement = tool.createElement(root,'ParamMap');
+            tool.setAttribute(paramMapElement,"MapType",'value');
+            tool.setAttribute(paramMapElement,"CompParamName",'bindComponents');
+            tool.setAttribute(paramMapElement,"CompParamValue",node.getBindComponents());
+            tool.setAttribute(paramMapElement,"PageParamName",'');
+            tool.setAttribute(paramMapElement,"ChangeExpt",'');
+            tool.appendChild(paramMapsElement,paramMapElement);
+
+            var paramMapElement1 = tool.createElement(root,'ParamMap');
+            tool.setAttribute(paramMapElement1,"MapType",'value');
+            tool.setAttribute(paramMapElement1,"CompParamName",'isAutoCommit');
+            tool.setAttribute(paramMapElement1,"CompParamValue",node.getIsAutoCommit());
+            tool.setAttribute(paramMapElement1,"PageParamName",'');
+            tool.setAttribute(paramMapElement1,"ChangeExpt",'');
+            tool.appendChild(paramMapsElement,paramMapElement1);
+
+            tool.appendChild(rootElement,paramMapsElement);
+
+            var Before = tool.createElement(root,'Before');
+            tool.setAttribute(Before,"CanStop",true);
+            var Call = tool.createElement(root,'Call');
+            tool.setAttribute(Call,'Type','JS');
+            tool.appendChild(Before,Call);
+            var After = tool.createElement(root,'After');
+            var Call = tool.createElement(root,'Call');
+            tool.setAttribute(Call,'Type','JS');
+            tool.appendChild(After,Call);
+            var Return = tool.createElement(root,'Return');
+            tool.appendChild(rootElement,Before);
+            tool.appendChild(rootElement,After);
+            tool.appendChild(rootElement,Return);
+
+            console.log(tool.xmlToString(root));
+        }
         var json = {};
         if(node.getClassName()=='wof.functionWidget.CommitComponent'){
             json.commandItemID = node.getComponentId();
@@ -239,11 +290,7 @@ wof.functionWidget.spanner.CommitComponentSpanner.prototype = {
 
     //加工并发送数据
     _receivePropertysAndRenderSelf:function(propertys){
-        if(propertys.className=="wof.functionWidget.CommitComponent"){
-            this.setPropertys(propertys);
-        }else{
-            this.setPropertys(null);
-        }
+        this.setPropertys(propertys);
         this.render();
     },
 

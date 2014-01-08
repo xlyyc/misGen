@@ -59,7 +59,7 @@ wof.bizWidget.GridComponent.prototype = {
 
     _numberDisplay: null,
 
-    _gridComponentState: null,    //列表组件状态
+    _gridComponentState: null,    //列表构件状态
 
     _bindEntityID: null,    //实体ID,Grid部件中可用到此实体及与该实体存在参照及对等关系的实体中的属性
 

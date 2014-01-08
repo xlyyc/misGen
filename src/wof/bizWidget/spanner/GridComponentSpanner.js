@@ -95,7 +95,8 @@ wof.bizWidget.spanner.GridComponentSpanner = function () {
     };
 
     var onReceiveMessage = [];
-    onReceiveMessage.push({id:'wof.bizWidget.Spanner_render',method:'this._receivePropertysAndRenderSelf(message.sender.propertys);'});
+    onReceiveMessage.push({id:'wof.bizWidget.GridComponent_active',method:'this._receivePropertysAndRenderSelf(message.sender);'});
+
     var method = 'this._receiveAndProcessParameters(message.sender.parameters);';
     onReceiveMessage.push({id:'wof.bizWidget.PropertyBar_apply',method:method});
     onReceiveMessage.push({id:'wof.bizWidget.OnSendMessageBar_apply',method:method});
@@ -405,25 +406,93 @@ wof.bizWidget.spanner.GridComponentSpanner.prototype = {
 
     //静态方法 导出数据(只有需要给运行时解析的叶子节点才需要定义此方法)
     exportData: function(node){
-        /*
-         <GridComponent Name="员工列表" ID="emGrid" BindEntityID="Employee" index="1" GridComponentState="" CallStr="gridcomponent:0_0_1"
-         numberDisplay="true" headerHeight="30" rowHeight="20" useMutiplePage="true" rowsCount="5">
-         <Columns>
-         <Column Name="emId" Caption="工号" VisbleType="" RegExp="" ScaleLength="2" IntLength="6" Min="4" Max="6" Required="true" Length="6" Display="true" CanSearch="true" ColumnType="BindData" BindDataField="emId" columnWidth="100" ReadOnly="true" />
-         <Column Name="name" Caption="姓名" VisbleType="text" ColumnType="string" BindDataField="name" columnWidth="200" />
-         <Column Name="sex" Caption="性别" VisbleType="" RegExp="" ScaleLength="2" IntLength="6" Min="4" Max="6" Required="true" Length="6" Display="true" CanSearch="true" ColumnType="BindData" BindDataField="menu.name" columnWidth="100" />
-         <Column Name="age" Caption="年龄" VisbleType="int" RegExp="" ColumnType="integer" BindDataField="age" columnWidth="100" />
-         <Column Name="country" Caption="国籍" ColumnType="BindData" BindDataField="country" columnWidth="100" />
-         <Column Name="nation" Caption="民族" VisbleType="" RegExp="" Required="true" Length="6" Display="true" CanSearch="true" ColumnType="BindData" BindDataField="nation" columnWidth="100" />
-         <Column Name="address" Caption="家庭住1址" VisbleType="" Display="true" CanSearch="true" ColumnType="BindData" BindDataField="address" columnWidth="200" />
-         <Column Name="comments" Caption="备注" VisbleType="" RegExp="" Required="true" Length="6" Display="true" CanSearch="true" ColumnType="BindData" BindDataField="comments" columnWidth="200" />
-         </Columns>
-         <ParamMaps>
-         <ParamMap MapType="value" CompParamName="" PageParamName="" ChangeExpt="" />
-         </ParamMaps>
-         <MutiplePageInfo RowsCount="10" />
-         </GridComponent>
-         */
+
+//        <GridComponent rowsCount="30" useMutiplePage="false" rowHeight="30" headerHeight="45" index="null"
+// ID="8E5FC36B5A434B6C8F6EBD67F0C58F26" BindEntityID="HJXX" GridComponentState="null" numberDisplay="true"
+// Name="未命名列表" InitActionName="null" CallStr="gridComponent:0_0_1">
+//            <Columns>
+//                <Column LinkForm="" CheckErrorInfo="" RefSearchCondition="" RegExp="" ScaleLength="0"
+// IntLength="0" Max="0" Min="0" Length="0" CanSearch="false" OrderByType="" Required="false" ReadOnly="false"
+// VisbleType="select" selectPattern="normal" picUrl="" editor="false" DateTimeFormat="yyyy-MM-dd HH:mm:ss"
+// IsPin="false" Display="true" GridId="" BindDataField="JZGJBXXB.gh" columnWidth="200"
+// Caption="职工工号" ColumnType="integer" UseMultiSelect="false" Name="zggh"/>
+//                <Column LinkForm="" CheckErrorInfo="" RefSearchCondition="" RegExp="" ScaleLength="0" IntLength="0" Max="0" Min="0" Length="0" CanSearch="false" OrderByType="" Required="false" ReadOnly="false" VisbleType="text" selectPattern="normal" picUrl="" editor="false" DateTimeFormat="yyyy-MM-dd HH:mm:ss" IsPin="false" Display="true" GridId="" BindDataField="JZGJBXXB.xm" columnWidth="200" Caption="职工姓名" ColumnType="integer" UseMultiSelect="false" Name="zgname"/>
+//                <Column LinkForm="" CheckErrorInfo="" RefSearchCondition="" RegExp="" ScaleLength="0" IntLength="0" Max="0" Min="0" Length="0" CanSearch="false" OrderByType="" Required="false" ReadOnly="false" VisbleType="text" selectPattern="normal" picUrl="" editor="false" DateTimeFormat="" IsPin="false" Display="true" GridId="" BindDataField="JZGJBXXB.xb" columnWidth="120" Caption="性别" ColumnType="integer" UseMultiSelect="false" Name="zgsex"/>
+//                <Column LinkForm="" CheckErrorInfo="" RefSearchCondition="" RegExp="" ScaleLength="0" IntLength="0" Max="0" Min="0" Length="0" CanSearch="false" OrderByType="" Required="false" ReadOnly="false" VisbleType="text" selectPattern="normal" picUrl="" editor="false" DateTimeFormat="yyyy-MM-dd HH:mm:ss" IsPin="false" Display="true" GridId="" BindDataField="HJLB.jxmc" columnWidth="200" Caption="获奖项目" ColumnType="integer" UseMultiSelect="false" Name="jxname"/>
+//            </Columns>
+//            <ParamMaps/>
+//        </GridComponent>
+
+        if(node.getClassName()=='wof.bizWidget.GridComponent'){
+            var tool = wof.util.Tool;
+            var root = tool.stringToXml("<GridCompoent></GridCompoent>");
+            var rootElement = root.documentElement;
+            tool.setAttribute(rootElement,'rowsCount',node.getRowsCount());
+            tool.setAttribute(rootElement,'useMutiplePage',node.getUseMutiplePage());
+            tool.setAttribute(rootElement,'rowHeight',node.getRowHeight());
+            tool.setAttribute(rootElement,'headerHeight',node.getHeaderHeight());
+            tool.setAttribute(rootElement,'index',node.getIndex());
+            tool.setAttribute(rootElement,'ID',node.getComponentId());
+            tool.setAttribute(rootElement,'BindEntityId',node.getBindEntityID());
+            tool.setAttribute(rootElement,'GridComponentState',node.getGridComponentState());
+            tool.setAttribute(rootElement,'numberDisplay',node.getNumberDisplay());
+            tool.setAttribute(rootElement,'Name',node.getName());
+            tool.setAttribute(rootElement,'CallStr',node.getCallStr());
+            tool.setAttribute(rootElement,"InitActionName",node.getInitActionName());
+            tool.setAttribute(rootElement,'rowsCount',node.getRowsCount());
+
+            var columnsElement = tool.createElement(root,'Columns');
+            var childNodes = node.childNodes();
+            for(var i=0;i<childNodes.length;i++){
+                var column = tool.createElement(root,"Column");
+                var childNode = childNodes[i];
+                tool.setAttribute(column,"LinkForm",childNode.getLinkForm());
+                tool.setAttribute(column,"CheckErrorInfo",childNode.getCheckErrorInfo());
+                tool.setAttribute(column,"RefSearchCondition",childNode.getRefSearchCondition());
+                tool.setAttribute(column,"RegExp",childNode.getRegExp());
+                tool.setAttribute(column,"ScaleLength",childNode.getScaleLength());
+                tool.setAttribute(column,"IntLength",childNode.getIntLength());
+                tool.setAttribute(column,"Max",childNode.getMax());
+                tool.setAttribute(column,"Min",childNode.getMin());
+                tool.setAttribute(column,"Length",childNode.getLength());
+                tool.setAttribute(column,"CanSearch",childNode.getCanSearch());
+                tool.setAttribute(column,"OrderByType",childNode.getOrderByType());
+                tool.setAttribute(column,"Required",childNode.getRequired());
+                tool.setAttribute(column,"ReadOnly",childNode.getReadOnly());
+                tool.setAttribute(column,"VisbleType",childNode.getVisbleType());
+                tool.setAttribute(column,"selectPattern",childNode.getSelectPattern());
+                tool.setAttribute(column,"picUrl",childNode.getPicUrl());
+                tool.setAttribute(column,"editor",childNode.getEditor());
+                tool.setAttribute(column,"DateTimeFormat",childNode.getDateTimeFormat());
+                tool.setAttribute(column,"IsPin",childNode.getIsPin());
+                tool.setAttribute(column,"Display",childNode.getDisplay());
+                tool.setAttribute(column,"GridId",childNode.getGridId());
+                tool.setAttribute(column,"BindDataField",childNode.getBindDataField());
+                tool.setAttribute(column,"columnWidth",childNode.getColumnWidth());
+                tool.setAttribute(column,"Caption",childNode.getCaption());
+                tool.setAttribute(column,"ColumnType",childNode.getColumnType());
+                tool.setAttribute(column,"UseMultiSelect",childNode.getUseMultiSelect());
+                tool.setAttribute(column,"Name",childNode.getName());
+                tool.appendChild(columnsElement,column);
+            }
+            tool.appendChild(rootElement,columnsElement);
+
+            var paramMapsElement = tool.createElement(root,'ParamMaps');
+            var paramMapElement = tool.createElement(root,'ParamMap');
+            for(var k in node.getParamMaps()){
+                tool.setAttribute(paramMapElement,k,node.getParameters()[k]);
+            }
+            tool.appendChild(paramMapsElement,paramMapElement);
+            tool.appendChild(rootElement,paramMapsElement);
+
+            var mutiplePageInfo = tool.createElement(root,'MutiplePageInfo');
+            tool.setAttribute(mutiplePageInfo,"RowsCount",node.getRowsCount());
+            tool.appendChild(rootElement,mutiplePageInfo);
+            console.log(tool.xmlToString(root));
+            //return tool.xmlToString(root);
+        }
+
+
         var json = {};
         if(node.getClassName()=='wof.bizWidget.GridComponent'){
             json.className = node.getClassName();
@@ -488,11 +557,7 @@ wof.bizWidget.spanner.GridComponentSpanner.prototype = {
 
     //加工并发送数据
     _receivePropertysAndRenderSelf:function(propertys){
-        if(propertys.className=="wof.bizWidget.GridComponent"){
-            this.setPropertys(propertys);
-        }else{
-            this.setPropertys(null);
-        }
+        this.setPropertys(propertys);
         this.render();
     },
 

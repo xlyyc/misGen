@@ -101,7 +101,9 @@ wof.bizWidget.spanner.VoucherComponentSpanner = function () {
     };
 
     var onReceiveMessage = [];
-    onReceiveMessage.push({id:'wof.bizWidget.Spanner_render',method:'this._receivePropertysAndRenderSelf(message.sender.propertys);'});
+    onReceiveMessage.push({id:'wof.bizWidget.VoucherComponent_active',method:'this._receivePropertysAndRenderSelf(message.sender);'});
+
+
     var method = 'this._receiveAndProcessParameters(message.sender.parameters);';
     onReceiveMessage.push({id:'wof.bizWidget.PropertyBar_apply',method:method});
     onReceiveMessage.push({id:'wof.bizWidget.OnSendMessageBar_apply',method:method});
@@ -574,11 +576,7 @@ wof.bizWidget.spanner.VoucherComponentSpanner.prototype = {
 
     //加工并发送数据
     _receivePropertysAndRenderSelf:function(propertys){
-        if(propertys.className=="wof.bizWidget.VoucherComponent"){
-            this.setPropertys(propertys);
-        }else{
-            this.setPropertys(null);
-        }
+        this.setPropertys(propertys);
         this.render();
     },
 
@@ -604,26 +602,102 @@ wof.bizWidget.spanner.VoucherComponentSpanner.prototype = {
 
     //静态方法 导出数据(只有需要给运行时解析的叶子节点才需要定义此方法)
     exportData: function(node){
+
         /*
-         <VoucherComponent CallStr="VoucherComponent:1.0.0" BindEntityID="Employee" ID="emplyform" index="1" ViewType="nomal" width="1000">
-         <VoucherItemGroup MustInOrder="true" ColsNum="5" GroupCaption="员工基本信息" IsHead="false" index="0" ItemHeight="50">
-         <VoucherItem ItemName="emId" TipValue="EM201302001" ReadOnly="false" InputWidth="150" InputHeight="20" Visiable="false" ItemLabel="工号" LableWidth="100" DataField="emId" VisbleType="Text" />
-         <VoucherItem ItemName="name" InputWidth="150" Visible="true" Required="true" ItemLabel="姓名" LableWidth="100" DataField="name" VisbleType="Text" RowNum="0" />
-         <VoucherItem ItemName="sex" InputWidth="150" Visible="true" ItemLabel="性别" LableWidth="100" DataField="sex" VisbleType="Radio" RowNum="0" />
-         <VoucherItem ItemName="entryDate" InputWidth="150" Visible="true" ItemLabel="入职时间" LableWidth="100" TipValue="点击选择时间" DataField="entryDate" DateTimeBoxFormat="yyyy-MM-dd hh:mm" VisbleType="Date" RowNum="1" />
-         <VoucherItem ItemName="birthdate" InputWidth="150" Visible="true" ItemLabel="出生年月" LableWidth="100" TipValue="点击选择时间" DataField="birthdate" DateTimeBoxFormat="yyyy-MM" VisbleType="Date" RowNum="0" />
-         <VoucherItem ItemName="empty" Visible="true" ItemLabel="" LableWidth="" DataField="" VisbleType="" IsFixItem="false" RowNum="5" ColNum="2" Colspan="2" Rowspan="2" />
-         <VoucherItem ItemName="age" InputWidth="150" Visible="true" ItemLabel="年龄" LableWidth="100" DataField="age" VisbleType="Number" />
-         <VoucherItem ItemName="pic" InputWidth="150" Visible="true" Colspan="2" Rowspan="2" ItemLabel="照片" LableWidth="100" DataField="pic" VisbleType="File" IsFixItem="true" RowNum="1" ColNum="2" />
-         <VoucherItem ItemName="country" InputWidth="150" Visiable="true" ItemLabel="国籍" LableWidth="100" DataField="country" VisbleType="Select" RowNum="2" />
-         <VoucherItem ItemName="comments" InputWidth="300" Index="10" IsFixItem="false" RowNum="5" ColNum="1" InputHeight="80" Visible="true" ItemLabel="自我介绍" LableWidth="100" DataField="comments" VisbleType="TextArea" Min="10" Max="100" Colspan="3" Rowspan="2" />
-         <VoucherItem ItemName="eMail" InputWidth="100" Visible="true" ItemLabel="电子邮箱" LableWidth="150" DataField="eMail" Required="true" RegExp="/^((13[0-9]{1})|159|153)+\d{8}$/" CheckErrorInfo="请输入正确的邮箱格式" VisbleType="Text" RowNum="3" />
-         </VoucherItemGroup>
-         <ParamMaps>
-         <ParamMap MapType="value" CompParamName="" PageParamName="" ChangeExpt="" />
-         </ParamMaps>
+         <VoucherComponent width="559" ViewType="tab" index="null" ID="DF6FAEFD49E24FA38147C29E2CADFD5E" BindEntityID="" Caption="未命名表头" State="null" InitActionName="null" CallStr="voucherComponent:0_0_1" ItemHeight="60">
+             <VoucherItemGroup IsHead="false" index="1" ColsNum="4" GroupCaption="表头分组1" ItemHeight="45" MustInOrder="false">
+                 <VoucherItem TipValue="" Colspan="1" LinkageItem="" InputHeight="20" InputWidth="100" LabelWidth="160" VisbleType="text" UseMultiSelect="false" selectPattern="normal" CheckErrorInfo="" RegExp="" Max="0" Min="0" Length="0" Required="false" ReadOnly="false" DateTimeBoxFormat="yyyy-MM-dd" DataField="" ItemLabel="" ItemName="" Rowspan="1" IsFixItem="false" RowNum="1" ColNum="1"/>
+                 <VoucherItem TipValue="" Colspan="1" LinkageItem="" InputHeight="20" InputWidth="100" LabelWidth="160" VisbleType="text" UseMultiSelect="false" selectPattern="normal" CheckErrorInfo="" RegExp="" Max="0" Min="0" Length="0" Required="false" ReadOnly="false" DateTimeBoxFormat="yyyy-MM-dd" DataField="" ItemLabel="" ItemName="" Rowspan="1" IsFixItem="false" RowNum="1" ColNum="2"/>
+                 <VoucherItem TipValue="" Colspan="1" LinkageItem="" InputHeight="20" InputWidth="100" LabelWidth="160" VisbleType="text" UseMultiSelect="false" selectPattern="normal" CheckErrorInfo="" RegExp="" Max="0" Min="0" Length="0" Required="false" ReadOnly="false" DateTimeBoxFormat="yyyy-MM-dd" DataField="" ItemLabel="" ItemName="" Rowspan="1" IsFixItem="false" RowNum="1" ColNum="3"/>
+                 <VoucherItem TipValue="" Colspan="1" LinkageItem="" InputHeight="20" InputWidth="100" LabelWidth="160" VisbleType="text" UseMultiSelect="false" selectPattern="normal" CheckErrorInfo="" RegExp="" Max="0" Min="0" Length="0" Required="false" ReadOnly="false" DateTimeBoxFormat="yyyy-MM-dd" DataField="" ItemLabel="" ItemName="" Rowspan="1" IsFixItem="false" RowNum="1" ColNum="4"/>
+             </VoucherItemGroup>
+             <ParamMaps/>
          </VoucherComponent>
          */
+
+        if(node.getClassName()=='wof.bizWidget.VoucherComponent'){
+            var tool = wof.util.Tool;
+            var root = tool.stringToXml("<VoucherComponent></VoucherComponent>");
+            var rootElement = root.documentElement;
+            tool.setAttribute(rootElement,'CallStr',node.getCallStr());
+            tool.setAttribute(rootElement,'BindEntityID',node.getBindEntityID());
+            tool.setAttribute(rootElement,'ID',node.getComponentId());
+            tool.setAttribute(rootElement,'index',node.getIndex());
+            tool.setAttribute(rootElement,'ViewType',node.getViewType());
+            tool.setAttribute(rootElement,'Caption',node.getCaption());
+            tool.setAttribute(rootElement,'width',node.getWidth());
+            tool.setAttribute(rootElement,'State',node.getState());
+            tool.setAttribute(rootElement,'InitActionName',node.getInitActionName());
+            tool.setAttribute(rootElement,'ItemHeight',node.getItemHeight());
+
+            var childNodes = node._voucherItemGroups;
+            for(var i=0;i<childNodes.length;i++){
+                if(childNodes[i].getClassName()=='wof.bizWidget.VoucherItemGroup'){
+                    var group = childNodes[i];
+                    var voucherItemGroup = tool.createElement(root,"VoucherItemGroup");
+                    tool.setAttribute(voucherItemGroup,"MustInOrder",group.getMustInOrder());
+                    tool.setAttribute(voucherItemGroup,"ColsNum",group.getColsNum());
+                    tool.setAttribute(voucherItemGroup,"GroupCaption",group.getGroupCaption());
+                    tool.setAttribute(voucherItemGroup,"IsHead",group.getIsHead());
+                    tool.setAttribute(voucherItemGroup,"ItemHeight",group.getItemHeight());
+                    tool.setAttribute(voucherItemGroup,"index",group.getIndex());
+                    var cns = group.childNodes();
+                    for(var t=0;t<cns.length;t++){
+                        if(cns[t].getClassName()=='wof.bizWidget.VoucherItem'){
+                            var item = cns[t];
+                            var voucherItem = tool.createElement(root,"VoucherItem");
+
+                            tool.setAttribute(voucherItem,"ItemName",item.getItemName());
+                            tool.setAttribute(voucherItem,"TipValue",item.getTipValue());
+                            tool.setAttribute(voucherItem,"ReadOnly",item.getReadOnly());
+                            tool.setAttribute(voucherItem,"InputWidth",item.getInputWidth());
+                            tool.setAttribute(voucherItem,"InputHeight",item.getInputHeight());
+                            tool.setAttribute(voucherItem,"Visiable",item.getVisiable());
+                            tool.setAttribute(voucherItem,"ItemLabel",item.getItemLabel());
+                            tool.setAttribute(voucherItem,"LableWidth",item.getLabelWidth());
+                            tool.setAttribute(voucherItem,"DataField",item.getDataField());
+                            tool.setAttribute(voucherItem,"Colspan",item.getColspan());
+                            tool.setAttribute(voucherItem,"VisbleType",item.getVisbleType());
+                            tool.setAttribute(voucherItem,"LinkageItem",item.getLinkageItem());
+                            tool.setAttribute(voucherItem,"UseMultiSelect",item.getUseMultiSelect());
+                            tool.setAttribute(voucherItem,"selectPattern",item.getSelectPattern());
+                            tool.setAttribute(voucherItem,"CheckErrorInfo",item.getCheckErrorInfo());
+                            tool.setAttribute(voucherItem,"RegExp",item.getRegExp());
+                            tool.setAttribute(voucherItem,"Max",item.getMax());
+                            tool.setAttribute(voucherItem,"Min",item.getMin());
+                            tool.setAttribute(voucherItem,"Length",item.getLength());
+                            tool.setAttribute(voucherItem,"Required",item.getRequired());
+                            tool.setAttribute(voucherItem,"ReadOnly",item.getReadOnly());
+                            tool.setAttribute(voucherItem,"DateTimeBoxFormat",item.getDateTimeBoxFormat());
+                            tool.setAttribute(voucherItem,"ReadOnly",item.getReadOnly());
+                            tool.setAttribute(voucherItem,"Rowspan",item.getRowspan());
+                            tool.setAttribute(voucherItem,"IsFixItem",item.getIsFixItem());
+                            tool.setAttribute(voucherItem,"RowNum",item.getRowNum());
+                            tool.setAttribute(voucherItem,"ColNum",item.getColNum());
+                            tool.appendChild(voucherItemGroup,voucherItem);
+                        }
+                    }
+
+                    tool.appendChild(rootElement,voucherItemGroup);
+                }
+            }
+
+            var paramMaps = tool.createElement(root,"ParamMaps");
+
+            var paramMap = tool.createElement(root,"ParamMap");
+
+            for(var k in node.getParamMaps()){
+                var param = node.getParamMaps()[k];
+                tool.setAttribute(paramMap,k,param);
+            }
+
+            tool.appendChild(paramMaps,paramMap);
+
+            tool.appendChild(rootElement,paramMaps);
+
+            console.log(tool.xmlToString(root));
+        }
+
         var json = {};
         if(node.getClassName()=='wof.bizWidget.VoucherComponent'){
             json.className = node.getClassName();

@@ -20,7 +20,8 @@ wof.widget.spanner.TabSpanner = function () {
     };
 
     var onReceiveMessage = [];
-    onReceiveMessage.push({id:'wof.bizWidget.Spanner_render',method:'var propertys=message.sender.propertys;if(propertys.className=="wof.widget.Tab"){this.setPropertys(propertys);}else{this.setPropertys(null)}this.render();'});
+    onReceiveMessage.push({id:'wof.widget.Tab_active',method:'var propertys=message.sender;if(propertys.className=="wof.widget.Tab"){this.setPropertys(propertys);}else{this.setPropertys(null)}this.render();'});
+
     var method = 'var data=message.sender.propertys; '
         +'if(data.id==this.getPropertys().id){ '
         +' var node=wof.util.ObjectManager.get(data.id); '

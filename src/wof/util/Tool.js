@@ -11,30 +11,47 @@
             return s.join("");
         },
 
-        stringToXml: function(xmlString) {
+        stringToXml: function(xmlString){
             var xmlDoc;
-            if (typeof xmlString == "string") {
+            if(typeof xmlString == "string"){
                 if (document.implementation.createDocument) { //FF
                     var parser = new DOMParser();
-                    xmlDoc = parser.parseFromString(xmlString, "text/xml");
-                } else if (window.ActiveXObject) {
+                    xmlDoc = parser.parseFromString(xmlString, "application/xml");
+                } else if (window.ActiveXObject) { //IE
                     xmlDoc = new ActiveXObject("Microsoft.XMLDOM");
-                    xmlDoc.async = false;
+                    xmlDoc.async="false";
                     xmlDoc.loadXML(xmlString);
                 }
-            }else {
+            } else {
                 xmlDoc = xmlString;
             }
             return xmlDoc;
         },
 
-        xmlToString: function(xmlDoc) {
+        xmlToString:function(xmlDoc) {
             if (window.ActiveXObject) {
                 return xmlDoc.xml;  //IE
             } else {
                 return (new XMLSerializer()).serializeToString(xmlDoc);  //FF
             }
+        },
+
+        createElement : function (document,name){
+               return document.createElement(name);
+        },
+
+        setAttribute : function (element,name,value){
+                if(!value){
+                    value = '';
+                }
+                element.setAttribute(name,value);
+        },
+
+        appendChild : function (element,node){
+              element.appendChild(node);
         }
 
-    };
+
+
+};
 }

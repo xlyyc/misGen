@@ -41,7 +41,7 @@ wof.bizWidget.spanner.FlowLayoutSpanner = function () {
     };
 
     var onReceiveMessage = [];
-    onReceiveMessage.push({id:'wof.bizWidget.Spanner_render',method:'this._receivePropertysAndRenderSelf(message.sender.propertys);'});
+    onReceiveMessage.push({id:'wof.bizWidget.FlowLayout_active',method:'this._receivePropertysAndRenderSelf(message.sender);'});
     var method = 'this._receiveAndProcessParameters(message.sender.parameters);';
     onReceiveMessage.push({id:'wof.bizWidget.PropertyBar_apply',method:method});
     onReceiveMessage.push({id:'wof.bizWidget.OnSendMessageBar_apply',method:method});
@@ -580,11 +580,7 @@ wof.bizWidget.spanner.FlowLayoutSpanner.prototype = {
 
     //接收对象属性并渲染句柄自身
     _receivePropertysAndRenderSelf:function(propertys){
-        if(propertys.className=="wof.bizWidget.FlowLayout"){
-            this.setPropertys(propertys);
-        }else{
-            this.setPropertys(null);
-        }
+        this.setPropertys(propertys);
         this.render();
     },
 

@@ -20,7 +20,8 @@ wof.widget.spanner.ButtonSpanner = function () {
     };
 
     var onReceiveMessage = [];
-    onReceiveMessage.push({id:'wof.bizWidget.Spanner_render',method:'var propertys=message.sender.propertys;if(propertys.className=="wof.widget.Button"){this.setPropertys(propertys);}else{this.setPropertys(null)}this.render();'});
+    onReceiveMessage.push({id:'wof.widget.Button_active',method:'var propertys=message.sender;if(propertys.className=="wof.widget.Button"){this.setPropertys(propertys);}else{this.setPropertys(null)}this.render();'});
+
     var method = 'var data=message.sender.propertys; '
         +'if(data.id==this.getPropertys().id){ '
         +' var button=wof.util.ObjectManager.get(data.id); '

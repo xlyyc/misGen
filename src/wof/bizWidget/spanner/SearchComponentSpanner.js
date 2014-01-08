@@ -17,7 +17,7 @@ wof.bizWidget.spanner.SearchComponentSpanner = function () {
             'itemHeight':{prop:'itemHeight','name':'行高','type':'naturalNumber','readOnly':false,'isHide':false,required:true},
             'name':{prop:'name','name':'构件名称','type':'text','readOnly':false,'isHide':false,required:false},
             'caption':{prop:'caption','name':'标题','type':'text','readOnly':false,'isHide':false,required:false},
-            'linkComponentID':{prop:'linkComponentID','name':'关联组件','type':'custom','readOnly':false,'isHide':false,required:false, customMethod:'wof.customWindow.ComponentTreeSelector', customParam:'gridComponent,voucherGridComponent'},
+            'linkComponentID':{prop:'linkComponentID','name':'关联构件','type':'custom','readOnly':false,'isHide':false,required:false, customMethod:'wof.customWindow.ComponentTreeSelector', customParam:'gridComponent,voucherGridComponent'},
             'colsNum':{prop:'colsNum','name':'列数','type':'naturalNumber','readOnly':false,'isHide':false,required:true},
             'isExpand':{prop:'isExpand','name':'是否展开','type':'yesOrNo','readOnly':false,'isHide':false,required:false},
             'paramMaps':{prop:'paramMaps','name':'参数','type':'custom','readOnly':false,'isHide':false,required:false, customMethod:'wof.customWindow.ParamMapsWindow', customParam:'dataId'}
@@ -64,7 +64,8 @@ wof.bizWidget.spanner.SearchComponentSpanner = function () {
     };
 
     var onReceiveMessage = [];
-    onReceiveMessage.push({id:'wof.bizWidget.Spanner_render',method:'this._receivePropertysAndRenderSelf(message.sender.propertys);'});
+    onReceiveMessage.push({id:'wof.bizWidget.SearchComponent_active',method:'this._receivePropertysAndRenderSelf(message.sender);'});
+
     var method = 'this._receiveAndProcessParameters(message.sender.parameters);';
     onReceiveMessage.push({id:'wof.bizWidget.PropertyBar_apply',method:method});
     onReceiveMessage.push({id:'wof.bizWidget.OnSendMessageBar_apply',method:method});
@@ -394,17 +395,72 @@ wof.bizWidget.spanner.SearchComponentSpanner.prototype = {
     //静态方法 导出数据
     exportData: function(node){
         /**
-         <SearchComponent BindEntityID="Employee" Id="emSearch" ColsNum="3" Caption="员工信息搜索" index="A" State="" CallStr="searchcomponent:0_0_1" LinkComponentID="emGrid">
-            <SearchItem Caption="姓名" Index="0" DataField="name" Name="name" VisbleType="Text" LableWidth="100" InputWidth="100" Max="5"/>
-            <SearchItem Caption="年龄" Index="1" DataField="age" Name="age" VisbleType="Number" FromTo="true" LableWidth="100" InputWidth="100" />
-            <SearchItem Name="Sex" InputWidth="150" Visible="true" Caption="性别" LableWidth="100" DataField="sex" VisbleType="Text"/>
-            <SearchItem Name="birthdate" InputWidth="150" Visible="true" Caption="出生日期" LableWidth="100" TipValue="点击选择时间" DataField="birthdate" DateTimeFormat="YYYY_MM_DD_HH_MM_SS" VisbleType="Date" FromTo="true"/>
-            <ParamMaps>
-               <ParamMap MapType="value" CompParamName="" PageParamName="" ChangeExpt=""></ParamMap>
-            </ParamMaps>
+         <SearchComponent ColsNum="4" State="null" LinkComponentID="10ECB93CBDCD4C1C87E820FEECD15638"
+         Caption="未命名搜索" index="null" Id="DDA2D8FAF570415296692376AB131B53" CallStr="searchComponent:0_0_1"
+         Name="rsSearch" InitActionName="null" itemHeight="45">
+             <SearchItem TipValue="" Colspan="1" LinkageItem="" InputHeight="13" InputWidth="120" LableWidth="80" FromTo="false" VisbleType="text" DateTimeBoxFormat="yyyy-MM-dd HH:mm:ss" selectPattern="normal" UseMultiSelect="false" Caption="工号" DataField="JZGJBXXB.gh" Name="" rowspan="1"/>
+             <SearchItem TipValue="" Colspan="1" LinkageItem="" InputHeight="13" InputWidth="120" LableWidth="80" FromTo="false" VisbleType="text" DateTimeBoxFormat="yyyy-MM-dd HH:mm:ss" selectPattern="normal" UseMultiSelect="false" Caption="姓名" DataField="JZGJBXXB.xm" Name="" rowspan="1"/>
+             <SearchItem TipValue="" Colspan="1" LinkageItem="" InputHeight="20" InputWidth="120" LableWidth="80" FromTo="false" VisbleType="select" DateTimeBoxFormat="yyyy-MM-dd HH:mm:ss" selectPattern="normal" UseMultiSelect="false" Caption="政治面貌" DataField="JZGJBXXB.zzmmbm" Name="" rowspan="1"/>
+             <SearchItem TipValue="" Colspan="1" LinkageItem="" InputHeight="20" InputWidth="120" LableWidth="80" FromTo="false" VisbleType="select" DateTimeBoxFormat="yyyy-MM-dd HH:mm:ss" selectPattern="normal" UseMultiSelect="false" Caption="所属机构" DataField="JZGJBXXB.zzjg" Name="jzgzz" rowspan="1"/>
+             <SearchItem TipValue="" Colspan="2" LinkageItem="" InputHeight="13" InputWidth="150" LableWidth="80" FromTo="true" VisbleType="date" DateTimeBoxFormat="yyyy-MM-dd HH:mm:ss" selectPattern="normal" UseMultiSelect="false" Caption="出生日期" DataField="JZGJBXXB.csrq" Name="" rowspan="1"/>
+             <SearchItem TipValue="" Colspan="1" LinkageItem="" InputHeight="20" InputWidth="120" LableWidth="80" FromTo="false" VisbleType="number" DateTimeBoxFormat="yyyy-MM-dd HH:mm:ss" selectPattern="normal" UseMultiSelect="false" Caption="年龄" DataField="JZGJBXXB.NL" Name="zgage" rowspan="1"/>
+             <SearchItem TipValue="" Colspan="1" LinkageItem="" InputHeight="20" InputWidth="120"
+         LableWidth="80" FromTo="false" VisbleType="select" DateTimeBoxFormat="" selectPattern="normal"
+         UseMultiSelect="false" Caption="性别" DataField="JZGJBXXB.xb" Name="jzgsex" rowspan="1"/>
+             <ParamMaps/>
          </SearchComponent>
-
          */
+        if(node.getClassName()=='wof.bizWidget.SearchComponent'){
+            var tool = wof.util.Tool;
+            var root = tool.stringToXml("<SearchComponent></SearchComponent>");
+            var rootElement = root.documentElement;
+
+            tool.setAttribute(rootElement,"ColsNum",node.getColsNum());
+            tool.setAttribute(rootElement,"State",node.getState());
+            tool.setAttribute(rootElement,"LinkComponentID",node.getLinkComponentID());
+            tool.setAttribute(rootElement,"Caption",node.getCaption());
+            tool.setAttribute(rootElement,"index",node.getIndex());
+            tool.setAttribute(rootElement,"Id",node.getComponentId());
+            tool.setAttribute(rootElement,"CallStr",node.getCallStr());
+            tool.setAttribute(rootElement,"Name",node.getName());
+            tool.setAttribute(rootElement,"InitActionName",node.getInitActionName());
+            tool.setAttribute(rootElement,"ItemHeight",node.getItemHeight());
+
+            var childNodes = node.childNodes();
+            for(var i=0;i<childNodes.length;i++){
+                if(childNodes[i].getClassName()=='wof.bizWidget.SearchItem'){
+                    var item = childNodes[i];
+                    var SearchItem = tool.createElement(root,"SearchItem");
+                    tool.setAttribute(SearchItem,"Caption",item.getCaption());
+                    tool.setAttribute(SearchItem,"Name",item.getName());
+                    tool.setAttribute(SearchItem,"ColNum",item.getColNum());
+                    tool.setAttribute(SearchItem,"IsFixItem",item.getIsFixItem());
+                    tool.setAttribute(SearchItem,"rowspan",item.getRowspan());
+                    tool.setAttribute(SearchItem,"colspan",item.getColspan());
+                    tool.setAttribute(SearchItem,"DataField",item.getDataField());
+                    tool.setAttribute(SearchItem,"DateTimeBoxFormat",item.getDateTimeBoxFormat());
+                    tool.setAttribute(SearchItem,"selectPattern",item.getSelectPattern());
+                    tool.setAttribute(SearchItem,"UseMultiSelect",item.getUseMultiSelect());
+                    tool.setAttribute(SearchItem,"VisbleType",item.getVisbleType());
+                    tool.setAttribute(SearchItem,"FromTo",item.getFromTo());
+                    tool.setAttribute(SearchItem,"LabelWidth",item.getLabelWidth());
+                    tool.setAttribute(SearchItem,"InputWidth",item.getInputWidth());
+                    tool.setAttribute(SearchItem,"InputHeight",item.getInputHeight());
+                    tool.setAttribute(SearchItem,"TipValue",item.getTipValue());
+                    tool.setAttribute(SearchItem,"LinkageItem",item.getLinkageItem());
+                    tool.appendChild(rootElement,SearchItem);
+                }
+            }
+
+            var paramMapsElement = tool.createElement(root,'ParamMaps');
+            var paramMapElement = tool.createElement(root,'ParamMap');
+            for(var k in node.getParamMaps()){
+                tool.setAttribute(paramMapElement,k,node.getParameters()[k]);
+            }
+            tool.appendChild(paramMapsElement,paramMapElement);
+            tool.appendChild(rootElement,paramMapsElement);
+            console.log(tool.xmlToString(root));
+        }
         var json = {};
         if(node.getClassName()=='wof.bizWidget.SearchComponent'){
             json.className = node.getClassName();
@@ -461,11 +517,7 @@ wof.bizWidget.spanner.SearchComponentSpanner.prototype = {
 
     //加工并发送数据
     _receivePropertysAndRenderSelf:function(propertys){
-        if(propertys.className=="wof.bizWidget.SearchComponent"){
-            this.setPropertys(propertys);
-        }else{
-            this.setPropertys(null);
-        }
+        this.setPropertys(propertys);
         this.render();
     },
 

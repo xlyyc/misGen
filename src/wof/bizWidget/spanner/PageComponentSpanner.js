@@ -20,7 +20,8 @@ wof.bizWidget.spanner.PageComponentSpanner = function () {
     };
 
     var onReceiveMessage = [];
-    onReceiveMessage.push({id:'wof.bizWidget.Spanner_render',method:'this._receivePropertysAndRenderSelf(message.sender.propertys);'});
+    onReceiveMessage.push({id:'wof.bizWidget.PageComponent_active',method:'this._receivePropertysAndRenderSelf(message.sender);'});
+
     var method = 'this._receiveAndProcessParameters(message.sender.parameters);';
     onReceiveMessage.push({id:'wof.bizWidget.PropertyBar_apply',method:method});
     onReceiveMessage.push({id:'wof.bizWidget.OnSendMessageBar_apply',method:method});
@@ -174,11 +175,7 @@ wof.bizWidget.spanner.PageComponentSpanner.prototype = {
 
     //加工并发送数据
     _receivePropertysAndRenderSelf:function(propertys){
-        if(propertys.className=="wof.bizWidget.PageComponent"){
-            this.setPropertys(propertys);
-        }else{
-            this.setPropertys(null);
-        }
+        this.setPropertys(propertys);
         this.render();
     },
 

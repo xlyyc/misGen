@@ -15,7 +15,7 @@ wof.functionWidget.spanner.DeleteRecordComponentSpanner = function () {
     this._meta.propertys = {
         'DeleteRecordComponent':{
             'functionID':{prop:'functionID','name':'功能ID','type':'text','readOnly':false,'isHide':false},
-            'bindComponents':{prop:'bindComponents','name':'绑定组件','type':'custom','readOnly':false,'isHide':false,required:false, customMethod:'wof.customWindow.ComponentTreeSelector', customParam:'gridComponent,voucherGridComponent'},
+            'bindComponents':{prop:'bindComponents','name':'绑定构件','type':'custom','readOnly':false,'isHide':false,required:false, customMethod:'wof.customWindow.ComponentTreeSelector', customParam:'gridComponent,voucherGridComponent'},
             'commandItemID':{prop:'commandItemID','name':'功能构件ID','type':'text','readOnly':false,'isHide':false},
             'iSPermissionControl':{prop:'iSPermissionControl','name':'是否权限控制','type':'yesOrNo','readOnly':false,'isHide':false},
             'callItemCaption':{prop:'callItemCaption','name':'显示名称','type':'text','readOnly':false,'isHide':false}
@@ -25,7 +25,9 @@ wof.functionWidget.spanner.DeleteRecordComponentSpanner = function () {
 
 
     var onReceiveMessage = [];
-    onReceiveMessage.push({id:'wof.bizWidget.Spanner_render',method:'this._receivePropertysAndRenderSelf(message.sender.propertys);'});
+    onReceiveMessage.push({id:'wof.functionWidget.DeleteRecordComponent_active',method:'this._receivePropertysAndRenderSelf(message.sender);'});
+
+
     var method = 'this._receiveAndProcessParameters(message.sender.parameters);';
     onReceiveMessage.push({id:'wof.bizWidget.PropertyBar_apply',method:method});
     onReceiveMessage.push({id:'wof.bizWidget.OnSendMessageBar_apply',method:method});
@@ -200,6 +202,44 @@ wof.functionWidget.spanner.DeleteRecordComponentSpanner.prototype = {
              </ParamMaps>
          </CommandItem>
          */
+
+        if(node.getClassName()=='wof.functionWidget.DeleteRecordComponent'){
+            var tool = wof.util.Tool;
+            var root = tool.stringToXml("<CommandItem></CommandItem>");
+            var rootElement = root.documentElement;
+            tool.setAttribute(rootElement,"CallType",node.getCallType());
+            tool.setAttribute(rootElement,"CallItemCaption",node.getCallItemCaption());
+            tool.setAttribute(rootElement,"CallItemName",node.getCallItemName());
+            tool.setAttribute(rootElement,"FunctionID",node.getFunctionID());
+            tool.setAttribute(rootElement,"ISPermissionControl",node.getISPermissionControl());
+            tool.setAttribute(rootElement,"CommandItemID",node.getCommandItemID());
+            tool.setAttribute(rootElement,"CallStr",node.getCallStr());
+
+            var paramMapsElement = tool.createElement(root,'ParamMaps');
+            var paramMapElement = tool.createElement(root,'ParamMap');
+            tool.setAttribute(paramMapElement,"MapType",'value');
+            tool.setAttribute(paramMapElement,"CompParamName",'bindComponents');
+            tool.setAttribute(paramMapElement,"CompParamValue",node.getBindComponents());
+            tool.setAttribute(paramMapElement,"PageParamName",'');
+            tool.setAttribute(paramMapElement,"ChangeExpt",'');
+            tool.appendChild(paramMapsElement,paramMapElement);
+            tool.appendChild(rootElement,paramMapsElement);
+
+            var Before = tool.createElement(root,'Before');
+            tool.setAttribute(Before,"CanStop",true);
+            var Call = tool.createElement(root,'Call');
+            tool.setAttribute(Call,'Type','JS');
+            tool.appendChild(Before,Call);
+            var After = tool.createElement(root,'After');
+            var Call = tool.createElement(root,'Call');
+            tool.setAttribute(Call,'Type','JS');
+            tool.appendChild(After,Call);
+            var Return = tool.createElement(root,'Return');
+            tool.appendChild(rootElement,Before);
+            tool.appendChild(rootElement,After);
+            tool.appendChild(rootElement,Return);
+            console.log(tool.xmlToString(root));
+        }
         var json = {};
         if(node.getClassName()=='wof.functionWidget.DeleteRecordComponent'){
             json.commandItemID = node.getComponentId();
@@ -228,11 +268,7 @@ wof.functionWidget.spanner.DeleteRecordComponentSpanner.prototype = {
 
     //加工并发送数据
     _receivePropertysAndRenderSelf:function(propertys){
-        if(propertys.className=="wof.functionWidget.DeleteRecordComponent"){
-            this.setPropertys(propertys);
-        }else{
-            this.setPropertys(null);
-        }
+        this.setPropertys(propertys);
         this.render();
     },
 

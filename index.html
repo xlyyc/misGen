@@ -93,7 +93,6 @@
 <script src="src/wof/bizWidget/spanner/VoucherGridComponentSpanner.js"></script>
 <script src="src/wof/bizWidget/spanner/GridComponentSpanner.js"></script>
 <script src="src/wof/bizWidget/ObjectInspector.js"></script>
-<script src="src/wof/bizWidget/Spanner.js"></script>
 
 <script src="src/wof/functionWidget/CommitComponent.js"></script>
 <script src="src/wof/functionWidget/ViewRecordComponent.js"></script>
@@ -268,10 +267,6 @@ jQuery(function(){
                             objectBar.setTop(0);
                             objectBar.setLeft(0);
                             objectBar.appendTo(gridLayout);
-
-                            var spanner1 = new Spanner();
-                            spanner1.setComponents(components);
-                            spanner1.appendTo(gridLayout);
 
                             gridLayout.render();
 		}
@@ -467,8 +462,8 @@ jQuery(function(){
             wof.customWindow.PageParamWindow.run();
         }else if(id=='saveBtn'){
 
-            var xmldoc = wof.util.Tool.stringToXml('<node id="node1">测试XML数据</node>');
-            alert(wof.util.Tool.xmlToString(xmldoc));
+           /* var xmldoc = wof.util.Tool.stringToXml('<node id="node1">测试XML数据</node>');
+            alert(wof.util.Tool.xmlToString(xmldoc));*/
 
 
             var json = {};

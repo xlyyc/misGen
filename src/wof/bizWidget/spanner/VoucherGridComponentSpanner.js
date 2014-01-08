@@ -95,7 +95,8 @@ wof.bizWidget.spanner.VoucherGridComponentSpanner = function () {
     };
 
     var onReceiveMessage = [];
-    onReceiveMessage.push({id:'wof.bizWidget.Spanner_render',method:'this._receivePropertysAndRenderSelf(message.sender.propertys);'});
+    onReceiveMessage.push({id:'wof.bizWidget.VoucherGridComponent_active',method:'this._receivePropertysAndRenderSelf(message.sender);'});
+
     var method = 'this._receiveAndProcessParameters(message.sender.parameters);';
     onReceiveMessage.push({id:'wof.bizWidget.PropertyBar_apply',method:method});
     onReceiveMessage.push({id:'wof.bizWidget.OnSendMessageBar_apply',method:method});
@@ -405,6 +406,79 @@ wof.bizWidget.spanner.VoucherGridComponentSpanner.prototype = {
     //静态方法 导出数据(只有需要给运行时解析的叶子节点才需要定义此方法)
     exportData: function(node){
 
+
+//        <VoucherGridComponent rowsCount="30" useMutiplePage="true" VoucherHeadComponent="" State="null" BindEntityID="" Caption="未命名表体列表" numberDisplay="true"
+// index="null" ID="509746B71F7541158E20E3365F4D144E" Name="未命名表体列表" InitActionName="null"
+// CallStr="voucherGridComponent:0_0_1">
+//            <Columns>
+//                <Column LinkForm="" CheckErrorInfo="" RefSearchCondition="" RegExp="" ScaleLength="0" IntLength="0" Max="0" Min="0" Length="0" CanSearch="false" OrderByType="" Required="false" ReadOnly="false" VisbleType="text" selectPattern="normal" picUrl="" editor="true" DateTimeFormat="yyyy-MM-dd" IsPin="false" Display="true" GridId="" BindDataField="" columnWidth="120" Caption="列1" ColumnType="null" UseMultiSelect="false" Name=""/>
+//                <Column LinkForm="" CheckErrorInfo="" RefSearchCondition="" RegExp="" ScaleLength="0" IntLength="0" Max="0" Min="0" Length="0" CanSearch="false" OrderByType="" Required="false" ReadOnly="false" VisbleType="text" selectPattern="normal" picUrl="" editor="true" DateTimeFormat="yyyy-MM-dd" IsPin="false" Display="true" GridId="" BindDataField="" columnWidth="120" Caption="列2" ColumnType="null" UseMultiSelect="false" Name=""/>
+//                <Column LinkForm="" CheckErrorInfo="" RefSearchCondition="" RegExp="" ScaleLength="0" IntLength="0" Max="0" Min="0" Length="0" CanSearch="false" OrderByType="" Required="false" ReadOnly="false" VisbleType="text" selectPattern="normal" picUrl="" editor="true" DateTimeFormat="yyyy-MM-dd" IsPin="false" Display="true" GridId="" BindDataField="" columnWidth="120" Caption="列3" ColumnType="null" UseMultiSelect="false" Name=""/>
+//                <Column LinkForm="" CheckErrorInfo="" RefSearchCondition="" RegExp="" ScaleLength="0" IntLength="0" Max="0" Min="0" Length="0" CanSearch="false" OrderByType="" Required="false"
+// ReadOnly="false" VisbleType="text" selectPattern="normal" picUrl="" editor="true" DateTimeFormat="yyyy-MM-dd"
+// IsPin="false" Display="true" GridId="" BindDataField="" columnWidth="120" Caption="列4" ColumnType="null" UseMultiSelect="false" Name=""/>
+//            </Columns>
+//            <ParamMaps/>
+//        </VoucherGridComponent>
+
+        if(node.getClassName()=='wof.bizWidget.VoucherGridComponent'){
+            var tool = wof.util.Tool;
+            var root = tool.stringToXml("<VoucherGridComponent></VoucherGridComponent>");
+            var rootElement = root.documentElement;
+            tool.setAttribute(rootElement,"rowsCount",node.getRowsCount());
+            tool.setAttribute(rootElement,"useMutiplePage",node.getUseMutiplePage());
+            tool.setAttribute(rootElement,"VoucherHeadComponent",node.getVoucherHeadComponent());
+            tool.setAttribute(rootElement,"State",node.getState());
+            tool.setAttribute(rootElement,"BindEntityID",node.getBindEntityID());
+            tool.setAttribute(rootElement,"numberDisplay",node.getNumberDisplay());
+            tool.setAttribute(rootElement,"index",node.getIndex());
+            tool.setAttribute(rootElement,"ID",node.getComponentId());
+            tool.setAttribute(rootElement,"Name",node.getName());
+            tool.setAttribute(rootElement,"InitActionName",node.getInitActionName());
+            tool.setAttribute(rootElement,"CallStr",node.getCallStr());
+            var Columns = tool.createElement(root,"Columns");
+            var childNodes = node.childNodes();
+            for(var i=0;i<childNodes.length;i++){
+                var childNode = childNodes[i];
+                var Column = tool.createElement(root,"Column");
+                tool.setAttribute(Column,"LinkForm",childNode.getLinkForm());
+                tool.setAttribute(Column,"CheckErrorInfo",childNode.getCheckErrorInfo());
+                tool.setAttribute(Column,"RefSearchCondition",childNode.getRefSearchCondition());
+                tool.setAttribute(Column,"RegExp",childNode.getRegExp());
+                tool.setAttribute(Column,"ScaleLength",childNode.getScaleLength());
+                tool.setAttribute(Column,"IntLength",childNode.getIntLength());
+                tool.setAttribute(Column,"Max",childNode.getMax());
+                tool.setAttribute(Column,"Min",childNode.getMin());
+                tool.setAttribute(Column,"Length",childNode.getLength());
+                tool.setAttribute(Column,"CanSearch",childNode.getCanSearch());
+                tool.setAttribute(Column,"OrderByType",childNode.getOrderByType());
+                tool.setAttribute(Column,"Required",childNode.getRequired());
+                tool.setAttribute(Column,"ReadOnly",childNode.getReadOnly());
+                tool.setAttribute(Column,"VisbleType",childNode.getVisbleType());
+                tool.setAttribute(Column,"selectPattern",childNode.getSelectPattern());
+                tool.setAttribute(Column,"picUrl",childNode.getPicUrl());
+                tool.setAttribute(Column,"DateTimeFormat",childNode.getDateTimeFormat());
+                tool.setAttribute(Column,"IsPin",childNode.getIsPin());
+                tool.setAttribute(Column,"Display",childNode.getDisplay());
+                tool.setAttribute(Column,"GridId",childNode.getGridId());
+                tool.setAttribute(Column,"BindDataField",childNode.getBindDataField());
+                tool.setAttribute(Column,"columnWidth",childNode.getColumnWidth());
+                tool.setAttribute(Column,"Caption",childNode.getCaption());
+                tool.setAttribute(Column,"ColumnType",childNode.getColumnType());
+                tool.setAttribute(Column,"UseMultiSelect",childNode.getUseMultiSelect());
+                tool.setAttribute(Column,"Name",childNode.getName());
+                tool.appendChild(Columns,Column);
+            }
+            tool.appendChild(rootElement,Columns);
+            var paramMapsElement = tool.createElement(root,'ParamMaps');
+            var paramMapElement = tool.createElement(root,'ParamMap');
+            for(var k in node.getParamMaps()){
+                tool.setAttribute(paramMapElement,k,node.getParameters()[k]);
+            }
+            tool.appendChild(paramMapsElement,paramMapElement);
+            tool.appendChild(rootElement,paramMapsElement);
+            console.log(tool.xmlToString(root));
+        }
         var json = {};
         if(node.getClassName()=='wof.bizWidget.VoucherGridComponent'){
             json.className = node.getClassName();
@@ -471,11 +545,7 @@ wof.bizWidget.spanner.VoucherGridComponentSpanner.prototype = {
 
     //加工并发送数据
     _receivePropertysAndRenderSelf:function(propertys){
-        if(propertys.className=="wof.bizWidget.VoucherGridComponent"){
-            this.setPropertys(propertys);
-        }else{
-            this.setPropertys(null);
-        }
+        this.setPropertys(propertys);
         this.render();
     },
 
