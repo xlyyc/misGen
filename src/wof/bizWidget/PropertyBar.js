@@ -116,7 +116,9 @@ wof.bizWidget.PropertyBar.prototype={
         if(meta.isHide==true){
             tr = jQuery('<tr style="height:0px;">');
             tr.append(jQuery('<td style="height:0px;"></td>'));
-            var td = jQuery('<td style="height:0px;"><input type="hidden" name="'+meta.prop+'" value="'+String(value)+'"/></td>');
+            var td = jQuery('<td style="height:0px;"></td>');
+            var input = jQuery('<input type="hidden" name="'+meta.prop+'"/>');
+            td.append(input.val(String(value)));
             tr.append(td);
         }else{
             tr = jQuery('<tr style="height:30px;border:1px inset #a1a1a1;">');
@@ -124,11 +126,14 @@ wof.bizWidget.PropertyBar.prototype={
             if(meta.type=='text'){  //文本类型
                 var td = null;
                 if(meta.readOnly==true){
-                    td = jQuery('<td style="width:55%;"><input type="text" style="width:100px;border:0px;border-bottom:1px solid black;background-color:transparent;"'+(meta.readOnly==true?'readonly':'')+' name="'+meta.prop+'" value="'+String(value)+'"/></td>');
+                    td = jQuery('<td style="width:55%;"></td>');
+                    var input = jQuery('<input type="text" style="width:100px;border:0px;border-bottom:1px solid black;background-color:transparent;"'+(meta.readOnly==true?'readonly':'')+' name="'+meta.prop+'"/>');
+                    td.append(input.val(String(value)));
+                    tr.append(td);
                 }else{
                     td = jQuery('<td style="width:55%;">');
-                    var input = jQuery('<input type="text" style="width:100px;" name="'+meta.prop+'" value="'+String(value)+'"/>');
-                    td.append(input);
+                    var input = jQuery('<input type="text" style="width:100px;" name="'+meta.prop+'"/>');
+                    td.append(input.val(String(value)));
                     if(meta.required==true){
                         input.bind("blur", function(){
                             if(this.value==null||this.value==''){
@@ -149,23 +154,27 @@ wof.bizWidget.PropertyBar.prototype={
             }else if(meta.type=='naturalNumber'){ //自然数类型
                 var td = null;
                 if(meta.readOnly==true){
-                    td = jQuery('<td style="width:55%;"><input type="text" style="width:100px;border:0px;border-bottom:1px solid black;background-color:transparent;"'+(meta.readOnly==true?'readonly':'')+' name="'+meta.prop+'" value="'+String(value)+'"/></td>');
+                    td = jQuery('<td style="width:55%;"></td>');
+                    var input = jQuery('<input type="text" style="width:100px;border:0px;border-bottom:1px solid black;background-color:transparent;"'+(meta.readOnly==true?'readonly':'')+' name="'+meta.prop+'"/>');
+                    td.append(input.val(String(value)));
                 }else{
                     td = jQuery('<td style="width:55%;">');
-                    var input = jQuery('<input type="text" style="width:100px;"  name="'+meta.prop+'" value="'+String(value)+'"/>');
+                    var input = jQuery('<input type="text" style="width:100px;"  name="'+meta.prop+'"/>');
                     input.naturalNumber(meta.required);
-                    td.append(input);
+                    td.append(input.val(String(value)));
                 }
                 tr.append(td);
             }else if(meta.type=='positiveIntegerOrPositiveDecimal'){  //自然数(包括0)或者非负小数类型
                 var td = null;
                 if(meta.readOnly==true){
-                    td = jQuery('<td style="width:55%;"><input type="text" style="width:100px;border:0px;border-bottom:1px solid black;background-color:transparent;"'+(meta.readOnly==true?'readonly':'')+' name="'+meta.prop+'" value="'+String(value)+'"/></td>');
+                    td = jQuery('<td style="width:55%;"></td>');
+                    var input = jQuery('<input type="text" style="width:100px;border:0px;border-bottom:1px solid black;background-color:transparent;"'+(meta.readOnly==true?'readonly':'')+' name="'+meta.prop+'"/>');
+                    td.append(input.val(String(value)));
                 }else{
                     td = jQuery('<td style="width:55%;">');
-                    var input = jQuery('<input type="text" style="width:100px;"  name="'+meta.prop+'" value="'+String(value)+'"/>');
+                    var input = jQuery('<input type="text" style="width:100px;"  name="'+meta.prop+'"/>');
                     input.positiveIntegerOrPositiveDecimal(meta.required);
-                    td.append(input);
+                    td.append(input.val(String(value)));
                 }
                 tr.append(td);
             }else if(meta.type=='enum'){ //枚举类型
