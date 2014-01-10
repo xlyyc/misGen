@@ -10,7 +10,6 @@ var wof$_aop = (function(){
             if(typeof(obj[o])=='function'){
                 if(obj[o]['getClassName']==null){
                     //todo disable
-
                     for(var p in obj[o]['prototype']){
                         if(typeof(obj[o]['prototype'][p])!='function'&&p.indexOf('_')!=0){
                             (function(proto,p){
@@ -28,8 +27,6 @@ var wof$_aop = (function(){
                             })(obj[o]['prototype'],p);
                         }
                     }
-
-
                     obj[o].prototype._version = null;
                     obj[o].prototype.getVersion = function(){
                         if(this._version==null){
