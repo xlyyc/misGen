@@ -478,6 +478,7 @@ wof.bizWidget.spanner.VoucherGridComponentSpanner.prototype = {
             tool.appendChild(paramMapsElement,paramMapElement);
             tool.appendChild(rootElement,paramMapsElement);
             console.log(tool.xmlToString(root));
+            return tool.xmlToString(root);
         }
         var json = {};
         if(node.getClassName()=='wof.bizWidget.VoucherGridComponent'){

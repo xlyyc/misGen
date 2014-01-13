@@ -654,7 +654,7 @@ wof.bizWidget.spanner.VoucherComponentSpanner.prototype = {
                             tool.setAttribute(voucherItem,"InputHeight",item.getInputHeight());
                             tool.setAttribute(voucherItem,"Visiable",item.getVisiable());
                             tool.setAttribute(voucherItem,"ItemLabel",item.getItemLabel());
-                            tool.setAttribute(voucherItem,"LableWidth",item.getLabelWidth());
+                            tool.setAttribute(voucherItem,"LabelWidth",item.getLabelWidth());
                             tool.setAttribute(voucherItem,"DataField",item.getDataField());
                             tool.setAttribute(voucherItem,"Colspan",item.getColspan());
                             tool.setAttribute(voucherItem,"VisbleType",item.getVisbleType());
@@ -674,6 +674,7 @@ wof.bizWidget.spanner.VoucherComponentSpanner.prototype = {
                             tool.setAttribute(voucherItem,"IsFixItem",item.getIsFixItem());
                             tool.setAttribute(voucherItem,"RowNum",item.getRowNum());
                             tool.setAttribute(voucherItem,"ColNum",item.getColNum());
+                            //tool.setAttribute(voucherItem,"Index",item.getIndex());
                             tool.appendChild(voucherItemGroup,voucherItem);
                         }
                     }
@@ -696,6 +697,7 @@ wof.bizWidget.spanner.VoucherComponentSpanner.prototype = {
             tool.appendChild(rootElement,paramMaps);
 
             console.log(tool.xmlToString(root));
+            return tool.xmlToString(root);
         }
 
         var json = {};

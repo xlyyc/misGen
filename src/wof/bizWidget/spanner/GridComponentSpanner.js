@@ -425,7 +425,7 @@ wof.bizWidget.spanner.GridComponentSpanner.prototype = {
 
         if(node.getClassName()=='wof.bizWidget.GridComponent'){
             var tool = wof.util.Tool;
-            var root = tool.stringToXml("<GridCompoent></GridCompoent>");
+            var root = tool.stringToXml("<GridComponent></GridComponent>");
             var rootElement = root.documentElement;
             tool.setAttribute(rootElement,'rowsCount',node.getRowsCount());
             tool.setAttribute(rootElement,'useMutiplePage',node.getUseMutiplePage());
@@ -433,7 +433,7 @@ wof.bizWidget.spanner.GridComponentSpanner.prototype = {
             tool.setAttribute(rootElement,'headerHeight',node.getHeaderHeight());
             tool.setAttribute(rootElement,'index',node.getIndex());
             tool.setAttribute(rootElement,'ID',node.getComponentId());
-            tool.setAttribute(rootElement,'BindEntityId',node.getBindEntityID());
+            tool.setAttribute(rootElement,'BindEntityID',node.getBindEntityID());
             tool.setAttribute(rootElement,'GridComponentState',node.getGridComponentState());
             tool.setAttribute(rootElement,'numberDisplay',node.getNumberDisplay());
             tool.setAttribute(rootElement,'Name',node.getName());
@@ -485,11 +485,11 @@ wof.bizWidget.spanner.GridComponentSpanner.prototype = {
             tool.appendChild(paramMapsElement,paramMapElement);
             tool.appendChild(rootElement,paramMapsElement);
 
-            var mutiplePageInfo = tool.createElement(root,'MutiplePageInfo');
-            tool.setAttribute(mutiplePageInfo,"RowsCount",node.getRowsCount());
-            tool.appendChild(rootElement,mutiplePageInfo);
+//            var mutiplePageInfo = tool.createElement(root,'MutiplePageInfo');
+//            tool.setAttribute(mutiplePageInfo,"RowsCount",node.getRowsCount());
+//            tool.appendChild(rootElement,mutiplePageInfo);
             console.log(tool.xmlToString(root));
-            //return tool.xmlToString(root);
+            return tool.xmlToString(root);
         }
 
 

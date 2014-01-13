@@ -41,9 +41,6 @@
         },
 
         setAttribute : function (element,name,value){
-                if(!value){
-                    value = '';
-                }
                 element.setAttribute(name,value);
         },
 

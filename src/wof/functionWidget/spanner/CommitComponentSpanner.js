@@ -210,13 +210,15 @@ wof.functionWidget.spanner.CommitComponentSpanner.prototype = {
             var tool = wof.util.Tool;
             var root = tool.stringToXml("<CommandItem></CommandItem>");
             var rootElement = root.documentElement;
+
             tool.setAttribute(rootElement,"CallType",node.getCallType());
+            tool.setAttribute(rootElement,"FunctionID",node.getFunctionID());
             tool.setAttribute(rootElement,"CallItemCaption",node.getCallItemCaption());
             tool.setAttribute(rootElement,"CallItemName",node.getCallItemName());
-            tool.setAttribute(rootElement,"FunctionID",node.getFunctionID());
-            tool.setAttribute(rootElement,"ISPermissionControl",node.getISPermissionControl());
-            tool.setAttribute(rootElement,"CommandItemID",node.getCommandItemID());
             tool.setAttribute(rootElement,"CallStr",node.getCallStr());
+            tool.setAttribute(rootElement,"CommandItemID",node.getComponentId());
+            tool.setAttribute(rootElement,"ISPermissionControl",node.getISPermissionControl());
+
 
             var paramMapsElement = tool.createElement(root,'ParamMaps');
             var paramMapElement = tool.createElement(root,'ParamMap');
@@ -252,6 +254,7 @@ wof.functionWidget.spanner.CommitComponentSpanner.prototype = {
             tool.appendChild(rootElement,Return);
 
             console.log(tool.xmlToString(root));
+            return tool.xmlToString(root);
         }
         var json = {};
         if(node.getClassName()=='wof.functionWidget.CommitComponent'){

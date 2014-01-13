@@ -436,7 +436,7 @@ wof.bizWidget.spanner.SearchComponentSpanner.prototype = {
                     tool.setAttribute(SearchItem,"ColNum",item.getColNum());
                     tool.setAttribute(SearchItem,"IsFixItem",item.getIsFixItem());
                     tool.setAttribute(SearchItem,"rowspan",item.getRowspan());
-                    tool.setAttribute(SearchItem,"colspan",item.getColspan());
+                    tool.setAttribute(SearchItem,"Colspan",item.getColspan());
                     tool.setAttribute(SearchItem,"DataField",item.getDataField());
                     tool.setAttribute(SearchItem,"DateTimeBoxFormat",item.getDateTimeBoxFormat());
                     tool.setAttribute(SearchItem,"selectPattern",item.getSelectPattern());
@@ -460,6 +460,7 @@ wof.bizWidget.spanner.SearchComponentSpanner.prototype = {
             tool.appendChild(paramMapsElement,paramMapElement);
             tool.appendChild(rootElement,paramMapsElement);
             console.log(tool.xmlToString(root));
+            return tool.xmlToString(root);
         }
         var json = {};
         if(node.getClassName()=='wof.bizWidget.SearchComponent'){

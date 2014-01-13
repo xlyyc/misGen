@@ -91,7 +91,7 @@ wof.functionWidget.DeleteRecordComponent.prototype = {
     },
 
     getFunctionID : function (){
-        return this._functionID || '';
+        return this._functionID || wof.util.Tool.uuid();
     },
 
     setFunctionID : function (functionID){
