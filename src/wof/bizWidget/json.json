@@ -1,0 +1,32 @@
+{"Entitys":[
+    {
+        "CorrentPageSize":"10",
+        "Rows":[
+            {
+                "zzidref":{},
+                "zglbref":{"lbmc":"兼职员工","lbbm":"20"},
+                "zzmmref":{"zzmmbm":"20","zzmmmc":"党员"},
+                "XBref":{"xbbh":"350388234863251456","xbmc":"女"},
+                "lbbm":"20",
+                "zgbz":"张思",
+                "gh":"2012564523",
+                "zzmmbm":"20",
+                "xm":"张三",
+                "xb":"350388234863251456",
+                "csrq":"1997-12-02",
+                "zzjg":"100202",
+                "xmpy":"zhangsan",
+                "zgid":"350692420930768896",
+                "zzid":"1001001"
+            }
+
+        ],
+        "EntityAlias":"JZGJBXXB",
+        "TotalCount":"21",
+        "CurrentPageNum":"1",
+        "IdPro":"zgid",
+        "EntityType":"main",
+        "EntityName":"JZGJBXXB"
+    }
+]
+}
