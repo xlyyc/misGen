@@ -62,10 +62,10 @@ wof.bizWidget.DataObject.prototype = {
     _deleteBuffer:null,
 
     /**
-     * 原始缓冲区 存放从检索到的原始数据(一般用来做状态恢复 比如undo使用)
+     * 原始缓冲区 存放从检索到的原始数据(一般用来做数据恢复)
      * 保存按照条件检索到的记录(需要合并，以保证记录唯一)
      */
-    _originalBuffer:null, //
+    _originalBuffer:null,
 
     /**
      * get/set 属性方法定义
