@@ -22,16 +22,14 @@ wof.bizWidget.DataObject.prototype = {
 
     _totalDataNumber:null, //设定本地缓冲数据数量
 
-    _queryPolicy:null, //二次过滤策略(默认remote)   本地 local  远程 remote
+    _queryPolicy:null, //二次过滤策略(默认remote) 本地 local  远程 remote
 
     _entityId:null, //实体id
 
     _dataTotal:null, //原始缓冲区数据数量
 
-    _bufferPageNubmer: null, //预缓存页数(默认两页)
-
     /**
-     * 主缓冲区 存放检索出来的数据
+     * 主缓冲区 存放检索出来的数据 但不包括过滤掉和删除掉的数据
      * New 指定行是新行，但此行的列并未赋值 只适用到行
      * NewModified 指定行是新行且行中的列已经赋值 只适用到行
      * NotModified 指定行或列处的信息与最初检索出的相同
@@ -40,17 +38,13 @@ wof.bizWidget.DataObject.prototype = {
     _primaryBuffer:null,
 
     /**
-     * 过滤主缓冲区 存放从主缓冲区中过滤后的引用(以构件ID作为key 需要保证顺序)
-     *
-     * 保存检索到的记录的引用(如果二次过滤策略为remote 那么不需要合并引用 直接将对应过滤缓冲区设置为检索到的数据引用)
+     * 过滤主缓冲区 存放从主缓冲区中过滤掉的数据
+     * New 指定行是新行，但此行的列并未赋值 只适用到行
+     * NewModified 指定行是新行且行中的列已经赋值 只适用到行
+     * NotModified 指定行或列处的信息与最初检索出的相同
+     * DataModified 指定列或行中某列处的数据发生了改变
      */
     _filterBuffer:null,
-
-    /**
-     * 过滤删除缓冲区 存放从对应过滤主缓冲区删除的引用(以构件ID作为key 需要保证顺序)
-     *
-     */
-    _filterDeleteBuffer:null,
 
     /**
      * 删除缓冲区 存放从主缓冲区中删除掉的数据
@@ -63,7 +57,10 @@ wof.bizWidget.DataObject.prototype = {
 
     /**
      * 原始缓冲区 存放从检索到的原始数据(一般用来做数据恢复)
-     * 保存按照条件检索到的记录(需要合并，以保证记录唯一)
+     * New 指定行是新行，但此行的列并未赋值 只适用到行
+     * NewModified 指定行是新行且行中的列已经赋值 只适用到行
+     * NotModified 指定行或列处的信息与最初检索出的相同
+     * DataModified 指定列或行中某列处的数据发生了改变
      */
     _originalBuffer:null,
 
@@ -80,17 +77,6 @@ wof.bizWidget.DataObject.prototype = {
 
     setTotalDataNumber: function(totalDataNumber){
         this._totalDataNumber = totalDataNumber;
-    },
-
-    getBufferPageNubmer: function(){
-        if(this._bufferPageNubmer==null){
-            this._bufferPageNubmer = 2;
-        }
-        return this._bufferPageNubmer;
-    },
-
-    setBufferPageNubmer: function(bufferPageNubmer){
-        this._bufferPageNubmer = bufferPageNubmer;
     },
 
     getQueryPolicy: function(){
@@ -125,17 +111,6 @@ wof.bizWidget.DataObject.prototype = {
 
     setFilterBuffer: function(filterBuffer){
         this._filterBuffer = filterBuffer;
-    },
-
-    getFilterDeleteBuffer: function(){
-        if(this._filterDeleteBuffer==null){
-            this._filterDeleteBuffer = {};
-        }
-        return this._filterDeleteBuffer;
-    },
-
-    setFilterDeleteBuffer: function(filterDeleteBuffer){
-        this._filterDeleteBuffer = filterDeleteBuffer;
     },
 
     getDeleteBuffer: function(){
@@ -215,8 +190,7 @@ wof.bizWidget.DataObject.prototype = {
         return {
             totalDataNumber: this.getTotalDataNumber(),
             policy: this.getQueryPolicy(),
-            entityId: this.getEntityId(),
-            bufferPageNubmer: this.getBufferPageNubmer()
+            entityId: this.getEntityId()
         };
     },
     //----------必须实现----------
@@ -224,22 +198,19 @@ wof.bizWidget.DataObject.prototype = {
         this.setTotalDataNumber(data.totalDataNumber);
         this.setQueryPolicy(data.policy);
         this.setEntityId(data.entityId);
-        this.setBufferPageNubmer(data.bufferPageNubmer);
     },
 
     /**
      * 新增数据
      * 并发出对应消息
      *
-     * componentId 数据感知构件id
      * entityAlias 实体别名
      * entityData 实体数据
      */
-    _new: function(componentId, entityAlias, entityData){
+    _new: function(entityAlias, entityData){
         //entityData id由数据感知构件生成
-        //在主缓冲区中增加该条数据 并在对应的过滤缓冲区增加该数据的引用(需要保证顺序)
+        //在主缓冲区中增加该条数据
         //该数据在主缓冲区的状态为New或者NewModified(要结合实体的元数据中的默认值来决定是何种状态)
-        //并且在对应的过滤缓冲区加入该数据引用
 
     },
 
@@ -260,12 +231,10 @@ wof.bizWidget.DataObject.prototype = {
      * 并发出对应消息
      *
      * entityAlias 实体别名
-     * entityDataId 实体数据id
+     * entityData 实体数据
      */
-    _delete: function(entityAlias, entityDataId){
+    _delete: function(entityAlias, entityData){
         //将指定的数据从主缓冲区移动到对应的删除缓冲区(该数据的状态保持不变)
-
-        //同时检查所有的过滤缓冲区 如果存在该数据的引用 则将该引用移动到对应的过滤删除缓冲区
 
 
     },
@@ -275,28 +244,22 @@ wof.bizWidget.DataObject.prototype = {
      * todo 是否需要增加未保存数据处理策略配置?
      * 并发出对应消息
      *
-     * componentId 数据感知构件id
      * entityAlias 实体别名
      * queryParam 查询参数(JSON数组格式)
-     * pageNo 页号(从0开始)
-     * pageSize 分页记录数
+     * offset 偏移量(从0开始)
+     * rowsCount 返回数据数量
      */
-    _query: function(componentId, entityAlias, queryParam, pageNo, pageSize){
+    _query: function(entityAlias, queryParam, offset, rowsCount){
         var entityId = this.getEntityId();
-        if(this.getQueryPolicy()=='remote'){ //预定义检索条件+二次过滤条件向远处服务器请求数据
+        if(this.getQueryPolicy()=='remote'){ //预定义检索条件+二次过滤条件向远程服务请求数据
             /**
-             * 步骤一
-             * 根据bufferPageNubmer和pageSize计算出查询返回记录数
-             * 根据pageNo和pageSize计算出查询偏移量
              *
-             * 步骤二
+             * 步骤一
              * 根据查询条件发起检索 接收返回数据
              *
-             * 步骤三
-             * 清空对应过滤缓冲区
-             * 将返回数据合并入原始缓冲区和主缓冲区和删除缓冲区
-             * 注意如果主缓冲区和删除缓冲区数据发生修改 需要覆盖数据并将状态设置为NotModified(此逻辑将导致所涉及到的未保存的数据丢失)
-             * 再将返回数据引用保存入对应过滤缓冲区和对应过滤删除缓冲区(需要保持顺序)
+             * 步骤二
+             * 清空原始缓冲区 主缓冲区 过滤缓冲区 删除缓冲区对应实体数据
+             * 将返回数据加入原始缓冲区和主缓冲区 并将状态设置为NotModified(此逻辑将导致所涉及到的未保存的数据丢失)
              *
              */
         }else{
@@ -319,21 +282,18 @@ wof.bizWidget.DataObject.prototype = {
     },
 
     /**
-     * 根据原始缓冲区恢复本地数据
+     * todo 根据原始缓冲区恢复本地数据
      * 并发出对应消息
      *
      */
     _reset: function(){
         /**
          * 步骤一
-         * 清空主缓冲区和删除缓冲区
+         * 清空主缓冲区 过滤缓冲区 删除缓冲区
          *
          * 步骤二
          * 从原始缓冲区覆盖数据到主缓冲区
          * 并将主缓冲区的行列状态恢复为默认值(NotModified)
-         *
-         * 步骤三
-         * 将所有过滤删除缓冲区的数据合并入各自所对应的过滤缓冲区(需要保证顺序)
          *
          */
 
@@ -343,7 +303,7 @@ wof.bizWidget.DataObject.prototype = {
     /**
      * 回收内存
      *
-     * 此内存清理方法会移除原始缓冲区(包括主缓冲区、删除缓冲区)中没有被过滤缓冲区和过滤删除缓冲区引用的数据
+     * todo 此内存清理方法会移除原始缓冲区(包括主缓冲区、删除缓冲区)中没有被主缓冲区和过滤缓冲区以及过滤删除缓冲区引用的对应实体的数据
      */
     _gc: function(){
 
