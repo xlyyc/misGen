@@ -540,8 +540,8 @@
 
 
                 var calculateFiled = {"nodeId":"", "name":"计算列", "nocheck":true, "children":[]};
-                for(var i=0;i<child.calculateFiled.length;i++){
-                    calculateFiled.children.push({"nodeId":(child.alias+"."+child.calculateFiled[i].fieldID), "name":child.calculateFiled[i].fieldCaption});
+                for(var y=0;y<child.calculateFiled.length;y++){
+                    calculateFiled.children.push({"nodeId":(child.alias+"."+child.calculateFiled[y].fieldID), "name":child.calculateFiled[y].fieldCaption});
                 }
                 childEntity.children.push(calculateFiled);
 

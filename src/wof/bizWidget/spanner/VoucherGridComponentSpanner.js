@@ -421,65 +421,65 @@ wof.bizWidget.spanner.VoucherGridComponentSpanner.prototype = {
 //            <ParamMaps/>
 //        </VoucherGridComponent>
 
-        if(node.getClassName()=='wof.bizWidget.VoucherGridComponent'){
-            var tool = wof.util.Tool;
-            var root = tool.stringToXml("<VoucherGridComponent></VoucherGridComponent>");
-            var rootElement = root.documentElement;
-            tool.setAttribute(rootElement,"rowsCount",node.getRowsCount());
-            tool.setAttribute(rootElement,"useMutiplePage",node.getUseMutiplePage());
-            tool.setAttribute(rootElement,"VoucherHeadComponent",node.getVoucherHeadComponent());
-            tool.setAttribute(rootElement,"State",node.getState());
-            tool.setAttribute(rootElement,"BindEntityID",node.getBindEntityID());
-            tool.setAttribute(rootElement,"numberDisplay",node.getNumberDisplay());
-            tool.setAttribute(rootElement,"index",node.getIndex());
-            tool.setAttribute(rootElement,"ID",node.getComponentId());
-            tool.setAttribute(rootElement,"Name",node.getName());
-            tool.setAttribute(rootElement,"InitActionName",node.getInitActionName());
-            tool.setAttribute(rootElement,"CallStr",node.getCallStr());
-            var Columns = tool.createElement(root,"Columns");
-            var childNodes = node.childNodes();
-            for(var i=0;i<childNodes.length;i++){
-                var childNode = childNodes[i];
-                var Column = tool.createElement(root,"Column");
-                tool.setAttribute(Column,"LinkForm",childNode.getLinkForm());
-                tool.setAttribute(Column,"CheckErrorInfo",childNode.getCheckErrorInfo());
-                tool.setAttribute(Column,"RefSearchCondition",childNode.getRefSearchCondition());
-                tool.setAttribute(Column,"RegExp",childNode.getRegExp());
-                tool.setAttribute(Column,"ScaleLength",childNode.getScaleLength());
-                tool.setAttribute(Column,"IntLength",childNode.getIntLength());
-                tool.setAttribute(Column,"Max",childNode.getMax());
-                tool.setAttribute(Column,"Min",childNode.getMin());
-                tool.setAttribute(Column,"Length",childNode.getLength());
-                tool.setAttribute(Column,"CanSearch",childNode.getCanSearch());
-                tool.setAttribute(Column,"OrderByType",childNode.getOrderByType());
-                tool.setAttribute(Column,"Required",childNode.getRequired());
-                tool.setAttribute(Column,"ReadOnly",childNode.getReadOnly());
-                tool.setAttribute(Column,"VisbleType",childNode.getVisbleType());
-                tool.setAttribute(Column,"selectPattern",childNode.getSelectPattern());
-                tool.setAttribute(Column,"picUrl",childNode.getPicUrl());
-                tool.setAttribute(Column,"DateTimeFormat",childNode.getDateTimeFormat());
-                tool.setAttribute(Column,"IsPin",childNode.getIsPin());
-                tool.setAttribute(Column,"Display",childNode.getDisplay());
-                tool.setAttribute(Column,"GridId",childNode.getGridId());
-                tool.setAttribute(Column,"BindDataField",childNode.getBindDataField());
-                tool.setAttribute(Column,"columnWidth",childNode.getColumnWidth());
-                tool.setAttribute(Column,"Caption",childNode.getCaption());
-                tool.setAttribute(Column,"ColumnType",childNode.getColumnType());
-                tool.setAttribute(Column,"UseMultiSelect",childNode.getUseMultiSelect());
-                tool.setAttribute(Column,"Name",childNode.getName());
-                tool.appendChild(Columns,Column);
-            }
-            tool.appendChild(rootElement,Columns);
-            var paramMapsElement = tool.createElement(root,'ParamMaps');
-            var paramMapElement = tool.createElement(root,'ParamMap');
-            for(var k in node.getParamMaps()){
-                tool.setAttribute(paramMapElement,k,node.getParameters()[k]);
-            }
-            tool.appendChild(paramMapsElement,paramMapElement);
-            tool.appendChild(rootElement,paramMapsElement);
-            console.log(tool.xmlToString(root));
-            return tool.xmlToString(root);
-        }
+//        if(node.getClassName()=='wof.bizWidget.VoucherGridComponent'){
+//            var tool = wof.util.Tool;
+//            var root = tool.stringToXml("<VoucherGridComponent></VoucherGridComponent>");
+//            var rootElement = root.documentElement;
+//            tool.setAttribute(rootElement,"rowsCount",node.getRowsCount());
+//            tool.setAttribute(rootElement,"useMutiplePage",node.getUseMutiplePage());
+//            tool.setAttribute(rootElement,"VoucherHeadComponent",node.getVoucherHeadComponent());
+//            tool.setAttribute(rootElement,"State",node.getState());
+//            tool.setAttribute(rootElement,"BindEntityID",node.getBindEntityID());
+//            tool.setAttribute(rootElement,"numberDisplay",node.getNumberDisplay());
+//            tool.setAttribute(rootElement,"index",node.getIndex());
+//            tool.setAttribute(rootElement,"ID",node.getComponentId());
+//            tool.setAttribute(rootElement,"Name",node.getName());
+//            tool.setAttribute(rootElement,"InitActionName",node.getInitActionName());
+//            tool.setAttribute(rootElement,"CallStr",node.getCallStr());
+//            var Columns = tool.createElement(root,"Columns");
+//            var childNodes = node.childNodes();
+//            for(var i=0;i<childNodes.length;i++){
+//                var childNode = childNodes[i];
+//                var Column = tool.createElement(root,"Column");
+//                tool.setAttribute(Column,"LinkForm",childNode.getLinkForm());
+//                tool.setAttribute(Column,"CheckErrorInfo",childNode.getCheckErrorInfo());
+//                tool.setAttribute(Column,"RefSearchCondition",childNode.getRefSearchCondition());
+//                tool.setAttribute(Column,"RegExp",childNode.getRegExp());
+//                tool.setAttribute(Column,"ScaleLength",childNode.getScaleLength());
+//                tool.setAttribute(Column,"IntLength",childNode.getIntLength());
+//                tool.setAttribute(Column,"Max",childNode.getMax());
+//                tool.setAttribute(Column,"Min",childNode.getMin());
+//                tool.setAttribute(Column,"Length",childNode.getLength());
+//                tool.setAttribute(Column,"CanSearch",childNode.getCanSearch());
+//                tool.setAttribute(Column,"OrderByType",childNode.getOrderByType());
+//                tool.setAttribute(Column,"Required",childNode.getRequired());
+//                tool.setAttribute(Column,"ReadOnly",childNode.getReadOnly());
+//                tool.setAttribute(Column,"VisbleType",childNode.getVisbleType());
+//                tool.setAttribute(Column,"selectPattern",childNode.getSelectPattern());
+//                tool.setAttribute(Column,"picUrl",childNode.getPicUrl());
+//                tool.setAttribute(Column,"DateTimeFormat",childNode.getDateTimeFormat());
+//                tool.setAttribute(Column,"IsPin",childNode.getIsPin());
+//                tool.setAttribute(Column,"Display",childNode.getDisplay());
+//                tool.setAttribute(Column,"GridId",childNode.getGridId());
+//                tool.setAttribute(Column,"BindDataField",childNode.getBindDataField());
+//                tool.setAttribute(Column,"columnWidth",childNode.getColumnWidth());
+//                tool.setAttribute(Column,"Caption",childNode.getCaption());
+//                tool.setAttribute(Column,"ColumnType",childNode.getColumnType());
+//                tool.setAttribute(Column,"UseMultiSelect",childNode.getUseMultiSelect());
+//                tool.setAttribute(Column,"Name",childNode.getName());
+//                tool.appendChild(Columns,Column);
+//            }
+//            tool.appendChild(rootElement,Columns);
+//            var paramMapsElement = tool.createElement(root,'ParamMaps');
+//            var paramMapElement = tool.createElement(root,'ParamMap');
+//            for(var k in node.getParamMaps()){
+//                tool.setAttribute(paramMapElement,k,node.getParameters()[k]);
+//            }
+//            tool.appendChild(paramMapsElement,paramMapElement);
+//            tool.appendChild(rootElement,paramMapsElement);
+//            //console.log(tool.xmlToString(root));
+//            //return tool.xmlToString(root);
+//        }
         var json = {};
         if(node.getClassName()=='wof.bizWidget.VoucherGridComponent'){
             json.className = node.getClassName();
@@ -541,6 +541,7 @@ wof.bizWidget.spanner.VoucherGridComponentSpanner.prototype = {
             }
             json.columns = columns;
         }
+        console.log(JSON.stringify(json));
         return json;
     },
 

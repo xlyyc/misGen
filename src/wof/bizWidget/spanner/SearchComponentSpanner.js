@@ -410,58 +410,58 @@ wof.bizWidget.spanner.SearchComponentSpanner.prototype = {
              <ParamMaps/>
          </SearchComponent>
          */
-        if(node.getClassName()=='wof.bizWidget.SearchComponent'){
-            var tool = wof.util.Tool;
-            var root = tool.stringToXml("<SearchComponent></SearchComponent>");
-            var rootElement = root.documentElement;
-
-            tool.setAttribute(rootElement,"ColsNum",node.getColsNum());
-            tool.setAttribute(rootElement,"State",node.getState());
-            tool.setAttribute(rootElement,"LinkComponentID",node.getLinkComponentID());
-            tool.setAttribute(rootElement,"Caption",node.getCaption());
-            tool.setAttribute(rootElement,"index",node.getIndex());
-            tool.setAttribute(rootElement,"Id",node.getComponentId());
-            tool.setAttribute(rootElement,"CallStr",node.getCallStr());
-            tool.setAttribute(rootElement,"Name",node.getName());
-            tool.setAttribute(rootElement,"InitActionName",node.getInitActionName());
-            tool.setAttribute(rootElement,"ItemHeight",node.getItemHeight());
-
-            var childNodes = node.childNodes();
-            for(var i=0;i<childNodes.length;i++){
-                if(childNodes[i].getClassName()=='wof.bizWidget.SearchItem'){
-                    var item = childNodes[i];
-                    var SearchItem = tool.createElement(root,"SearchItem");
-                    tool.setAttribute(SearchItem,"Caption",item.getCaption());
-                    tool.setAttribute(SearchItem,"Name",item.getName());
-                    tool.setAttribute(SearchItem,"ColNum",item.getColNum());
-                    tool.setAttribute(SearchItem,"IsFixItem",item.getIsFixItem());
-                    tool.setAttribute(SearchItem,"rowspan",item.getRowspan());
-                    tool.setAttribute(SearchItem,"Colspan",item.getColspan());
-                    tool.setAttribute(SearchItem,"DataField",item.getDataField());
-                    tool.setAttribute(SearchItem,"DateTimeBoxFormat",item.getDateTimeBoxFormat());
-                    tool.setAttribute(SearchItem,"selectPattern",item.getSelectPattern());
-                    tool.setAttribute(SearchItem,"UseMultiSelect",item.getUseMultiSelect());
-                    tool.setAttribute(SearchItem,"VisbleType",item.getVisbleType());
-                    tool.setAttribute(SearchItem,"FromTo",item.getFromTo());
-                    tool.setAttribute(SearchItem,"LabelWidth",item.getLabelWidth());
-                    tool.setAttribute(SearchItem,"InputWidth",item.getInputWidth());
-                    tool.setAttribute(SearchItem,"InputHeight",item.getInputHeight());
-                    tool.setAttribute(SearchItem,"TipValue",item.getTipValue());
-                    tool.setAttribute(SearchItem,"LinkageItem",item.getLinkageItem());
-                    tool.appendChild(rootElement,SearchItem);
-                }
-            }
-
-            var paramMapsElement = tool.createElement(root,'ParamMaps');
-            var paramMapElement = tool.createElement(root,'ParamMap');
-            for(var k in node.getParamMaps()){
-                tool.setAttribute(paramMapElement,k,node.getParameters()[k]);
-            }
-            tool.appendChild(paramMapsElement,paramMapElement);
-            tool.appendChild(rootElement,paramMapsElement);
-            console.log(tool.xmlToString(root));
-            return tool.xmlToString(root);
-        }
+//        if(node.getClassName()=='wof.bizWidget.SearchComponent'){
+//            var tool = wof.util.Tool;
+//            var root = tool.stringToXml("<SearchComponent></SearchComponent>");
+//            var rootElement = root.documentElement;
+//
+//            tool.setAttribute(rootElement,"ColsNum",node.getColsNum());
+//            tool.setAttribute(rootElement,"State",node.getState());
+//            tool.setAttribute(rootElement,"LinkComponentID",node.getLinkComponentID());
+//            tool.setAttribute(rootElement,"Caption",node.getCaption());
+//            tool.setAttribute(rootElement,"index",node.getIndex());
+//            tool.setAttribute(rootElement,"Id",node.getComponentId());
+//            tool.setAttribute(rootElement,"CallStr",node.getCallStr());
+//            tool.setAttribute(rootElement,"Name",node.getName());
+//            tool.setAttribute(rootElement,"InitActionName",node.getInitActionName());
+//            tool.setAttribute(rootElement,"ItemHeight",node.getItemHeight());
+//
+//            var childNodes = node.childNodes();
+//            for(var i=0;i<childNodes.length;i++){
+//                if(childNodes[i].getClassName()=='wof.bizWidget.SearchItem'){
+//                    var item = childNodes[i];
+//                    var SearchItem = tool.createElement(root,"SearchItem");
+//                    tool.setAttribute(SearchItem,"Caption",item.getCaption());
+//                    tool.setAttribute(SearchItem,"Name",item.getName());
+//                    tool.setAttribute(SearchItem,"ColNum",item.getColNum());
+//                    tool.setAttribute(SearchItem,"IsFixItem",item.getIsFixItem());
+//                    tool.setAttribute(SearchItem,"rowspan",item.getRowspan());
+//                    tool.setAttribute(SearchItem,"Colspan",item.getColspan());
+//                    tool.setAttribute(SearchItem,"DataField",item.getDataField());
+//                    tool.setAttribute(SearchItem,"DateTimeBoxFormat",item.getDateTimeBoxFormat());
+//                    tool.setAttribute(SearchItem,"selectPattern",item.getSelectPattern());
+//                    tool.setAttribute(SearchItem,"UseMultiSelect",item.getUseMultiSelect());
+//                    tool.setAttribute(SearchItem,"VisbleType",item.getVisbleType());
+//                    tool.setAttribute(SearchItem,"FromTo",item.getFromTo());
+//                    tool.setAttribute(SearchItem,"LabelWidth",item.getLabelWidth());
+//                    tool.setAttribute(SearchItem,"InputWidth",item.getInputWidth());
+//                    tool.setAttribute(SearchItem,"InputHeight",item.getInputHeight());
+//                    tool.setAttribute(SearchItem,"TipValue",item.getTipValue());
+//                    tool.setAttribute(SearchItem,"LinkageItem",item.getLinkageItem());
+//                    tool.appendChild(rootElement,SearchItem);
+//                }
+//            }
+//
+//            var paramMapsElement = tool.createElement(root,'ParamMaps');
+//            var paramMapElement = tool.createElement(root,'ParamMap');
+//            for(var k in node.getParamMaps()){
+//                tool.setAttribute(paramMapElement,k,node.getParameters()[k]);
+//            }
+//            tool.appendChild(paramMapsElement,paramMapElement);
+//            tool.appendChild(rootElement,paramMapsElement);
+//           // console.log(tool.xmlToString(root));
+//            //return tool.xmlToString(root);
+//        }
         var json = {};
         if(node.getClassName()=='wof.bizWidget.SearchComponent'){
             json.className = node.getClassName();
@@ -512,6 +512,7 @@ wof.bizWidget.spanner.SearchComponentSpanner.prototype = {
             }
             json.searchItem = searchItems;
         }
+        console.log(JSON.stringify(json));
         return json;
     },
 

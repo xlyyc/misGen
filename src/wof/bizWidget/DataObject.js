@@ -29,38 +29,29 @@ wof.bizWidget.DataObject.prototype = {
     _dataTotal:null, //原始缓冲区数据数量
 
     /**
-     * 主缓冲区 存放检索出来的数据 但不包括过滤掉和删除掉的数据
      * New 指定行是新行，但此行的列并未赋值 只适用到行
      * NewModified 指定行是新行且行中的列已经赋值 只适用到行
      * NotModified 指定行或列处的信息与最初检索出的相同
      * DataModified 指定列或行中某列处的数据发生了改变
+     */
+
+    /**
+     * 主缓冲区 存放检索出来的数据 但不包括过滤掉和删除掉的数据
      */
     _primaryBuffer:null,
 
     /**
      * 过滤主缓冲区 存放从主缓冲区中过滤掉的数据
-     * New 指定行是新行，但此行的列并未赋值 只适用到行
-     * NewModified 指定行是新行且行中的列已经赋值 只适用到行
-     * NotModified 指定行或列处的信息与最初检索出的相同
-     * DataModified 指定列或行中某列处的数据发生了改变
      */
     _filterBuffer:null,
 
     /**
      * 删除缓冲区 存放从主缓冲区中删除掉的数据
-     * New 指定行是新行，但此行的列并未赋值 只适用到行
-     * NewModified 指定行是新行且行中的列已经赋值 只适用到行
-     * NotModified 指定行或列处的信息与最初检索出的相同
-     * DataModified 指定列或行中某列处的数据发生了改变
      */
     _deleteBuffer:null,
 
     /**
      * 原始缓冲区 存放从检索到的原始数据(一般用来做数据恢复)
-     * New 指定行是新行，但此行的列并未赋值 只适用到行
-     * NewModified 指定行是新行且行中的列已经赋值 只适用到行
-     * NotModified 指定行或列处的信息与最初检索出的相同
-     * DataModified 指定列或行中某列处的数据发生了改变
      */
     _originalBuffer:null,
 
@@ -278,7 +269,15 @@ wof.bizWidget.DataObject.prototype = {
      */
     _submit: function(entityData){
         var entityId = this.getEntityId();
-
+        /**
+         *
+         * 步骤一
+         * 根据当前状态整理提交的数据
+         *
+         * 步骤二
+         * 提交成功后刷新数据
+         *
+         */
     },
 
     /**
