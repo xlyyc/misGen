@@ -85,6 +85,8 @@
 <script src="src/wof/bizWidget/ParamWindow.js"></script>
 <script src="src/wof/bizWidget/PageParamWindow.js"></script>
 
+<script src="src/wof/bizWidget/DataObject.js"></script>
+
 <script src="src/wof/bizWidget/spanner/GridLayoutSpanner.js"></script>
 <script src="src/wof/bizWidget/spanner/PageComponentSpanner.js"></script>
 <script src="src/wof/bizWidget/spanner/FlowLayoutSpanner.js"></script>
@@ -370,6 +372,9 @@ jQuery(function(){
                     with(wof.widget.spanner)
                         with(wof.functionWidget.spanner)
                         with(wof.kernel){
+
+
+
                            /* var gridLayout = new GridLayout();
                             gridLayout.setOverflow('auto');
                             gridLayout.setWidth(windowWidth-sidebar1Width-sidebar2Width);
@@ -428,6 +433,10 @@ jQuery(function(){
                                 content.append(flowLayout.getDomInstance());
                                 wof.util.ObjectManager.add(flowLayout.getId(), flowLayout);
 
+
+                                var dataObject = new DataObject();
+                                dataObject.appendTo(flowLayout);
+
                                 flowLayout.render();
                             }
                         }
@@ -477,9 +486,12 @@ jQuery(function(){
                 var package =  clz.substring(0,clz.lastIndexOf(shortName)-1);
                 var spann = eval(package+'.spanner.'+shortName+'Spanner');
                 if(spann!=null){
-                    if(spann.prototype.exportData!=null){
-                        _leafsData.push(spann.prototype.exportData(node));
-                    }
+				 
+						if(spann.prototype.exportData!=null){
+							_leafsData.push(spann.prototype.exportData(node));
+						}
+				
+                  
                 }
                 var childNodes = node.childNodes();
                 if(childNodes.length>0){
@@ -488,7 +500,8 @@ jQuery(function(){
                     }
                 }
             }
-            _getLeafData(layout);
+				
+				    _getLeafData(layout);
 
             var _inputParam = [];
             function _getInputParam(){
@@ -496,6 +509,7 @@ jQuery(function(){
                     _inputParam.push(pageInputParam[name]);
                 }
             }
+		
             _getInputParam();
 
             json.inputParam = _inputParam;

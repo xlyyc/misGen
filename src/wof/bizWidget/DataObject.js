@@ -10,6 +10,46 @@ wof.bizWidget.DataObject = function () {
     this.getDomInstance().css('overflow','hidden');
 
     this._dataTotal = 0;
+
+
+    this._entities = {"Entitys":[
+        {	"CorrentPageSize":"10",
+            "Rows":[
+                {	"hjxxchild":{"hjms":"","hjmc":"2014优秀员工","jxjlid":"1","dqzt":"0","hjrqks":"2014-01-01","zgid":"1","jxbm":"1","hjrqjs":"2014-09-01"},
+                    "jxbmref":{"bz":"","jxmc":"优秀员工","sfqy":"true","jxbm":"1"},
+                    "zzidref":{"lbbm":"1","zgbz":"好人","gh":"20153021422","xm":"张三丰","zzmmbm":"1","xb":"1","csrq":"2014-01-01","zzjg":"1001","zgid":"1","zzid":"1001"}
+                },
+                {	"hjxxchild":{"hjms":"","hjmc":"2014优秀团队","jxjlid":"2","dqzt":"0","hjrqks":"2014-01-01","zgid":"1","jxbm":"2","hjrqjs":"2014-09-01"},
+                    "jxbmref":{"bz":"","jxmc":"优秀团队","sfqy":"true","jxbm":"2"},
+                    "zzidref":{"lbbm":"1","zgbz":"好人","gh":"20153021422","xm":"张三丰","zzmmbm":"1","xb":"1","csrq":"2014-01-01","zzjg":"1001","zgid":"1","zzid":"1001"}
+                }
+            ],
+            "EntityAlias":"hjxxchild",
+            "TotalCount":"2",
+            "CurrentPageNum":"1",
+            "IdPro":"jxjlid",
+            "EntityType":"child",// 子实体
+            "EntityName":"HJXX"
+        },
+        {"	CorrentPageSize":"1",
+            "Rows":[
+                {	"zglbref":{"lbmc":"全职员工","lbbm":"1","lbbz":"全职员工"},
+                    "JZGJBXXB":{"xb_show":"男","lbbm_show":"全职员工","zgbz":"好人","xm":"张三丰","zzmmbm":"1","zzmmbm_show":"团员","zzjg":"1001","zzid":"1001","lbbm":"1","gh":"20153021422","zzjg_show":"计算机学院","xb":"1","csrq":"2014-01-01 12:00:00","zgid":"1"},
+                    "zzmmref":{"zzmmbz":"","zzmmbm":"1","zzmmmc":"团员"},
+                    "zzjgref":{"bz":"","zzmc":"计算机学院","zzbm":"1001","sjzzbm":"1","zzid":"10"},
+                    "XBref":{"xbbh":"1","xbmc":"男"},
+                    "zzidref":{}
+                }
+            ],
+            "EntityAlias":"JZGJBXXB",
+            "TotalCount":"1",
+            "CurrentPageNum":"1",
+            "IdPro":"zgid",
+            "EntityType":"main", // 主实体
+            "EntityName":"JZGJBXXB"
+        }
+    ]};
+
 };
 /**
  * 数据对象
@@ -160,6 +200,8 @@ wof.bizWidget.DataObject.prototype = {
             this._initFlag = true;
         }
 
+        alert(this._entities.Entitys.length);
+
     },
 
     //----------必须实现----------
@@ -202,6 +244,10 @@ wof.bizWidget.DataObject.prototype = {
         //entityData id由数据感知构件生成
         //在主缓冲区中增加该条数据
         //该数据在主缓冲区的状态为New或者NewModified(要结合实体的元数据中的默认值来决定是何种状态)
+
+
+
+
 
     },
 
