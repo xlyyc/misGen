@@ -12,7 +12,7 @@ wof.bizWidget.DataObject = function () {
     this._dataTotal = 0;
 
 
-    this._entities = {"Entitys":[
+    this._entities = [
         {	"CorrentPageSize":"10",
             "Rows":[
                 {	"hjxxchild":{"hjms":"","hjmc":"2014优秀员工","jxjlid":"1","dqzt":"0","hjrqks":"2014-01-01","zgid":"1","jxbm":"1","hjrqjs":"2014-09-01"},
@@ -48,7 +48,7 @@ wof.bizWidget.DataObject = function () {
             "EntityType":"main", // 主实体
             "EntityName":"JZGJBXXB"
         }
-    ]};
+    ];
 
 };
 /**
