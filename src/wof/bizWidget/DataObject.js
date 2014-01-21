@@ -12,8 +12,9 @@ wof.bizWidget.DataObject = function () {
     this._dataTotal = 0;
 
 
-    this._entities = [
-        {	"CorrentPageSize":"10",
+    this._originalBuffer = {
+        "hjxxchild":{
+            "CorrentPageSize":"10",
             "Rows":[
                 {	"hjxxchild":{"hjms":"","hjmc":"2014优秀员工","jxjlid":"1","dqzt":"0","hjrqks":"2014-01-01","zgid":"1","jxbm":"1","hjrqjs":"2014-09-01"},
                     "jxbmref":{"bz":"","jxmc":"优秀员工","sfqy":"true","jxbm":"1"},
@@ -31,7 +32,8 @@ wof.bizWidget.DataObject = function () {
             "EntityType":"child",// 子实体
             "EntityName":"HJXX"
         },
-        {"	CorrentPageSize":"1",
+        "JZGJBXXB":{
+            "CorrentPageSize":"1",
             "Rows":[
                 {	"zglbref":{"lbmc":"全职员工","lbbm":"1","lbbz":"全职员工"},
                     "JZGJBXXB":{"xb_show":"男","lbbm_show":"全职员工","zgbz":"好人","xm":"张三丰","zzmmbm":"1","zzmmbm_show":"团员","zzjg":"1001","zzid":"1001","lbbm":"1","gh":"20153021422","zzjg_show":"计算机学院","xb":"1","csrq":"2014-01-01 12:00:00","zgid":"1"},
@@ -48,7 +50,16 @@ wof.bizWidget.DataObject = function () {
             "EntityType":"main", // 主实体
             "EntityName":"JZGJBXXB"
         }
-    ];
+    };
+
+    this._primaryBuffer = {
+        "hjxxchild":{
+            "hjmc":{"1":{"value":"2014最佳员工","status":"DataModified"}},
+            "hjrqks":{"0":{"value":"2014-01-14","status":"DataModified"}}
+        }
+
+
+    };
 
 };
 /**
@@ -200,8 +211,6 @@ wof.bizWidget.DataObject.prototype = {
             this._initFlag = true;
         }
 
-        alert(this._entities.Entitys.length);
-
     },
 
     //----------必须实现----------
@@ -211,7 +220,7 @@ wof.bizWidget.DataObject.prototype = {
 
     //选择实现
     afterRender: function () {
-
+        this._query("hjxxchild");
     },
 
     /**
@@ -299,6 +308,31 @@ wof.bizWidget.DataObject.prototype = {
              * 将返回数据加入原始缓冲区和主缓冲区 并将状态设置为NotModified(此逻辑将导致所涉及到的未保存的数据丢失)
              *
              */
+                alert(this._originalBuffer[entityAlias].Rows[0].hjxxchild.hjmc);
+            var ent = {
+                "CorrentPageSize":"10",
+                "Rows":[
+                {	"hjxxchild":{"hjms":"","hjmc":"2013优秀员工","jxjlid":"1","dqzt":"0","hjrqks":"2014-01-01","zgid":"1","jxbm":"1","hjrqjs":"2014-09-01"},
+                    "jxbmref":{"bz":"","jxmc":"优秀员工","sfqy":"true","jxbm":"1"},
+                    "zzidref":{"lbbm":"1","zgbz":"好人","gh":"20153021422","xm":"张三丰","zzmmbm":"1","xb":"1","csrq":"2014-01-01","zzjg":"1001","zgid":"1","zzid":"1001"}
+                },
+                {	"hjxxchild":{"hjms":"","hjmc":"2014优秀团队","jxjlid":"2","dqzt":"0","hjrqks":"2014-01-01","zgid":"1","jxbm":"2","hjrqjs":"2014-09-01"},
+                    "jxbmref":{"bz":"","jxmc":"优秀团队","sfqy":"true","jxbm":"2"},
+                    "zzidref":{"lbbm":"1","zgbz":"好人","gh":"20153021422","xm":"张三丰","zzmmbm":"1","xb":"1","csrq":"2014-01-01","zzjg":"1001","zgid":"1","zzid":"1001"}
+                }
+            ],
+                "EntityAlias":"hjxxchild",
+                "TotalCount":"2",
+                "CurrentPageNum":"1",
+                "IdPro":"jxjlid",
+                "EntityType":"child",// 子实体
+                "EntityName":"HJXX"
+            };
+
+            this._originalBuffer[entityAlias] = ent;
+
+            alert(this._originalBuffer[entityAlias].Rows[0].hjxxchild.hjmc);
+
         }else{
             console.log('本地策略暂时不支持');
         }
