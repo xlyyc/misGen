@@ -11,7 +11,6 @@ wof.bizWidget.DataObject = function () {
 
     this._dataTotal = 0;
 
-
     this._originalBuffer = {
         "hjxxchild":{
             "CorrentPageSize":"10",
@@ -51,7 +50,6 @@ wof.bizWidget.DataObject = function () {
             "EntityName":"JZGJBXXB"
         }
     };
-
     this._primaryBuffer = {
         "hjxxchild":{
             "hjmc":{"1":{"value":"2014最佳员工","status":"DataModified"}},
@@ -60,7 +58,8 @@ wof.bizWidget.DataObject = function () {
 
 
     };
-
+    this._filterBuffer = {};
+    this._deleteBuffer = {};
 };
 /**
  * 数据对象
@@ -221,6 +220,11 @@ wof.bizWidget.DataObject.prototype = {
     //选择实现
     afterRender: function () {
         this._query("hjxxchild");
+
+        this._update("hjxxchild");
+
+        this._update("hjxxchild");
+
     },
 
     /**
@@ -264,12 +268,60 @@ wof.bizWidget.DataObject.prototype = {
      * 修改数据
      * 并发出对应消息
      *
+     * todo 需要考虑过滤缓冲区和删除缓冲区的情况
      * entityAlias 实体别名
-     * entityData 实体数据
+     * data 修改数据
+     *
      */
-    _update: function(entityAlias, entityData){
+    _update: function(entityAlias, data){
+        data = [
+            {
+                "row":"1",
+                "data":{"hjmc":"2018优秀员工","jxjlid":"1","dqzt":"0","hjrqks":"2014-05-05","zgid":"1"}
+            }
+        ];
         //在主缓冲区中修改对应数据 并将数据状态改为DataModified
-
+        var original = this._originalBuffer[entityAlias];
+        if(original!=null){
+            var primary = this._primaryBuffer[entityAlias];
+            if(primary!=null){
+                //需要和原有修改数据进行合并
+                for(var i=0;i<data.length;i++){
+                    var record = data[i];
+                    for(var n in record["data"]){
+                        var f = primary[n];
+                        if(f!=null){
+                            primary[n][record["row"]] = {"value":record["data"][n],"status":"DataModified"};
+                        }else{
+                            var o = {};
+                            o[record["row"]] = {"value":record["data"][n],"status":"DataModified"};
+                            primary[n] = o;
+                        }
+                    }
+                }
+                console.log("1111111111111111111111");
+            }else{
+                var updateData = {};
+                for(var i=0;i<data.length;i++){
+                    var record = data[i];
+                    for(var n in record["data"]){
+                        var f = updateData[n];
+                        if(f!=null){
+                            updateData[n][record["row"]] = {"value":record["data"][n],"status":"DataModified"};
+                        }else{
+                            var o = {};
+                            o[record["row"]] = {"value":record["data"][n],"status":"DataModified"};
+                            updateData[n] = o;
+                        }
+                    }
+                }
+                this._primaryBuffer[entityAlias] = updateData;
+                console.log("2222222222222222222222222");
+            }
+            console.log(JSON.stringify(this._primaryBuffer[entityAlias]));
+        }else{
+            console.log('被修改的数据在原始缓冲区中不存在');
+        }
     },
 
     /**
@@ -299,28 +351,23 @@ wof.bizWidget.DataObject.prototype = {
         var entityId = this.getEntityId();
         if(this.getQueryPolicy()=='remote'){ //预定义检索条件+二次过滤条件向远程服务请求数据
             /**
-             *
              * 步骤一
              * 根据查询条件发起检索 接收返回数据
-             *
-             * 步骤二
-             * 清空原始缓冲区 主缓冲区 过滤缓冲区 删除缓冲区对应实体数据
-             * 将返回数据加入原始缓冲区和主缓冲区 并将状态设置为NotModified(此逻辑将导致所涉及到的未保存的数据丢失)
-             *
              */
-                alert(this._originalBuffer[entityAlias].Rows[0].hjxxchild.hjmc);
             var ent = {
                 "CorrentPageSize":"10",
                 "Rows":[
-                {	"hjxxchild":{"hjms":"","hjmc":"2013优秀员工","jxjlid":"1","dqzt":"0","hjrqks":"2014-01-01","zgid":"1","jxbm":"1","hjrqjs":"2014-09-01"},
-                    "jxbmref":{"bz":"","jxmc":"优秀员工","sfqy":"true","jxbm":"1"},
-                    "zzidref":{"lbbm":"1","zgbz":"好人","gh":"20153021422","xm":"张三丰","zzmmbm":"1","xb":"1","csrq":"2014-01-01","zzjg":"1001","zgid":"1","zzid":"1001"}
-                },
-                {	"hjxxchild":{"hjms":"","hjmc":"2014优秀团队","jxjlid":"2","dqzt":"0","hjrqks":"2014-01-01","zgid":"1","jxbm":"2","hjrqjs":"2014-09-01"},
-                    "jxbmref":{"bz":"","jxmc":"优秀团队","sfqy":"true","jxbm":"2"},
-                    "zzidref":{"lbbm":"1","zgbz":"好人","gh":"20153021422","xm":"张三丰","zzmmbm":"1","xb":"1","csrq":"2014-01-01","zzjg":"1001","zgid":"1","zzid":"1001"}
-                }
-            ],
+                    {
+                        "hjxxchild":{"hjms":"","hjmc":"2013优秀员工","jxjlid":"1","dqzt":"0","hjrqks":"2014-01-01","zgid":"1","jxbm":"1","hjrqjs":"2014-09-01"},
+                        "jxbmref":{"bz":"","jxmc":"优秀员工","sfqy":"true","jxbm":"1"},
+                        "zzidref":{"lbbm":"1","zgbz":"好人","gh":"20153021422","xm":"张三丰","zzmmbm":"1","xb":"1","csrq":"2014-01-01","zzjg":"1001","zgid":"1","zzid":"1001"}
+                    },
+                    {
+                        "hjxxchild":{"hjms":"","hjmc":"2014优秀团队","jxjlid":"2","dqzt":"0","hjrqks":"2014-01-01","zgid":"1","jxbm":"2","hjrqjs":"2014-09-01"},
+                        "jxbmref":{"bz":"","jxmc":"优秀团队","sfqy":"true","jxbm":"2"},
+                        "zzidref":{"lbbm":"1","zgbz":"好人","gh":"20153021422","xm":"张三丰","zzmmbm":"1","xb":"1","csrq":"2014-01-01","zzjg":"1001","zgid":"1","zzid":"1001"}
+                    }
+                ],
                 "EntityAlias":"hjxxchild",
                 "TotalCount":"2",
                 "CurrentPageNum":"1",
@@ -328,10 +375,19 @@ wof.bizWidget.DataObject.prototype = {
                 "EntityType":"child",// 子实体
                 "EntityName":"HJXX"
             };
-
+            /**
+             * 步骤二
+             * 清空原始缓冲区 主缓冲区 过滤缓冲区 删除缓冲区对应实体数据
+             */
+            delete this._originalBuffer[entityAlias];
+            delete this._primaryBuffer[entityAlias];
+            delete this._filterBuffer[entityAlias];
+            delete this._deleteBuffer[entityAlias];
+            /**
+             * 步骤三
+             * 将返回数据加入原始缓冲区和主缓冲区 并将状态设置为NotModified(此逻辑将导致所涉及到的未保存的数据丢失)
+             */
             this._originalBuffer[entityAlias] = ent;
-
-            alert(this._originalBuffer[entityAlias].Rows[0].hjxxchild.hjmc);
 
         }else{
             console.log('本地策略暂时不支持');
@@ -347,7 +403,7 @@ wof.bizWidget.DataObject.prototype = {
      *
      * entityData 实体数据
      */
-    _submit: function(entityData){
+    _save: function(entityData){
         var entityId = this.getEntityId();
         /**
          *
