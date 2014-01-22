@@ -221,9 +221,7 @@ wof.bizWidget.DataObject.prototype = {
     afterRender: function () {
         this._query("hjxxchild");
 
-        this._update("hjxxchild");
-
-        this._update("hjxxchild");
+        console.log(JSON.stringify(this._primaryBuffer["hjxxchild"]));
 
     },
 
@@ -275,14 +273,25 @@ wof.bizWidget.DataObject.prototype = {
      */
     _update: function(entityAlias, data){
         data = [
-            {
-                "row":"1",
-                "data":{"hjmc":"2018优秀员工","jxjlid":"1","dqzt":"0","hjrqks":"2014-05-05","zgid":"1"}
-            }
+            {"hjmc":"2018优秀员工","jxjlid":"1","dqzt":"0","hjrqks":"2014-05-05","zgid":"1"}
         ];
+
         //在主缓冲区中修改对应数据 并将数据状态改为DataModified
         var original = this._originalBuffer[entityAlias];
         if(original!=null){
+            var rows = original["Rows"];
+            var idPro = original["IdPro"];
+            for(var i=0;i<data.length;i++){
+                var ent = data[i];
+                for(var t=0;t<rows.length;t++){
+                    var row = rows[t];
+                    if(row[idPro]==ent[idPro]){
+
+                    }
+                }
+            }
+
+
             var primary = this._primaryBuffer[entityAlias];
             if(primary!=null){
                 //需要和原有修改数据进行合并
@@ -329,12 +338,22 @@ wof.bizWidget.DataObject.prototype = {
      * 并发出对应消息
      *
      * entityAlias 实体别名
-     * entityData 实体数据
+     * 数据id 实体id
      */
-    _delete: function(entityAlias, entityData){
+    _delete: function(entityAlias, id){
         //将指定的数据从主缓冲区移动到对应的删除缓冲区(该数据的状态保持不变)
+        var primary = this._primaryBuffer[entityAlias];
+        if(primary!=null){
+            var data
+        }
 
-
+        /**
+         *
+         * "hjxxchild":{
+            "hjmc":{"1":{"value":"2014最佳员工","status":"DataModified"}},
+            "hjrqks":{"0":{"value":"2014-01-14","status":"DataModified"}}
+        }
+         */
     },
 
     /**
@@ -388,6 +407,7 @@ wof.bizWidget.DataObject.prototype = {
              * 将返回数据加入原始缓冲区和主缓冲区 并将状态设置为NotModified(此逻辑将导致所涉及到的未保存的数据丢失)
              */
             this._originalBuffer[entityAlias] = ent;
+            this._primaryBuffer[entityAlias] = ent["Rows"];
 
         }else{
             console.log('本地策略暂时不支持');
