@@ -219,6 +219,8 @@ wof.bizWidget.DataObject.prototype = {
 
         this._update("hjxxchild");
 
+        this._delete("hjxxchild");
+
     },
 
     /**
@@ -306,7 +308,7 @@ wof.bizWidget.DataObject.prototype = {
             }else{
                 console.log('被修改的数据在主缓冲区中不存在');
             }
-            console.log(JSON.stringify(this._primaryBuffer[entityAlias]));
+            console.log('主缓冲区数据:'+JSON.stringify(this._primaryBuffer[entityAlias]));
         }else{
             console.log('被修改的数据在原始缓冲区中不存在');
         }
@@ -319,9 +321,50 @@ wof.bizWidget.DataObject.prototype = {
      * entityAlias 实体别名
      * entityData 实体数据
      */
-    _delete: function(entityAlias, entityData){
+    _delete: function(entityAlias, data){
+        data = [
+            {"hjmc":"2017优秀员工","jxjlid":"2","dqzt":"0","hjrqks":"2014-08-05","zgid":"1"}
+        ];
         //将指定的数据从主缓冲区移动到对应的删除缓冲区(该数据的状态保持不变)
+        var original = this._originalBuffer[entityAlias];
+        if(original!=null){
+            var idPro = original["IdPro"];
 
+            var primary = this._primaryBuffer[entityAlias];
+            if(this._deleteBuffer[entityAlias]==null){
+                this._deleteBuffer[entityAlias] = [];
+            }
+            var dele = this._deleteBuffer[entityAlias];
+
+            if(primary!=null){
+                //查找列号(返回-1表示没有找到)
+                function _findRowById(record){
+                    var row = -1;
+                    var id = record[idPro];
+                    var rows = primary;
+                    for(var i=0;i<rows.length;i++){
+                        if(id==rows[i][entityAlias][idPro]["value"]){
+                            row = i;
+                            break;
+                        }
+                    }
+                    return row;
+                }
+                for(var i=data.length-1;i>=0;i--){
+                    var record = data[i];
+                    var r = _findRowById(record);
+                    if(r>-1){
+                        dele.push((primary[r]));
+                        primary.splice(r,1);
+                    }
+                }
+            }else{
+                console.log('被删除的数据在主缓冲区中不存在');
+            }
+            console.log('删除缓冲区数据:'+JSON.stringify(this._deleteBuffer[entityAlias]));
+        }else{
+            console.log('被删除的数据在原始缓冲区中不存在');
+        }
 
     },
 
