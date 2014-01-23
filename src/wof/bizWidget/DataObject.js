@@ -317,6 +317,7 @@ wof.bizWidget.DataObject.prototype = {
     /**
      * 删除数据
      * 并发出对应消息
+     * todo 需要考虑新增数据的处理方式
      *
      * entityAlias 实体别名
      * entityData 实体数据
@@ -365,6 +366,17 @@ wof.bizWidget.DataObject.prototype = {
         }else{
             console.log('被删除的数据在原始缓冲区中不存在');
         }
+
+    },
+
+    /**
+     * todo 撤销删除
+     * 并发出对应消息
+     *
+     * entityAlias 实体别名
+     * entityData 实体数据
+     */
+    _undelete: function(entityAlias, data){
 
     },
 
