@@ -275,7 +275,8 @@ wof.bizWidget.DataObject.prototype = {
      */
     _update: function(entityAlias, data){
         data = [
-            {"hjmc":"2018优秀员工","jxjlid":"1","dqzt":"0","hjrqks":"2014-05-05","zgid":"1"}
+            {"hjmc":"2018优秀员工","jxjlid":"1","dqzt":"0","hjrqks":"2014-08-05","zgid":"1"},
+            {"hjmc":"2017优秀员工","jxjlid":"2","dqzt":"0","hjrqks":"2014-08-05","zgid":"1"}
         ];
         //在主缓冲区中修改对应数据 并将数据状态改为DataModified
         var original = this._originalBuffer[entityAlias];
@@ -311,7 +312,6 @@ wof.bizWidget.DataObject.prototype = {
                         }
                     }
                 }
-                console.log('1111111111111111111111111111');
             }else{
                 var updateData = {};
                 for(var i=0;i<data.length;i++){
@@ -328,7 +328,6 @@ wof.bizWidget.DataObject.prototype = {
                     }
                 }
                 this._primaryBuffer[entityAlias] = updateData;
-                console.log('22222222222222222222222222');
             }
             console.log(JSON.stringify(this._primaryBuffer[entityAlias]));
         }else{

@@ -255,6 +255,18 @@ jQuery(function(){
                             components.push(deleteRecordComponentSpanner);
 
 
+                            for(var i=0;i<components.length;i++){
+                                var name = components[i].getMeta().name;
+                                for(var t=0;t<components.length;t++){
+                                    var n = components[t].getMeta().name;
+                                    if(name!=n){
+                                        var onReceiveMessage = components[t].getOnReceiveMessage();
+                                        onReceiveMessage.push({id: name+'_active',method:'this._receivePropertysAndRenderSelf(null);'});
+                                        components[t].setOnReceiveMessage(onReceiveMessage);
+                                    }
+                                }
+                            }
+
                             var compositeComponentsData = [];
                             try{
                                 compositeComponentsData = JSON.parse(pageComponentTemplateList());
