@@ -112,7 +112,7 @@ wof.bizWidget.ObjectBar.prototype={
             if(bizWidgetComponents.length>0){
                 var toolbarItem1 = new wof.widget.ToolbarItem();
                 toolbarItem1.setIsInside(true);
-                toolbarItem1.setTitle('业务构件');
+                toolbarItem1.setTitle('页面构件');
                 toolbarItem1.setName('biz');
                 toolbarItem1.appendTo(toolbar);
                 for(var i=0;i<bizWidgetComponents.length;i++){
