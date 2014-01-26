@@ -18,12 +18,14 @@ wof.bizWidget.DataObject = function () {
                 {
                     "hjxxchild":{"hjms":{"value":"","status":"NotModified"},"hjmc":{"value":"2014优秀员工","status":"NotModified"},"jxjlid":{"value":"1","status":"NotModified"},"dqzt":{"value":"0","status":"NotModified"},"hjrqks":{"value":"2014-01-01","status":"NotModified"},"zgid":{"value":"1","status":"NotModified"},"jxbm":{"value":"1","status":"NotModified"},"hjrqjs":{"value":"2014-09-01","status":"NotModified"}},
                     "jxbmref":{"bz":"","jxmc":"优秀员工","sfqy":"true","jxbm":"1"},
-                    "zzidref":{"lbbm":"1","zgbz":"好人","gh":"20153021422","xm":"张三丰","zzmmbm":"1","xb":"1","csrq":"2014-01-01","zzjg":"1001","zgid":"1","zzid":"1001"}
+                    "zzidref":{"lbbm":"1","zgbz":"好人","gh":"20153021422","xm":"张三丰","zzmmbm":"1","xb":"1","csrq":"2014-01-01","zzjg":"1001","zgid":"1","zzid":"1001"},
+                    "_status":"NotModified"
                 },
                 {
                     "hjxxchild":{"hjms":{"value":"","status":"NotModified"},"hjmc":{"value":"2014优秀团队","status":"NotModified"},"jxjlid":{"value":"2","status":"NotModified"},"dqzt":{"value":"0","status":"NotModified"},"hjrqks":{"value":"2014-01-01","status":"NotModified"},"zgid":{"value":"1","status":"NotModified"},"jxbm":{"value":"2","status":"NotModified"},"hjrqjs":{"value":"2014-09-01","status":"NotModified"}},
                     "jxbmref":{"bz":"","jxmc":"优秀团队","sfqy":"true","jxbm":"2"},
-                    "zzidref":{"lbbm":"1","zgbz":"好人","gh":"20153021422","xm":"张三丰","zzmmbm":"1","xb":"1","csrq":"2014-01-01","zzjg":"1001","zgid":"1","zzid":"1001"}
+                    "zzidref":{"lbbm":"1","zgbz":"好人","gh":"20153021422","xm":"张三丰","zzmmbm":"1","xb":"1","csrq":"2014-01-01","zzjg":"1001","zgid":"1","zzid":"1001"},
+                    "_status":"NotModified"
                 }
             ],
             "EntityAlias":"hjxxchild",
@@ -42,7 +44,8 @@ wof.bizWidget.DataObject = function () {
                     "zzmmref":{"zzmmbz":"","zzmmbm":"1","zzmmmc":"团员"},
                     "zzjgref":{"bz":"","zzmc":"计算机学院","zzbm":"1001","sjzzbm":"1","zzid":"10"},
                     "XBref":{"xbbh":"1","xbmc":"男"},
-                    "zzidref":{}
+                    "zzidref":{},
+                    "_status":"NotModified"
                 }
             ],
             "EntityAlias":"JZGJBXXB",
@@ -283,7 +286,7 @@ wof.bizWidget.DataObject.prototype = {
             function _findRowById(record){
                 var row = -1;
                 var id = record[idPro];
-                var rows = original["Rows"];
+                var rows = primary;
                 for(var i=0;i<rows.length;i++){
                     if(id==rows[i][entityAlias][idPro]["value"]){
                         row = i;
