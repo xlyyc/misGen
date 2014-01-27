@@ -335,6 +335,7 @@ wof.bizWidget.DataObject.prototype = {
                             f['value'] = record[n];
                             f['status'] = 'DataModified';
                         }
+                        primary[r]['status'] ='DataModified';
                     }
                 }
             }else{
@@ -477,19 +478,28 @@ wof.bizWidget.DataObject.prototype = {
      *
      * 保存成功后 将清空删除缓冲区(包括删除缓冲区对应在原始缓冲区中保存的数据)
      *
-     * entityData 实体数据
+     * entityAlias 实体别名
      */
-    _save: function(entityData){
-        var entityId = this.getEntityId();
+    _save: function(entityAlias){
+
         /**
          *
-         * 步骤一
          * 根据当前状态整理提交的数据
          *
-         * 步骤二
-         * 提交成功后刷新数据
-         *
          */
+        var data = {};
+        if(entityAlias!=null){
+            var primary = this._primaryBuffer[entityAlias];
+            if(primary!=null){
+
+            }else{
+                console.log('主缓冲区不存在对应实体别名:'+entityAlias);
+            }
+        }else{
+
+        }
+        console.log();
+
     },
 
     /**
