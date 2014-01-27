@@ -16,18 +16,18 @@ wof.bizWidget.DataObject = function () {
             "CorrentPageSize":"10",
             "Rows":[
                 {
-                    "hjxxchild":{"hjms":{"value":"","status":"NotModified"},"hjmc":{"value":"2014优秀员工","status":"NotModified"},"jxjlid":{"value":"1","status":"NotModified"},"dqzt":{"value":"0","status":"NotModified"},"hjrqks":{"value":"2014-01-01","status":"NotModified"},"zgid":{"value":"1","status":"NotModified"},"jxbm":{"value":"1","status":"NotModified"},"hjrqjs":{"value":"2014-09-01","status":"NotModified"}},
-                    "jxbmref":{"bz":"","jxmc":"优秀员工","sfqy":"true","jxbm":"1"},
-                    "zzidref":{"lbbm":"1","zgbz":"好人","gh":"20153021422","xm":"张三丰","zzmmbm":"1","xb":"1","csrq":"2014-01-01","zzjg":"1001","zgid":"1","zzid":"1001"},
-                    "_status":"NotModified"
+                    'data':{"hjms":{"value":"","status":"NotModified"},"hjmc":{"value":"2014优秀员工","status":"NotModified"},"jxjlid":{"value":"1","status":"NotModified"},"dqzt":{"value":"0","status":"NotModified"},"hjrqks":{"value":"2014-01-01","status":"NotModified"},"zgid":{"value":"1","status":"NotModified"},"jxbm":{"value":"1","status":"NotModified"},"hjrqjs":{"value":"2014-09-01","status":"NotModified"}},
+                    "status":"NotModified"
                 },
                 {
-                    "hjxxchild":{"hjms":{"value":"","status":"NotModified"},"hjmc":{"value":"2014优秀团队","status":"NotModified"},"jxjlid":{"value":"2","status":"NotModified"},"dqzt":{"value":"0","status":"NotModified"},"hjrqks":{"value":"2014-01-01","status":"NotModified"},"zgid":{"value":"1","status":"NotModified"},"jxbm":{"value":"2","status":"NotModified"},"hjrqjs":{"value":"2014-09-01","status":"NotModified"}},
-                    "jxbmref":{"bz":"","jxmc":"优秀团队","sfqy":"true","jxbm":"2"},
-                    "zzidref":{"lbbm":"1","zgbz":"好人","gh":"20153021422","xm":"张三丰","zzmmbm":"1","xb":"1","csrq":"2014-01-01","zzjg":"1001","zgid":"1","zzid":"1001"},
-                    "_status":"NotModified"
+                    "data":{"hjms":{"value":"","status":"NotModified"},"hjmc":{"value":"2014优秀团队","status":"NotModified"},"jxjlid":{"value":"2","status":"NotModified"},"dqzt":{"value":"0","status":"NotModified"},"hjrqks":{"value":"2014-01-01","status":"NotModified"},"zgid":{"value":"1","status":"NotModified"},"jxbm":{"value":"2","status":"NotModified"},"hjrqjs":{"value":"2014-09-01","status":"NotModified"}},
+                    "status":"NotModified"
                 }
             ],
+            "Ref":{
+                "jxbmref":{"bz":"","jxmc":"优秀团队","sfqy":"true","jxbm":"2"},
+                "zzidref":{"lbbm":"1","zgbz":"好人","gh":"20153021422","xm":"张三丰","zzmmbm":"1","xb":"1","csrq":"2014-01-01","zzjg":"1001","zgid":"1","zzid":"1001"}
+            },
             "EntityAlias":"hjxxchild",
             "TotalCount":"2",
             "CurrentPageNum":"1",
@@ -39,15 +39,17 @@ wof.bizWidget.DataObject = function () {
             "CorrentPageSize":"1",
             "Rows":[
                 {
-                    "zglbref":{"lbmc":"全职员工","lbbm":"1","lbbz":"全职员工"},
-                    "JZGJBXXB":{"xb_show":{"value":"男","status":"NotModified"},"lbbm_show":{"value":"全职员工","status":"NotModified"},"zgbz":{"value":"好人","status":"NotModified"},"xm":{"value":"张三丰","status":"NotModified"},"zzmmbm":{"value":"1","status":"NotModified"},"zzmmbm_show":{"value":"团员","status":"NotModified"},"zzjg":{"value":"1001","status":"NotModified"},"zzid":{"value":"1001","status":"NotModified"},"lbbm":{"value":"1","status":"NotModified"},"gh":{"value":"20153021422","status":"NotModified"},"zzjg_show":{"value":"计算机学院","status":"NotModified"},"xb":{"value":"1","status":"NotModified"},"csrq":{"value":"2014-01-01 12:00:00","status":"NotModified"},"zgid":{"value":"1","status":"NotModified"}},
-                    "zzmmref":{"zzmmbz":"","zzmmbm":"1","zzmmmc":"团员"},
-                    "zzjgref":{"bz":"","zzmc":"计算机学院","zzbm":"1001","sjzzbm":"1","zzid":"10"},
-                    "XBref":{"xbbh":"1","xbmc":"男"},
-                    "zzidref":{},
-                    "_status":"NotModified"
+                    "data":{"xb_show":{"value":"男","status":"NotModified"},"lbbm_show":{"value":"全职员工","status":"NotModified"},"zgbz":{"value":"好人","status":"NotModified"},"xm":{"value":"张三丰","status":"NotModified"},"zzmmbm":{"value":"1","status":"NotModified"},"zzmmbm_show":{"value":"团员","status":"NotModified"},"zzjg":{"value":"1001","status":"NotModified"},"zzid":{"value":"1001","status":"NotModified"},"lbbm":{"value":"1","status":"NotModified"},"gh":{"value":"20153021422","status":"NotModified"},"zzjg_show":{"value":"计算机学院","status":"NotModified"},"xb":{"value":"1","status":"NotModified"},"csrq":{"value":"2014-01-01 12:00:00","status":"NotModified"},"zgid":{"value":"1","status":"NotModified"}},
+                    "status":"NotModified"
                 }
             ],
+            "Ref":{
+                "zglbref":{"lbmc":"全职员工","lbbm":"1","lbbz":"全职员工"},
+                "zzmmref":{"zzmmbz":"","zzmmbm":"1","zzmmmc":"团员"},
+                "zzjgref":{"bz":"","zzmc":"计算机学院","zzbm":"1001","sjzzbm":"1","zzid":"10"},
+                "XBref":{"xbbh":"1","xbmc":"男"},
+                "zzidref":{}
+            },
             "EntityAlias":"JZGJBXXB",
             "TotalCount":"1",
             "CurrentPageNum":"1",
@@ -218,7 +220,10 @@ wof.bizWidget.DataObject.prototype = {
 
     //选择实现
     afterRender: function () {
+
         this._query("hjxxchild");
+
+        this._new("hjxxchild");
 
         this._update("hjxxchild");
 
@@ -250,15 +255,40 @@ wof.bizWidget.DataObject.prototype = {
      * 并发出对应消息
      *
      * entityAlias 实体别名
-     * entityData 实体数据
+     * data 新增数据
      */
-    _new: function(entityAlias, entityData){
+    _new: function(entityAlias, data){
         //entityData id由数据感知构件生成
         //在主缓冲区中增加该条数据
         //该数据在主缓冲区的状态为New或者NewModified(要结合实体的元数据中的默认值来决定是何种状态)
 
+        data = [
+            {"hjmc":"2011优秀员工","jxjlid":wof.util.Tool.uuid(),"dqzt":"0","hjrqks":"2014-08-05","zgid":"1"},
+            {"hjmc":"2000最佳新员工","jxjlid":wof.util.Tool.uuid(),"dqzt":"0","hjrqks":"2014-08-05","zgid":"1"}
+        ];
 
-
+        var original = this._originalBuffer[entityAlias];
+        if(original!=null){
+            var idPro = original["IdPro"];
+            var primary = this._primaryBuffer[entityAlias];
+            if(primary!=null){
+                for(var i=0;i<data.length;i++){
+                    var record = data[i];
+                    var newData = {
+                        'data':{},
+                        'status':'New'
+                    };
+                    for(var n in record){
+                        newData['data'][n] = {'value':record[n],'status':'DataModified'};
+                    }
+                    primary.push(newData);
+                }
+            }else{
+                console.log('主缓冲区不存在对应实体别名:'+entityAlias);
+            }
+        }else{
+            console.log('原始缓冲区不存在对应实体别名:'+entityAlias);
+        }
 
 
     },
@@ -280,15 +310,14 @@ wof.bizWidget.DataObject.prototype = {
         //在主缓冲区中修改对应数据 并将数据状态改为DataModified
         var original = this._originalBuffer[entityAlias];
         if(original!=null){
-            var idPro = original["IdPro"];
+            var idPro = original['IdPro'];
 
             //查找列号(返回-1表示没有找到)
             function _findRowById(record){
                 var row = -1;
                 var id = record[idPro];
-                var rows = primary;
-                for(var i=0;i<rows.length;i++){
-                    if(id==rows[i][entityAlias][idPro]["value"]){
+                for(var i=0;i<primary.length;i++){
+                    if(id==primary[i]['data'][idPro]['value']){
                         row = i;
                         break;
                     }
@@ -302,18 +331,18 @@ wof.bizWidget.DataObject.prototype = {
                     var r = _findRowById(record);
                     if(r>-1){
                         for(var n in record){
-                            var f = primary[r][entityAlias][n];
-                            f["value"] = record[n];
-                            f["status"] = "DataModified";
+                            var f = primary[r]['data'][n];
+                            f['value'] = record[n];
+                            f['status'] = 'DataModified';
                         }
                     }
                 }
             }else{
-                console.log('被修改的数据在主缓冲区中不存在');
+                console.log('主缓冲区不存在对应实体别名:'+entityAlias);
             }
             console.log('主缓冲区数据:'+JSON.stringify(this._primaryBuffer[entityAlias]));
         }else{
-            console.log('被修改的数据在原始缓冲区中不存在');
+            console.log('原始缓冲区不存在对应实体别名:'+entityAlias);
         }
     },
 
@@ -332,7 +361,7 @@ wof.bizWidget.DataObject.prototype = {
         //将指定的数据从主缓冲区移动到对应的删除缓冲区(该数据的状态保持不变)
         var original = this._originalBuffer[entityAlias];
         if(original!=null){
-            var idPro = original["IdPro"];
+            var idPro = original['IdPro'];
 
             var primary = this._primaryBuffer[entityAlias];
             if(this._deleteBuffer[entityAlias]==null){
@@ -345,9 +374,8 @@ wof.bizWidget.DataObject.prototype = {
                 function _findRowById(record){
                     var row = -1;
                     var id = record[idPro];
-                    var rows = primary;
-                    for(var i=0;i<rows.length;i++){
-                        if(id==rows[i][entityAlias][idPro]["value"]){
+                    for(var i=0;i<primary.length;i++){
+                        if(id==primary[i]['data'][idPro]["value"]){
                             row = i;
                             break;
                         }
@@ -363,11 +391,11 @@ wof.bizWidget.DataObject.prototype = {
                     }
                 }
             }else{
-                console.log('被删除的数据在主缓冲区中不存在');
+                console.log('主缓冲区不存在对应实体别名:'+entityAlias);
             }
             console.log('删除缓冲区数据:'+JSON.stringify(this._deleteBuffer[entityAlias]));
         }else{
-            console.log('被删除的数据在原始缓冲区中不存在');
+            console.log('原始缓冲区不存在对应实体别名:'+entityAlias);
         }
 
     },
@@ -404,16 +432,18 @@ wof.bizWidget.DataObject.prototype = {
                 "CorrentPageSize":"10",
                 "Rows":[
                     {
-                        "hjxxchild":{"hjms":{"value":"","status":"NotModified"},"hjmc":{"value":"2014优秀员工","status":"NotModified"},"jxjlid":{"value":"1","status":"NotModified"},"dqzt":{"value":"0","status":"NotModified"},"hjrqks":{"value":"2014-01-01","status":"NotModified"},"zgid":{"value":"1","status":"NotModified"},"jxbm":{"value":"1","status":"NotModified"},"hjrqjs":{"value":"2014-09-01","status":"NotModified"}},
-                        "jxbmref":{"bz":"","jxmc":"优秀员工","sfqy":"true","jxbm":"1"},
-                        "zzidref":{"lbbm":"1","zgbz":"好人","gh":"20153021422","xm":"张三丰","zzmmbm":"1","xb":"1","csrq":"2014-01-01","zzjg":"1001","zgid":"1","zzid":"1001"}
+                        'data':{"hjms":{"value":"","status":"NotModified"},"hjmc":{"value":"2014优秀员工","status":"NotModified"},"jxjlid":{"value":"1","status":"NotModified"},"dqzt":{"value":"0","status":"NotModified"},"hjrqks":{"value":"2014-01-01","status":"NotModified"},"zgid":{"value":"1","status":"NotModified"},"jxbm":{"value":"1","status":"NotModified"},"hjrqjs":{"value":"2014-09-01","status":"NotModified"}},
+                        "status":"NotModified"
                     },
                     {
-                        "hjxxchild":{"hjms":{"value":"","status":"NotModified"},"hjmc":{"value":"2014优秀团队","status":"NotModified"},"jxjlid":{"value":"2","status":"NotModified"},"dqzt":{"value":"0","status":"NotModified"},"hjrqks":{"value":"2014-01-01","status":"NotModified"},"zgid":{"value":"1","status":"NotModified"},"jxbm":{"value":"2","status":"NotModified"},"hjrqjs":{"value":"2014-09-01","status":"NotModified"}},
-                        "jxbmref":{"bz":"","jxmc":"优秀团队","sfqy":"true","jxbm":"2"},
-                        "zzidref":{"lbbm":"1","zgbz":"好人","gh":"20153021422","xm":"张三丰","zzmmbm":"1","xb":"1","csrq":"2014-01-01","zzjg":"1001","zgid":"1","zzid":"1001"}
+                        "data":{"hjms":{"value":"","status":"NotModified"},"hjmc":{"value":"2014优秀团队","status":"NotModified"},"jxjlid":{"value":"2","status":"NotModified"},"dqzt":{"value":"0","status":"NotModified"},"hjrqks":{"value":"2014-01-01","status":"NotModified"},"zgid":{"value":"1","status":"NotModified"},"jxbm":{"value":"2","status":"NotModified"},"hjrqjs":{"value":"2014-09-01","status":"NotModified"}},
+                        "status":"NotModified"
                     }
                 ],
+                "Ref":{
+                    "jxbmref":{"bz":"","jxmc":"优秀团队","sfqy":"true","jxbm":"2"},
+                    "zzidref":{"lbbm":"1","zgbz":"好人","gh":"20153021422","xm":"张三丰","zzmmbm":"1","xb":"1","csrq":"2014-01-01","zzjg":"1001","zgid":"1","zzid":"1001"}
+                },
                 "EntityAlias":"hjxxchild",
                 "TotalCount":"2",
                 "CurrentPageNum":"1",
@@ -429,14 +459,12 @@ wof.bizWidget.DataObject.prototype = {
             delete this._primaryBuffer[entityAlias];
             delete this._filterBuffer[entityAlias];
             delete this._deleteBuffer[entityAlias];
-
             /**
              * 步骤三
              * 将返回数据加入原始缓冲区和主缓冲区 并将状态设置为NotModified(此逻辑将导致所涉及到的未保存的数据丢失)
              */
             this._originalBuffer[entityAlias] = ent;
             this._primaryBuffer[entityAlias] = ent["Rows"];
-
         }else{
             console.log('本地策略暂时不支持');
         }
