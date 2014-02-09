@@ -16,7 +16,7 @@ wof.bizWidget.DataObject = function () {
             "CorrentPageSize":"10",
             "Rows":[
                 {
-                    'data':{"hjms":{"value":"","status":"NotModified"},"hjmc":{"value":"2014优秀员工","status":"NotModified"},"jxjlid":{"value":"1","status":"NotModified"},"dqzt":{"value":"0","status":"NotModified"},"hjrqks":{"value":"2014-01-01","status":"NotModified"},"zgid":{"value":"1","status":"NotModified"},"jxbm":{"value":"1","status":"NotModified"},"hjrqjs":{"value":"2014-09-01","status":"NotModified"}},
+                    "data":{"hjms":{"value":"","status":"NotModified"},"hjmc":{"value":"2014优秀员工","status":"NotModified"},"jxjlid":{"value":"1","status":"NotModified"},"dqzt":{"value":"0","status":"NotModified"},"hjrqks":{"value":"2014-01-01","status":"NotModified"},"zgid":{"value":"1","status":"NotModified"},"jxbm":{"value":"1","status":"NotModified"},"hjrqjs":{"value":"2014-09-01","status":"NotModified"}},
                     "status":"NotModified"
                 },
                 {
@@ -229,6 +229,8 @@ wof.bizWidget.DataObject.prototype = {
 
         this._delete("hjxxchild");
 
+        this._save("hjxxchild");
+
     },
 
     /**
@@ -274,14 +276,18 @@ wof.bizWidget.DataObject.prototype = {
             if(primary!=null){
                 for(var i=0;i<data.length;i++){
                     var record = data[i];
-                    var newData = {
-                        'data':{},
-                        'status':'New'
-                    };
-                    for(var n in record){
-                        newData['data'][n] = {'value':record[n],'status':'DataModified'};
+                    if(record[idPro]!=null){
+                        var newData = {
+                            'data':{},
+                            'status':'New'
+                        };
+                        for(var n in record){
+                            newData['data'][n] = {'value':record[n],'status':'DataModified'};
+                        }
+                        primary.push(newData);
+                    }else{
+                        console.log('新增数据'+JSON.stringify(record)+'没有主键');
                     }
-                    primary.push(newData);
                 }
             }else{
                 console.log('主缓冲区不存在对应实体别名:'+entityAlias);
@@ -298,6 +304,7 @@ wof.bizWidget.DataObject.prototype = {
      * 并发出对应消息
      *
      * todo 需要考虑过滤缓冲区和删除缓冲区的情况
+     * todo 同时需要修改相同实体的数据
      * entityAlias 实体别名
      * data 修改数据
      *
@@ -312,8 +319,8 @@ wof.bizWidget.DataObject.prototype = {
         if(original!=null){
             var idPro = original['IdPro'];
 
-            //查找列号(返回-1表示没有找到)
-            function _findRowById(record){
+            //在主缓冲区查找列号(返回-1表示没有找到)
+            function _findRowFromPrimaryById(record){
                 var row = -1;
                 var id = record[idPro];
                 for(var i=0;i<primary.length;i++){
@@ -328,14 +335,18 @@ wof.bizWidget.DataObject.prototype = {
             if(primary!=null){
                 for(var i=0;i<data.length;i++){
                     var record = data[i];
-                    var r = _findRowById(record);
+                    var r = _findRowFromPrimaryById(record);
                     if(r>-1){
                         for(var n in record){
                             var f = primary[r]['data'][n];
                             f['value'] = record[n];
                             f['status'] = 'DataModified';
                         }
-                        primary[r]['status'] ='DataModified';
+                        if(primary[r]['status'] == 'New'){
+                            primary[r]['status'] = 'NewModified';
+                        }else if(primary[r]['status'] == 'NotModified'){
+                            primary[r]['status'] = 'DataModified';
+                        }
                     }
                 }
             }else{
@@ -351,13 +362,14 @@ wof.bizWidget.DataObject.prototype = {
      * 删除数据
      * 并发出对应消息
      * todo 需要考虑新增数据的处理方式
+     * todo 同时需要考虑相同实体的数据
      *
      * entityAlias 实体别名
      * entityData 实体数据
      */
     _delete: function(entityAlias, data){
         data = [
-            {"hjmc":"2017优秀员工","jxjlid":"2","dqzt":"0","hjrqks":"2014-08-05","zgid":"1"}
+            {"jxjlid":"2"}
         ];
         //将指定的数据从主缓冲区移动到对应的删除缓冲区(该数据的状态保持不变)
         var original = this._originalBuffer[entityAlias];
@@ -371,8 +383,8 @@ wof.bizWidget.DataObject.prototype = {
             var dele = this._deleteBuffer[entityAlias];
 
             if(primary!=null){
-                //查找列号(返回-1表示没有找到)
-                function _findRowById(record){
+                //在主缓冲区查找列号(返回-1表示没有找到)
+                function _findRowFromPrimaryById(record){
                     var row = -1;
                     var id = record[idPro];
                     for(var i=0;i<primary.length;i++){
@@ -385,7 +397,7 @@ wof.bizWidget.DataObject.prototype = {
                 }
                 for(var i=data.length-1;i>=0;i--){
                     var record = data[i];
-                    var r = _findRowById(record);
+                    var r = _findRowFromPrimaryById(record);
                     if(r>-1){
                         dele.push((primary[r]));
                         primary.splice(r,1);
@@ -429,29 +441,15 @@ wof.bizWidget.DataObject.prototype = {
              * 步骤一
              * 根据查询条件发起检索 接收返回数据
              */
-            var ent = {
-                "CorrentPageSize":"10",
-                "Rows":[
-                    {
-                        'data':{"hjms":{"value":"","status":"NotModified"},"hjmc":{"value":"2014优秀员工","status":"NotModified"},"jxjlid":{"value":"1","status":"NotModified"},"dqzt":{"value":"0","status":"NotModified"},"hjrqks":{"value":"2014-01-01","status":"NotModified"},"zgid":{"value":"1","status":"NotModified"},"jxbm":{"value":"1","status":"NotModified"},"hjrqjs":{"value":"2014-09-01","status":"NotModified"}},
-                        "status":"NotModified"
-                    },
-                    {
-                        "data":{"hjms":{"value":"","status":"NotModified"},"hjmc":{"value":"2014优秀团队","status":"NotModified"},"jxjlid":{"value":"2","status":"NotModified"},"dqzt":{"value":"0","status":"NotModified"},"hjrqks":{"value":"2014-01-01","status":"NotModified"},"zgid":{"value":"1","status":"NotModified"},"jxbm":{"value":"2","status":"NotModified"},"hjrqjs":{"value":"2014-09-01","status":"NotModified"}},
-                        "status":"NotModified"
-                    }
-                ],
-                "Ref":{
-                    "jxbmref":{"bz":"","jxmc":"优秀团队","sfqy":"true","jxbm":"2"},
-                    "zzidref":{"lbbm":"1","zgbz":"好人","gh":"20153021422","xm":"张三丰","zzmmbm":"1","xb":"1","csrq":"2014-01-01","zzjg":"1001","zgid":"1","zzid":"1001"}
-                },
-                "EntityAlias":"hjxxchild",
-                "TotalCount":"2",
-                "CurrentPageNum":"1",
-                "IdPro":"jxjlid",
-                "EntityType":"child",// 子实体
-                "EntityName":"HJXX"
-            };
+
+            var rsp = jQuery.ajax(
+                {
+                    url:'data.json',
+                    async:false
+                }
+            );
+            var ent = JSON.parse(rsp.responseText);
+
             /**
              * 步骤二
              * 清空原始缓冲区 主缓冲区 过滤缓冲区 删除缓冲区对应实体数据
@@ -479,26 +477,54 @@ wof.bizWidget.DataObject.prototype = {
      * 保存成功后 将清空删除缓冲区(包括删除缓冲区对应在原始缓冲区中保存的数据)
      *
      * entityAlias 实体别名
+     * 如果entityAlias为空 则保存全部实体的修改数据
      */
     _save: function(entityAlias){
-
-        /**
-         *
-         * 根据当前状态整理提交的数据
-         *
-         */
         var data = {};
         if(entityAlias!=null){
+            //只保存指定实体的修改数据
+            var entity = {"primaryBuffer":[],"deleteBuffer":[]};
             var primary = this._primaryBuffer[entityAlias];
             if(primary!=null){
-
-            }else{
-                console.log('主缓冲区不存在对应实体别名:'+entityAlias);
+                var primaryRows = [];
+                for(var i=0;i<primary.length;i++){
+                    var row = primary[i];
+                    if(row['status']!='NotModified'){
+                        var record = {'data':{},'status':'NotModified'};
+                        for(var n in row['data']){
+                            var f = row['data'][n];
+                            if(f['status']!='NotModified'){
+                                record['data'][n] = row['data'][n];
+                                record['status'] = row['status'];
+                            }
+                        }
+                        primaryRows.push(record);
+                    }
+                }
+                entity['primaryBuffer'].push(primaryRows);
             }
+            var dele = this._deleteBuffer[entityAlias];
+            if(dele!=null){
+                var deleRows = [];
+                for(var i=0;i<dele.length;i++){
+                    var row = dele[i];
+                    var record = {'data':{},'status':'NotModified'};
+                    for(var n in row['data']){
+                        var f = row['data'][n];
+                        if(f['status']!='NotModified'){
+                            record['data'][n] = row['data'][n];
+                            record['status'] = row['status'];
+                        }
+                    }
+                    deleRows.push(record);
+                }
+            }
+            entity['deleteBuffer'].push(deleRows);
+            data[entityAlias] = entity;
+            console.log('实体'+entityAlias+'数据=='+JSON.stringify(data));
         }else{
-
+            //保存全部实体的修改数据
         }
-        console.log();
 
     },
 
