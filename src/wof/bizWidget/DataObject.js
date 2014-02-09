@@ -524,7 +524,19 @@ wof.bizWidget.DataObject.prototype = {
             console.log('实体'+entityAlias+'数据=='+JSON.stringify(data));
         }else{
             //保存全部实体的修改数据
+
         }
+
+    },
+
+    /**
+     *
+     * 是否存在未保存的数据
+     *
+     * entityAlias 实体别名
+     * 如果entityAlias为空 则检查全部的实体
+     */
+    hasNotSavedData: function(entityAlias){
 
     },
 
