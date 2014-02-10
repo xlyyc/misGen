@@ -459,9 +459,9 @@ wof.bizWidget.DataObject.prototype = {
                             var f = row['data'][n];
                             if(f['status']!='NotModified' || n==idPro){
                                 record['data'][n] = row['data'][n];
-                                record['status'] = row['status'];
                             }
                         }
+                        record['status'] = row['status'];
                         primaryRows.push(record);
                     }
                 }
@@ -472,15 +472,17 @@ wof.bizWidget.DataObject.prototype = {
                 var deleRows = [];
                 for(var i=0;i<dele.length;i++){
                     var row = dele[i];
-                    var record = {'data':{},'status':'NotModified'};
-                    for(var n in row['data']){
-                        var f = row['data'][n];
-                        if(f['status']!='NotModified' || n==idPro){
-                            record['data'][n] = row['data'][n];
-                            record['status'] = row['status'];
+                    if(row['status']!='New' && row['status']!='NewModified'){
+                        var record = {'data':{},'status':''};
+                        for(var n in row['data']){
+                            var f = row['data'][n];
+                            if(f['status']!='NotModified' || n==idPro){
+                                record['data'][n] = row['data'][n];
+                            }
                         }
+                        record['status'] = row['status'];
+                        deleRows.push(record);
                     }
-                    deleRows.push(record);
                 }
                 entity['deleteBuffer'] = deleRows;
             }
@@ -494,8 +496,8 @@ wof.bizWidget.DataObject.prototype = {
             for(var alias in this._originalBuffer){
                 data[alias] = _getEnt(alias);
             }
-            console.log('111111========='+JSON.stringify(data));
         }
+        console.log('提交数据:'+JSON.stringify(data));
 
     },
 
