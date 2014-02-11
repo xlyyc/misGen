@@ -175,15 +175,15 @@ wof.bizWidget.DataObject.prototype = {
     //选择实现
     afterRender: function () {
 
-        this.query('pageId','hjxxchild');
+        this.query('pageId', 'JZGJBXXB');
 
-        this.new("hjxxchild");
+        //this.new("JZGJBXXB", [{"xb_show":"男","zgid":wof.util.Tool.uuid()},{"lbbm_show":"全职员工","zgid":wof.util.Tool.uuid()}]);
 
-        this.update("hjxxchild");
+        //this.update("JZGJBXXB", [{"lbbm_show":"兼职员工","zgid":"1"}]);
 
-        this.delete("hjxxchild");
+        //this.delete("JZGJBXXB", [{"zgid":"1"}]);
 
-        this.save();
+        //this.saveOrUpdate();
 
     },
 
@@ -217,15 +217,9 @@ wof.bizWidget.DataObject.prototype = {
         //entityData id由数据感知构件生成
         //在主缓冲区中增加该条数据
         //该数据在主缓冲区的状态为New或者NewModified(要结合实体的元数据中的默认值来决定是何种状态)
-
-        data = [
-            {"hjmc":"2011优秀员工","jxjlid":wof.util.Tool.uuid(),"dqzt":"0","hjrqks":"2014-08-05","zgid":"1"},
-            {"hjmc":"2000最佳新员工","jxjlid":wof.util.Tool.uuid(),"dqzt":"0","hjrqks":"2014-08-05","zgid":"1"}
-        ];
-
         var original = this._originalBuffer[entityAlias];
         if(original!=null){
-            var idPro = original["IdPro"];
+            var idPro = original["idPro"];
             var primary = this._primaryBuffer[entityAlias];
             if(primary!=null){
                 for(var i=0;i<data.length;i++){
@@ -249,8 +243,6 @@ wof.bizWidget.DataObject.prototype = {
         }else{
             console.log('原始缓冲区不存在对应实体别名:'+entityAlias);
         }
-
-
     },
 
     /**
@@ -264,14 +256,10 @@ wof.bizWidget.DataObject.prototype = {
      *
      */
     update: function(entityAlias, data){
-        data = [
-            {"hjmc":"2018优秀员工","jxjlid":"1","dqzt":"0","hjrqks":"2014-08-05","zgid":"1"},
-            {"hjmc":"2017优秀员工","jxjlid":"2","dqzt":"0","hjrqks":"2014-08-05","zgid":"1"}
-        ];
         //在主缓冲区中修改对应数据 并将数据状态改为DataModified
         var original = this._originalBuffer[entityAlias];
         if(original!=null){
-            var idPro = original['IdPro'];
+            var idPro = original['idPro'];
 
             //在主缓冲区查找列号(返回-1表示没有找到)
             function _findRowFromPrimaryById(record){
@@ -294,7 +282,9 @@ wof.bizWidget.DataObject.prototype = {
                         for(var n in record){
                             var f = primary[r]['data'][n];
                             f['value'] = record[n];
-                            f['status'] = 'DataModified';
+                            if(idPro!=n){
+                                f['status'] = 'DataModified';
+                            }
                         }
                         if(primary[r]['status'] == 'New'){
                             primary[r]['status'] = 'NewModified';
@@ -321,13 +311,10 @@ wof.bizWidget.DataObject.prototype = {
      * entityData 实体数据
      */
     delete: function(entityAlias, data){
-        data = [
-            {"jxjlid":"2"}
-        ];
         //将指定的数据从主缓冲区移动到对应的删除缓冲区(该数据的状态保持不变)
         var original = this._originalBuffer[entityAlias];
         if(original!=null){
-            var idPro = original['IdPro'];
+            var idPro = original['idPro'];
 
             var primary = this._primaryBuffer[entityAlias];
             if(this._deleteBuffer[entityAlias]==null){
@@ -375,7 +362,7 @@ wof.bizWidget.DataObject.prototype = {
      */
     undelete: function(entityAlias, data){
         data = [
-            {"jxjlid":"2"}
+            {"zgid":"1"}
         ];
 
 
@@ -400,7 +387,6 @@ wof.bizWidget.DataObject.prototype = {
              * 步骤一
              * 根据查询条件发起检索 接收返回数据
              */
-
             var rsp = jQuery.ajax(
                 {
                     url:'data.json',
@@ -408,22 +394,41 @@ wof.bizWidget.DataObject.prototype = {
                 }
             );
             var ents = JSON.parse(rsp.responseText);
+
+            function _ent(childData){
+                for(var n in childData){
+                    var ent = childData[n];
+                    console.log("2222222222222ent['entityAlias']=="+ent['entityAlias']);
+                }
+            }
+            var i=0;
+            for(var n in ents){
+                var ent = ents[n];
+                console.log("1111111111111ent['entityAlias']=="+ent['entityAlias']);
+                if(ent['rows'][i]['childData']!=null){
+                    console.log("ent['rows'][i]['rowId']====="+ent['rows'][i]['rowId']);
+                    //哪个实体下的第几行的某个子实体
+                    _ent(ent['rows'][i]['childData']);
+                }
+                i++;
+            }
             for(var n in ents){
                 var ent = ents[n];
                 /**
                  * 步骤二
                  * 清空对应原始缓冲区 主缓冲区 过滤缓冲区 删除缓冲区对应实体数据
                  */
-                delete this._originalBuffer[ent['EntityAlias']];
-                delete this._primaryBuffer[ent['EntityAlias']];
-                delete this._filterBuffer[ent['EntityAlias']];
-                delete this._deleteBuffer[ent['EntityAlias']];
+                var alias = ent['entityAlias'];
+                delete this._originalBuffer[alias];
+                delete this._primaryBuffer[alias];
+                delete this._filterBuffer[alias];
+                delete this._deleteBuffer[alias];
                 /**
                  * 步骤三
                  * 将返回数据加入对应原始缓冲区和主缓冲区 并将状态设置为NotModified(此逻辑将导致所涉及到的未保存的数据丢失)
                  */
-                this._originalBuffer[ent['EntityAlias']] = ent;
-                this._primaryBuffer[ent['EntityAlias']] = ent["Rows"];
+                this._originalBuffer[alias] = ent;
+                this._primaryBuffer[alias] = ent["rows"];
 
             }
         }else{
@@ -441,12 +446,12 @@ wof.bizWidget.DataObject.prototype = {
      * entityAlias 实体别名
      * 如果entityAlias为空 则保存全部实体的修改数据
      */
-    save: function(entityAlias){
+    saveOrUpdate: function(entityAlias){
         var data = {};
         //根据别名组织数据
         var _this = this;
         function _getEnt(entAlias){
-            var idPro = _this._originalBuffer[entAlias]['IdPro'];
+            var idPro = _this._originalBuffer[entAlias]['idPro'];
             var entity = {"primaryBuffer":[],"deleteBuffer":[]};
             var primary = _this._primaryBuffer[entAlias];
             if(primary!=null){
@@ -508,7 +513,82 @@ wof.bizWidget.DataObject.prototype = {
      * entityAlias 实体别名
      * 如果entityAlias为空 则检查全部的实体
      */
-    hasNotSavedData: function(entityAlias){
+    existsUnsavedData : function(entityAlias){
+        var d =
+        {
+            "JZGJBXXB":{ //实体别名
+                "primaryBuffer":[ //主缓冲区数据
+                    {
+                        "data":{
+                            "xb_show":{"value":"男","status":"DataModified"},
+                            "zgid":{"value":"1905DBAE755A40D48D9FB0F7F717C686","status":"NotModified"}
+                        },
+                        "status":"New", //New和NewModified 新增行 此两种状态的数据需要做insert操作
+                        "child":{
+                            "hjxxchild":{
+                                "primaryBuffer":[
+                                    {
+                                        "data":{
+                                            "hjmc":{"value":"2018优秀员工","status":"DataModified"},
+                                            "jxjlid":{"value":"1","status":"NotModified"},
+                                            "dqzt":{"value":"0","status":"DataModified"},
+                                            "hjrqks":{"value":"2014-08-05","status":"DataModified"},
+                                            "zgid":{"value":"1","status":"DataModified"}
+                                        },
+                                        "status":"DataModified" //DataModified数据被修改 此状态的数据需要做update操作
+                                    },
+                                    {
+                                        "data":{
+                                            "hjmc":{"value":"2011优秀员工","status":"DataModified"},
+                                            "jxjlid":{"value":"74F7089226FB4AB197FA2A12EED12730","status":"NotModified"},
+                                            "dqzt":{"value":"0","status":"DataModified"},
+                                            "hjrqks":{"value":"2014-08-05","status":"DataModified"},
+                                            "zgid":{"value":"1","status":"DataModified"}
+                                        },
+                                        "status":"New"
+                                    },
+                                    {
+                                        "data":{
+                                            "hjmc":{"value":"2000最佳新员工","status":"DataModified"},
+                                            "jxjlid":{"value":"C77980FDEACF447F8BAE7F624A8BD237","status":"NotModified"},
+                                            "dqzt":{"value":"0","status":"DataModified"},
+                                            "hjrqks":{"value":"2014-08-05","status":"DataModified"},
+                                            "zgid":{"value":"1","status":"DataModified"}
+                                        },
+                                        "status":"NewModified" //New和NewModified 新增行 此两种状态的数据需要做insert操作
+                                    }
+                                ],
+                                "deleteBuffer":[ //删除缓冲区数据 此缓冲区中的数据需要做delete操作
+                                    {
+                                        "data":{
+                                            "hjmc":{"value":"2017优秀员工","status":"DataModified"},
+                                            "jxjlid":{"value":"2","status":"NotModified"},
+                                            "dqzt":{"value":"0","status":"DataModified"},
+                                            "hjrqks":{"value":"2014-08-05","status":"DataModified"},
+                                            "zgid":{"value":"1","status":"DataModified"}
+                                        },
+                                        "status":"DataModified"
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                ],
+                "deleteBuffer":[
+                    {
+                        "data":{
+                            "lbbm_show":{"value":"兼职员工","status":"DataModified"},
+                            "zgid":{"value":"1","status":"NotModified"}
+                        },
+                        "status":"DataModified"
+                    }
+                ]
+            }
+        }
+
+
+
+
 
     },
 
