@@ -2,7 +2,7 @@
     "JZGJBXXB":{
         "rows":[
             {
-                "rowId":"1",
+                "rowId":"uuid1",
                 "data":{
                     "xb_show":{"value":"男","status":"NotModified"},
                     "lbbm_show":{"value":"全职员工","status":"NotModified"},
@@ -24,7 +24,7 @@
                     "hjxxchild":{
                         "rows":[
                             {
-                                "rowId":"1",
+                                "rowId":"uuid2",
                                 "data":{
                                     "hjms":{"value":"","status":"NotModified"},
                                     "hjmc":{"value":"2014优秀员工","status":"NotModified"},
@@ -38,7 +38,7 @@
                                 "status":"NotModified"
                             },
                             {
-                                "rowId":"2",
+                                "rowId":"uuid3",
                                 "data":{
                                     "hjms":{"value":"","status":"NotModified"},
                                     "hjmc":{"value":"2014优秀团队","status":"NotModified"},

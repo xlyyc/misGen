@@ -395,10 +395,10 @@ wof.bizWidget.DataObject.prototype = {
             );
             var ents = JSON.parse(rsp.responseText);
 
-            function _ent(childData){
-                for(var n in childData){
-                    var ent = childData[n];
-                    console.log("2222222222222ent['entityAlias']=="+ent['entityAlias']);
+            function _ent(parentEnt, row){
+                for(var n in row['childData']){
+                    var ent = row['childData'][n];
+                    console.log("2222222222222ent['entityAlias']=="+parentEnt['entityAlias']+','+row['rowId']+','+ent['entityAlias']);
                 }
             }
             var i=0;
@@ -407,8 +407,8 @@ wof.bizWidget.DataObject.prototype = {
                 console.log("1111111111111ent['entityAlias']=="+ent['entityAlias']);
                 if(ent['rows'][i]['childData']!=null){
                     console.log("ent['rows'][i]['rowId']====="+ent['rows'][i]['rowId']);
-                    //哪个实体下的第几行的某个子实体
-                    _ent(ent['rows'][i]['childData']);
+                    //哪个实体下的第几行(指定rowId)的某个子实体
+                    _ent(ent, ent['rows'][i]);
                 }
                 i++;
             }
