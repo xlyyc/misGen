@@ -25,6 +25,7 @@
 <script src="lib/jquery.ztree/js/jquery.ztree.all-3.5.js"></script>
 <script src="lib/json2.js"></script>
 <script src="lib/fixConsole.js"></script>
+<script src="lib/jsonpath-0.8.0.js"></script>
 <script src="src/wof/kernel/initNamespace.js"></script>
 
 
@@ -446,8 +447,13 @@ jQuery(function(){
                                 wof.util.ObjectManager.add(flowLayout.getId(), flowLayout);
 
 
-                                var dataObject = new DataObject();
-                                dataObject.appendTo(flowLayout);
+                                try{
+                                    var dataObject = new DataObject();
+                                    dataObject.appendTo(flowLayout);
+                                }catch(e){
+                                    alert(e);
+                                }
+
 
                                 flowLayout.render();
                             }

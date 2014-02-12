@@ -64,7 +64,54 @@
                         "idPro":"jxjlid",
                         "entityType":"child",
                         "entityName":"HJXX"
+                    } ,
+
+
+                    "hjxxchild1":{
+                        "rows":[
+                            {
+                                "rowId":"uuid4",
+                                "data":{
+                                    "hjms":{"value":"","status":"NotModified"},
+                                    "hjmc":{"value":"2014优秀员工","status":"NotModified"},
+                                    "jxjlid":{"value":"1","status":"NotModified"},
+                                    "dqzt":{"value":"0","status":"NotModified"},
+                                    "hjrqks":{"value":"2014-01-01","status":"NotModified"},
+                                    "zgid":{"value":"1","status":"NotModified"},
+                                    "jxbm":{"value":"1","status":"NotModified","refId":"jxbmref"},
+                                    "hjrqjs":{"value":"2014-09-01","status":"NotModified"}
+                                },
+                                "status":"NotModified"
+                            },
+                            {
+                                "rowId":"uuid5",
+                                "data":{
+                                    "hjms":{"value":"","status":"NotModified"},
+                                    "hjmc":{"value":"2014优秀团队","status":"NotModified"},
+                                    "jxjlid":{"value":"2","status":"NotModified"},
+                                    "dqzt":{"value":"0","status":"NotModified"},
+                                    "hjrqks":{"value":"2014-01-01","status":"NotModified"},
+                                    "zgid":{"value":"1","status":"NotModified"},
+                                    "jxbm":{"value":"2","status":"NotModified"},
+                                    "hjrqjs":{"value":"2014-09-01","status":"NotModified"}
+                                },
+                                "status":"NotModified"
+                            }
+                        ],
+                        "ref":{
+                            "jxbmref":{
+                                "rowsCount":"1",
+                                "data":[{"name":"优秀团队","value":"1"}]
+                            }
+                        },
+                        "entityAlias":"hjxxchild1",
+                        "rowsCount":"100",
+                        "offset":"0",
+                        "idPro":"jxjlid",
+                        "entityType":"child",
+                        "entityName":"HJXX"
                     }
+
                 }
             }
         ],

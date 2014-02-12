@@ -177,11 +177,11 @@ wof.bizWidget.DataObject.prototype = {
 
         this.query('pageId', 'JZGJBXXB');
 
-        //this.new("JZGJBXXB", [{"xb_show":"男","zgid":wof.util.Tool.uuid()},{"lbbm_show":"全职员工","zgid":wof.util.Tool.uuid()}]);
+        //this.insert("JZGJBXXB", [{"xb_show":"男","zgid":wof.util.Tool.uuid()},{"lbbm_show":"全职员工","zgid":wof.util.Tool.uuid()}]);
 
-        //this.update("JZGJBXXB", [{"lbbm_show":"兼职员工","zgid":"1"}]);
+        //this.modify("JZGJBXXB", [{"lbbm_show":"兼职员工","zgid":"1"}]);
 
-        //this.delete("JZGJBXXB", [{"zgid":"1"}]);
+        //this.remove("JZGJBXXB", [{"zgid":"1"}]);
 
         //this.saveOrUpdate();
 
@@ -213,7 +213,7 @@ wof.bizWidget.DataObject.prototype = {
      * entityAlias 实体别名
      * data 新增数据
      */
-    new: function(entityAlias, data){
+    insert: function(entityAlias, data){
         //entityData id由数据感知构件生成
         //在主缓冲区中增加该条数据
         //该数据在主缓冲区的状态为New或者NewModified(要结合实体的元数据中的默认值来决定是何种状态)
@@ -255,7 +255,7 @@ wof.bizWidget.DataObject.prototype = {
      * data 修改数据
      *
      */
-    update: function(entityAlias, data){
+    modify: function(entityAlias, data){
         //在主缓冲区中修改对应数据 并将数据状态改为DataModified
         var original = this._originalBuffer[entityAlias];
         if(original!=null){
@@ -310,7 +310,7 @@ wof.bizWidget.DataObject.prototype = {
      * entityAlias 实体别名
      * entityData 实体数据
      */
-    delete: function(entityAlias, data){
+    remove: function(entityAlias, data){
         //将指定的数据从主缓冲区移动到对应的删除缓冲区(该数据的状态保持不变)
         var original = this._originalBuffer[entityAlias];
         if(original!=null){
@@ -395,40 +395,53 @@ wof.bizWidget.DataObject.prototype = {
             );
             var ents = JSON.parse(rsp.responseText);
 
-            function _ent(parentEnt, row){
+            /**
+             * 步骤二
+             * 清空对应原始缓冲区 主缓冲区 过滤缓冲区 删除缓冲区对应实体数据
+             * 将返回数据加入对应原始缓冲区和主缓冲区 并将状态设置为NotModified(此逻辑将导致所涉及到的未保存的数据丢失)
+             */
+            var _this = this;
+            function _findJSON(pathId){
+                if(pathId.indexOf('.')>0){
+                    var ns = pathId.split('.');
+                    path = "$.'"+ns[0]+"'.rows[?(@.rowId='"+ns[1]+"')].childData.'"+ns[2]+"'";
+                }else{
+                    path = "$.'"+pathId+"'";
+                }
+                var o = jsonPath(ents, path)[0];
+                return o;
+            }
+            function _setChildEnt(parentEnt, row){
                 for(var n in row['childData']){
                     var ent = row['childData'][n];
-                    console.log("2222222222222ent['entityAlias']=="+parentEnt['entityAlias']+','+row['rowId']+','+ent['entityAlias']);
+                    var pathId = parentEnt['entityAlias']+'.'+row['rowId']+'.'+ent['entityAlias'];
+                    var entity = _findJSON(pathId);
+                    delete _this._originalBuffer[pathId];
+                    delete _this._primaryBuffer[pathId];
+                    delete _this._filterBuffer[pathId];
+                    delete _this._deleteBuffer[pathId];
+                    _this._originalBuffer[pathId] = entity;
+                    _this._primaryBuffer[pathId] = JSON.parse(JSON.stringify(entity['rows'])); //值copy
                 }
             }
             var i=0;
             for(var n in ents){
                 var ent = ents[n];
-                console.log("1111111111111ent['entityAlias']=="+ent['entityAlias']);
+                var pathId = ent['entityAlias'];
+                var entity = _findJSON(pathId);
+                delete this._originalBuffer[pathId];
+                delete this._primaryBuffer[pathId];
+                delete this._filterBuffer[pathId];
+                delete this._deleteBuffer[pathId];
+                this._originalBuffer[pathId] = entity;
+                this._primaryBuffer[pathId] = JSON.parse(JSON.stringify(entity['rows'])); //值copy
+
                 if(ent['rows'][i]['childData']!=null){
-                    console.log("ent['rows'][i]['rowId']====="+ent['rows'][i]['rowId']);
-                    //哪个实体下的第几行(指定rowId)的某个子实体
-                    _ent(ent, ent['rows'][i]);
+                    _setChildEnt(ent, ent['rows'][i]);
                 }
                 i++;
             }
-            for(var n in ents){
-                var ent = ents[n];
-                /**
-                 * 步骤二
-                 * 清空对应原始缓冲区 主缓冲区 过滤缓冲区 删除缓冲区对应实体数据
-                 */
-                var alias = ent['entityAlias'];
-                delete this._originalBuffer[alias];
-                delete this._primaryBuffer[alias];
-                delete this._filterBuffer[alias];
-                delete this._deleteBuffer[alias];
-                /**
-                 * 步骤三
-                 * 将返回数据加入对应原始缓冲区和主缓冲区 并将状态设置为NotModified(此逻辑将导致所涉及到的未保存的数据丢失)
-                 */
-                this._originalBuffer[alias] = ent;
-                this._primaryBuffer[alias] = ent["rows"];
+            for(var n in this._primaryBuffer){
 
             }
         }else{
@@ -514,81 +527,6 @@ wof.bizWidget.DataObject.prototype = {
      * 如果entityAlias为空 则检查全部的实体
      */
     existsUnsavedData : function(entityAlias){
-        var d =
-        {
-            "JZGJBXXB":{ //实体别名
-                "primaryBuffer":[ //主缓冲区数据
-                    {
-                        "data":{
-                            "xb_show":{"value":"男","status":"DataModified"},
-                            "zgid":{"value":"1905DBAE755A40D48D9FB0F7F717C686","status":"NotModified"}
-                        },
-                        "status":"New", //New和NewModified 新增行 此两种状态的数据需要做insert操作
-                        "child":{
-                            "hjxxchild":{
-                                "primaryBuffer":[
-                                    {
-                                        "data":{
-                                            "hjmc":{"value":"2018优秀员工","status":"DataModified"},
-                                            "jxjlid":{"value":"1","status":"NotModified"},
-                                            "dqzt":{"value":"0","status":"DataModified"},
-                                            "hjrqks":{"value":"2014-08-05","status":"DataModified"},
-                                            "zgid":{"value":"1","status":"DataModified"}
-                                        },
-                                        "status":"DataModified" //DataModified数据被修改 此状态的数据需要做update操作
-                                    },
-                                    {
-                                        "data":{
-                                            "hjmc":{"value":"2011优秀员工","status":"DataModified"},
-                                            "jxjlid":{"value":"74F7089226FB4AB197FA2A12EED12730","status":"NotModified"},
-                                            "dqzt":{"value":"0","status":"DataModified"},
-                                            "hjrqks":{"value":"2014-08-05","status":"DataModified"},
-                                            "zgid":{"value":"1","status":"DataModified"}
-                                        },
-                                        "status":"New"
-                                    },
-                                    {
-                                        "data":{
-                                            "hjmc":{"value":"2000最佳新员工","status":"DataModified"},
-                                            "jxjlid":{"value":"C77980FDEACF447F8BAE7F624A8BD237","status":"NotModified"},
-                                            "dqzt":{"value":"0","status":"DataModified"},
-                                            "hjrqks":{"value":"2014-08-05","status":"DataModified"},
-                                            "zgid":{"value":"1","status":"DataModified"}
-                                        },
-                                        "status":"NewModified" //New和NewModified 新增行 此两种状态的数据需要做insert操作
-                                    }
-                                ],
-                                "deleteBuffer":[ //删除缓冲区数据 此缓冲区中的数据需要做delete操作
-                                    {
-                                        "data":{
-                                            "hjmc":{"value":"2017优秀员工","status":"DataModified"},
-                                            "jxjlid":{"value":"2","status":"NotModified"},
-                                            "dqzt":{"value":"0","status":"DataModified"},
-                                            "hjrqks":{"value":"2014-08-05","status":"DataModified"},
-                                            "zgid":{"value":"1","status":"DataModified"}
-                                        },
-                                        "status":"DataModified"
-                                    }
-                                ]
-                            }
-                        }
-                    }
-                ],
-                "deleteBuffer":[
-                    {
-                        "data":{
-                            "lbbm_show":{"value":"兼职员工","status":"DataModified"},
-                            "zgid":{"value":"1","status":"NotModified"}
-                        },
-                        "status":"DataModified"
-                    }
-                ]
-            }
-        }
-
-
-
-
 
     },
 
