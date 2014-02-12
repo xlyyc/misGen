@@ -219,29 +219,24 @@ wof.bizWidget.DataObject.prototype = {
         //entityData id由数据感知构件生成
         //在主缓冲区中增加该条数据
         //该数据在主缓冲区的状态为New或者NewModified(要结合实体的元数据中的默认值来决定是何种状态)
-
         var id = null;
         if(rowId==null||rowId.length==0){
             id = entityAlias;
         }else{
             id = this._mainEntityAlias+'.'+rowId+'.'+entityAlias;
         }
-        var o = this._primaryBuffer[id];
-        //console.log(JSON.stringify(o));
-
         var original = this._originalBuffer[id];
-        console.log(JSON.stringify(original));
-        return;
         if(original!=null){
             var idPro = original["idPro"];
-            var primary = this._primaryBuffer[entityAlias];
+            var primary = this._primaryBuffer[id];
             if(primary!=null){
                 for(var i=0;i<data.length;i++){
                     var record = data[i];
                     if(record[idPro]!=null){
                         var newData = {
                             'data':{},
-                            'status':'New'
+                            'status':'New',
+                            'rowId':wof.util.Tool.uuid()
                         };
                         for(var n in record){
                             newData['data'][n] = {'value':record[n],'status':'DataModified'};
@@ -252,10 +247,10 @@ wof.bizWidget.DataObject.prototype = {
                     }
                 }
             }else{
-                console.log('主缓冲区不存在对应实体别名:'+entityAlias);
+                console.log('主缓冲区不存在对应实体:'+id);
             }
         }else{
-            console.log('原始缓冲区不存在对应实体别名:'+entityAlias);
+            console.log('原始缓冲区不存在对应实体:'+id);
         }
     },
 
@@ -440,7 +435,7 @@ wof.bizWidget.DataObject.prototype = {
                 }
             }
             var i=0;
-            for(var n in ents){   //实际由于只有一个主实体 所以该循环只有一次
+            for(var n in ents){   //实际由于只有一个主实体 所以循环只有一次
                 var ent = ents[n];
                 var pathId = ent['entityAlias'];
                 this._mainEntityAlias = pathId;

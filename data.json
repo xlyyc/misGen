@@ -12,7 +12,7 @@
                     "zzmmbm_show":{"value":"团员","status":"NotModified"},
                     "zzjg":{"value":"1001","status":"NotModified"},
                     "zzid":{"value":"1001","status":"NotModified"},
-                    "lbbm":{"value":"1","status":"NotModified","refId":"zglbref"},
+                    "lbbm":{"value":"1","status":"NotModified"},
                     "gh":{"value":"20153021422","status":"NotModified"},
                     "zzjg_show":{"value":"计算机学院","status":"NotModified"},
                     "xb":{"value":"1","status":"NotModified"},
@@ -32,7 +32,7 @@
                                     "dqzt":{"value":"0","status":"NotModified"},
                                     "hjrqks":{"value":"2014-01-01","status":"NotModified"},
                                     "zgid":{"value":"1","status":"NotModified"},
-                                    "jxbm":{"value":"1","status":"NotModified","refId":"jxbmref"},
+                                    "jxbm":{"value":"1","status":"NotModified"},
                                     "hjrqjs":{"value":"2014-09-01","status":"NotModified"}
                                 },
                                 "status":"NotModified"
@@ -54,6 +54,7 @@
                         ],
                         "ref":{
                             "jxbmref":{
+                                "fields":["jxbm"],
                                 "rowsCount":"1",
                                 "data":[{"name":"优秀团队","value":"1"}]
                             }
@@ -78,7 +79,7 @@
                                     "dqzt":{"value":"0","status":"NotModified"},
                                     "hjrqks":{"value":"2014-01-01","status":"NotModified"},
                                     "zgid":{"value":"1","status":"NotModified"},
-                                    "jxbm":{"value":"1","status":"NotModified","refId":"jxbmref"},
+                                    "jxbm":{"value":"1","status":"NotModified"},
                                     "hjrqjs":{"value":"2014-09-01","status":"NotModified"}
                                 },
                                 "status":"NotModified"
@@ -100,6 +101,7 @@
                         ],
                         "ref":{
                             "jxbmref":{
+                                "fields":["jxbmref"],
                                 "rowsCount":"1",
                                 "data":[{"name":"优秀团队","value":"1"}]
                             }
