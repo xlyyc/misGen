@@ -60,6 +60,8 @@ wof.bizWidget.DataObject.prototype = {
      */
     _originalBuffer:null,
 
+    _mainEntityAlias:null, //主实体别名
+
     /**
      * get/set 属性方法定义
      */
@@ -177,7 +179,7 @@ wof.bizWidget.DataObject.prototype = {
 
         this.query('pageId', 'JZGJBXXB');
 
-        //this.insert("JZGJBXXB", [{"xb_show":"男","zgid":wof.util.Tool.uuid()},{"lbbm_show":"全职员工","zgid":wof.util.Tool.uuid()}]);
+        this.insert("hjxxchild", "uuid1", [{"hjmc":"好员工","jxjlid":wof.util.Tool.uuid()}]);
 
         //this.modify("JZGJBXXB", [{"lbbm_show":"兼职员工","zgid":"1"}]);
 
@@ -209,15 +211,27 @@ wof.bizWidget.DataObject.prototype = {
     /**
      * 新增数据
      * 并发出对应消息
-     *
      * entityAlias 实体别名
+     * rowId 主表实体行id 如果别名为主实体 该参数为空
      * data 新增数据
      */
-    insert: function(entityAlias, data){
+    insert: function(entityAlias, rowId, data){
         //entityData id由数据感知构件生成
         //在主缓冲区中增加该条数据
         //该数据在主缓冲区的状态为New或者NewModified(要结合实体的元数据中的默认值来决定是何种状态)
-        var original = this._originalBuffer[entityAlias];
+
+        var id = null;
+        if(rowId==null||rowId.length==0){
+            id = entityAlias;
+        }else{
+            id = this._mainEntityAlias+'.'+rowId+'.'+entityAlias;
+        }
+        var o = this._primaryBuffer[id];
+        //console.log(JSON.stringify(o));
+
+        var original = this._originalBuffer[id];
+        console.log(JSON.stringify(original));
+        return;
         if(original!=null){
             var idPro = original["idPro"];
             var primary = this._primaryBuffer[entityAlias];
@@ -402,6 +416,7 @@ wof.bizWidget.DataObject.prototype = {
              */
             var _this = this;
             function _findJSON(pathId){
+                var path = null;
                 if(pathId.indexOf('.')>0){
                     var ns = pathId.split('.');
                     path = "$.'"+ns[0]+"'.rows[?(@.rowId='"+ns[1]+"')].childData.'"+ns[2]+"'";
@@ -425,9 +440,10 @@ wof.bizWidget.DataObject.prototype = {
                 }
             }
             var i=0;
-            for(var n in ents){
+            for(var n in ents){   //实际由于只有一个主实体 所以该循环只有一次
                 var ent = ents[n];
                 var pathId = ent['entityAlias'];
+                this._mainEntityAlias = pathId;
                 var entity = _findJSON(pathId);
                 delete this._originalBuffer[pathId];
                 delete this._primaryBuffer[pathId];
@@ -442,7 +458,7 @@ wof.bizWidget.DataObject.prototype = {
                 i++;
             }
             for(var n in this._primaryBuffer){
-
+                console.log(n);
             }
         }else{
             console.log('本地策略暂时不支持');
