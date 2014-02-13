@@ -492,30 +492,22 @@ wof.bizWidget.DataObject.prototype = {
      *
      */
     saveOrUpdate: function(entityParameter){
-        /**
-         * 如果entityParameter为空对象 保存所有实体的数据
-         * 否则 如果mainEntityAlias和childEntityAlias及mainRowId都不为空 则保存主实体和mainRowId下对应子实体数据
-         * 否则 如果mainEntityAlias和childEntityAlias不为空 mainRowId为空 则保存主实体和所有子实体数据
-         * 否则 如果mainEntityAlias不为空 childEntityAlias和mainRowId为空 则只保存主实体数据
-         * 否则 如果mainEntityAlias为空 childEntityAlias和mainRowId不为空 则只保存mainRowId下对应子实体数据
-         *
-         */
-
+        var saveType = null; //保存方式
         if(jQuery.isEmptyObject(entityParameter)){
             entityParameter = {};
-
+            saveType = 0;
             console.log('entityParameter为空对象 保存所有实体的数据');
         }else if(entityParameter['mainEntityAlias']!=null && entityParameter['childEntityAlias']!=null && entityParameter['mainRowId']!=null){
-
+            saveType = 1;
             console.log('mainEntityAlias和childEntityAlias及mainRowId都不为空 则保存主实体和mainRowId下对应子实体数据');
         }else if(entityParameter['mainEntityAlias']!=null && entityParameter['childEntityAlias']!=null && entityParameter['mainRowId']==null){
-
+            saveType = 2;
             console.log('mainEntityAlias和childEntityAlias不为空 mainRowId为空 则保存主实体和所有子实体数据');
         }else if(entityParameter['mainEntityAlias']!=null && entityParameter['childEntityAlias']==null && entityParameter['mainRowId']==null){
-
+            saveType = 3;
             console.log('如果mainEntityAlias不为空 childEntityAlias和mainRowId为空 则只保存主实体数据');
         }else if(entityParameter['mainEntityAlias']==null && entityParameter['childEntityAlias']!=null && entityParameter['mainRowId']!=null){
-
+            saveType = 4;
             console.log('如果mainEntityAlias为空 childEntityAlias和mainRowId不为空 则只保存mainRowId下对应子实体数据');
         }
         var mainEntityAlias = entityParameter['entityParameter'];
