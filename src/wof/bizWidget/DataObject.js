@@ -185,7 +185,9 @@ wof.bizWidget.DataObject.prototype = {
 
         this.deleteData({'childEntityAlias':'hjxxchild', 'mainRowId':'uuid1'}, [{"jxjlid":"1"}]);
 
-        this.saveOrUpdate({'childEntityAlias':'hjxxchild', 'mainRowId':'uuid1'});
+        this.deleteData({'mainEntityAlias':'JZGJBXXB'}, [{'zgid':'1'}]);
+
+        this.saveOrUpdate({'mainEntityAlias':'JZGJBXXB'});
 
     },
 
@@ -219,11 +221,11 @@ wof.bizWidget.DataObject.prototype = {
         //entityData id由数据感知构件生成
         //在主缓冲区中增加该条数据
         //该数据在主缓冲区的状态为New或者NewModified(要结合实体的元数据中的默认值来决定是何种状态)
-        var mainEntityAlias = entityParameter['entityParameter'];
+        var mainEntityAlias = entityParameter['mainEntityAlias'];
         var childEntityAlias = entityParameter['childEntityAlias'];
         var mainRowId = entityParameter['mainRowId'];
         var id = null;
-        if(mainEntityAlias!=null){
+        if(mainEntityAlias!=null&&mainEntityAlias.length>0){
             id = mainEntityAlias;
         }else{
             id = this._mainEntityAlias+'.'+mainRowId+'.'+childEntityAlias;
@@ -270,11 +272,11 @@ wof.bizWidget.DataObject.prototype = {
      */
     updateData: function(entityParameter, data){
         //在主缓冲区中修改对应数据 并将数据状态改为DataModified
-        var mainEntityAlias = entityParameter['entityParameter'];
+        var mainEntityAlias = entityParameter['mainEntityAlias'];
         var childEntityAlias = entityParameter['childEntityAlias'];
         var mainRowId = entityParameter['mainRowId'];
         var id = null;
-        if(mainEntityAlias!=null){
+        if(mainEntityAlias!=null&&mainEntityAlias.length>0){
             id = mainEntityAlias;
         }else{
             id = this._mainEntityAlias+'.'+mainRowId+'.'+childEntityAlias;
@@ -334,11 +336,11 @@ wof.bizWidget.DataObject.prototype = {
      */
     deleteData: function(entityParameter, data){
         //将指定的数据从主缓冲区移动到对应的删除缓冲区(该数据的状态保持不变)
-        var mainEntityAlias = entityParameter['entityParameter'];
+        var mainEntityAlias = entityParameter['mainEntityAlias'];
         var childEntityAlias = entityParameter['childEntityAlias'];
         var mainRowId = entityParameter['mainRowId'];
         var id = null;
-        if(mainEntityAlias!=null){
+        if(mainEntityAlias!=null&&mainEntityAlias.length>0){
             id = mainEntityAlias;
         }else{
             id = this._mainEntityAlias+'.'+mainRowId+'.'+childEntityAlias;
@@ -492,6 +494,7 @@ wof.bizWidget.DataObject.prototype = {
      *
      */
     saveOrUpdate: function(entityParameter){
+        var data = {};
         var saveType = null; //保存方式
         if(jQuery.isEmptyObject(entityParameter)){
             entityParameter = {};
@@ -510,21 +513,19 @@ wof.bizWidget.DataObject.prototype = {
             saveType = 4;
             console.log('如果mainEntityAlias为空 childEntityAlias和mainRowId不为空 则只保存mainRowId下对应子实体数据');
         }
-        var mainEntityAlias = entityParameter['entityParameter'];
+        var mainEntityAlias = entityParameter['mainEntityAlias'];
         var childEntityAlias = entityParameter['childEntityAlias'];
         var mainRowId = entityParameter['mainRowId'];
         var id = null;
-        if(mainEntityAlias!=null){
+        if(mainEntityAlias!=null&&mainEntityAlias.length>0){
             id = mainEntityAlias;
         }else{
             id = this._mainEntityAlias+'.'+mainRowId+'.'+childEntityAlias;
         }
 
-            return;
 
-        var data = {};
         var _this = this;
-        //根据别名组织数据
+        //根据id组织数据
         function _getEnt(id){
             var idPro = _this._originalBuffer[id]['idPro'];
             var entity = {"primaryBuffer":[],"deleteBuffer":[]};
@@ -568,14 +569,16 @@ wof.bizWidget.DataObject.prototype = {
             }
             return entity;
         }
-        if(id!=null){
-            //只保存指定id实体的修改数据
+        if(saveType==0){
             _getEnt(id);
-        }else{
-            //保存全部实体的修改数据
-            for(var n in this._originalBuffer){
-                _getEnt(n);
-            }
+        }else if(saveType==1){
+
+        }else if(saveType==2){
+
+        }else if(saveType==3){
+            data[mainEntityAlias] = _getEnt(id);
+        }else if(saveType==4){
+
         }
         console.log('提交数据:'+JSON.stringify(data));
     },
