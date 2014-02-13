@@ -179,13 +179,13 @@ wof.bizWidget.DataObject.prototype = {
 
         this.query('pageId', 'JZGJBXXB');
 
-        this.insert("hjxxchild", "uuid1", [{"hjmc":"好员工","jxjlid":wof.util.Tool.uuid()}]);
+        this.newData({'mainEntityAlias':'','childEntityAlias':'hjxxchild', 'mainRowId':'uuid1'}, [{"hjmc":"好员工","jxjlid":wof.util.Tool.uuid()}]);
 
-        //this.modify("JZGJBXXB", [{"lbbm_show":"兼职员工","zgid":"1"}]);
+        this.updateData({'mainEntityAlias':'','childEntityAlias':'hjxxchild', 'mainRowId':'uuid1'}, [{"hjmc":"好员工修改过","jxjlid":"1"}]);
 
-        //this.remove("JZGJBXXB", [{"zgid":"1"}]);
+        this.deleteData({'childEntityAlias':'hjxxchild', 'mainRowId':'uuid1'}, [{"jxjlid":"1"}]);
 
-        //this.saveOrUpdate();
+        this.saveOrUpdate({'childEntityAlias':'hjxxchild', 'mainRowId':'uuid1'});
 
     },
 
@@ -211,19 +211,22 @@ wof.bizWidget.DataObject.prototype = {
     /**
      * 新增数据
      * 并发出对应消息
-     * entityAlias 实体别名
-     * rowId 主表实体行id 如果别名为主实体 该参数为空
-     * data 新增数据
+     * entityParameter 实体参数
+     * 形如 {'mainEntityAlias':'','childEntityAlias':'hjxxchild', 'mainRowId':'uuid1'}
+     * data 新增的数据
      */
-    insert: function(entityAlias, rowId, data){
+    newData: function(entityParameter, data){
         //entityData id由数据感知构件生成
         //在主缓冲区中增加该条数据
         //该数据在主缓冲区的状态为New或者NewModified(要结合实体的元数据中的默认值来决定是何种状态)
+        var mainEntityAlias = entityParameter['entityParameter'];
+        var childEntityAlias = entityParameter['childEntityAlias'];
+        var mainRowId = entityParameter['mainRowId'];
         var id = null;
-        if(rowId==null||rowId.length==0){
-            id = entityAlias;
+        if(mainEntityAlias!=null){
+            id = mainEntityAlias;
         }else{
-            id = this._mainEntityAlias+'.'+rowId+'.'+entityAlias;
+            id = this._mainEntityAlias+'.'+mainRowId+'.'+childEntityAlias;
         }
         var original = this._originalBuffer[id];
         if(original!=null){
@@ -260,16 +263,25 @@ wof.bizWidget.DataObject.prototype = {
      *
      * todo 需要考虑过滤缓冲区和删除缓冲区的情况
      * todo 同时需要修改相同实体的数据
-     * entityAlias 实体别名
+     * entityParameter 实体参数
+     * 形如 {'mainEntityAlias':'','childEntityAlias':'hjxxchild', 'mainRowId':'uuid1'}
      * data 修改数据
      *
      */
-    modify: function(entityAlias, data){
+    updateData: function(entityParameter, data){
         //在主缓冲区中修改对应数据 并将数据状态改为DataModified
-        var original = this._originalBuffer[entityAlias];
+        var mainEntityAlias = entityParameter['entityParameter'];
+        var childEntityAlias = entityParameter['childEntityAlias'];
+        var mainRowId = entityParameter['mainRowId'];
+        var id = null;
+        if(mainEntityAlias!=null){
+            id = mainEntityAlias;
+        }else{
+            id = this._mainEntityAlias+'.'+mainRowId+'.'+childEntityAlias;
+        }
+        var original = this._originalBuffer[id];
         if(original!=null){
             var idPro = original['idPro'];
-
             //在主缓冲区查找列号(返回-1表示没有找到)
             function _findRowFromPrimaryById(record){
                 var row = -1;
@@ -282,7 +294,7 @@ wof.bizWidget.DataObject.prototype = {
                 }
                 return row;
             }
-            var primary = this._primaryBuffer[entityAlias];
+            var primary = this._primaryBuffer[id];
             if(primary!=null){
                 for(var i=0;i<data.length;i++){
                     var record = data[i];
@@ -303,11 +315,11 @@ wof.bizWidget.DataObject.prototype = {
                     }
                 }
             }else{
-                console.log('主缓冲区不存在对应实体别名:'+entityAlias);
+                console.log('主缓冲区不存在对应实体:'+id);
             }
-            console.log('主缓冲区数据:'+JSON.stringify(this._primaryBuffer[entityAlias]));
+            console.log('主缓冲区数据:'+JSON.stringify(this._primaryBuffer[id]));
         }else{
-            console.log('原始缓冲区不存在对应实体别名:'+entityAlias);
+            console.log('原始缓冲区不存在对应实体:'+id);
         }
     },
 
@@ -316,21 +328,29 @@ wof.bizWidget.DataObject.prototype = {
      * 并发出对应消息
      * todo 同时需要考虑相同实体的数据
      *
-     * entityAlias 实体别名
+     * entityParameter 实体参数
+     * 形如 {'mainEntityAlias':'','childEntityAlias':'hjxxchild', 'mainRowId':'uuid1'}
      * entityData 实体数据
      */
-    remove: function(entityAlias, data){
+    deleteData: function(entityParameter, data){
         //将指定的数据从主缓冲区移动到对应的删除缓冲区(该数据的状态保持不变)
-        var original = this._originalBuffer[entityAlias];
+        var mainEntityAlias = entityParameter['entityParameter'];
+        var childEntityAlias = entityParameter['childEntityAlias'];
+        var mainRowId = entityParameter['mainRowId'];
+        var id = null;
+        if(mainEntityAlias!=null){
+            id = mainEntityAlias;
+        }else{
+            id = this._mainEntityAlias+'.'+mainRowId+'.'+childEntityAlias;
+        }
+        var original = this._originalBuffer[id];
         if(original!=null){
             var idPro = original['idPro'];
-
-            var primary = this._primaryBuffer[entityAlias];
-            if(this._deleteBuffer[entityAlias]==null){
-                this._deleteBuffer[entityAlias] = [];
+            var primary = this._primaryBuffer[id];
+            if(this._deleteBuffer[id]==null){
+                this._deleteBuffer[id] = [];
             }
-            var dele = this._deleteBuffer[entityAlias];
-
+            var dele = this._deleteBuffer[id];
             if(primary!=null){
                 //在主缓冲区查找列号(返回-1表示没有找到)
                 function _findRowFromPrimaryById(record){
@@ -353,11 +373,11 @@ wof.bizWidget.DataObject.prototype = {
                     }
                 }
             }else{
-                console.log('主缓冲区不存在对应实体别名:'+entityAlias);
+                console.log('主缓冲区不存在对应实体:'+id);
             }
-            console.log('删除缓冲区数据:'+JSON.stringify(this._deleteBuffer[entityAlias]));
+            console.log('删除缓冲区数据:'+JSON.stringify(this._deleteBuffer[id]));
         }else{
-            console.log('原始缓冲区不存在对应实体别名:'+entityAlias);
+            console.log('原始缓冲区不存在对应实体:'+id);
         }
 
     },
@@ -467,17 +487,56 @@ wof.bizWidget.DataObject.prototype = {
      *
      * 保存成功后 将清空删除缓冲区(包括删除缓冲区对应在原始缓冲区中保存的数据)
      *
-     * entityAlias 实体别名
-     * 如果entityAlias为空 则保存全部实体的修改数据
+     * entityParameter 实体参数
+     * 形如 {'mainEntityAlias':'','childEntityAlias':'hjxxchild', 'mainRowId':'uuid1'}
+     *
      */
-    saveOrUpdate: function(entityAlias){
+    saveOrUpdate: function(entityParameter){
+        /**
+         * 如果entityParameter为空对象 保存所有实体的数据
+         * 否则 如果mainEntityAlias和childEntityAlias及mainRowId都不为空 则保存主实体和mainRowId下对应子实体数据
+         * 否则 如果mainEntityAlias和childEntityAlias不为空 mainRowId为空 则保存主实体和所有子实体数据
+         * 否则 如果mainEntityAlias不为空 childEntityAlias和mainRowId为空 则只保存主实体数据
+         * 否则 如果mainEntityAlias为空 childEntityAlias和mainRowId不为空 则只保存mainRowId下对应子实体数据
+         *
+         */
+
+        if(jQuery.isEmptyObject(entityParameter)){
+            entityParameter = {};
+
+            console.log('entityParameter为空对象 保存所有实体的数据');
+        }else if(entityParameter['mainEntityAlias']!=null && entityParameter['childEntityAlias']!=null && entityParameter['mainRowId']!=null){
+
+            console.log('mainEntityAlias和childEntityAlias及mainRowId都不为空 则保存主实体和mainRowId下对应子实体数据');
+        }else if(entityParameter['mainEntityAlias']!=null && entityParameter['childEntityAlias']!=null && entityParameter['mainRowId']==null){
+
+            console.log('mainEntityAlias和childEntityAlias不为空 mainRowId为空 则保存主实体和所有子实体数据');
+        }else if(entityParameter['mainEntityAlias']!=null && entityParameter['childEntityAlias']==null && entityParameter['mainRowId']==null){
+
+            console.log('如果mainEntityAlias不为空 childEntityAlias和mainRowId为空 则只保存主实体数据');
+        }else if(entityParameter['mainEntityAlias']==null && entityParameter['childEntityAlias']!=null && entityParameter['mainRowId']!=null){
+
+            console.log('如果mainEntityAlias为空 childEntityAlias和mainRowId不为空 则只保存mainRowId下对应子实体数据');
+        }
+        var mainEntityAlias = entityParameter['entityParameter'];
+        var childEntityAlias = entityParameter['childEntityAlias'];
+        var mainRowId = entityParameter['mainRowId'];
+        var id = null;
+        if(mainEntityAlias!=null){
+            id = mainEntityAlias;
+        }else{
+            id = this._mainEntityAlias+'.'+mainRowId+'.'+childEntityAlias;
+        }
+
+            return;
+
         var data = {};
-        //根据别名组织数据
         var _this = this;
-        function _getEnt(entAlias){
-            var idPro = _this._originalBuffer[entAlias]['idPro'];
+        //根据别名组织数据
+        function _getEnt(id){
+            var idPro = _this._originalBuffer[id]['idPro'];
             var entity = {"primaryBuffer":[],"deleteBuffer":[]};
-            var primary = _this._primaryBuffer[entAlias];
+            var primary = _this._primaryBuffer[id];
             if(primary!=null){
                 var primaryRows = [];
                 for(var i=0;i<primary.length;i++){
@@ -496,7 +555,7 @@ wof.bizWidget.DataObject.prototype = {
                 }
                 entity['primaryBuffer'] = primaryRows;
             }
-            var dele = _this._deleteBuffer[entAlias];
+            var dele = _this._deleteBuffer[id];
             if(dele!=null){
                 var deleRows = [];
                 for(var i=0;i<dele.length;i++){
@@ -517,17 +576,16 @@ wof.bizWidget.DataObject.prototype = {
             }
             return entity;
         }
-        if(entityAlias!=null){
-            //只保存指定实体的修改数据
-            data[entityAlias] = _getEnt(entityAlias);
+        if(id!=null){
+            //只保存指定id实体的修改数据
+            _getEnt(id);
         }else{
             //保存全部实体的修改数据
-            for(var alias in this._originalBuffer){
-                data[alias] = _getEnt(alias);
+            for(var n in this._originalBuffer){
+                _getEnt(n);
             }
         }
         console.log('提交数据:'+JSON.stringify(data));
-
     },
 
     /**
