@@ -1,0 +1,70 @@
+{
+            "JZGJBXXB":{ //实体别名
+                "primaryBuffer":[ //主缓冲区数据
+                    {
+                        "data":{
+                            "xb_show":{"value":"男","status":"DataModified"},
+                            "zgid":{"value":"1905DBAE755A40D48D9FB0F7F717C686","status":"DataModified"}
+                        },
+                        "status":"New", //New和NewModified 新增行 此两种状态的数据需要做insert操作
+                        "child":{
+                            "hjxxchild":{
+                                "primaryBuffer":[
+                                    {
+                                        "data":{
+                                            "hjmc":{"value":"2018优秀员工","status":"DataModified"},
+                                            "jxjlid":{"value":"1","status":"NotModified"},
+                                            "dqzt":{"value":"0","status":"DataModified"},
+                                            "hjrqks":{"value":"2014-08-05","status":"DataModified"},
+                                            "zgid":{"value":"1","status":"DataModified"}
+                                        },
+                                        "status":"DataModified" //DataModified数据被修改 此状态的数据需要做update操作
+                                    },
+                                    {
+                                        "data":{
+                                            "hjmc":{"value":"2011优秀员工","status":"DataModified"},
+                                            "jxjlid":{"value":"74F7089226FB4AB197FA2A12EED12730","status":"NotModified"},
+                                            "dqzt":{"value":"0","status":"DataModified"},
+                                            "hjrqks":{"value":"2014-08-05","status":"DataModified"},
+                                            "zgid":{"value":"1","status":"DataModified"}
+                                        },
+                                        "status":"New"
+                                    },
+                                    {
+                                        "data":{
+                                            "hjmc":{"value":"2000最佳新员工","status":"DataModified"},
+                                            "jxjlid":{"value":"C77980FDEACF447F8BAE7F624A8BD237","status":"NotModified"},
+                                            "dqzt":{"value":"0","status":"DataModified"},
+                                            "hjrqks":{"value":"2014-08-05","status":"DataModified"},
+                                            "zgid":{"value":"1","status":"DataModified"}
+                                        },
+                                        "status":"NewModified" //New和NewModified 新增行 此两种状态的数据需要做insert操作
+                                    }
+                                ],
+                                "deleteBuffer":[ //删除缓冲区数据 此缓冲区中的数据需要做delete操作
+                                    {
+                                        "data":{
+                                            "hjmc":{"value":"2017优秀员工","status":"DataModified"},
+                                            "jxjlid":{"value":"2","status":"NotModified"},
+                                            "dqzt":{"value":"0","status":"DataModified"},
+                                            "hjrqks":{"value":"2014-08-05","status":"DataModified"},
+                                            "zgid":{"value":"1","status":"DataModified"}
+                                        },
+                                        "status":"DataModified"
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                ],
+                "deleteBuffer":[
+                    {
+                        "data":{
+                            "lbbm_show":{"value":"兼职员工","status":"DataModified"},
+                            "zgid":{"value":"1","status":"NotModified"}
+                        },
+                        "status":"DataModified"
+                    }
+                ]
+            }
+        }
