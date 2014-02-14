@@ -187,7 +187,7 @@ wof.bizWidget.DataObject.prototype = {
 
         this.deleteData({'mainEntityAlias':'JZGJBXXB'}, [{'zgid':'1'}]);
 
-        this.saveOrUpdate({'mainEntityAlias':'JZGJBXXB'});
+        this.saveOrUpdate({'mainEntityAlias':'JZGJBXXB','childEntityAlias':'hjxxchild', 'mainRowId':'uuid1'});
 
     },
 
@@ -528,29 +528,75 @@ wof.bizWidget.DataObject.prototype = {
         }
 
         var _this = this;
-        function _findMainRowAndSetData(mainEntData, mainRowId, childId){
+        function _findMainRowAndSetData(mainEntData, mainRowId, childEntityAlias){
+            var childId = _getId(childEntityAlias);
             var childEnt = _getEnt(childId);
             var idPro = _this._originalBuffer[_this._mainEntityAlias]['idPro'];
+            var mainPrimId = null;
             var mainPrim = _this._primaryBuffer[_this._mainEntityAlias];
-            for(var i=0;i<mainPrim.length;i++){
-                var row = mainPrim[i];
-                if(row['rowId']==mainRowId){
-                    for(var n in row['data']){
-
+            if(mainPrim!=null){
+                for(var i=0;i<mainPrim.length;i++){
+                    var row = mainPrim[i];
+                    if(row['rowId']==mainRowId){
+                        mainPrimId = row['data'][idPro]['value'];
+                        break;
                     }
-                    break;
                 }
             }
-       /*     if(){
-                //先从主实体主缓冲区查找
-
+            var mainDeleId = null;
+            var mainDele = _this._deleteBuffer[_this._mainEntityAlias];
+            if(mainDele!=null){
+                for(var i=0;i<mainDele.length;i++){
+                    var row = mainDele[i];
+                    if(row['rowId']==mainRowId){
+                        mainDeleId = row['data'][idPro]['value'];
+                        break;
+                    }
+                }
+            }
+            if(mainPrimId!=null){
+                var tempFlag = false;
+                for(var i=0;i<mainEntData['primaryBuffer'].length;i++){
+                    var row = mainEntData['primaryBuffer'][i];
+                    if(row['data'][idPro]!=null&&row['data'][idPro]['value']==mainPrimId){
+                        row['child'][childEntityAlias] = childEnt;
+                        tempFlag = true;
+                        break;
+                    }
+                }
+                if(tempFlag==false){
+                    var childData = {
+                        "data":{},
+                        "status":"NotModified",
+                        "child":{}
+                    };
+                    childData['data'][idPro] = {'value':mainPrimId,'status':'NotModified'};
+                    childData['child'][childEntityAlias] = childEnt;
+                    mainEntData['primaryBuffer'].push(childData);
+                }
+            }else if(mainDeleId!=null){
+                var tempFlag = false;
+                for(var i=0;i<mainEntData['deleteBuffer'].length;i++){
+                    var row = mainEntData['deleteBuffer'][i];
+                    if(row['data'][idPro]!=null&&row['data'][idPro]['value']==mainDeleId){
+                        row['child'][childEntityAlias] = childEnt;
+                        tempFlag = true;
+                        break;
+                    }
+                }
+                if(tempFlag==false){
+                    var childData = {
+                        "data":{},
+                        "status":"NotModified",
+                        "child":{}
+                    };
+                    childData['data'][idPro] = {'value':mainDeleId,'status':'NotModified'};
+                    childData['child'][childEntityAlias] = childEnt;
+                    mainEntData['deleteBuffer'].push(childData);
+                }
             }else{
-                // 找不到再在主实体删除缓冲区查找
-
-            }*/
-
-
-
+                console.log('数据错误 找不到rowId为'+mainRowId+'的数据');
+            }
         }
         //根据id组织数据
         function _getEnt(id){
@@ -562,7 +608,7 @@ wof.bizWidget.DataObject.prototype = {
                 for(var i=0;i<primary.length;i++){
                     var row = primary[i];
                     if(row['status']!='NotModified'){
-                        var record = {'data':{},'status':'NotModified'};
+                        var record = {'data':{},'status':'NotModified','child':{}};
                         for(var n in row['data']){
                             var f = row['data'][n];
                             if(f['status']!='NotModified' || n==idPro){
@@ -581,7 +627,7 @@ wof.bizWidget.DataObject.prototype = {
                 for(var i=0;i<dele.length;i++){
                     var row = dele[i];
                     if(row['status']!='New' && row['status']!='NewModified'){
-                        var record = {'data':{},'status':''};
+                        var record = {'data':{},'status':'','child':{}};
                         for(var n in row['data']){
                             var f = row['data'][n];
                             if(f['status']!='NotModified' || n==idPro){
@@ -600,9 +646,7 @@ wof.bizWidget.DataObject.prototype = {
 
         }else if(saveType==1){
             data[mainEntityAlias] = _getEnt(_getId());
-
-            var childId = _getId(childEntityAlias);
-            _findMainRowAndSetData(data[mainEntityAlias], mainRowId, childId);
+            _findMainRowAndSetData(data[mainEntityAlias], mainRowId, childEntityAlias);
 
         }else if(saveType==2){
 
