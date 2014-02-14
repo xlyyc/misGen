@@ -516,15 +516,42 @@ wof.bizWidget.DataObject.prototype = {
         var mainEntityAlias = entityParameter['mainEntityAlias'];
         var childEntityAlias = entityParameter['childEntityAlias'];
         var mainRowId = entityParameter['mainRowId'];
-        var id = null;
-        if(mainEntityAlias!=null&&mainEntityAlias.length>0){
-            id = mainEntityAlias;
-        }else{
-            id = this._mainEntityAlias+'.'+mainRowId+'.'+childEntityAlias;
+
+        function _getId(childEntityAlias){
+            var id = null;
+            if(mainEntityAlias!=null&&mainEntityAlias.length>0){
+                id = mainEntityAlias;
+            }else{
+                id = this._mainEntityAlias+'.'+mainRowId+'.'+childEntityAlias;
+            }
+            return id;
         }
 
-
         var _this = this;
+        function _findMainRowAndSetData(mainEntData, mainRowId, childId){
+            var childEnt = _getEnt(childId);
+            var idPro = _this._originalBuffer[_this._mainEntityAlias]['idPro'];
+            var mainPrim = _this._primaryBuffer[_this._mainEntityAlias];
+            for(var i=0;i<mainPrim.length;i++){
+                var row = mainPrim[i];
+                if(row['rowId']==mainRowId){
+                    for(var n in row['data']){
+
+                    }
+                    break;
+                }
+            }
+       /*     if(){
+                //先从主实体主缓冲区查找
+
+            }else{
+                // 找不到再在主实体删除缓冲区查找
+
+            }*/
+
+
+
+        }
         //根据id组织数据
         function _getEnt(id){
             var idPro = _this._originalBuffer[id]['idPro'];
@@ -570,13 +597,17 @@ wof.bizWidget.DataObject.prototype = {
             return entity;
         }
         if(saveType==0){
-            _getEnt(id);
+
         }else if(saveType==1){
+            data[mainEntityAlias] = _getEnt(_getId());
+
+            var childId = _getId(childEntityAlias);
+            _findMainRowAndSetData(data[mainEntityAlias], mainRowId, childId);
 
         }else if(saveType==2){
 
         }else if(saveType==3){
-            data[mainEntityAlias] = _getEnt(id);
+            data[mainEntityAlias] = _getEnt(_getId(childEntityAlias));
         }else if(saveType==4){
 
         }
