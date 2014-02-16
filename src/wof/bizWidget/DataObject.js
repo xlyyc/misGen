@@ -187,8 +187,8 @@ wof.bizWidget.DataObject.prototype = {
 
         //this.deleteData({'mainEntityAlias':'JZGJBXXB'}, [{'zgid':'1'}]);
 
-        //this.saveOrUpdate({'mainEntityAlias':'JZGJBXXB','childEntityAlias':'hjxxchild', 'mainRowId':'uuid1'});
-        this.saveOrUpdate();
+        this.saveOrUpdate({'mainEntityAlias':'JZGJBXXB','childEntityAlias':'hjxxchild'});
+        //this.saveOrUpdate();
     },
 
     /**
@@ -509,29 +509,24 @@ wof.bizWidget.DataObject.prototype = {
         }else if(entityParameter['mainEntityAlias']!=null && entityParameter['childEntityAlias']==null && entityParameter['mainRowId']==null){
             saveType = 3;
             console.log('如果mainEntityAlias不为空 childEntityAlias和mainRowId为空 则只保存主实体数据');
-        }else if(entityParameter['mainEntityAlias']==null && entityParameter['childEntityAlias']!=null && entityParameter['mainRowId']!=null){
-            saveType = 4;
-            console.log('如果mainEntityAlias为空 childEntityAlias和mainRowId不为空 则只保存mainRowId下对应子实体数据');
         }
         var mainEntityAlias = entityParameter['mainEntityAlias'];
         var childEntityAlias = entityParameter['childEntityAlias'];
         var mainRowId = entityParameter['mainRowId'];
 
-        function _getId(childEntityAlias){
+        function _getId(mainEntityAlias,mainRowId,childEntityAlias){
             var id = null;
             if(mainEntityAlias!=null&&mainEntityAlias.length>0){
                 id = mainEntityAlias;
-            }else if(childEntityAlias!=null){
-                id = this._mainEntityAlias+'.'+mainRowId+'.'+childEntityAlias;
             }else{
-                id = this._mainEntityAlias;
+                id = _this._mainEntityAlias+'.'+mainRowId+'.'+childEntityAlias;
             }
             return id;
         }
 
         var _this = this;
         function _findMainRowAndSetData(mainEntData, mainRowId, childEntityAlias){
-            var childId = _getId(childEntityAlias);
+            var childId = _getId(null,mainRowId,childEntityAlias);
             var childEnt = _getEnt(childId);
             var idPro = _this._originalBuffer[_this._mainEntityAlias]['idPro'];
             var mainPrimId = null;
@@ -649,30 +644,50 @@ wof.bizWidget.DataObject.prototype = {
             var primMainEnt = this._primaryBuffer[this._mainEntityAlias];
             if(primMainEnt!=null){
                 for(var i=0;i<primMainEnt.length;i++){
-                    console.log('yyyy====='+primMainEnt[i]['rowId']);
+                    var mainRowId = primMainEnt[i]['rowId'];
                     for(var n in primMainEnt[i]['childData']){
-                        console.log('aaaa===='+n);
+                        var childAlias = n.substring(n.lastIndexOf('.')+1);
+                        _findMainRowAndSetData(data[this._mainEntityAlias], mainRowId, childAlias);
                     }
                 }
             }
             var deleMainEnt = this._deleteBuffer[this._mainEntityAlias];
             if(deleMainEnt!=null){
                 for(var i=0;i<deleMainEnt.length;i++){
-                    console.log('tttt====='+deleMainEnt[i]['rowId']);
+                    var mainRowId = deleMainEnt[i]['rowId'];
                     for(var n in deleMainEnt[i]['childData']){
-                        console.log('bbbb===='+n);
+                        var childAlias = n.substring(n.lastIndexOf('.')+1);
+                        _findMainRowAndSetData(data[this._mainEntityAlias], mainRowId, childAlias);
                     }
                 }
             }
         }else if(saveType==1){
-            data[mainEntityAlias] = _getEnt(_getId());
+            data[mainEntityAlias] = _getEnt(_getId(this._mainEntityAlias));
             _findMainRowAndSetData(data[mainEntityAlias], mainRowId, childEntityAlias);
         }else if(saveType==2){
-
+            data[this._mainEntityAlias] = _getEnt(this._mainEntityAlias);
+            var primMainEnt = this._primaryBuffer[this._mainEntityAlias];
+            if(primMainEnt!=null){
+                for(var i=0;i<primMainEnt.length;i++){
+                    var mainRowId = primMainEnt[i]['rowId'];
+                    for(var n in primMainEnt[i]['childData']){
+                        var childAlias = n.substring(n.lastIndexOf('.')+1);
+                        _findMainRowAndSetData(data[this._mainEntityAlias], mainRowId, childAlias);
+                    }
+                }
+            }
+            var deleMainEnt = this._deleteBuffer[this._mainEntityAlias];
+            if(deleMainEnt!=null){
+                for(var i=0;i<deleMainEnt.length;i++){
+                    var mainRowId = deleMainEnt[i]['rowId'];
+                    for(var n in deleMainEnt[i]['childData']){
+                        var childAlias = n.substring(n.lastIndexOf('.')+1);
+                        _findMainRowAndSetData(data[this._mainEntityAlias], mainRowId, childAlias);
+                    }
+                }
+            }
         }else if(saveType==3){
-            data[mainEntityAlias] = _getEnt(_getId(childEntityAlias));
-        }else if(saveType==4){
-
+            data[mainEntityAlias] = _getEnt(_getId(this._mainEntityAlias));
         }
         console.log('提交数据:'+JSON.stringify(data));
     },
