@@ -232,6 +232,10 @@ wof.bizWidget.DataObject.prototype = {
 
         this.updateData([{"zglbref.lbbz":"外聘员工111","zgid":"362646149296820224"}]);
 
+        this.deleteData([{"zgid":"362646149296820224"}]);
+
+        this.undeleteData();
+
         this.saveData();
     },
 
