@@ -216,27 +216,19 @@ wof.bizWidget.DataObject.prototype = {
     //选择实现
     afterRender: function () {
 
-        this.queryData('pageId', 'JZGJBXXB');
-
-   /*     this.addData([{"hjmc":"好员工","jxjlid":wof.util.Tool.uuid()}], {'childEntityAlias':'hjxxchild', 'mainRowId':'uuid1'});
-
-        this.updateData([{"hjmc":"好员工修改过","jxjlid":"1"}], {'childEntityAlias':'hjxxchild', 'mainRowId':'uuid1'});
-
-        this.deleteData([{"jxjlid":"1"}], {'childEntityAlias':'hjxxchild', 'mainRowId':'uuid1'});
-
-        this.deleteData([{'zgid':'1'}]);
-
-        this.undeleteData();
-
-        this.saveData('mainAndRowChild',{'childEntityAlias':'hjxxchild', 'mainRowId':'uuid1'});*/
+      /*  this.queryData('pageId', 'JZGJBXXB');
 
         this.updateData([{"zglbref.lbbz":"外聘员工111","zgid":"362646149296820224"}]);
 
         this.deleteData([{"zgid":"362646149296820224"}]);
 
+        this.addData([{"zglbref.lbbz":"好员工222","zgid":wof.util.Tool.uuid()}]);
+
+        this.addData([{"hjmc":"好员工333","jxjlid":wof.util.Tool.uuid()}], {'childEntityAlias':'hjxxchild', 'mainRowId':'372873910208696320'});
+
         this.undeleteData();
 
-        this.saveData();
+        this.saveData();*/
     },
 
     /**
@@ -272,6 +264,7 @@ wof.bizWidget.DataObject.prototype = {
         //在主缓冲区中增加该条数据
         //该数据在主缓冲区的状态为New或者NewModified(要结合实体的元数据中的默认值来决定是何种状态)
         var id = this._getBufferId(entityParameter);
+        var alias = id.substring(id.lastIndexOf('.')+1);
         var original = this._originalBuffer[id];
         if(original!=null){
             var idPro = original["idPro"];
@@ -293,6 +286,7 @@ wof.bizWidget.DataObject.prototype = {
                         console.log('新增数据'+JSON.stringify(record)+'没有主键');
                     }
                 }
+                this.sendMessage('wof.bizWidget.DataObject_add',[alias]);
             }else{
                 console.log('主缓冲区不存在对应实体:'+id);
             }
@@ -315,6 +309,7 @@ wof.bizWidget.DataObject.prototype = {
     updateData: function(data, entityParameter){
         //在主缓冲区中修改对应数据 并将数据状态改为DataModified
         var id = this._getBufferId(entityParameter);
+        var alias = id.substring(id.lastIndexOf('.')+1);
         var original = this._originalBuffer[id];
         if(original!=null){
             var idPro = original['idPro'];
@@ -350,6 +345,7 @@ wof.bizWidget.DataObject.prototype = {
                         }
                     }
                 }
+                this.sendMessage('wof.bizWidget.DataObject_update',[alias]);
             }else{
                 console.log('主缓冲区不存在对应实体:'+id);
             }
@@ -371,6 +367,7 @@ wof.bizWidget.DataObject.prototype = {
     deleteData: function(data, entityParameter){
         //将指定的数据从主缓冲区移动到对应的删除缓冲区(该数据的状态保持不变)
         var id = this._getBufferId(entityParameter);
+        var alias = id.substring(id.lastIndexOf('.')+1);
         var original = this._originalBuffer[id];
         if(original!=null){
             var idPro = original['idPro'];
@@ -400,6 +397,7 @@ wof.bizWidget.DataObject.prototype = {
                         primary.splice(r,1);
                     }
                 }
+                this.sendMessage('wof.bizWidget.DataObject_delete',[alias]);
             }else{
                 console.log('主缓冲区不存在对应实体:'+id);
             }
@@ -420,6 +418,7 @@ wof.bizWidget.DataObject.prototype = {
      */
     undeleteData: function(entityParameter){
         var id = this._getBufferId(entityParameter);
+        var alias = id.substring(id.lastIndexOf('.')+1);
         var primaryBuffer = this._primaryBuffer[id];
         if(primaryBuffer==null){
             primaryBuffer = [];
@@ -432,7 +431,7 @@ wof.bizWidget.DataObject.prototype = {
             primaryBuffer.push((deleBuffer[i]));
             deleBuffer.splice(i,1);
         }
-
+        this.sendMessage('wof.bizWidget.DataObject_undelete',[alias]);
     },
 
     /**
@@ -514,6 +513,8 @@ wof.bizWidget.DataObject.prototype = {
                 }
                 i++;
             }
+
+            this.sendMessage('wof.bizWidget.DataObject_query',[entityAlias]);    //todo 逻辑有问题
         }else{
             console.log('本地策略暂时不支持');
         }
@@ -658,6 +659,9 @@ wof.bizWidget.DataObject.prototype = {
             }
             return entity;
         }
+
+        var aliasArr = [this._mainEntityAlias];
+
         if(saveType=='all'){
             data[this._mainEntityAlias] = _getEnt(this._mainEntityAlias);
             var primMainEnt = this._primaryBuffer[this._mainEntityAlias];
@@ -667,6 +671,7 @@ wof.bizWidget.DataObject.prototype = {
                     for(var n in primMainEnt[i]['childData']){
                         var childAlias = n.substring(n.lastIndexOf('.')+1);
                         _findMainRowAndSetData(data[this._mainEntityAlias], mainRowId, childAlias);
+                        aliasArr.push(childAlias);
                     }
                 }
             }
@@ -677,6 +682,7 @@ wof.bizWidget.DataObject.prototype = {
                     for(var n in deleMainEnt[i]['childData']){
                         var childAlias = n.substring(n.lastIndexOf('.')+1);
                         _findMainRowAndSetData(data[this._mainEntityAlias], mainRowId, childAlias);
+                        aliasArr.push(childAlias);
                     }
                 }
             }
@@ -684,13 +690,14 @@ wof.bizWidget.DataObject.prototype = {
         }else if(saveType=='mainAndRowChild'){
             data[this._mainEntityAlias] = _getEnt(this._mainEntityAlias);
             _findMainRowAndSetData(data[this._mainEntityAlias], mainRowId, childEntityAlias);
+            childAlias.push(childEntityAlias);
             console.log('保存主实体和指定行下对应子实体数据');
         }else if(saveType=='main'){
             data[this._mainEntityAlias] = _getEnt(this._mainEntityAlias);
             console.log('只保存主实体数据');
         }
+        this.sendMessage('wof.bizWidget.DataObject_save',aliasArr);
         console.log('提交数据:'+JSON.stringify(data));
-
        /* var rsp = jQuery.ajax(
             {
                 url:_this.getDataServicesUrl()+'/saveOrUpdate',
@@ -699,6 +706,18 @@ wof.bizWidget.DataObject.prototype = {
         );
         console.log('服务器返回:'+rsp.responseText);
         */
+    },
+
+    /**
+     * todo 获得本地指定实体数据
+     *
+     * entityParameter 实体参数
+     * 形如 {'childEntityAlias':'hjxxchild', 'mainRowId':'uuid1'}
+     */
+    getLocalData: function(entityParameter){
+        var id = this._getBufferId(entityParameter);
+        var primaryBuffer = this._primaryBuffer[id];
+
     },
 
     /**
