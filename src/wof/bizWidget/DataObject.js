@@ -552,8 +552,19 @@ wof.bizWidget.DataObject.prototype = {
                             _setChildEnt(ent['rows'][t]);
                         }
                     }
-                }else if(queryType=='main'){ //todo
+                }else if(queryType=='main'){
+                    var ent = JSON.parse(JSON.stringify(ents[n]));
+                    var pathId = ent['entityAlias'];
+                    this._mainEntityAlias = pathId;
+                    var entity = _findJSON(pathId);
+                    delete this._originalBuffer[pathId];    //todo 此处需要考虑移除没有对应mainRowId的子实体数据
+                    delete this._primaryBuffer[pathId];
+                    delete this._filterBuffer[pathId];
+                    delete this._deleteBuffer[pathId];
+                    this._originalBuffer[pathId] = entity;
+                    this._primaryBuffer[pathId] = JSON.parse(JSON.stringify(entity['rows'])); //值copy
 
+                    aliasArr.push(pathId);
                 }else if(queryType=='child'){ //todo
 
                 }
