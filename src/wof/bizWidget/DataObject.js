@@ -215,8 +215,7 @@ wof.bizWidget.DataObject.prototype = {
 
     //选择实现
     afterRender: function () {
-
-      /*  this.queryData('pageId', 'JZGJBXXB');
+        this.queryData('pageId', 'all', null, null, 0, 100);
 
         this.updateData([{"zglbref.lbbz":"外聘员工111","zgid":"362646149296820224"}]);
 
@@ -228,7 +227,7 @@ wof.bizWidget.DataObject.prototype = {
 
         this.undeleteData();
 
-        this.saveData();*/
+        this.saveData();
     },
 
     /**
@@ -436,24 +435,63 @@ wof.bizWidget.DataObject.prototype = {
 
     /**
      * 查询方法
-     * 如果entityAlias为空 则表示查询全部实体数据
-     * 此方式会直接忽略未保存的数据
+     * 此方式会直接忽略对应的未保存的数据
      * 并发出对应消息
      *
      * pageId 页面id
-     * entityAlias 实体别名
+     * queryType all所有实体 main仅主实体 child仅子实体
+     * entityParameter 实体参数
+     * 形如 {'childEntityAlias':'hjxxchild', 'mainRowId':'uuid1'}
      * queryParam 查询参数(JSON数组格式)
      * offset 偏移量(从0开始)
      * rowsCount 返回数据数量
      */
-    queryData: function(pageId, entityAlias, queryParam, offset, rowsCount){
-        var entityId = this.getEntityId();
+    queryData: function(pageId, queryType, entityParameter, queryParam, offset, rowsCount){
+        var queryData = {};
+        queryData['pageId'] = pageId;
+        queryData['offset'] = offset;
+        queryData['rowsCount'] = rowsCount;
+        queryData['queryParam'] = queryParam;
+        if(queryType==null){
+            queryType = 'all';
+        }
+
+        var aliasArr = [];
+        /**
+         * 根据查询类型组织查询参数
+         */
+        if(queryType=='all'){
+            queryData['queryType'] = 'all';
+        }else if(queryType=='main'){
+            queryData['queryType'] = 'main';
+        }else if(queryType=='child'){
+            queryData['queryType'] = 'child';
+            queryData['childEntityAlias'] = entityParameter['childEntityAlias'];
+            queryData['mainRowIdVal'] = _getMainRowIdVal(entityParameter['mainRowId']);
+        }
+        var _this = this;
+        function _getMainRowIdVal(mainRowId){
+            var mainRowIdVal = null;
+            var idPro = _this._originalBuffer[_this._mainEntityAlias]['idPro'];
+            var primary = _this._primaryBuffer[_this._mainEntityAlias];
+            if(primary!=null){
+                for(var i=0;i<primary.length;i++){
+                    var row = primary[i];
+                    if(row['rowId']==mainRowId){
+                        mainRowIdVal = row['data'][idPro]['value'];
+                        break;
+                    }
+                }
+            }
+            return mainRowIdVal;
+        }
+
+
         if(this.getQueryPolicy()=='remote'){ //预定义检索条件+二次过滤条件向远程服务请求数据
             /**
              * 步骤一
              * 根据查询条件发起检索 接收返回数据
              */
-            var _this = this;
             var rsp = jQuery.ajax(
                 {
                     //url:_this.getDataServicesUrl()+'/query',
@@ -485,6 +523,7 @@ wof.bizWidget.DataObject.prototype = {
                     var ent = row['childData'][n];
                     var pathId = _this._mainEntityAlias+'.'+row['rowId']+'.'+ent['entityAlias'];
                     var entity = _findJSON(pathId);
+                    aliasArr.push(pathId);
                     delete _this._originalBuffer[pathId];
                     delete _this._primaryBuffer[pathId];
                     delete _this._filterBuffer[pathId];
@@ -495,26 +534,35 @@ wof.bizWidget.DataObject.prototype = {
             }
             var i=0;
             for(var n in ents){   //实际由于只有一个主实体 所以循环只有一次
-                var ent = JSON.parse(JSON.stringify(ents[n]));
-                var pathId = ent['entityAlias'];
-                this._mainEntityAlias = pathId;
-                var entity = _findJSON(pathId);
-                delete this._originalBuffer[pathId];
-                delete this._primaryBuffer[pathId];
-                delete this._filterBuffer[pathId];
-                delete this._deleteBuffer[pathId];
-                this._originalBuffer[pathId] = entity;
-                this._primaryBuffer[pathId] = JSON.parse(JSON.stringify(entity['rows'])); //值copy
+                if(queryType=='all'){
+                    var ent = JSON.parse(JSON.stringify(ents[n]));
+                    var pathId = ent['entityAlias'];
+                    this._mainEntityAlias = pathId;
+                    var entity = _findJSON(pathId);
+                    delete this._originalBuffer[pathId];    //todo 此处需要考虑移除没有对应mainRowId的子实体数据
+                    delete this._primaryBuffer[pathId];
+                    delete this._filterBuffer[pathId];
+                    delete this._deleteBuffer[pathId];
+                    this._originalBuffer[pathId] = entity;
+                    this._primaryBuffer[pathId] = JSON.parse(JSON.stringify(entity['rows'])); //值copy
 
-                for(var t=0;t<ent['rows'].length;t++){
-                    if(ent['rows'][t]['childData']!=null){
-                        _setChildEnt(ent['rows'][t]);
+                    aliasArr.push(pathId);
+                    for(var t=0;t<ent['rows'].length;t++){
+                        if(ent['rows'][t]['childData']!=null){
+                            _setChildEnt(ent['rows'][t]);
+                        }
                     }
+                }else if(queryType=='main'){ //todo
+
+                }else if(queryType=='child'){ //todo
+
                 }
                 i++;
+
             }
 
-            this.sendMessage('wof.bizWidget.DataObject_query',[entityAlias]);    //todo 逻辑有问题
+            this.sendMessage('wof.bizWidget.DataObject_query',aliasArr);
+            console.log('aliasArr=='+JSON.stringify(aliasArr));
         }else{
             console.log('本地策略暂时不支持');
         }
@@ -528,7 +576,7 @@ wof.bizWidget.DataObject.prototype = {
      * 保存成功后 将清空删除缓冲区(包括删除缓冲区对应在原始缓冲区中保存的数据)
      *
      * saveType 保存方式
-     * all 保存全部实体(默认) main 仅保存主实体 mainAndRowChild 保存主实体和指定行下的子实体
+     * all 保存全部实体(默认) main 仅保存主实体 mainAndChild 保存主实体和指定行下的子实体
      * entityParameter 实体参数
      * 形如 {'childEntityAlias':'hjxxchild', 'mainRowId':'uuid1'}
      *
@@ -548,71 +596,73 @@ wof.bizWidget.DataObject.prototype = {
         function _findMainRowAndSetData(mainEntData, mainRowId, childEntityAlias){
             var childId = _this._getBufferId({'childEntityAlias':childEntityAlias, 'mainRowId':mainRowId});
             var childEnt = _getEnt(childId);
-            var idPro = _this._originalBuffer[_this._mainEntityAlias]['idPro'];
-            var mainPrimId = null;
-            var mainPrim = _this._primaryBuffer[_this._mainEntityAlias];
-            if(mainPrim!=null){
-                for(var i=0;i<mainPrim.length;i++){
-                    var row = mainPrim[i];
-                    if(row['rowId']==mainRowId){
-                        mainPrimId = row['data'][idPro]['value'];
-                        break;
+            if(childEnt['primaryBuffer'].length>0 || childEnt['deleteBuffer'].length>0){
+                var idPro = _this._originalBuffer[_this._mainEntityAlias]['idPro'];
+                var mainPrimId = null;
+                var mainPrim = _this._primaryBuffer[_this._mainEntityAlias];
+                if(mainPrim!=null){
+                    for(var i=0;i<mainPrim.length;i++){
+                        var row = mainPrim[i];
+                        if(row['rowId']==mainRowId){
+                            mainPrimId = row['data'][idPro]['value'];
+                            break;
+                        }
                     }
                 }
-            }
-            var mainDeleId = null;
-            var mainDele = _this._deleteBuffer[_this._mainEntityAlias];
-            if(mainDele!=null){
-                for(var i=0;i<mainDele.length;i++){
-                    var row = mainDele[i];
-                    if(row['rowId']==mainRowId){
-                        mainDeleId = row['data'][idPro]['value'];
-                        break;
+                var mainDeleId = null;
+                var mainDele = _this._deleteBuffer[_this._mainEntityAlias];
+                if(mainDele!=null){
+                    for(var i=0;i<mainDele.length;i++){
+                        var row = mainDele[i];
+                        if(row['rowId']==mainRowId){
+                            mainDeleId = row['data'][idPro]['value'];
+                            break;
+                        }
                     }
                 }
-            }
-            if(mainPrimId!=null){
-                var tempFlag = false;
-                for(var i=0;i<mainEntData['primaryBuffer'].length;i++){
-                    var row = mainEntData['primaryBuffer'][i];
-                    if(row['data'][idPro]!=null&&row['data'][idPro]['value']==mainPrimId){
-                        row['child'][childEntityAlias] = childEnt;
-                        tempFlag = true;
-                        break;
+                if(mainPrimId!=null){
+                    var tempFlag = false;
+                    for(var i=0;i<mainEntData['primaryBuffer'].length;i++){
+                        var row = mainEntData['primaryBuffer'][i];
+                        if(row['data'][idPro]!=null&&row['data'][idPro]['value']==mainPrimId){
+                            row['child'][childEntityAlias] = childEnt;
+                            tempFlag = true;
+                            break;
+                        }
                     }
-                }
-                if(tempFlag==false){
-                    var childData = {
-                        "data":{},
-                        "status":"NotModified",
-                        "child":{}
-                    };
-                    childData['data'][idPro] = {'value':mainPrimId,'status':'NotModified'};
-                    childData['child'][childEntityAlias] = childEnt;
-                    mainEntData['primaryBuffer'].push(childData);
-                }
-            }else if(mainDeleId!=null){
-                var tempFlag = false;
-                for(var i=0;i<mainEntData['deleteBuffer'].length;i++){
-                    var row = mainEntData['deleteBuffer'][i];
-                    if(row['data'][idPro]!=null&&row['data'][idPro]['value']==mainDeleId){
-                        row['child'][childEntityAlias] = childEnt;
-                        tempFlag = true;
-                        break;
+                    if(tempFlag==false){
+                        var childData = {
+                            "data":{},
+                            "status":"NotModified",
+                            "child":{}
+                        };
+                        childData['data'][idPro] = {'value':mainPrimId,'status':'NotModified'};
+                        childData['child'][childEntityAlias] = childEnt;
+                        mainEntData['primaryBuffer'].push(childData);
                     }
+                }else if(mainDeleId!=null){
+                    var tempFlag = false;
+                    for(var i=0;i<mainEntData['deleteBuffer'].length;i++){
+                        var row = mainEntData['deleteBuffer'][i];
+                        if(row['data'][idPro]!=null&&row['data'][idPro]['value']==mainDeleId){
+                            row['child'][childEntityAlias] = childEnt;
+                            tempFlag = true;
+                            break;
+                        }
+                    }
+                    if(tempFlag==false){
+                        var childData = {
+                            "data":{},
+                            "status":"NotModified",
+                            "child":{}
+                        };
+                        childData['data'][idPro] = {'value':mainDeleId,'status':'NotModified'};
+                        childData['child'][childEntityAlias] = childEnt;
+                        mainEntData['deleteBuffer'].push(childData);
+                    }
+                }else{
+                    console.log('数据错误 找不到rowId为'+mainRowId+'的数据');
                 }
-                if(tempFlag==false){
-                    var childData = {
-                        "data":{},
-                        "status":"NotModified",
-                        "child":{}
-                    };
-                    childData['data'][idPro] = {'value':mainDeleId,'status':'NotModified'};
-                    childData['child'][childEntityAlias] = childEnt;
-                    mainEntData['deleteBuffer'].push(childData);
-                }
-            }else{
-                console.log('数据错误 找不到rowId为'+mainRowId+'的数据');
             }
         }
         //根据id组织数据
@@ -687,7 +737,7 @@ wof.bizWidget.DataObject.prototype = {
                 }
             }
             console.log('保存所有实体的数据');
-        }else if(saveType=='mainAndRowChild'){
+        }else if(saveType=='mainAndChild'){
             data[this._mainEntityAlias] = _getEnt(this._mainEntityAlias);
             _findMainRowAndSetData(data[this._mainEntityAlias], mainRowId, childEntityAlias);
             childAlias.push(childEntityAlias);
