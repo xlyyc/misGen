@@ -535,6 +535,9 @@ wof.bizWidget.DataObject.prototype = {
             var i=0;
             for(var n in ents){   //实际由于只有一个主实体 所以循环只有一次
                 if(queryType=='all'){
+
+                    //todo 需要首先执行清空所有缓冲区的函数
+
                     var ent = JSON.parse(JSON.stringify(ents[n]));
                     var pathId = ent['entityAlias'];
                     this._mainEntityAlias = pathId;
@@ -553,6 +556,8 @@ wof.bizWidget.DataObject.prototype = {
                         }
                     }
                 }else if(queryType=='main'){
+                    //todo 需要首先执行清空所有缓冲区的函数
+
                     var ent = JSON.parse(JSON.stringify(ents[n]));
                     var pathId = ent['entityAlias'];
                     this._mainEntityAlias = pathId;
@@ -566,6 +571,7 @@ wof.bizWidget.DataObject.prototype = {
 
                     aliasArr.push(pathId);
                 }else if(queryType=='child'){ //todo
+                    //todo 需要首先执行清空所有对应子缓冲区的函数
 
                 }
                 i++;
