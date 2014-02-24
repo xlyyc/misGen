@@ -193,6 +193,8 @@ wof.bizWidget.DataObject.prototype = {
 
         this.deleteData([{"zgid":"362646149296820224"}]);
 
+        console.log('已经删除的数据====='+JSON.stringify(this.getLocalDeleteData()));
+
         this.addData([{"zglbref.lbbz":"好员工222","zgid":wof.util.Tool.uuid()}]);
 
         this.addData([{"hjmc":"好员工333","jxjlid":wof.util.Tool.uuid()}], {'childEntityAlias':'hjxxchild', 'mainRowId':'372873910208696320'});
@@ -765,6 +767,30 @@ wof.bizWidget.DataObject.prototype = {
         var id = this._getBufferId(entityParameter);
         var primaryBuffer = this._primaryBuffer[id];
         return primaryBuffer;
+    },
+
+    /**
+     * 获得本地指定实体的删除数据
+     *
+     * entityParameter 实体参数
+     * 形如 {'childEntityAlias':'hjxxchild', 'mainRowId':'uuid1'}
+     */
+    getLocalDeleteData: function(entityParameter){
+        var id = this._getBufferId(entityParameter);
+        var deleteBuffer = this._deleteBuffer[id];
+        return deleteBuffer;
+    },
+
+    /**
+     * 获得本地指定实体的原始数据
+     *
+     * entityParameter 实体参数
+     * 形如 {'childEntityAlias':'hjxxchild', 'mainRowId':'uuid1'}
+     */
+    getLocalOriginalData: function(entityParameter){
+        var id = this._getBufferId(entityParameter);
+        var originalBuffer = this._originalBuffer[id];
+        return originalBuffer;
     },
 
     /**
