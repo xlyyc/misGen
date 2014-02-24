@@ -9,8 +9,6 @@ wof.bizWidget.DataObject = function () {
 
     this.getDomInstance().css('overflow','hidden');
 
-    this._dataTotal = 0;
-
     this._originalBuffer = {};
     this._primaryBuffer = {};
     this._filterBuffer = {};
@@ -27,13 +25,7 @@ wof.bizWidget.DataObject.prototype = {
      * 属性声明 （private ，用"_"标识）
      */
 
-    _totalDataNumber:null, //设定本地缓冲数据数量
-
     _queryPolicy:null, //二次过滤策略(默认remote) 本地 local  远程 remote
-
-    _entityId:null, //实体id
-
-    _dataTotal:null, //原始缓冲区数据数量
 
     _dataServicesUrl: null, //数据服务URL
 
@@ -73,18 +65,6 @@ wof.bizWidget.DataObject.prototype = {
     /**
      * get/set 属性方法定义
      */
-
-    getTotalDataNumber: function(){
-        if(this._totalDataNumber==null){
-            this._totalDataNumber = 2000;
-        }
-        return this._totalDataNumber;
-    },
-
-    setTotalDataNumber: function(totalDataNumber){
-        this._totalDataNumber = totalDataNumber;
-    },
-
     getQueryPolicy: function(){
         if(this._queryPolicy==null){
             this._queryPolicy = 'remote';
@@ -141,14 +121,6 @@ wof.bizWidget.DataObject.prototype = {
         this._originalBuffer = originalBuffer;
     },
 
-    getEntityId: function(){
-        return this._entityId;
-    },
-
-    setEntityId: function(entityId){
-        this._entityId = entityId;
-    },
-
     getAsyncQuery: function(){
         if(this._asyncQuery==null){
             this._asyncQuery=false;
@@ -178,8 +150,6 @@ wof.bizWidget.DataObject.prototype = {
     setDataServicesUrl: function(dataServicesUrl){
         this._dataServicesUrl = dataServicesUrl;
     },
-
-
 
     /**
      * Render 方法定义
@@ -217,6 +187,8 @@ wof.bizWidget.DataObject.prototype = {
     afterRender: function () {
         this.queryData('pageId', 'all', null, null, 0, 100);
 
+        this.queryData('pageId', 'child', {'childEntityAlias':'hjxxchild', 'mainRowId':'372873910208696320'}, null, 0, 100);
+
         this.updateData([{"zglbref.lbbz":"外聘员工111","zgid":"362646149296820224"}]);
 
         this.deleteData([{"zgid":"362646149296820224"}]);
@@ -237,16 +209,12 @@ wof.bizWidget.DataObject.prototype = {
     //----------必须实现----------
     getData: function () {
         return {
-            totalDataNumber: this.getTotalDataNumber(),
-            policy: this.getQueryPolicy(),
-            entityId: this.getEntityId()
+            policy: this.getQueryPolicy()
         };
     },
     //----------必须实现----------
     setData: function (data) {
-        this.setTotalDataNumber(data.totalDataNumber);
         this.setQueryPolicy(data.policy);
-        this.setEntityId(data.entityId);
     },
 
     /**
@@ -455,7 +423,7 @@ wof.bizWidget.DataObject.prototype = {
         if(queryType==null){
             queryType = 'all';
         }
-
+        var _this = this;
         var aliasArr = [];
         /**
          * 根据查询类型组织查询参数
@@ -469,7 +437,6 @@ wof.bizWidget.DataObject.prototype = {
             queryData['childEntityAlias'] = entityParameter['childEntityAlias'];
             queryData['mainRowIdVal'] = _getMainRowIdVal(entityParameter['mainRowId']);
         }
-        var _this = this;
         function _getMainRowIdVal(mainRowId){
             var mainRowIdVal = null;
             var idPro = _this._originalBuffer[_this._mainEntityAlias]['idPro'];
@@ -485,13 +452,32 @@ wof.bizWidget.DataObject.prototype = {
             }
             return mainRowIdVal;
         }
-
-
+        function _setChildEnt(childEnt, mainRowId){
+            var pathId = _this._mainEntityAlias+'.'+mainRowId+'.'+childEnt['entityAlias'];
+            aliasArr.push(pathId);
+            delete _this._originalBuffer[pathId];
+            delete _this._primaryBuffer[pathId];
+            delete _this._filterBuffer[pathId];
+            delete _this._deleteBuffer[pathId];
+            _this._originalBuffer[pathId] = childEnt;
+            _this._primaryBuffer[pathId] = JSON.parse(JSON.stringify(childEnt['rows']));
+        }
+        function _clearBuffer(){
+            _this._originalBuffer = {};
+            _this._primaryBuffer = {};
+            _this._filterBuffer = {};
+            _this._deleteBuffer = {};
+        }
         if(this.getQueryPolicy()=='remote'){ //预定义检索条件+二次过滤条件向远程服务请求数据
             /**
              * 步骤一
              * 根据查询条件发起检索 接收返回数据
              */
+                if(queryType=='child'){
+                    this.setDataServicesUrl('child.json');
+                }else{
+                    this.setDataServicesUrl('data.json');
+                }
             var rsp = jQuery.ajax(
                 {
                     //url:_this.getDataServicesUrl()+'/query',
@@ -506,76 +492,71 @@ wof.bizWidget.DataObject.prototype = {
              * 清空对应原始缓冲区 主缓冲区 过滤缓冲区 删除缓冲区对应实体数据
              * 将返回数据加入对应原始缓冲区和主缓冲区 并将状态设置为NotModified(此逻辑将导致所涉及到的未保存的数据丢失)
              */
-
-            function _findJSON(pathId){
-                var path = null;
-                if(pathId.indexOf('.')>0){
-                    var ns = pathId.split('.');
-                    path = "$.'"+ns[0]+"'.rows[?(@.rowId='"+ns[1]+"')].childData.'"+ns[2]+"'";
-                }else{
-                    path = "$.'"+pathId+"'";
-                }
-                var o = jsonPath(ents, path)[0];
-                return o;
-            }
-            function _setChildEnt(row){
-                for(var n in row['childData']){
-                    var ent = row['childData'][n];
-                    var pathId = _this._mainEntityAlias+'.'+row['rowId']+'.'+ent['entityAlias'];
-                    var entity = _findJSON(pathId);
-                    aliasArr.push(pathId);
-                    delete _this._originalBuffer[pathId];
-                    delete _this._primaryBuffer[pathId];
-                    delete _this._filterBuffer[pathId];
-                    delete _this._deleteBuffer[pathId];
-                    _this._originalBuffer[pathId] = entity;
-                    _this._primaryBuffer[pathId] = JSON.parse(JSON.stringify(entity['rows'])); //值copy
-                }
-            }
-            var i=0;
-            for(var n in ents){   //实际由于只有一个主实体 所以循环只有一次
+            for(var n in ents){   //循环只有一次
                 if(queryType=='all'){
+                    _clearBuffer();//需要首先执行清空所有缓冲区的函数
 
-                    //todo 需要首先执行清空所有缓冲区的函数
-
-                    var ent = JSON.parse(JSON.stringify(ents[n]));
-                    var pathId = ent['entityAlias'];
+                    var mainEnt = JSON.parse(JSON.stringify(ents[n]));
+                    var pathId = mainEnt['entityAlias'];
                     this._mainEntityAlias = pathId;
-                    var entity = _findJSON(pathId);
-                    delete this._originalBuffer[pathId];    //todo 此处需要考虑移除没有对应mainRowId的子实体数据
+                    delete this._originalBuffer[pathId];
                     delete this._primaryBuffer[pathId];
                     delete this._filterBuffer[pathId];
                     delete this._deleteBuffer[pathId];
-                    this._originalBuffer[pathId] = entity;
-                    this._primaryBuffer[pathId] = JSON.parse(JSON.stringify(entity['rows'])); //值copy
+                    this._originalBuffer[pathId] = mainEnt;
+                    this._primaryBuffer[pathId] = JSON.parse(JSON.stringify(mainEnt['rows']));
 
                     aliasArr.push(pathId);
-                    for(var t=0;t<ent['rows'].length;t++){
-                        if(ent['rows'][t]['childData']!=null){
-                            _setChildEnt(ent['rows'][t]);
+                    for(var t=0;t<mainEnt['rows'].length;t++){
+                        if(mainEnt['rows'][t]['childData']!=null){
+                            var mainRow = mainEnt['rows'][t];
+                            for(var k in mainRow['childData']){
+                                var childEnt = mainRow['childData'][k];
+                                _setChildEnt(childEnt, mainRow['rowId']);
+                            }
                         }
                     }
                 }else if(queryType=='main'){
-                    //todo 需要首先执行清空所有缓冲区的函数
+                    _clearBuffer();//需要首先执行清空所有缓冲区的函数
 
-                    var ent = JSON.parse(JSON.stringify(ents[n]));
-                    var pathId = ent['entityAlias'];
+                    var mainEnt = JSON.parse(JSON.stringify(ents[n]));
+                    var pathId = mainEnt['entityAlias'];
                     this._mainEntityAlias = pathId;
-                    var entity = _findJSON(pathId);
-                    delete this._originalBuffer[pathId];    //todo 此处需要考虑移除没有对应mainRowId的子实体数据
+                    delete this._originalBuffer[pathId];
                     delete this._primaryBuffer[pathId];
                     delete this._filterBuffer[pathId];
                     delete this._deleteBuffer[pathId];
-                    this._originalBuffer[pathId] = entity;
-                    this._primaryBuffer[pathId] = JSON.parse(JSON.stringify(entity['rows'])); //值copy
+                    this._originalBuffer[pathId] = mainEnt;
+                    this._primaryBuffer[pathId] = JSON.parse(JSON.stringify(mainEnt['rows'])); //值copy
 
                     aliasArr.push(pathId);
-                }else if(queryType=='child'){ //todo
-                    //todo 需要首先执行清空所有对应子缓冲区的函数
+                }else if(queryType=='child'){
+                    var childEnt = ents[n];
 
+                    var originalBufferRows = this._originalBuffer[this._mainEntityAlias]['rows'];
+                    for(var y=0;y<originalBufferRows.length;y++){
+                        var row = originalBufferRows[y];
+                        if(row['rowId']==entityParameter['mainRowId']){
+                            if(row['childData']==null){
+                                row['childData'] = {};
+                            }
+                            row['childData'][entityParameter['childEntityAlias']] = childEnt;
+                            break;
+                        }
+                    }
+                    var primaryBufferRows = this._primaryBuffer[this._mainEntityAlias];
+                    for(var y=0;y<primaryBufferRows.length;y++){
+                        var row = primaryBufferRows[y];
+                        if(row['rowId']==entityParameter['mainRowId']){
+                            if(row['childData']==null){
+                                row['childData'] = {};
+                            }
+                            row['childData'][entityParameter['childEntityAlias']] = JSON.parse(JSON.stringify(childEnt));
+                            break;
+                        }
+                    }
+                    _setChildEnt(childEnt, entityParameter['mainRowId']);
                 }
-                i++;
-
             }
 
             this.sendMessage('wof.bizWidget.DataObject_query',aliasArr);
@@ -583,7 +564,6 @@ wof.bizWidget.DataObject.prototype = {
         }else{
             console.log('本地策略暂时不支持');
         }
-        this._calcDataTotal();
     },
 
     /**
@@ -776,7 +756,7 @@ wof.bizWidget.DataObject.prototype = {
     },
 
     /**
-     * todo 获得本地指定实体数据
+     * 获得本地指定实体数据
      *
      * entityParameter 实体参数
      * 形如 {'childEntityAlias':'hjxxchild', 'mainRowId':'uuid1'}
@@ -784,7 +764,7 @@ wof.bizWidget.DataObject.prototype = {
     getLocalData: function(entityParameter){
         var id = this._getBufferId(entityParameter);
         var primaryBuffer = this._primaryBuffer[id];
-
+        return primaryBuffer;
     },
 
     /**
@@ -815,25 +795,6 @@ wof.bizWidget.DataObject.prototype = {
          */
 
 
-    },
-
-    /**
-     * 回收内存
-     *
-     * todo 此内存清理方法会移除原始缓冲区(包括主缓冲区、删除缓冲区)中没有被主缓冲区和过滤缓冲区以及过滤删除缓冲区引用的对应实体的数据
-     */
-    _gc: function(){
-
-    },
-
-    /**
-     * 计算原始缓冲区的数据数量
-     *
-     * 此方法会在 _query、_new方法中被调用
-     */
-    _calcDataTotal: function(){
-
-        this._dataTotal = 2000;
     },
 
     /**
