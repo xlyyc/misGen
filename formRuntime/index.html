@@ -38,14 +38,6 @@
 <script src="src/wof/util/GlobalObject.js"></script>
 <script src="src/wof/util/Tool.js"></script>
 
-<script src="src/wof/widget/Mediator.js"></script>
-
-<script src="src/wof/customWindow/MetaTreeSelector.js"></script>
-<script src="src/wof/customWindow/ComponentTreeSelector.js"></script>
-<script src="src/wof/customWindow/ParamMapsWindow.js"></script>
-<script src="src/wof/customWindow/PageParamWindow.js"></script>
-<script src="src/wof/customWindow/PageFormSelector.js"></script>
-
 <script src="src/wof/widget/Tab.js"></script>
 <script src="src/wof/widget/TabItem.js"></script>
 <script src="src/wof/widget/Toolbar.js"></script>
@@ -58,8 +50,6 @@
 <script src="src/wof/widget/RadioGroup.js"></script>
 <script src="src/wof/widget/ComboBox.js"></script>
 <script src="src/wof/widget/Tree.js"></script>
-<script src="src/wof/widget/spanner/ButtonSpanner.js"></script>
-<script src="src/wof/widget/spanner/TabSpanner.js"></script>
 
 <script src="src/wof/bizWidget/FlowLayout.js"></script>
 <script src="src/wof/bizWidget/FlowLayoutSection.js"></script>
@@ -85,17 +75,7 @@
 <script src="src/wof/bizWidget/ComponentsTree.js"></script>
 <script src="src/wof/bizWidget/ParamWindow.js"></script>
 <script src="src/wof/bizWidget/PageParamWindow.js"></script>
-
 <script src="src/wof/bizWidget/DataObject.js"></script>
-
-<script src="src/wof/bizWidget/spanner/GridLayoutSpanner.js"></script>
-<script src="src/wof/bizWidget/spanner/PageComponentSpanner.js"></script>
-<script src="src/wof/bizWidget/spanner/FlowLayoutSpanner.js"></script>
-<script src="src/wof/bizWidget/spanner/VoucherComponentSpanner.js"></script>
-<script src="src/wof/bizWidget/spanner/SearchComponentSpanner.js"></script>
-<script src="src/wof/bizWidget/spanner/VoucherGridComponentSpanner.js"></script>
-<script src="src/wof/bizWidget/spanner/GridComponentSpanner.js"></script>
-<script src="src/wof/bizWidget/ObjectInspector.js"></script>
 
 <script src="src/wof/functionWidget/CommitComponent.js"></script>
 <script src="src/wof/functionWidget/ViewRecordComponent.js"></script>
@@ -103,25 +83,11 @@
 <script src="src/wof/functionWidget/DeleteRecordComponent.js"></script>
 <script src="src/wof/functionWidget/AddRecordComponent.js"></script>
 
-<script src="src/wof/functionWidget/spanner/CommitComponentSpanner.js"></script>
-<script src="src/wof/functionWidget/spanner/ViewRecordComponentSpanner.js"></script>
-<script src="src/wof/functionWidget/spanner/UpdateRecordComponentSpanner.js"></script>
-<script src="src/wof/functionWidget/spanner/DeleteRecordComponentSpanner.js"></script>
-<script src="src/wof/functionWidget/spanner/AddRecordComponentSpanner.js"></script>
-
 <script src="src/wof/kernel/initAOP.js"></script>
 <script>
 
 jQuery(function(){
-	var headerHeight = 35;
-	var sidebar1Width = 150;
-	var sidebar2Width = 237;
 	var container = jQuery('#container');
-	var header = jQuery('#header');
-	var sidebar1 = jQuery('#sidebar1');
-	var sidebar2 = jQuery('#sidebar2');
-	var content = jQuery('#content');
-	//设置布局
 	function layout(){
 		var windowWidth = jQuery(window).width();
 		var windowHeight = jQuery(window).height();
@@ -129,335 +95,36 @@ jQuery(function(){
 		container.css('height', windowHeight+'px');
 		container.css('left', '0px');
 		container.css('top', '0px');
-		header.css('width', windowWidth+'px');
-		header.css('height', headerHeight+'px');
-		header.css('left', '0px');
-		header.css('top', '0px');
-		sidebar1.css('width', sidebar1Width+'px');
-		sidebar1.css('height', (windowHeight-headerHeight-5)+'px');
-		sidebar1.css('left', '0px');
-		sidebar1.css('top', headerHeight+'px');		
-		content.css('width', (windowWidth-sidebar1Width-sidebar2Width)+'px');
-		content.css('height', (windowHeight-headerHeight-5)+'px');
-		content.css('left', sidebar1Width+'px');
-		content.css('top', headerHeight+'px');
-		sidebar2.css('width', sidebar2Width+'px');
-		sidebar2.css('height', (windowHeight-headerHeight-5)+'px');
-		sidebar2.css('left', (windowWidth-sidebar2Width)+'px');
-		sidebar2.css('top', headerHeight+'px');
 	}
-	//重设左侧边栏
-	function resizeSidebar1(){
-		try{
-			var windowWidth = jQuery(window).width();
-			var windowHeight = jQuery(window).height();
-			var gridLayout = wof.util.ObjectManager.get(sidebar1.children('div[oid]').first().attr('oid'));
-            gridLayout.setHeight(windowHeight-headerHeight-5);
-            gridLayout.render();
-		}catch(e){}
-	}
-	//初始化左侧边栏
-	function initSidebar1(){
-		var windowWidth = jQuery(window).width();
-		var windowHeight = jQuery(window).height();
-        with(wof.widget)
-            with(wof.bizWidget)
-                with(wof.functionWidget)
-                    with(wof.bizWidget.spanner)
-                        with(wof.widget.spanner)
-                            with(wof.functionWidget.spanner)
-                            with(wof.kernel){
-                            var gridLayout = new GridLayout();
-                            gridLayout.setOnSendMessage([{id:'wof.bizWidget.GridLayout_active',method:'return false;'}]);
-                            gridLayout.setOverflow('y');
-                            gridLayout.setWidth(sidebar1Width);
-                            gridLayout.setHeight(windowHeight-headerHeight-5);
-                            gridLayout.setTop(0);
-                            gridLayout.setLeft(0);
-                            gridLayout.setCss('ui-widget-content');
-                            gridLayout.setOverflow('y');
-                            sidebar1.append(gridLayout.getDomInstance());
-                            wof.util.ObjectManager.add(gridLayout.getId(), gridLayout);
-
-                            var components = [];
-                            var layoutComponents = [];
-                            var bizWidgetComponents = [];
-                            var widgetComponents = [];
-
-                            var flowLayoutSpanner = new FlowLayoutSpanner();
-                            flowLayoutSpanner.appendTo(gridLayout);
-                            layoutComponents.push(flowLayoutSpanner);
-                            components.push(flowLayoutSpanner);
-
-                            var gridLayoutSpanner = new GridLayoutSpanner();
-                            gridLayoutSpanner.appendTo(gridLayout);
-                            layoutComponents.push(gridLayoutSpanner);
-                            components.push(gridLayoutSpanner);
-
-                            var voucherComponentSpanner = new VoucherComponentSpanner();
-                            voucherComponentSpanner.appendTo(gridLayout);
-                            bizWidgetComponents.push(voucherComponentSpanner);
-                            components.push(voucherComponentSpanner);
-
-                            var searchComponentSpanner = new SearchComponentSpanner();
-                            searchComponentSpanner.appendTo(gridLayout);
-                            bizWidgetComponents.push(searchComponentSpanner);
-                            components.push(searchComponentSpanner);
-
-                            var gridComponentSpanner = new GridComponentSpanner();
-                            gridComponentSpanner.appendTo(gridLayout);
-                            bizWidgetComponents.push(gridComponentSpanner);
-                            components.push(gridComponentSpanner);
-
-                            var voucherGridComponentSpanner = new VoucherGridComponentSpanner();
-                            voucherGridComponentSpanner.appendTo(gridLayout);
-                            bizWidgetComponents.push(voucherGridComponentSpanner);
-                            components.push(voucherGridComponentSpanner);
-
-                            var pageComponentSpanner = new PageComponentSpanner();
-                            pageComponentSpanner.appendTo(gridLayout);
-                            bizWidgetComponents.push(pageComponentSpanner);
-                            components.push(pageComponentSpanner);
-
-                        /*    var buttonSpanner = new ButtonSpanner();
-                            buttonSpanner.appendTo(gridLayout);
-                            widgetComponents.push(buttonSpanner);
-                            components.push(buttonSpanner);
-
-                            var tabSpanner = new TabSpanner();
-                            tabSpanner.appendTo(gridLayout);
-                            widgetComponents.push(tabSpanner);
-                            components.push(tabSpanner);*/
-
-                            var commitComponentSpanner = new CommitComponentSpanner();
-                            commitComponentSpanner.appendTo(gridLayout);
-                            widgetComponents.push(commitComponentSpanner);
-                            components.push(commitComponentSpanner);
-
-                            var viewRecordComponentSpanner = new ViewRecordComponentSpanner();
-                            viewRecordComponentSpanner.appendTo(gridLayout);
-                            widgetComponents.push(viewRecordComponentSpanner);
-                            components.push(viewRecordComponentSpanner);
-
-                            var updateRecordComponentSpanner = new UpdateRecordComponentSpanner();
-                            updateRecordComponentSpanner.appendTo(gridLayout);
-                            widgetComponents.push(updateRecordComponentSpanner);
-                            components.push(updateRecordComponentSpanner);
-
-                            var addRecordComponentSpanner = new AddRecordComponentSpanner();
-                            addRecordComponentSpanner.appendTo(gridLayout);
-                            widgetComponents.push(addRecordComponentSpanner);
-                            components.push(addRecordComponentSpanner);
-
-
-                            var deleteRecordComponentSpanner = new DeleteRecordComponentSpanner();
-                            deleteRecordComponentSpanner.appendTo(gridLayout);
-                            widgetComponents.push(deleteRecordComponentSpanner);
-                            components.push(deleteRecordComponentSpanner);
-
-
-                            for(var i=0;i<components.length;i++){
-                                var name = components[i].getMeta().name;
-                                for(var t=0;t<components.length;t++){
-                                    var n = components[t].getMeta().name;
-                                    if(name!=n){
-                                        var onReceiveMessage = components[t].getOnReceiveMessage();
-                                        onReceiveMessage.push({id: name+'_active',method:'this._receivePropertysAndRenderSelf(null);'});
-                                        components[t].setOnReceiveMessage(onReceiveMessage);
-                                    }
-                                }
-                            }
-
-                            var compositeComponentsData = [];
-                            try{
-                                compositeComponentsData = JSON.parse(pageComponentTemplateList());
-                            }catch(e){
-                            }
-                            var objectBar = new ObjectBar();
-                            objectBar.setCompositeComponents(compositeComponentsData);
-                            objectBar.setLayoutComponents(layoutComponents);
-                            objectBar.setBizWidgetComponents(bizWidgetComponents);
-                            objectBar.setWidgetComponents(widgetComponents);
-                            objectBar.setWidth(sidebar1Width-18);
-                            objectBar.setTop(0);
-                            objectBar.setLeft(0);
-                            objectBar.appendTo(gridLayout);
-
-                            gridLayout.render();
-		}
-	}
-	
-	//初始化右侧边栏
-	function initSidebar2(){
-		var windowWidth = jQuery(window).width();
-		var windowHeight = jQuery(window).height();
-		with(wof.widget)
-            with(wof.bizWidget){
-
-                var messageIds = [
-                    'wof.bizWidget.spanner.FlowLayoutSpanner_render',
-                    'wof.widget.spanner.ButtonSpanner_render',
-                    'wof.bizWidget.spanner.GridLayoutSpanner_render',
-                    'wof.bizWidget.spanner.VoucherComponentSpanner_render',
-                    'wof.bizWidget.spanner.SearchComponentSpanner_render',
-                    'wof.bizWidget.spanner.VoucherGridComponentSpanner_render',
-                    'wof.bizWidget.spanner.GridComponentSpanner_render',
-                    'wof.bizWidget.spanner.PageComponentSpanner_render',
-                    'wof.functionWidget.spanner.CommitComponentSpanner_render',
-                    'wof.functionWidget.spanner.ViewRecordComponentSpanner_render',
-                    'wof.functionWidget.spanner.UpdateRecordComponentSpanner_render',
-                    'wof.functionWidget.spanner.DeleteRecordComponentSpanner_render',
-                    'wof.functionWidget.spanner.AddRecordComponentSpanner_render'
-                ];
-
-                var tab = new Tab();
-                tab.setOnSendMessage([{id:'wof.widget.Tab_active',method:'return false;'}]);
-                tab.setWidth(sidebar2Width-7);
-                tab.setHeight(windowHeight-headerHeight-12);
-                tab.setTop(0);
-                tab.setLeft(0);
-                tab.setActiveIndex(1);
-                sidebar2.append(tab.getDomInstance());
-                wof.util.ObjectManager.add(tab.getId(), tab);
-
-                tab.insertItem({title:'属性'});
-                var propertyBar = new PropertyBar();
-                propertyBar.setWidth(sidebar2Width-24);
-                propertyBar.setHeight(windowHeight-headerHeight-56);
-                var method = 'if(!jQuery.isEmptyObject(message.sender.parameters)){this.setParameters(message.sender.parameters);this.setMeta(message.sender.meta);this.render();}';
-                var onReceiveMessage = [];
-                for(var i=0;i<messageIds.length;i++){
-                    onReceiveMessage.push({id:messageIds[i],method:method});
-                }
-                propertyBar.setOnReceiveMessage(onReceiveMessage);
-                propertyBar.setTop(0);
-                propertyBar.setLeft(4);
-                tab.insertNode(propertyBar,1);
-
-                tab.insertItem({title:'发送'});
-                var onSendMessageBar = new OnSendMessageBar();
-                onSendMessageBar.setWidth(sidebar2Width-24);
-                onSendMessageBar.setHeight(windowHeight-headerHeight-56);
-                var meth = 'if(!jQuery.isEmptyObject(message.sender.parameters)){this.setParameters(message.sender.parameters);this.setSendMessages(message.sender.meta.sendMessages);this.render();}';
-                var receives = [];
-                for(var i=0;i<messageIds.length;i++){
-                    receives.push({id:messageIds[i],method:meth});
-                }
-                onSendMessageBar.setOnReceiveMessage(receives);
-                onSendMessageBar.setTop(0);
-                onSendMessageBar.setLeft(4);
-                tab.insertNode(onSendMessageBar,2);
-
-                tab.insertItem({title:'监听'});
-                var onReceiveMessageBar = new OnReceiveMessageBar();
-                onReceiveMessageBar.setWidth(sidebar2Width-24);
-                onReceiveMessageBar.setHeight(windowHeight-headerHeight-56);
-                var met = 'if(!jQuery.isEmptyObject(message.sender.parameters)){this.setParameters(message.sender.parameters);this.render();}';
-                var receiv = [];
-                for(var i=0;i<messageIds.length;i++){
-                    receiv.push({id:messageIds[i],method:met});
-                }
-                onReceiveMessageBar.setOnReceiveMessage(receiv);
-                onReceiveMessageBar.setTop(0);
-                onReceiveMessageBar.setLeft(4);
-                tab.insertNode(onReceiveMessageBar,3);
-
-                tab.render();
-		}
-	}
-	//重设右侧边栏
-	function resizeSidebar2(){
-		try{
-			var windowWidth = jQuery(window).width();
-			var windowHeight = jQuery(window).height();
-			var tab = wof.util.ObjectManager.get(sidebar2.children('div[oid]').first().attr('oid'));
-            tab.setHeight(windowHeight-headerHeight-12);
-            tab.render();
-		}catch(e){}
-	}
-	//初始化工作区
 	function initContent(){
 		var windowWidth = jQuery(window).width();
 		var windowHeight = jQuery(window).height();
         with(wof.widget)
             with(wof.bizWidget)
-                with(wof.bizWidget.spanner)
-                    with(wof.widget.spanner)
-                        with(wof.functionWidget.spanner)
-                        with(wof.kernel){
+                with(wof.kernel)
+                    with(wof.util){
+                        var windowWidth = jQuery(window).width();
+                        var flowLayout = new FlowLayout();
+                        flowLayout.setLeft(0);
+                        flowLayout.setTop(0);
+                        flowLayout.setWidth(windowWidth-10);
+                        flowLayout.setCols(4);
+                        flowLayout.setItemHeight(60);
 
+                        var sectionData1 = {title:'默认分组1',titleHeight:30,cols:3,itemHeight:300};
+                        flowLayout.insertSection(sectionData1);
 
+                        container.append(flowLayout.getDomInstance());
+                        ObjectManager.add(flowLayout.getId(), flowLayout);
 
-                           /* var gridLayout = new GridLayout();
-                            gridLayout.setOverflow('auto');
-                            gridLayout.setWidth(windowWidth-sidebar1Width-sidebar2Width);
-                            gridLayout.setHeight(windowHeight-headerHeight-5);
-                            gridLayout.setTop(0);
-                            gridLayout.setLeft(0);
-                            content.append(gridLayout.getDomInstance());
-                            wof.util.ObjectManager.add(gridLayout.getId(), gridLayout);*/
-
-                            /*var pageComponent = new PageComponent();
-                            pageComponent.setOverflow('auto');
-                            pageComponent.setWidth(windowWidth-sidebar1Width-sidebar2Width);
-                            pageComponent.setHeight(windowHeight-headerHeight-5);
-                            pageComponent.setTop(0);
-                            pageComponent.setLeft(0);
-                            content.append(pageComponent.getDomInstance());
-                            wof.util.ObjectManager.add(pageComponent.getId(), pageComponent);*/
-
-                            var pageMetas = {};
-                            try{
-                                pageMetas = JSON.parse(getPageMetas());
-
-                            }catch(e){
-                                //alert(e);
-                            }
-
-                            if(!jQuery.isEmptyObject(pageMetas)){
-                                pageInputParam = pageMetas.inputParam;
-                                var node = eval('(new '+pageMetas.layout.className+'())');
-                                node.setData(pageMetas.layout);
-                                content.append(node.getDomInstance());
-                                wof.util.ObjectManager.add(node.getId(), node);
-
-                                node.render();
-                            }else{
-                                var itemHeight = 70;
-                                var width = 811;
-
-                                var flowLayout = new FlowLayout();
-                                flowLayout.setLeft(0);
-                                flowLayout.setTop(0);
-                                flowLayout.setWidth(width);
-                                flowLayout.setCols(4);
-                                flowLayout.setItemHeight(60);
-                                var method = 'var layout = this.clone();'
-                                 + '\n layout.setTop(300);'
-                                 + '\n layout.appendTo(this.parentNode());'
-                                 + '\n layout.render();'
-                                 +'\n return false;';
-                                // flowLayout.setOnReceiveMessage([{id:'wof.widget.Button_mousedown',priority:50,method:method}]);
-                                 flowLayout.setOnSendMessage([{id:'wof.bizWidget.FlowLayout_render',method:'console.log(this.getCols());'}]);
-
-                                var sectionData1 = {title:'默认分组1',width:width,titleHeight:30,cols:1,itemHeight:300};
-                                flowLayout.insertSection(sectionData1);
-
-                                content.append(flowLayout.getDomInstance());
-                                wof.util.ObjectManager.add(flowLayout.getId(), flowLayout);
-
-
-                                try{
-                                    var dataObject = new DataObject();
-                                    dataObject.appendTo(flowLayout);
-                                }catch(e){
-                                    alert(e);
-                                }
-
-
-                                flowLayout.render();
-                            }
+                        try{
+                            var dataObject = new DataObject();
+                            dataObject.appendTo(flowLayout);
+                        }catch(e){
+                            alert(e);
                         }
+                        flowLayout.render();
+                }
     }
 	//重设工作区
 	function resizeContent(){
@@ -465,149 +132,27 @@ jQuery(function(){
 			var windowWidth = jQuery(window).width();
 			var windowHeight = jQuery(window).height();
 			var layout = getContentLayout();
-            layout.setWidth(windowWidth-sidebar1Width-sidebar2Width);
-            layout.setHeight(windowHeight-headerHeight-5);
+            layout.setWidth(windowWidth-10);
             layout.render();
-		}catch(e){}
+		}catch(e){
+            alert(e);
+        }
 	}
 	jQuery(window).load(function(){
 		layout();
-		initSidebar2();
         initContent();
-        initSidebar1();
 	});
 	jQuery(window).resize(function(){
 		layout();
-		resizeSidebar1();
-		resizeSidebar2();
         resizeContent();
 	});
-	jQuery("#pageParamBtn,#saveBtn,#saveToCompositeComponentBtn").button().click(function(event){
-		event.preventDefault();
-		var id = jQuery(event.target).attr('id');
-        if(id=='pageParamBtn'){
-            wof.customWindow.PageParamWindow.run();
-        }else if(id=='saveBtn'){
-
-           /* var xmldoc = wof.util.Tool.stringToXml('<node id="node1">测试XML数据</node>');
-            alert(wof.util.Tool.xmlToString(xmldoc));*/
-
-
-            var json = {};
-			var layout = getContentLayout();
-
-            //将叶子节点数据拉平导出
-            var _leafsData = [];
-            function _getLeafData(node){
-                var clz = node.getClassName();
-                var shortName = clz.substring(clz.lastIndexOf('.')+1);
-                var package =  clz.substring(0,clz.lastIndexOf(shortName)-1);
-                var spann = eval(package+'.spanner.'+shortName+'Spanner');
-                if(spann!=null){
-				 
-						if(spann.prototype.exportData!=null){
-							_leafsData.push(spann.prototype.exportData(node));
-						}
-				
-                  
-                }
-                var childNodes = node.childNodes();
-                if(childNodes.length>0){
-                    for(var i=0; i<childNodes.length; i++){
-                        _getLeafData(childNodes[i]);
-                    }
-                }
-            }
-				
-				    _getLeafData(layout);
-
-            var _inputParam = [];
-            function _getInputParam(){
-                for(var name in pageInputParam){
-                    _inputParam.push(pageInputParam[name]);
-                }
-            }
-		
-            _getInputParam();
-
-            json.inputParam = _inputParam;
-            json.components = _leafsData;
-            json.layout = layout.getData();
-
-            try{
-                setPageMetas(JSON.stringify(json));
-            }catch(e){
-                //alert(e);
-            }
-		}else if(id=='saveToCompositeComponentBtn'){
-            jQuery('#dialog-form').dialog({
-                autoOpen: false,
-                height:200,
-                width: 300,
-                modal: true,
-                buttons:{
-                    '保存':function(){
-                        var name = jQuery('#dialog_form_name').val();
-                        if(name!=null&&name.length>0){
-                            var templateData = null;
-                            var obj = wof.util.ObjectManager.get(wof.util.GlobalObject.get('cutObjectId'));
-                            if(obj!=null){
-                                if(window.confirm('是否只保存剪切板中的内容？')){
-                                    templateData = obj.getData();
-                                }else{
-                                    templateData = getContentLayout().getData();
-                                }
-                            }else{
-                                templateData = getContentLayout().getData();
-                            }
-
-                            try{
-                                savePageComponentTemplate(wof.util.Tool.uuid(), name, JSON.stringify({'templateData':templateData}));
-                            }catch(e){
-                                //alert(e);
-                            }
-
-                        }
-                        jQuery(this).dialog('close');
-                    },
-                    '关闭':function(){
-                        jQuery(this).dialog('close');
-                    }
-                }
-            });
-            jQuery('#dialog-form').dialog('open');
-        }
-	});
 });
-
 window.getContentLayout = function(){
-    return wof.util.ObjectManager.get(jQuery('#content').children('div[oid]').first().attr('oid'));
+    return wof.util.ObjectManager.get(jQuery('#container').children('div[oid]').first().attr('oid'));
 }
-var pageInputParam = {};
-
 </script>
 </head>
 <body>
-<div id="container" style="position:absolute;">
-	<div id="header" style="position:absolute;background-color:#fff;border-bottom:1px solid black;z-index:90000">
-        <input type="button" id="pageParamBtn" value="页面参数" />
-        <input type="button" id="saveBtn" value="保存" />
-        <input type="button" id="saveToCompositeComponentBtn" value="保存为模板" />
-    </div>
-	<div id="sidebar1" style="position:absolute;z-index:90000;">
-    	
-    </div>
-    <div id="content" style="position:absolute;z-index: auto;">
-    	
-    </div>
-    <div id="sidebar2" style="position:absolute;z-index:90000;">
-    	
-    </div>
-</div>
-
-<div id="dialog-form" title="保存为模板">
-    <p class="validateTips">名称</p>
-    <p><input type="text" id="dialog_form_name" class="text" /></p>
-</div>
+<div id="container" style="position:absolute;"></div>
 </body>
 </html>
