@@ -225,10 +225,10 @@ var wof$_aop = (function(){
                         node.after(this);
                     };
                     obj[o].prototype.appendTo = function(parentNode){
-                        if(parentNode!=null){
+                        if(parentNode!=null&&parentNode.getClassName!=null){
                             parentNode.appendChild(this);
                         }else{
-                            jQuery('body').append(this.getDomInstance());
+                            jQuery(parentNode).append(this.getDomInstance());
                             wof.util.ObjectManager.add(this.getId(), this);
                         }
                     };
