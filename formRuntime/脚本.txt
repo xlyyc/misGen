@@ -1,0 +1,12 @@
+
+
+this.deleteSection(2);
+
+
+this.updateSection({index:2,cols:5,itemHeight:100});
+this.render();
+
+
+var sectionData = {title:'未命名',titleHeight:30,cols:2,itemHeight:80};
+this.insertSection(sectionData);
+this.render();
