@@ -55,26 +55,15 @@
 <script src="src/wof/bizWidget/FlowLayoutSection.js"></script>
 <script src="src/wof/bizWidget/FlowLayoutItem.js"></script>
 <script src="src/wof/bizWidget/GridLayout.js"></script>
-<script src="src/wof/bizWidget/PageComponent.js"></script>
-<script src="src/wof/bizWidget/PropertyBar.js"></script>
-<script src="src/wof/bizWidget/ObjectBar.js"></script>
-<script src="src/wof/bizWidget/OnSendMessageBar.js"></script>
-<script src="src/wof/bizWidget/OnReceiveMessageBar.js"></script>
 <script src="src/wof/bizWidget/VoucherComponent.js"></script>
 <script src="src/wof/bizWidget/VoucherItemGroup.js"></script>
 <script src="src/wof/bizWidget/VoucherItem.js"></script>
 <script src="src/wof/bizWidget/VoucherGridComponent.js"></script>
 <script src="src/wof/bizWidget/VoucherGridComponentColumn.js"></script>
-<script src="src/wof/bizWidget/GridComponent.js"></script>
 <script src="src/wof/bizWidget/GridComponentColumn.js"></script>
 <script src="src/wof/bizWidget/VoucherGridComponent.js"></script>
 <script src="src/wof/bizWidget/SearchComponent.js"></script>
 <script src="src/wof/bizWidget/SearchItem.js"></script>
-<script src="src/wof/bizWidget/BizEntityTree.js"></script>
-<script src="src/wof/bizWidget/PageFormTree.js"></script>
-<script src="src/wof/bizWidget/ComponentsTree.js"></script>
-<script src="src/wof/bizWidget/ParamWindow.js"></script>
-<script src="src/wof/bizWidget/PageParamWindow.js"></script>
 <script src="src/wof/bizWidget/DataObject.js"></script>
 
 <script src="src/wof/functionWidget/CommitComponent.js"></script>
@@ -111,17 +100,34 @@ jQuery(function(){
                         flowLayout.setCols(4);
                         flowLayout.setItemHeight(60);
 
-                        var sectionData1 = {title:'默认分组',titleHeight:30,cols:3,itemHeight:250};
-                        flowLayout.insertSection(sectionData1);
+                        flowLayout.insertSection({title:'默认分组1',titleHeight:30,cols:3});
+
+                        flowLayout.insertSection({title:'默认分组2',titleHeight:30,cols:3,itemHeight:200});
 
                         flowLayout.appendTo(container);
 
+                        flowLayout.render();
+
+                        var flowLayout2 = new FlowLayout();
+                        flowLayout2.setLeft(0);
+                        flowLayout2.setTop(0);
+                        flowLayout2.setWidth(400);
+                        flowLayout2.setCols(2);
+                        flowLayout2.setItemHeight(60);
+                        var sectionData = {title:'嵌套流式布局的第一个分组',titleHeight:30,cols:2,itemHeight:80};
+                        flowLayout2.insertSection(sectionData);
+
+                        flowLayout.insertNode(flowLayout2,{row:1,col:2},1);
+
+
                         try{
-                            var dataObject = new DataObject();
-                            dataObject.appendTo(flowLayout);
+                           // var dataObject = new DataObject();
+                            //dataObject.appendTo(flowLayout);
                         }catch(e){
                             alert(e);
                         }
+
+
                         flowLayout.render();
                 }
     }

@@ -9,7 +9,6 @@ wof.bizWidget.FlowLayoutSection = function () {
 
     this.setIsInside(true);
 
-    //todo overflow定义
     this.getDomInstance().css('overflow','hidden');
 
     this._backgroundImg = jQuery('<img src="src/img/backgroud.gif" style="position:absolute;cursor:pointer;opacity:0;filter:alpha(opacity=0);width:100%;height:100%;">');
@@ -182,47 +181,6 @@ wof.bizWidget.FlowLayoutSection.prototype = {
                 }
                 _this.sendMessage('wof.bizWidget.FlowLayoutSection_dblclick');
             });
-            this.getDomInstance().droppable({
-                snap:true,
-                accept:function(draggable){
-                    var b=false;
-                    var draggableObj = wof.util.ObjectManager.get(draggable.attr('oid'));
-                    if(draggableObj!=null){
-                        if(draggableObj.getClassName()=='wof.bizWidget.FlowLayoutSection'){
-                            var layout = draggableObj.parentNode();
-                            var thisLayout = _this.parentNode();
-                            if(thisLayout.getId()==layout.getId()){
-                                b=true;
-                            }
-                        }
-                    }
-                    return b;
-                },
-                hoverClass: 'ui-state-hover',
-                drop:function(event,ui){
-                    event.stopPropagation();
-                    _this.sendMessage('wof.bizWidget.FlowLayoutSection_drop', {'sectionId':ui.draggable.attr('oid')});
-                }
-            });
-            this.getDomInstance().draggable({
-                cursor:"move",
-                opacity: 0.7,
-                cursorAt:{
-                    top:0,
-                    left:0
-                },
-                scroll: false,
-                containment: 'div[oid="'+this.parentNode().getId()+'"]',  //限定拖放只能在当前FlowLayout内
-                start:function(event,ui){
-                    event.stopPropagation();
-                    clearTimeout(timeFn);
-                    _this.getDomInstance().css('zIndex',60000);
-                },
-                stop:function(event,ui){
-                    event.stopPropagation();
-                    _this.getDomInstance().css('zIndex','auto');
-                }
-            });
             //如果是clone过来的 会直接创建一个label对象 需要先移除
             var nodes = this.childNodes();
             for(var i=0;i<nodes.length;i++){
@@ -328,7 +286,7 @@ wof.bizWidget.FlowLayoutSection.prototype = {
         this._label.render();
         var items = this._getItems();
         for(var i=0;i<items.length;i++){
-            items[i].getDomInstance().css('border','1px solid #bcbcbc').css('backgroundColor','#fff');
+            items[i].getDomInstance().css('backgroundColor','#fff');
         }
     },
 
