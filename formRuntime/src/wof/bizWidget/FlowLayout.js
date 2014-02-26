@@ -371,8 +371,6 @@ wof.bizWidget.FlowLayout.prototype = {
             if(flowLayoutData.onReceiveMessage!=null){
                 this.setOnReceiveMessage(flowLayoutData.onReceiveMessage);
             }
-            /*this.setActiveSectionIndex(null);
-            this.setActiveItemRank(null);*/
         }
     },
 
@@ -419,9 +417,6 @@ wof.bizWidget.FlowLayout.prototype = {
                 if(sectionData.isAutoExt!=null){
                     section.setIsAutoExt((sectionData.isAutoExt=='true'||sectionData.isAutoExt==true)?true:false);
                 }
-
-                /*this.setActiveSectionIndex(Number(sectionData.index));
-                this.setActiveItemRank(null);*/
             }
         }
     },
@@ -450,8 +445,6 @@ wof.bizWidget.FlowLayout.prototype = {
                         item.setRowspan(Number(itemData.rowspan));
                     }
                 }
-                /*this.setActiveSectionIndex(Number(itemData.sectionIndex));
-                this.setActiveItemRank({row:Number(itemData.row),col:Number(itemData.col)});*/
             }
         }
     },

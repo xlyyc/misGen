@@ -185,7 +185,7 @@ wof.bizWidget.DataObject.prototype = {
 
     //选择实现
     afterRender: function () {
-        this.queryData('pageId', 'all', null, null, 0, 100);
+        /*this.queryData('pageId', 'main', null, null, 0, 100);
 
         this.queryData('pageId', 'child', {'childEntityAlias':'hjxxchild', 'mainRowId':'372873910208696320'}, null, 0, 100);
 
@@ -201,7 +201,7 @@ wof.bizWidget.DataObject.prototype = {
 
         this.undeleteData();
 
-        this.saveData();
+        this.saveData();*/
     },
 
     /**
@@ -477,6 +477,8 @@ wof.bizWidget.DataObject.prototype = {
              */
                 if(queryType=='child'){
                     this.setDataServicesUrl('child.json');
+                }else if(queryType=='main'){
+                    this.setDataServicesUrl('main.json');
                 }else{
                     this.setDataServicesUrl('data.json');
                 }
