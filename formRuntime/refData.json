@@ -1,0 +1,11 @@
+{
+    "fieldName1":{
+        "totalCount":"1",
+        "data":[{"name":"优秀团队","value":"1"}]
+    },
+    "fieldName2":{
+        "totalCount":"1",
+        "data":[{"name":"党员","value":"1"}]
+    }
+
+}
