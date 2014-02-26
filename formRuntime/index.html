@@ -114,21 +114,21 @@ jQuery(function(){
                         flowLayout2.setWidth(400);
                         flowLayout2.setCols(2);
                         flowLayout2.setItemHeight(60);
-                        var sectionData = {title:'嵌套流式布局的第一个分组',titleHeight:30,cols:2,itemHeight:110};
+                        var sectionData = {title:'嵌套流式布局的第一个分组',titleHeight:30,cols:2,itemHeight:80};
                         flowLayout2.insertSection(sectionData);
 
                         flowLayout.insertNode(flowLayout2,{row:1,col:2},1);
 
 
                         try{
-                           // var dataObject = new DataObject();
-                            //dataObject.appendTo(flowLayout);
+                            var dataObject = new DataObject();
+                            dataObject.appendTo(flowLayout);
                         }catch(e){
                             alert(e);
                         }
 
 
-                        flowLayout2.render();
+                        flowLayout.render();
                 }
     }
 	//重设工作区

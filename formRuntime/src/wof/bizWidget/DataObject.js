@@ -824,6 +824,24 @@ wof.bizWidget.DataObject.prototype = {
     },
 
     /**
+     * 获得参照数据
+     *
+     * pageId 页面id
+     */
+    getRefData: function(pageId){
+        var _this = this;
+        var rsp = jQuery.ajax(
+            {
+                //url:_this.getDataServicesUrl()+'/query',
+                url:'refData.json',
+                async:_this.getAsyncQuery()
+            }
+        );
+        var refData = JSON.parse(rsp.responseText);
+        return refData;
+    },
+
+    /**
      * 获得缓冲区id
      *
      * entityParameter 实体参数
