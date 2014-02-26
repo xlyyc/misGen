@@ -224,7 +224,7 @@ wof.widget.Tab.prototype = {
         if(itemIndex!=null){
             for(var i=1;i<=items.length;i++){
                 if(i==itemIndex){
-                    item = items[i-1];
+                    var item = items[i-1];
                     item.removeChildren(true);
                     item.remove(true);
                     break;
@@ -232,7 +232,7 @@ wof.widget.Tab.prototype = {
             }
         }else{
             for(var i=items.length-1;i>=0;i--){
-                item = items[i];
+                var item = items[i];
                 item.removeChildren(true);
                 item.remove(true);
             }

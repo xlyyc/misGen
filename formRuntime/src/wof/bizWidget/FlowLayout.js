@@ -576,6 +576,19 @@ wof.bizWidget.FlowLayout.prototype = {
         }
     },
 
+    //根据itemRank和sectionIndex找到对应item中的对象
+    getNode: function(itemRank, sectionIndex){
+        var node = null;
+        var section = this.findSectionByIndex(sectionIndex);
+        if(section!=null){
+            var item = section.findItemByRank(itemRank);
+            if(item!=null){
+                node = item.childNodes()[0];
+            }
+        }
+        return node;
+    },
+
     //进行布局
     _layout: function(){
         var height = 0;

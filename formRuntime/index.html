@@ -102,7 +102,7 @@ jQuery(function(){
 
                         flowLayout.insertSection({title:'默认分组1',titleHeight:30,cols:3});
 
-                        flowLayout.insertSection({title:'默认分组2',titleHeight:30,cols:3,itemHeight:200});
+                        flowLayout.insertSection({title:'默认分组2',titleHeight:30,cols:2,itemHeight:300});
 
                         flowLayout.appendTo(container);
 
@@ -114,21 +114,45 @@ jQuery(function(){
                         flowLayout2.setWidth(400);
                         flowLayout2.setCols(2);
                         flowLayout2.setItemHeight(60);
-                        var sectionData = {title:'嵌套流式',titleHeight:30,cols:2,itemHeight:80};
+                        var sectionData = {title:'嵌套流式',titleHeight:30,cols:2,itemHeight:200};
                         flowLayout2.insertSection(sectionData);
 
                         flowLayout.insertNode(flowLayout2,{row:1,col:2},1);
 
-
-                        try{
+                        /*try{
                             var dataObject = new DataObject();
                             dataObject.appendTo(flowLayout);
                         }catch(e){
                             alert(e);
-                        }
-
+                        }*/
 
                         flowLayout.render();
+
+                        /*var newFlowLayout = new FlowLayout();
+                        var flData = flowLayout.getData();
+                        console.log(JSON.stringify(flData));
+                        newFlowLayout.setData(flData);
+                        newFlowLayout.setTop(300);
+                        newFlowLayout.downSection(1);
+                        newFlowLayout.appendTo(container);
+                        newFlowLayout.render();*/
+
+
+                        var voucherComponent = new VoucherComponent();
+                        voucherComponent.setLeft(0);
+                        voucherComponent.setTop(0);
+                        voucherComponent.setWidth(500);
+                        voucherComponent.setItemHeight(60);
+                        voucherComponent.setViewType('tab');
+                        var voucherItemGroupData1 = {groupCaption:'表头分组1',width:500,titleHeight:25,colsNum:4,itemHeight:45};
+                        voucherComponent.insertVoucherItemGroup(voucherItemGroupData1);
+                        var voucherItemGroupData2 = {groupCaption:'表头分组2',width:500,titleHeight:25,colsNum:2,itemHeight:45};
+                        voucherComponent.insertVoucherItemGroup(voucherItemGroupData2);
+
+                        flowLayout.insertNode(voucherComponent,{row:1,col:1},2);
+
+                        flowLayout.render();
+
                 }
     }
 	//重设工作区

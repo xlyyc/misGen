@@ -201,31 +201,6 @@ wof.bizWidget.VoucherComponent.prototype = {
                 this._tab.setLeft(0);
                 this._tab.appendTo(this);
             }
-            //_voucherItemGroups初始化
-            if(this._voucherItemGroups.length==0){
-                if(this.getViewType()=='tab'){
-                    var ic = this._tab.getItemsCount();
-                    for(var i=0;i<ic;i++){
-                        var tempGroups = this._tab.getNodesByItemIndex(i+1);
-                        if(tempGroups.length>0){
-                            this._voucherItemGroups.push(tempGroups[0]);
-                        }
-                    }
-                    var groups = this._findGroups();
-                    for(var i=groups.length-1;i>=0;i--){
-                        var headGroup = groups[i];
-                        this._voucherItemGroups.push(headGroup);
-                    }
-                    this._voucherItemGroups.sort(function(a, b) {
-                        return a.getIndex() - b.getIndex();
-                    });
-                }else{
-                    var groups  = this._findGroups();
-                    for(var i=0;i<groups.length;i++){
-                        this._voucherItemGroups.push(groups[i]);
-                    }
-                }
-            }
 
             this._initFlag = true;
         }
@@ -237,7 +212,6 @@ wof.bizWidget.VoucherComponent.prototype = {
         }
         //删除tab下所有的item
         this._tab.deleteItem();
-
     },
 
     //----------必须实现----------
@@ -599,8 +573,6 @@ wof.bizWidget.VoucherComponent.prototype = {
             if(voucherComponentData.paramMaps!=null){
                 this.setParamMaps(voucherComponentData.paramMaps);
             }
-            /*this.setActiveVoucherItemGroupIndex(null);
-             this.setActiveItemRank(null);*/
         }
     },
 
@@ -647,8 +619,6 @@ wof.bizWidget.VoucherComponent.prototype = {
                 if(voucherItemGroupData.isHead!=null){
                     voucherItemGroup.setIsHead((voucherItemGroupData.isHead=='true'||voucherItemGroupData.isHead==true)?true:false);
                 }
-                /*this.setActiveVoucherItemGroupIndex(Number(voucherItemGroupData.index));
-                 this.setActiveItemRank(null);*/
             }
         }
     },
@@ -737,8 +707,6 @@ wof.bizWidget.VoucherComponent.prototype = {
                         voucherItem.setTipValue(voucherItemData.tipValue);
                     }
                 }
-                /*this.setActiveVoucherItemGroupIndex(Number(voucherItemData.VoucherItemGroupIndex));
-                 this.setActiveItemRank({rowNum:Number(voucherItemData.rowNum),colNum:Number(voucherItemData.colNum)});*/
             }
         }
     },
@@ -972,20 +940,6 @@ wof.bizWidget.VoucherComponent.prototype = {
                 activeVoucherItemGroup.activeVoucherItemGroupStyle();
             }
         }
-    },
-
-    //创建初始化的VoucherComponent
-    createSelf: function(width, height){
-        var node = new wof.bizWidget.VoucherComponent();
-        node.setLeft(0);
-        node.setTop(0);
-        node.setWidth(width-4);
-        node.setItemHeight(60);
-        var voucherItemGroupData = {groupCaption:'表头分组1',width:width,titleHeight:25,colsNum:4,itemHeight:45};
-        node.insertVoucherItemGroup(voucherItemGroupData);
-        return node;
     }
-
-
 
 };

@@ -363,57 +363,6 @@ wof.bizWidget.VoucherItem.prototype = {
                 clearTimeout(timeFn);
                 _this.sendMessage('wof.bizWidget.VoucherItem_dblclick');
             });
-            this.getDomInstance().droppable({
-                snap:true,
-                accept:function(draggable){
-                    var b=false;
-                    var draggableObj = wof.util.ObjectManager.get(draggable.attr('oid'));
-                    if(draggableObj!=null){
-                        if(draggableObj.getClassName()=='wof.bizWidget.VoucherItem'){
-                            if(_this.parentNode()==null){
-                                b=false;
-                            }else{
-
-                                var layout = draggableObj.parentNode().getVoucherComponent();
-                                var thisLayout = _this.parentNode().getVoucherComponent();
-                                if(thisLayout.getId()==layout.getId()){
-                                    b=true;
-                                }
-                            }
-                        }
-                    }
-                    return b;
-                },
-                hoverClass: 'ui-state-hover',
-                drop:function(event,ui){
-                    event.stopPropagation();
-                    var obj = wof.util.ObjectManager.get(ui.draggable.attr('oid'));
-                    if(obj!=null){
-                        if(obj.getClassName()=='wof.bizWidget.VoucherItem'){
-                            _this.sendMessage('wof.bizWidget.VoucherItem_voucherItemDrop', {'voucherItemId':ui.draggable.attr('oid')});
-                        }
-                    }
-                }
-            });
-            this.getDomInstance().draggable({
-                cursor:"move",
-                opacity: 0.7,
-                cursorAt:{
-                    top:0,
-                    left:0
-                },
-                containment: 'div[oid="'+this.parentNode().getId()+'"]',  //限定拖放只能在当前分组内
-                scroll: false,
-                start:function(event,ui){
-                    event.stopPropagation();
-                    clearTimeout(timeFn);
-                    _this.getDomInstance().css('zIndex',60000);
-                },
-                stop:function(event,ui){
-                    event.stopPropagation();
-                    _this.getDomInstance().css('zIndex','auto');
-                }
-            });
             this._initFlag = true;
         }
 
@@ -437,22 +386,17 @@ wof.bizWidget.VoucherItem.prototype = {
 
     //选择实现
     afterRender: function () {
-        if(this.getIsFixItem()==true){
-            this.getDomInstance().draggable('disable');
-        }else{
-            this.getDomInstance().draggable('enable');
-        }
         if(this.getLeft()!=null){
-            this.getDomInstance().css('left', ((this.getLeft()*this.getScale())+2)+'px');
+            this.getDomInstance().css('left', (this.getLeft()*this.getScale())+'px');
         }
         if(this.getTop()!=null){
-            this.getDomInstance().css('top', ((this.getTop()*this.getScale())+2)+'px');
+            this.getDomInstance().css('top', (this.getTop()*this.getScale())+'px');
         }
         if(this.getWidth()!=null){
-            this.getDomInstance().css('width', ((this.getWidth()*this.getScale())-4)+'px');
+            this.getDomInstance().css('width', (this.getWidth()*this.getScale())+'px');
         }
         if(this.getHeight()!=null){
-            this.getDomInstance().css('height', ((this.getHeight()*this.getScale())-4)+'px');
+            this.getDomInstance().css('height', (this.getHeight()*this.getScale())+'px');
         }
 
     },
