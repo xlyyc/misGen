@@ -543,6 +543,13 @@ wof.bizWidget.FlowLayout.prototype = {
         }
     },
 
+    //重设布局大小
+    resize:function(width, height){
+        this.setWidth(width);
+        this.setHeight(height);
+        this.render();
+    },
+
     //根据itemRank和sectionIndex定位到item并增加列数
     addItemColspan:function(itemRank, sectionIndex){
         var section = this.findSectionByIndex(sectionIndex);
