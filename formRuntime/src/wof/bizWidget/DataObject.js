@@ -33,6 +33,8 @@ wof.bizWidget.DataObject.prototype = {
 
     _asyncSave:null, //是否异步保存数据 默认同步
 
+    _pageId: null,  // 页面ID
+
     /**
      * New 指定行是新行，但此行的列并未赋值 只适用到行
      * NewModified 指定行是新行且行中的列已经赋值 只适用到行
@@ -62,9 +64,17 @@ wof.bizWidget.DataObject.prototype = {
 
     _mainEntityAlias:null, //主实体别名
 
+    _init: function(data){
+        this.setPageId(data.pageId);
+    },
+
     /**
      * get/set 属性方法定义
      */
+    setPageId: function (pageId) {
+        this._pageId = pageId;
+    },
+
     getQueryPolicy: function(){
         if(this._queryPolicy==null){
             this._queryPolicy = 'remote';
@@ -157,24 +167,6 @@ wof.bizWidget.DataObject.prototype = {
 
     //选择实现
     beforeRender: function () {
-        if(this._initFlag==null){
-            var _this = this;
-            var timeFn = null;
-            this.getDomInstance().mousedown(function(event){
-                event.stopPropagation();
-                clearTimeout(timeFn);
-                timeFn = setTimeout(function(){
-                    _this.sendMessage('wof.bizWidget.DataObject_mousedown');
-                },250);
-            });
-            this.getDomInstance().dblclick(function(event){
-                event.stopPropagation();
-                clearTimeout(timeFn);
-                _this.sendMessage('wof.bizWidget.DataObject_dblclick');
-            });
-
-            this._initFlag = true;
-        }
 
     },
 
@@ -185,9 +177,9 @@ wof.bizWidget.DataObject.prototype = {
 
     //选择实现
     afterRender: function () {
-        /*this.queryData('pageId', 'main', null, null, 0, 100);
+        /*this.queryData('main', null, null, 0, 100);
 
-        this.queryData('pageId', 'child', {'childEntityAlias':'hjxxchild', 'mainRowId':'372873910208696320'}, null, 0, 100);
+        this.queryData('child', {'childEntityAlias':'hjxxchild', 'mainRowId':'372873910208696320'}, null, 0, 100);
 
         this.updateData([{"zglbref.lbbz":"外聘员工111","zgid":"362646149296820224"}]);
 
@@ -408,7 +400,6 @@ wof.bizWidget.DataObject.prototype = {
      * 此方式会直接忽略对应的未保存的数据
      * 并发出对应消息
      *
-     * pageId 页面id
      * queryType all所有实体 main仅主实体 child仅子实体
      * entityParameter 实体参数
      * 形如 {'childEntityAlias':'hjxxchild', 'mainRowId':'uuid1'}
@@ -416,9 +407,9 @@ wof.bizWidget.DataObject.prototype = {
      * offset 偏移量(从0开始)
      * rowsCount 返回数据数量
      */
-    queryData: function(pageId, queryType, entityParameter, queryParam, offset, rowsCount){
+    queryData: function(queryType, entityParameter, queryParam, offset, rowsCount){
         var queryData = {};
-        queryData['pageId'] = pageId;
+        queryData['pageId'] = this._pageId;
         queryData['offset'] = offset;
         queryData['rowsCount'] = rowsCount;
         queryData['queryParam'] = queryParam;
@@ -828,10 +819,10 @@ wof.bizWidget.DataObject.prototype = {
     /**
      * 获得参照数据
      *
-     * pageId 页面id
      */
-    getRefData: function(pageId){
+    getRefData: function(){
         var _this = this;
+        var pageId = this._pageId;
         var rsp = jQuery.ajax(
             {
                 //url:_this.getDataServicesUrl()+'/query',

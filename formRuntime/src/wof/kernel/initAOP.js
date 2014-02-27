@@ -582,3 +582,4 @@ wof$_aop('wof.widget');
 wof$_aop('wof.bizWidget');
 wof$_aop('wof.functionWidget');
 var wof$ = wof.util.Selector.find;
+wof$.create = wof.util.ObjectManager.create;

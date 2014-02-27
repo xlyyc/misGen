@@ -9,6 +9,16 @@ wof.bizWidget.VoucherComponent = function () {
 
     this._voucherItemGroups = [];
 
+    //初始化监听消息
+    this.setOnReceiveMessage([
+        {id: 'wof.bizWidget.DataObject_query', priority: 50, method: 'this._onQueryDataCompleted(message);'},
+        {id: 'wof.bizWidget.DataObject_add', proprity: 50, method: 'this._onAddDataCompleted(message);'},
+        {id: 'wof.bizWidget.DataObject_update', proprity: 50, method: 'this._onUpdateDataCompleted(message);'},
+        {id: 'wof.bizWidget.DataObject_delete', proprity: 50, method: 'this._onDeleteDataCompleted(message);'},
+        {id: 'wof.bizWidget.DataObject_undelete', proprity: 50, method: 'this._onUndeleteDataCompleted(message);'},
+        {id: 'wof.bizWidget.DataObject_save', proprity: 50, method: 'this._onSaveDataCompleted(message);'}
+    ]);
+
 };
 wof.bizWidget.VoucherComponent.prototype = {
     /**
@@ -45,9 +55,17 @@ wof.bizWidget.VoucherComponent.prototype = {
 
     _componentId:null,
 
+    _dataObject:null,
+
+    _cacheData: null,  //缓存数据
+
     /**
      * get/set 属性方法定义
      */
+
+    setDataObject: function(dataObject){
+        this._dataObject = dataObject;
+    },
 
     getComponentId: function(){
         if(this._componentId==null){
@@ -165,6 +183,28 @@ wof.bizWidget.VoucherComponent.prototype = {
         this._activeVoucherItemRank = activeVoucherItemRank;
     },
 
+    _init: function(data){
+
+    },
+
+    _onQueryDataCompleted: function(message){
+        if(this._isDataChange(message)){
+            var data = this._dataObject.getLocalData(this.getBindEntityID());
+            this._cacheData = data[0];
+        }
+    },
+
+    _isDataChange: function(message) {
+        var flag = false;
+        for(var i=0; i<message.data.length; i++){
+            if(this.getBindEntityID() == message.data[i]){
+                flag = true;
+                break;
+            }
+        }
+        return flag;
+    },
+
     /**
      * Render 方法定义
      */
@@ -188,7 +228,6 @@ wof.bizWidget.VoucherComponent.prototype = {
                 _this.sendMessage('wof.bizWidget.VoucherComponent_dblclick');
                 _this.sendMessage('wof.bizWidget.VoucherComponent_active');
             });
-
             //_tab初始化
             if(this._tab==null){
                 var tab = this._findTab();
@@ -202,9 +241,47 @@ wof.bizWidget.VoucherComponent.prototype = {
                 this._tab.appendTo(this);
             }
 
+            //_voucherItemGroups初始化
+           /* if(this._voucherItemGroups.length==0){
+                if(this.getViewType()=='tab'){
+                    var ic = this._tab.getItemsCount();
+                    for(var i=0;i<ic;i++){
+                        var tempGroups = this._tab.getNodesByItemIndex(i+1);
+                        if(tempGroups.length>0){
+                            this._voucherItemGroups.push(tempGroups[0]);
+                        }
+                    }
+                    var groups = this._findGroups();
+                    for(var i=groups.length-1;i>=0;i--){
+                        var headGroup = groups[i];
+                        this._voucherItemGroups.push(headGroup);
+                    }
+                    this._voucherItemGroups.sort(function(a, b) {
+                        return a.getIndex() - b.getIndex();
+                    });
+                }else{
+                    var groups  = this._findGroups();
+                    for(var i=0;i<groups.length;i++){
+                        this._voucherItemGroups.push(groups[i]);
+                    }
+                }
+            }*/
+
             this._initFlag = true;
         }
 
+        //如果缓存数据为空 则执行查询
+        if(this._cacheData==null){
+            //todo 查询条件需要实现
+            this._dataObject.queryData('main',null,null,0,1);
+
+        }
+
+
+    },
+
+    //----------必须实现----------
+    render: function () {
         for(var i=0;i<this._voucherItemGroups.length;i++){
             var group = this._voucherItemGroups[i];
             group.remove();
@@ -212,11 +289,6 @@ wof.bizWidget.VoucherComponent.prototype = {
         }
         //删除tab下所有的item
         this._tab.deleteItem();
-    },
-
-    //----------必须实现----------
-    render: function () {
-
     },
 
     //选择实现
@@ -392,43 +464,6 @@ wof.bizWidget.VoucherComponent.prototype = {
             group.setIndex(i+1);
             group.remove();
             group.appendTo(this);
-        }
-    },
-
-    /**
-     * 在指定voucherItem插入节点
-     * 如果voucherItemRank和voucherItemGroupIndex为null 则在当前焦点的voucherItem中插入
-     * node 节点对象
-     * voucherItemIndex 在指定voucherItem序号内插入(序号从1开始)
-     * voucherItemGroupIndex voucherItemGroup 序号
-     */
-    insertNode: function(node, voucherItemRank, voucherItemGroupIndex){
-        if(node!=null){
-            if(voucherItemRank==null && voucherItemGroupIndex==null){
-                voucherItemGroupIndex = this.getActiveVoucherItemGroupIndex();
-                voucherItemRank = this.getActiveVoucherItemRank();
-            }
-            if(voucherItemRank!=null && voucherItemGroupIndex!=null){
-                var voucherItemGroup = this.findVoucherItemGroupByIndex(voucherItemGroupIndex);
-                if(voucherItemGroup!=null){
-                    var voucherItem = voucherItemGroup.findVoucherItemByRank(voucherItemRank);
-                    if(voucherItem!=null){
-                        if(voucherItem.childNodes().length==0){
-                            node.appendTo(voucherItem);
-                        }else{
-                            var newVoucherItem = new wof.bizWidget.VoucherItem();
-                            newVoucherItem.beforeTo(voucherItem);
-                            node.appendTo(newVoucherItem);
-                        }
-                    }else{
-                        console.log('不存在voucherItem 请先插入新的voucherItem');
-                    }
-                }else{
-                    console.log('不存在VoucherItemGroup 请先插入新的VoucherItemGroup');
-                }
-            }
-        }else{
-            console.log('node对象为null 不能插入');
         }
     },
 
