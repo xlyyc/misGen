@@ -177,7 +177,6 @@ wof.bizWidget.VoucherItemGroup.prototype = {
 
     //选择实现
     beforeRender: function () {
-        alert(11);
         if(this._initFlag==null){
             var _this = this;
             var timeFn = null;

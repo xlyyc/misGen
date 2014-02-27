@@ -242,7 +242,7 @@ wof.bizWidget.VoucherComponent.prototype = {
             }
 
             //_voucherItemGroups初始化
-           /* if(this._voucherItemGroups.length==0){
+            if(this._voucherItemGroups.length==0){
                 if(this.getViewType()=='tab'){
                     var ic = this._tab.getItemsCount();
                     for(var i=0;i<ic;i++){
@@ -265,23 +265,11 @@ wof.bizWidget.VoucherComponent.prototype = {
                         this._voucherItemGroups.push(groups[i]);
                     }
                 }
-            }*/
+            }
 
             this._initFlag = true;
         }
 
-        //如果缓存数据为空 则执行查询
-        if(this._cacheData==null){
-            //todo 查询条件需要实现
-            this._dataObject.queryData('main',null,null,0,1);
-
-        }
-
-
-    },
-
-    //----------必须实现----------
-    render: function () {
         for(var i=0;i<this._voucherItemGroups.length;i++){
             var group = this._voucherItemGroups[i];
             group.remove();
@@ -289,6 +277,16 @@ wof.bizWidget.VoucherComponent.prototype = {
         }
         //删除tab下所有的item
         this._tab.deleteItem();
+    },
+
+    //----------必须实现----------
+    render: function () {
+        //如果缓存数据为空 则执行查询
+        if(this._cacheData==null){
+            //todo 查询条件需要实现
+            this._dataObject.queryData('main',null,null,0,1);
+
+        }
     },
 
     //选择实现
