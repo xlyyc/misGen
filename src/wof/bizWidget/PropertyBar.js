@@ -200,7 +200,7 @@ wof.bizWidget.PropertyBar.prototype={
                     event.stopPropagation();
                     var hidden = jQuery(event.target).prev();
                     var customParam = meta.customParam;
-                    eval(meta.customMethod+'.run(hidden,customParam);');
+                    eval(meta.customMethod+'.run(hidden,customParam,_this);');
                 });
                 tr.append(td);
             }

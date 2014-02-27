@@ -440,22 +440,38 @@ jQuery(function(){
                                 // flowLayout.setOnReceiveMessage([{id:'wof.widget.Button_mousedown',priority:50,method:method}]);
                                  flowLayout.setOnSendMessage([{id:'wof.bizWidget.FlowLayout_render',method:'console.log(this.getCols());'}]);
 
-                                var sectionData1 = {title:'默认分组1',width:width,titleHeight:30,cols:1,itemHeight:300};
+                                var sectionData1 = {title:'默认分组1',width:width,titleHeight:30,cols:2,itemHeight:300};
                                 flowLayout.insertSection(sectionData1);
 
                                 content.append(flowLayout.getDomInstance());
                                 wof.util.ObjectManager.add(flowLayout.getId(), flowLayout);
 
-
-                                try{
-                                    var dataObject = new DataObject();
-                                    dataObject.appendTo(flowLayout);
-                                }catch(e){
-                                    alert(e);
-                                }
-
-
                                 flowLayout.render();
+
+                                var voucherComponent = wof$.create('VoucherComponent');
+                                voucherComponent.setLeft(0);
+                                voucherComponent.setTop(0);
+                                voucherComponent.setWidth(300);
+                                voucherComponent.setItemHeight(60);
+                                voucherComponent.setViewType('tab');
+
+                                var voucherItemGroupData1 = {groupCaption:'表头分组1',width:300,titleHeight:25,colsNum:4,itemHeight:45};
+                                voucherComponent.insertVoucherItemGroup(voucherItemGroupData1);
+                                var voucherItemGroupData2 = {groupCaption:'表头分组2',width:300,titleHeight:25,colsNum:2,itemHeight:45};
+                                voucherComponent.insertVoucherItemGroup(voucherItemGroupData2);
+
+                                flowLayout.insertNode(voucherComponent,{row:1,col:1},1);
+
+                                voucherComponent.render();
+
+
+                                var voucherComponent2 = wof$.create('VoucherComponent');
+                                voucherComponent2.setData(voucherComponent.getData());
+                                flowLayout.insertNode(voucherComponent2,{row:1,col:2},1);
+
+                                voucherComponent2.render();
+
+
                             }
                         }
     }

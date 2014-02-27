@@ -557,6 +557,33 @@ wof.bizWidget.spanner.VoucherGridComponentSpanner.prototype = {
             var voucherGridComponent=wof.util.ObjectManager.get(parameters.id);
             if(parameters.activeClass=="VoucherGridComponent"){
                 voucherGridComponent.updateVoucherGridComponent(parameters);
+                var bindEntityId = voucherGridComponent.getBindEntityID();
+                if(bindEntityId){
+                    var gridComponentColumns = voucherGridComponent._getBindEntityPropertyColumns();
+                    var entity = voucherGridComponent.getBindEntity();
+                    if(gridComponentColumns.length <= 0 && entity){
+                            var properties = entity.properties;
+                            if(properties){
+                                var gridComponentColumnsLength = !gridComponentColumns ? 0 : gridComponentColumns.length;
+                                if(gridComponentColumnsLength < properties.length){
+                                    var needCreateColumnCount = properties.length - gridComponentColumnsLength;
+                                    for(var i = 0; i < needCreateColumnCount; i++){
+                                        voucherGridComponent.insertColumnByIndex(1);
+                                    }
+                                }
+                                gridComponentColumns = voucherGridComponent._getAllColumns();
+                                for(var i = 0; i < gridComponentColumns.length;i++){
+                                    var gridComponentColumn = gridComponentColumns[i];
+                                    var property = properties.shift();
+                                    if(property){
+                                        gridComponentColumn.setBindDataField(entity.alias + '.' + property.name);
+                                        gridComponentColumn.setCaption(property.label);
+                                    }
+                                }
+                                this.render();
+                            }
+                    }
+                }
                 voucherGridComponent.render();
                 voucherGridComponent.sendMessage("wof.bizWidget.VoucherGridComponent_active");
             }else if(parameters.activeClass=="VoucherGridComponentColumn"){

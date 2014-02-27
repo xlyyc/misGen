@@ -142,7 +142,7 @@ wof.bizWidget.FlowLayoutSection.prototype = {
 	 },
 
     getWidth: function(){
-        if(this.parentNode()!=null){
+        if(this.parentNode().getWidth()!=null){
             this._width = this.parentNode().getWidth();
         }
         return this._width;

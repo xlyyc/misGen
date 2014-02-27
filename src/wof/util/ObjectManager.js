@@ -14,7 +14,20 @@
 		
 		remove: function(oId) {
 			return wof.util.ObjectManager._objs.remove(oId);
-		}
+		},
+
+        create: function(className, data){
+            var obj = null;
+            with(wof.widget)
+                with(wof.bizWidget)
+                    with(wof.functionWidget){
+                        obj = eval('new '+className+'()');
+                        if(obj._init!=null){
+                            obj._init(data);
+                        }
+                    }
+            return obj;
+        }
 		
 	};
 }

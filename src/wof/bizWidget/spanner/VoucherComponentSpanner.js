@@ -594,6 +594,22 @@ wof.bizWidget.spanner.VoucherComponentSpanner.prototype = {
                 voucherComponent.sendMessage("wof.bizWidget.VoucherComponent_active");
             }else if(parameters.activeClass=="VoucherComponent"){
                 voucherComponent.updateVoucherComponent(parameters);
+                var bindEntityID = parameters.bindEntityID;
+                var entity = voucherComponent.getBindEntity();
+                if(bindEntityID){
+                     if(voucherComponent._getBindEntityPropertyVoucherItems() <= 0 && entity){
+                            var properties = entity.properties;
+                            if(properties){
+                                for(var i = 0; i < properties.length;i++){
+                                    var property = properties[i];
+                                    voucherComponent.insertVoucherItem({itemLabel : property.label,
+                                         dataField : entity.alias + '.' + property.name},
+                                        {colNum : 1,rowNum : 1},
+                                        voucherComponent.getActiveVoucherItemGroupIndex() || 1);
+                                }
+                            }
+                    }
+                }
                 voucherComponent.render();
                 voucherComponent.sendMessage("wof.bizWidget.VoucherComponent_active");
             }

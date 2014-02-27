@@ -568,6 +568,33 @@ wof.bizWidget.spanner.GridComponentSpanner.prototype = {
             var gridComponent=wof.util.ObjectManager.get(parameters.id);
             if(parameters.activeClass=="GridComponent"){
                 gridComponent.updateGridComponent(parameters);
+                var bindEntityId = gridComponent.getBindEntityID();
+                if(bindEntityId){
+                    var gridComponentColumns = gridComponent._getBindEntityPropertyColumns();
+                    var entity = gridComponent.getBindEntity();
+                    if(gridComponentColumns.length <= 0 && entity){
+                            var properties = entity.properties;
+                            if(properties){
+                                var gridComponentColumnsLength = !gridComponentColumns ? 0 : gridComponentColumns.length;
+                                if(gridComponentColumnsLength < properties.length){
+                                    var needCreateColumnCount = properties.length - gridComponentColumnsLength;
+                                    for(var i = 0; i < needCreateColumnCount; i++){
+                                        gridComponent.insertColumnByIndex(1);
+                                    }
+                                }
+                                gridComponentColumns = gridComponent._getAllColumns();
+                                for(var i = 0; i < gridComponentColumns.length;i++){
+                                    var gridComponentColumn = gridComponentColumns[i];
+                                    var property = properties.shift();
+                                    if(property){
+                                        gridComponentColumn.setBindDataField(entity.alias + '.' + property.name);
+                                        gridComponentColumn.setCaption(property.label);
+                                    }
+                                }
+                                this.render();
+                            }
+                    }
+                }
                 gridComponent.render();
                 gridComponent.sendMessage("wof.bizWidget.GridComponent_active");
             }else if(parameters.activeClass=="GridComponentColumn"){

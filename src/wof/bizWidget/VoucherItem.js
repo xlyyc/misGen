@@ -547,8 +547,8 @@ wof.bizWidget.VoucherItem.prototype = {
         return component;
     },
 
-    //是否能够被删除
-    canDelete:function(){
+    //是否能够被删除   vouhcerGroupIndex,VoucherItemRunk
+    isModified:function(){
         var f = true;
         if(this.getDataField()!=''){
             f = false;

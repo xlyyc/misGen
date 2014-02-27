@@ -593,7 +593,7 @@ wof.bizWidget.VoucherItemGroup.prototype = {
                     var left = (c-1) * voucherItemWidth;
                     var obj = placeVoucherItemTable.items(top+','+left);
                     if(obj.getTop()==top){
-                        if(obj.canDelete()==true){
+                        if(obj.isModified()==true){
                             count++;
                         }else{
                             break;

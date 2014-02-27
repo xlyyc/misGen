@@ -251,7 +251,32 @@ wof.bizWidget.VoucherGridComponent.prototype = {
     },
 
 
-
+    getBindEntity : function (){
+        var bindEntityId = this.getBindEntityID();
+        if(bindEntityId){
+            var bindEntity = JSON.parse(getBizEntities());
+            //var bindEntity = {"childEntity":[],"linkEntity":[],"mainEntity":{"alias":"ZGLBCZB","calculateFiled":[],"defaultCondition":"","mainEntityName":"职工类别参照表","metaDataID":"ZGLBCZB","properties":[{"columnName":"lbbm","content":"","defaultValue":"","description":"","disabled":false,"display":"","displayWidth":"","enumValue":"","errorMessage":"","guid":"350039596123701248","isSystemAttribute":false,"label":"类别编码","length":"","max":0,"maxLength":0,"min":0,"minLength":0,"name":"lbbm","notNull":false,"prompt":"","refEntity":"","refEntityDisplay":"","refEntityProperty":"","refName":"","scale":"0","sql":"","tip":"","type":"id","uniqueName":""},{"columnName":"lbmc","content":"","defaultValue":"","description":"","disabled":false,"display":"","displayWidth":"","enumValue":"","errorMessage":"","guid":"350039636888141824","isSystemAttribute":false,"label":"类别名称","length":"","max":0,"maxLength":0,"min":0,"minLength":0,"name":"lbmc","notNull":false,"prompt":"","refEntity":"","refEntityDisplay":"","refEntityProperty":"","refName":"","scale":"0","sql":"","tip":"","type":"string","uniqueName":""},{"columnName":"lbbz","content":"","defaultValue":"","description":"","disabled":false,"display":"","displayWidth":"","enumValue":"","errorMessage":"","guid":"350039666051137536","isSystemAttribute":false,"label":"类别备注","length":"","max":0,"maxLength":0,"min":0,"minLength":0,"name":"lbbz","notNull":false,"prompt":"","refEntity":"","refEntityDisplay":"","refEntityProperty":"","refName":"","scale":"0","sql":"","tip":"","type":"string","uniqueName":""}]}};
+            var entity = bindEntity.mainEntity;
+            if(bindEntity.mainEntity.metaDataID != bindEntityId){
+                var linkEntity = bindEntity.linkEntity;
+                for(var i = 0; i < linkEntity.length;i++){
+                    if(linkEntity[i].metaDataID == bindEntityId){
+                        entity = linkEntity[i];
+                        break;
+                    }
+                }
+                var childEntity = bindEntity.childEntity;
+                for(var i = 0; i < childEntity.length;i++){
+                    if(childEntity[i].metaDataID == bindEntityId){
+                        entity = childEntity[i];
+                        break;
+                    }
+                }
+            }
+            return entity;
+        }
+        return null;
+    },
     /**
      * Render 方法定义
      */
@@ -276,7 +301,6 @@ wof.bizWidget.VoucherGridComponent.prototype = {
                 _this.sendMessage('wof.bizWidget.VoucherGridComponent_active');
             });
             this._initFlag = true;
-
         }
         this.getDomInstance().children('div:not([oid])').remove();
     },
@@ -324,7 +348,6 @@ wof.bizWidget.VoucherGridComponent.prototype = {
 
     //选择实现
     afterRender: function () {
-
         this.sendMessage('wof.bizWidget.VoucherGridComponent_render');
     },
 
@@ -778,7 +801,20 @@ wof.bizWidget.VoucherGridComponent.prototype = {
         table.css('height',(this._realHeight*this.getScale())+'px');
         return table;
     },
-
+    _getBindEntityPropertyColumns : function (){
+        var bindPropertyColumns = [];
+        var gridComponentColumns = this._getAllColumns();
+        if(gridComponentColumns){
+            for(var i = 0; i < gridComponentColumns.length;i++){
+                var gridComponentColumn = gridComponentColumns[i]
+                var bindDataField = gridComponentColumn.getBindDataField();
+                if(bindDataField){
+                    bindPropertyColumns.push(gridComponentColumn);
+                }
+            }
+        }
+        return bindPropertyColumns;
+    },
     //创建初始化的VoucherGridComponent
     createSelf: function(width, height){
         var node = new wof.bizWidget.VoucherGridComponent();
@@ -789,7 +825,7 @@ wof.bizWidget.VoucherGridComponent.prototype = {
         node.setTop(2);
         node.setLeft(2);
         node.setUseMutiplePage(true);
-        for(var i=0;i<4;i++){
+        for(var i=0;i<1;i++){
             var column = new wof.bizWidget.VoucherGridComponentColumn();
             column.setCaption('列'+(i+1));
             column.setColumnWidth(120);

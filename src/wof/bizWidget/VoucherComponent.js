@@ -164,6 +164,21 @@ wof.bizWidget.VoucherComponent.prototype = {
     setActiveVoucherItemRank: function(activeVoucherItemRank){
         this._activeVoucherItemRank = activeVoucherItemRank;
     },
+    getBindEntity : function (){
+        var bindEntityId = this.getBindEntityID();
+        if(bindEntityId){
+           var bizEntity = JSON.parse(getBizEntities());
+           /**var bizEntity = {"childEntity":[],"linkEntity":[],"mainEntity":{
+               "alias":"ZGLBCZB","calculateFiled":[],"defaultCondition":"","mainEntityName":"职工类别参照表","metaDataID":"ZGLBCZB","properties":[
+                   {"columnName":"lbbm","content":"","defaultValue":"","description":"","disabled":false,"display":"","displayWidth":"","enumValue":"","errorMessage":"","guid":"350039596123701248","isSystemAttribute":false,"label":"类别编码","length":"","max":0,"maxLength":0,"min":0,"minLength":0,"name":"lbbm","notNull":false,"prompt":"","refEntity":"","refEntityDisplay":"","refEntityProperty":"","refName":"","scale":"0","sql":"","tip":"","type":"id","uniqueName":""},{"columnName":"lbmc","content":"","defaultValue":"","description":"","disabled":false,"display":"","displayWidth":"","enumValue":"","errorMessage":"","guid":"350039636888141824","isSystemAttribute":false,"label":"类别名称","length":"","max":0,"maxLength":0,"min":0,"minLength":0,"name":"lbmc","notNull":false,"prompt":"","refEntity":"","refEntityDisplay":"","refEntityProperty":"","refName":"","scale":"0","sql":"","tip":"","type":"string","uniqueName":""},{"columnName":"lbbz","content":"","defaultValue":"","description":"","disabled":false,"display":"","displayWidth":"","enumValue":"","errorMessage":"","guid":"350039666051137536","isSystemAttribute":false,"label":"类别备注","length":"","max":0,"maxLength":0,"min":0,"minLength":0,"name":"lbbz","notNull":false,"prompt":"","refEntity":"","refEntityDisplay":"","refEntityProperty":"","refName":"","scale":"0","sql":"","tip":"","type":"string","uniqueName":""}
+                   ,{"columnName":"lbbm","content":"","defaultValue":"","description":"","disabled":false,"display":"","displayWidth":"","enumValue":"","errorMessage":"","guid":"350039596123701248","isSystemAttribute":false,"label":"类别编码","length":"","max":0,"maxLength":0,"min":0,"minLength":0,"name":"lbbm","notNull":false,"prompt":"","refEntity":"","refEntityDisplay":"","refEntityProperty":"","refName":"","scale":"0","sql":"","tip":"","type":"id","uniqueName":""},{"columnName":"lbmc","content":"","defaultValue":"","description":"","disabled":false,"display":"","displayWidth":"","enumValue":"","errorMessage":"","guid":"350039636888141824","isSystemAttribute":false,"label":"类别名称","length":"","max":0,"maxLength":0,"min":0,"minLength":0,"name":"lbmc","notNull":false,"prompt":"","refEntity":"","refEntityDisplay":"","refEntityProperty":"","refName":"","scale":"0","sql":"","tip":"","type":"string","uniqueName":""},{"columnName":"lbbz","content":"","defaultValue":"","description":"","disabled":false,"display":"","displayWidth":"","enumValue":"","errorMessage":"","guid":"350039666051137536","isSystemAttribute":false,"label":"类别备注","length":"","max":0,"maxLength":0,"min":0,"minLength":0,"name":"lbbz","notNull":false,"prompt":"","refEntity":"","refEntityDisplay":"","refEntityProperty":"","refName":"","scale":"0","sql":"","tip":"","type":"string","uniqueName":""}
+
+               ]}};**/
+           var entity = bizEntity.mainEntity;
+           return entity;
+        }
+        return null;
+    },
 
     /**
      * Render 方法定义
@@ -237,7 +252,6 @@ wof.bizWidget.VoucherComponent.prototype = {
         }
         //删除tab下所有的item
         this._tab.deleteItem();
-
     },
 
     //----------必须实现----------
@@ -422,40 +436,47 @@ wof.bizWidget.VoucherComponent.prototype = {
     },
 
     /**
-     * 在指定voucherItem插入节点
+     * 在指定分组中插入voucherItem
      * 如果voucherItemRank和voucherItemGroupIndex为null 则在当前焦点的voucherItem中插入
-     * node 节点对象
-     * voucherItemIndex 在指定voucherItem序号内插入(序号从1开始)
+     * nodeData 节点数据
+     * voucherItemRank 插入到的行列
      * voucherItemGroupIndex voucherItemGroup 序号
      */
-    insertNode: function(node, voucherItemRank, voucherItemGroupIndex){
-        if(node!=null){
-            if(voucherItemRank==null && voucherItemGroupIndex==null){
-                voucherItemGroupIndex = this.getActiveVoucherItemGroupIndex();
-                voucherItemRank = this.getActiveVoucherItemRank();
-            }
-            if(voucherItemRank!=null && voucherItemGroupIndex!=null){
-                var voucherItemGroup = this.findVoucherItemGroupByIndex(voucherItemGroupIndex);
-                if(voucherItemGroup!=null){
-                    var voucherItem = voucherItemGroup.findVoucherItemByRank(voucherItemRank);
-                    if(voucherItem!=null){
-                        if(voucherItem.childNodes().length==0){
-                            node.appendTo(voucherItem);
-                        }else{
-                            var newVoucherItem = new wof.bizWidget.VoucherItem();
-                            newVoucherItem.beforeTo(voucherItem);
-                            node.appendTo(newVoucherItem);
-                        }
-                    }else{
-                        console.log('不存在voucherItem 请先插入新的voucherItem');
-                    }
-                }else{
-                    console.log('不存在VoucherItemGroup 请先插入新的VoucherItemGroup');
-                }
-            }
-        }else{
-            console.log('node对象为null 不能插入');
-        }
+    insertVoucherItem: function(voucherItemData, voucherItemRank, voucherItemGroupIndex){
+          if(jQuery.isEmptyObject(voucherItemData)){
+              console.log('voucherItemData为null 不能插入');
+          }
+          if(!voucherItemData.itemLabel){
+              console.log('voucherItemData属性itemLabel不能为空');
+              return;
+          }
+          if(!voucherItemData.dataField){
+              console.log('voucherItemData属性dataField不能为空');
+              return ;
+          }
+          if(voucherItemRank == null && voucherItemGroupIndex == null){
+               voucherItemGroupIndex = this.getActiveVoucherItemGroupIndex();
+               voucherItemRank = this.getActiveVoucherItemRank();
+          }
+          var voucherItemGroup = this.findVoucherItemGroupByIndex(voucherItemGroupIndex);
+          if(!voucherItemGroup){
+              console.log('不存在VoucherItemGroup 请先插入新的VoucherItemGroup');
+              return ;
+          }
+          var voucherItem = voucherItemGroup.findVoucherItemByRank(voucherItemRank);
+          if(!voucherItem){
+              console.log('voucherItemRank 不存在');
+              return;
+          }
+          if(voucherItem.isModified()){
+              voucherItem.setItemLabel(voucherItemData.itemLabel);
+              voucherItem.setDataField(voucherItemData.dataField);
+          }else{
+              var newVoucherItem = new wof.bizWidget.VoucherItem();
+              newVoucherItem.setItemLabel(voucherItemData.itemLabel);
+              newVoucherItem.setDataField(voucherItemData.dataField);
+              newVoucherItem.afterTo(voucherItem);
+          }
     },
 
     /**
@@ -973,7 +994,19 @@ wof.bizWidget.VoucherComponent.prototype = {
             }
         }
     },
-
+    _getBindEntityPropertyVoucherItems : function() {
+        var bindEntityPropertyVoucherItems = [];
+        var activeIndex = this.getActiveVoucherItemGroupIndex() || 1;
+        var voucherItemGroup = this.findVoucherItemGroupByIndex(activeIndex);
+        var voucherItems = voucherItemGroup.findVoucherItems();
+        for(var i = 0; i < voucherItems.length;i++){
+            var voucherItem = voucherItems[i];
+            if(voucherItem.getDataField()){
+                bindEntityPropertyVoucherItems.push(voucherItem);
+            }
+        }
+        return bindEntityPropertyVoucherItems;
+    },
     //创建初始化的VoucherComponent
     createSelf: function(width, height){
         var node = new wof.bizWidget.VoucherComponent();
@@ -984,8 +1017,17 @@ wof.bizWidget.VoucherComponent.prototype = {
         var voucherItemGroupData = {groupCaption:'表头分组1',width:width,titleHeight:25,colsNum:4,itemHeight:45};
         node.insertVoucherItemGroup(voucherItemGroupData);
         return node;
+    },
+    // voucherItem 是否设置过
+    voucherItemModified : function(voucherGroupIndex,voucherItemRank){
+        var f = false;
+        var voucherItemGroup = this.findVoucherItemGroupByIndex(voucherGroupIndex);
+        if(voucherItemGroup){
+           var voucherItem = voucherItemGroup.findItemByRank(voucherItemRank);
+           if(voucherItem){
+               return voucherItem.isModified();
+           }
+        }
+        return f;
     }
-
-
-
 };
