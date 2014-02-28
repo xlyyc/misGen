@@ -594,7 +594,7 @@ wof.bizWidget.spanner.VoucherComponentSpanner.prototype = {
                 voucherComponent.sendMessage("wof.bizWidget.VoucherComponent_active");
             }else if(parameters.activeClass=="VoucherComponent"){
                 voucherComponent.updateVoucherComponent(parameters);
-                var bindEntityID = parameters.bindEntityID;
+                /*var bindEntityID = parameters.bindEntityID;
                 var entity = voucherComponent.getBindEntity();
                 if(bindEntityID){
                      if(voucherComponent._getBindEntityPropertyVoucherItems() <= 0 && entity){
@@ -609,7 +609,7 @@ wof.bizWidget.spanner.VoucherComponentSpanner.prototype = {
                                 }
                             }
                     }
-                }
+                }*/
                 voucherComponent.render();
                 voucherComponent.sendMessage("wof.bizWidget.VoucherComponent_active");
             }

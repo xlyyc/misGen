@@ -440,13 +440,80 @@ jQuery(function(){
                                 // flowLayout.setOnReceiveMessage([{id:'wof.widget.Button_mousedown',priority:50,method:method}]);
                                  flowLayout.setOnSendMessage([{id:'wof.bizWidget.FlowLayout_render',method:'console.log(this.getCols());'}]);
 
-                                var sectionData1 = {title:'默认分组1',width:width,titleHeight:30,cols:1,itemHeight:300};
+                                var sectionData1 = {title:'默认分组1',width:width,titleHeight:30,cols:2,itemHeight:300};
                                 flowLayout.insertSection(sectionData1);
 
-                                content.append(flowLayout.getDomInstance());
-                                wof.util.ObjectManager.add(flowLayout.getId(), flowLayout);
+                                flowLayout.appendTo(content);
+
+
+
 
                                 flowLayout.render();
+
+
+
+                                var voucherComponent = wof$.create('VoucherComponent');
+                                voucherComponent.setLeft(0);
+                                voucherComponent.setTop(0);
+                                voucherComponent.setWidth(500);
+                                voucherComponent.setItemHeight(60);
+                                voucherComponent.setViewType('tab');
+                                voucherComponent.insertVoucherItemGroup({groupCaption:'表头分组1',width:500,titleHeight:25,colsNum:4,itemHeight:45});
+                                voucherComponent.insertVoucherItemGroup({groupCaption:'表头分组2',width:500,titleHeight:25,colsNum:2,itemHeight:45});
+
+                                var voucherItemData1 = {
+                                    colspan:'1',
+                                    rowspan:'1',
+                                    isFixItem:'true',
+                                    itemName:'itemName1',
+                                    visiable:'true',
+                                    itemLabel:'姓名',
+                                    dataField:'xm',
+                                    dateTimeBoxFormat:'',
+                                    readOnly:'false',
+                                    required:'false',
+                                    length:'',
+                                    min:'',
+                                    max:'',
+                                    regExp:'',
+                                    checkErrorInfo:'',
+                                    visbleType:'select',
+                                    selectPattern:'',
+                                    useMultiSelect:'',
+                                    labelWidth:'160',
+                                    inputWidth:'100',
+                                    inputHeight:'20',
+                                    linkageItem:'',
+                                    tipValue:''
+                                };
+                                voucherComponent.insertVoucherItem(voucherItemData1, 1);
+
+                                flowLayout.insertNode(voucherComponent,{row:1,col:1},1);
+
+                                voucherComponent.render();
+
+                                var voucherComponent2 = voucherComponent.clone();
+
+                                //voucherComponent2.render();
+                                voucherComponent2.insertVoucherItemGroup({groupCaption:'表头分组3',width:500,titleHeight:25,colsNum:2,itemHeight:45});
+
+                                flowLayout.insertNode(voucherComponent2,{row:1,col:2},1);
+
+                                voucherComponent2.render();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                             }
                         }
     }

@@ -487,7 +487,6 @@ var wof$_aop = (function(){
                                 }
                                 this.setOnReceiveMessage(onReceiveMessage);
                             }
-                            this._setData(data);
                             var dataChildLen=data.childNodes.length;
                             var tempNodes=new wof.util.Hashtable();
                             var objChildLen=this.childNodes().length;
@@ -506,6 +505,7 @@ var wof$_aop = (function(){
                                     node.setData(data.childNodes[i]);
                                 }
                             }
+                            this._setData(data);
                         };
                     }
                     if(obj[o].prototype.render!=null){
