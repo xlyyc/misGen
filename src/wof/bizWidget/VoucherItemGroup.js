@@ -625,6 +625,10 @@ wof.bizWidget.VoucherItemGroup.prototype = {
             return rows;
         }
         voucherItems = this.findVoucherItems();
+        if(voucherItems.length==0){
+            var newVoucherItem = new wof.bizWidget.VoucherItem();
+            voucherItems.push(newVoucherItem);
+        }
         if(voucherItems.length>0){
             itemHeight = this.getItemHeight();
             voucherItemWidth = Math.floor(this.getWidth()/this.getColsNum());

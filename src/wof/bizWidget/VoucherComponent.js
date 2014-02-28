@@ -420,8 +420,7 @@ wof.bizWidget.VoucherComponent.prototype = {
         newVoucherItemGroup.setGroupCaption(voucherItemGroupData.groupCaption);
         newVoucherItemGroup.setColsNum(colsNum);
         newVoucherItemGroup.setItemHeight(itemHeight);
-        var newVoucherItem = new wof.bizWidget.VoucherItem();
-        newVoucherItem.appendTo(newVoucherItemGroup);
+
         if(voucherItemGroupIndex==this.getActiveVoucherItemGroupIndex()){
             this.setActiveVoucherItemRank(null);
         }
@@ -677,10 +676,11 @@ wof.bizWidget.VoucherComponent.prototype = {
     /**
      * 修改指定的voucherItem
      * voucherItemData voucherItem数据
+     * voucherItemGroupIndex 指定的voucherItemGroup序号(序号从1开始)
      */
-    updateVoucherItem: function(voucherItemData){
+    updateVoucherItem: function(voucherItemData, voucherItemGroupIndex){
         if(!jQuery.isEmptyObject(voucherItemData)){
-            var voucherItemGroup = this.findVoucherItemGroupByIndex(Number(voucherItemData.voucherItemGroupIndex));
+            var voucherItemGroup = this.findVoucherItemGroupByIndex(Number(voucherItemGroupIndex));
             if(voucherItemGroup!=null){
                 var voucherItem = voucherItemGroup.findVoucherItemByRank({rowNum:Number(voucherItemData.rowNum),colNum:Number(voucherItemData.colNum)});
                 if(voucherItem!=null){

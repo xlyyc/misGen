@@ -589,7 +589,7 @@ wof.bizWidget.spanner.VoucherComponentSpanner.prototype = {
                 voucherComponent.render();
                 voucherComponent.sendMessage("wof.bizWidget.VoucherComponent_active");
             }else if(parameters.activeClass=="VoucherItem"){
-                voucherComponent.updateVoucherItem(parameters);
+                voucherComponent.updateVoucherItem(parameters, parameters.voucherItemGroupIndex);
                 voucherComponent.render();
                 voucherComponent.sendMessage("wof.bizWidget.VoucherComponent_active");
             }else if(parameters.activeClass=="VoucherComponent"){
