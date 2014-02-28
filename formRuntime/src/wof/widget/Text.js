@@ -17,9 +17,6 @@ wof.widget.Text.prototype = {
     //Text对象名称
     _name: null,
 
-    //元数据属性id，如果自定义text 则为 custom
-    _metaAttrId : null ,
-
     //展示形式（预制）：普通 base 、只读 readOnly 、带下划线的只读 readUnderLine
     _displayType : null ,
 
@@ -46,16 +43,6 @@ wof.widget.Text.prototype = {
 
     setName: function(name){
         this._name = name;
-    },
-
-    getMetaAttrId:function(){
-        if(this._metaAttrId==null)
-            this._metaAttrId = '';
-        return this._metaAttrId;
-    },
-
-    setMetaAttrId: function(metaAttrId){
-        this._metaAttrId = metaAttrId;
     },
 
     getDisplayType:function(){
@@ -94,14 +81,12 @@ wof.widget.Text.prototype = {
     getData: function () {
         return {
             _name : this.getName()  ,
-            _metaAttrId: this.getMetaAttrId() ,
             _displayType : this.getDisplayType()
         };
     },
     //----------必须实现----------
     setData: function (data) {
         this.setName(data.name);
-        this.setMetaAttrId(data.metaAttrId);
         this.setDisplayType(data.displayType);
     }
 

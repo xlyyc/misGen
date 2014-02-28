@@ -57,7 +57,7 @@ wof.bizWidget.VoucherComponent.prototype = {
 
     _dataObject:null,
 
-    _cacheData: null,  //缓存数据
+    _queryFlag: null, //是否需要发起查询标识 true需要 false不需要  搜索条件发生变化或者数据发生变化的情况下会修改此标识状态
 
     /**
      * get/set 属性方法定义
@@ -190,7 +190,8 @@ wof.bizWidget.VoucherComponent.prototype = {
     _onQueryDataCompleted: function(message){
         if(this._isDataChange(message)){
             var data = this._dataObject.getLocalData(this.getBindEntityID());
-            this._cacheData = data[0];
+            //todo 处理数据变化
+
         }
     },
 
@@ -282,11 +283,12 @@ wof.bizWidget.VoucherComponent.prototype = {
     //----------必须实现----------
     render: function () {
         //如果缓存数据为空 则执行查询
-        if(this._cacheData==null){
+        if(this._queryFlag==true){
             //todo 查询条件需要实现
             this._dataObject.queryData('main',null,null,0,1);
-
+            this._queryFlag = false;
         }
+
     },
 
     //选择实现
@@ -450,8 +452,7 @@ wof.bizWidget.VoucherComponent.prototype = {
         newVoucherItemGroup.setGroupCaption(voucherItemGroupData.groupCaption);
         newVoucherItemGroup.setColsNum(colsNum);
         newVoucherItemGroup.setItemHeight(itemHeight);
-        var newVoucherItem = new wof.bizWidget.VoucherItem();
-        newVoucherItem.appendTo(newVoucherItemGroup);
+
         if(voucherItemGroupIndex==this.getActiveVoucherItemGroupIndex()){
             this.setActiveVoucherItemRank(null);
         }
@@ -659,10 +660,11 @@ wof.bizWidget.VoucherComponent.prototype = {
     /**
      * 修改指定的voucherItem
      * voucherItemData voucherItem数据
+     * voucherItemGroupIndex 指定的voucherItemGroup序号(序号从1开始)
      */
-    updateVoucherItem: function(voucherItemData){
+    updateVoucherItem: function(voucherItemData, voucherItemGroupIndex){
         if(!jQuery.isEmptyObject(voucherItemData)){
-            var voucherItemGroup = this.findVoucherItemGroupByIndex(Number(voucherItemData.voucherItemGroupIndex));
+            var voucherItemGroup = this.findVoucherItemGroupByIndex(Number(voucherItemGroupIndex));
             if(voucherItemGroup!=null){
                 var voucherItem = voucherItemGroup.findVoucherItemByRank({rowNum:Number(voucherItemData.rowNum),colNum:Number(voucherItemData.colNum)});
                 if(voucherItem!=null){
@@ -740,6 +742,99 @@ wof.bizWidget.VoucherComponent.prototype = {
                         voucherItem.setTipValue(voucherItemData.tipValue);
                     }
                 }
+            }
+        }
+    },
+
+    /**
+     * 在指定的分组下插入新的voucherItem
+     * voucherItemData voucherItem数据
+     * voucherItemGroupIndex 指定的voucherItemGroup序号(序号从1开始)
+     */
+    insertVoucherItem: function(voucherItemData, voucherItemGroupIndex){
+        if(!jQuery.isEmptyObject(voucherItemData)){
+            var voucherItemGroup = this.findVoucherItemGroupByIndex(voucherItemGroupIndex);
+            if(voucherItemGroup!=null){
+                var newVoucherItem = new wof.bizWidget.VoucherItem();
+                //newVoucherItem.setWidth(voucherItemWidth);
+                newVoucherItem.setHeight(voucherItemGroup.getItemHeight());
+                //newVoucherItem.setTop(top);
+                //newVoucherItem.setLeft(left);
+                newVoucherItem.setScale(voucherItemGroup.getScale());
+                if(voucherItemData.colspan!=null){
+                    if(voucherItemGroup.getColsNum()>=Number(voucherItemData.colspan)){
+                        newVoucherItem.setColspan(Number(voucherItemData.colspan));
+                    }else{
+                        console.log('设置colspan值错误:大于该分组colsNum值');
+                    }
+                }
+                if(voucherItemData.isFixItem!=null){
+                    newVoucherItem.setIsFixItem((voucherItemData.isFixItem=='true'||voucherItemData.isFixItem==true)?true:false);
+                }
+                if(voucherItemData.rowspan!=null){
+                    newVoucherItem.setRowspan(Number(voucherItemData.rowspan));
+                }
+                if(voucherItemData.itemName!=null){
+                    newVoucherItem.setItemName(voucherItemData.itemName);
+                }
+                if(voucherItemData.visiable!=null){
+                    newVoucherItem.setVisiable((voucherItemData.visiable=='true'||voucherItemData.visiable==true)?true:false);
+                }
+                if(voucherItemData.itemLabel!=null){
+                    newVoucherItem.setItemLabel(voucherItemData.itemLabel);
+                }
+                if(voucherItemData.dataField!=null){
+                    newVoucherItem.setDataField(voucherItemData.dataField);
+                }
+                if(voucherItemData.dateTimeBoxFormat!=null){
+                    newVoucherItem.setDateTimeBoxFormat(voucherItemData.dateTimeBoxFormat);
+                }
+                if(voucherItemData.readOnly!=null){
+                    newVoucherItem.setReadOnly((voucherItemData.readOnly=='true'||voucherItemData.readOnly==true)?true:false);
+                }
+                if(voucherItemData.required!=null){
+                    newVoucherItem.setRequired((voucherItemData.required=='true'||voucherItemData.required==true)?true:false);
+                }
+                if(voucherItemData.length!=null){
+                    newVoucherItem.setLength(voucherItemData.length==''?'':Number(voucherItemData.length));
+                }
+                if(voucherItemData.min!=null){
+                    newVoucherItem.setMin(voucherItemData.min==''?'':Number(voucherItemData.min));
+                }
+                if(voucherItemData.max!=null){
+                    newVoucherItem.setMax(voucherItemData.max==''?'':Number(voucherItemData.max));
+                }
+                if(voucherItemData.regExp!=null){
+                    newVoucherItem.setRegExp(voucherItemData.regExp);
+                }
+                if(voucherItemData.checkErrorInfo!=null){
+                    newVoucherItem.setCheckErrorInfo(voucherItemData.checkErrorInfo);
+                }
+                if(voucherItemData.selectPattern!=null){
+                    newVoucherItem.setSelectPattern(voucherItemData.selectPattern);
+                }
+                if(voucherItemData.useMultiSelect!=null){
+                    newVoucherItem.setUseMultiSelect((voucherItemData.useMultiSelect=='true'||voucherItemData.useMultiSelect==true)?true:false);
+                }
+                if(voucherItemData.visbleType!=null){
+                    newVoucherItem.setVisbleType(voucherItemData.visbleType);
+                }
+                if(voucherItemData.labelWidth!=null){
+                    newVoucherItem.setLabelWidth(voucherItemData.labelWidth==''?'':Number(voucherItemData.labelWidth));
+                }
+                if(voucherItemData.inputWidth!=null){
+                    newVoucherItem.setInputWidth(voucherItemData.inputWidth==''?'':Number(voucherItemData.inputWidth));
+                }
+                if(voucherItemData.inputHeight!=null){
+                    newVoucherItem.setInputHeight(voucherItemData.inputHeight==''?'':Number(voucherItemData.inputHeight));
+                }
+                if(voucherItemData.linkageItem!=null){
+                    newVoucherItem.setLinkageItem(voucherItemData.linkageItem);
+                }
+                if(voucherItemData.tipValue!=null){
+                    newVoucherItem.setTipValue(voucherItemData.tipValue);
+                }
+                newVoucherItem.appendTo(voucherItemGroup);
             }
         }
     },

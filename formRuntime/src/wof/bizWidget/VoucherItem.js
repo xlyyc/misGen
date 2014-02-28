@@ -467,9 +467,7 @@ wof.bizWidget.VoucherItem.prototype = {
     //创建元件
     createComponent: function(){
         var component = null;
-        if(this.getVisbleType()=='id'){
-            component = jQuery('<input type="text" style="width:'+this.getInputWidth()+'px;height:'+this.getInputHeight()+'px;">');
-        }else if(this.getVisbleType()=='text'){
+         if(this.getVisbleType()=='text'){
             component = jQuery('<input type="text" style="width:'+this.getInputWidth()+'px;height:'+this.getInputHeight()+'px;">');
         }else if(this.getVisbleType()=='textArea'){
             component = jQuery('<textarea style="width:'+this.getInputWidth()+'px;height:'+this.getInputHeight()+'px;"></textarea>');

@@ -40,8 +40,6 @@ wof.bizWidget.GridComponent.prototype = {
 
     _bindEntityId: null, //绑定的实体id(即实体别名) 在在数据源类型为do时需要使用到
 
-    _cacheData: null,  //缓存数据
-
     _cachePageNo: null, //缓存页号 数组类型 形如[2,3] 当前只支持缓存两页
 
     _dataObject: null, //数据对象 在数据源类型为do时需要使用到
@@ -73,8 +71,8 @@ wof.bizWidget.GridComponent.prototype = {
             //TODO ds
         }
         this.gotoPage(this.getPageNo());
+        this.render();
     },
-
     beforeRender: function () {
 
     },
@@ -99,7 +97,8 @@ wof.bizWidget.GridComponent.prototype = {
                 rowHeight: this.getRowHeight(),
                 header: this.getHeader(),
                 footer: this.getFooter(),
-                cell: this.getCells()
+                cell: this.getCells(),
+                data: this.getGridData()
             }
         };
         if (this._grid == null) {
@@ -126,6 +125,7 @@ wof.bizWidget.GridComponent.prototype = {
         }
         pageNo++;
         this.gotoPage(pageNo);
+
     },
     prevPage: function () {
         var pageNo = this.getPageNo();
@@ -152,16 +152,14 @@ wof.bizWidget.GridComponent.prototype = {
             var offset = (pageNo - 1) * this.getPageSize();
             var rowsCount = this.getPageSize() * 2;
             if (this.getDataSourceType() == 'do') {
-                this.getDo().queryData(this.getPageId(), 'main', null, null, offset, rowsCount);
+                this.getDo().queryData('main', null, null, offset, rowsCount);
             } else {
                 //TODO ds没实现
             }
         } else {
             this.setGridData(this._getPageDataInCache(this.getPageNo()));
-            this.render();
         }
     },
-
     //从缓存中获得指定页的数据
     _getPageDataInCache: function (pageNo) {
         if (this._isPageDataInCache(pageNo) == -1) {
@@ -169,7 +167,7 @@ wof.bizWidget.GridComponent.prototype = {
         }
         var cachePageNo = this.getCachePageNo();
         var offset = (cachePageNo[0] == pageNo) ? 0 : this.getPageSize();
-        var cacheData = this.getCacheData();
+        var cacheData = this.getDataSource().getLocalData();
         var data = [];
         //end为指定页数据的结束下标位置(下标从0开始)
         var end = ((offset + this.getPageSize()) < cacheData.length ? (offset + this.getPageSize()) : cacheData.length) - 1;
@@ -178,13 +176,18 @@ wof.bizWidget.GridComponent.prototype = {
         }
         return data;
     },
+    getDataSource: function () {
+        if (this.getDataSourceType() == 'do') {
+            return this.getDo();
+        }
+        return null;
+    },
     /**
      *
      * 查询完成后 将触发此函数
      */
     _onQueryDataCompleted: function (message) {
         if (this._isDataChange(message)) {
-            this.setCacheData(this.getDo().getLocalData());
             this.setCachePageNo([this.getPageNo(), this.getPageNo() + 1]);
             var total = null;
             if (this.getDataSourceType() == 'do') {
@@ -196,7 +199,6 @@ wof.bizWidget.GridComponent.prototype = {
             pageBar.total = parseInt(total);
             this.setPageBar(pageBar);
             this.setGridData(this._getPageDataInCache(this.getPageNo()));
-            this.render();
         }
     },
     _onAddDataCompleted: function (message) {
@@ -232,8 +234,8 @@ wof.bizWidget.GridComponent.prototype = {
 
     _isDataChange: function (message) {
         var flag = false;
-        for(var i=0; i<message.data.length; i++){
-            if(this.getBindEntityId() == message.data[i]){
+        for (var i = 0; i < message.data.length; i++) {
+            if (this.getBindEntityId() == message.data[i]) {
                 flag = true;
                 break;
             }
@@ -330,13 +332,6 @@ wof.bizWidget.GridComponent.prototype = {
         if (options.batchSelect) {
             this.setBatchSelect(options.batchSelect);
         }
-    },
-
-    getCacheData: function () {
-        return this._cacheData;
-    },
-    setCacheData: function (cacheData) {
-        this._cacheData = cacheData;
     },
     setRefData: function (refData) {
         this._refData = refData;
