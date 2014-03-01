@@ -492,9 +492,12 @@ jQuery(function(){
 
                                 voucherComponent.render();
 
-                                var voucherComponent2 = voucherComponent.clone();
 
-                                //voucherComponent2.render();
+                                var json = voucherComponent.getData();
+                                var voucherComponent2 = wof$.create('VoucherComponent');
+                                voucherComponent2.insertVoucherItemGroup({groupCaption:'表头分组2',width:500,titleHeight:25,colsNum:2,itemHeight:45});
+
+                                voucherComponent2.setData(json);
                                 voucherComponent2.insertVoucherItemGroup({groupCaption:'表头分组3',width:500,titleHeight:25,colsNum:2,itemHeight:45});
 
                                 flowLayout.insertNode(voucherComponent2,{row:1,col:2},1);
