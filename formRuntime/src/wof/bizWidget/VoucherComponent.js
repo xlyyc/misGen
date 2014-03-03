@@ -184,14 +184,27 @@ wof.bizWidget.VoucherComponent.prototype = {
     },
 
     _init: function(data){
-
+        this._queryFlag = true;
     },
 
     _onQueryDataCompleted: function(message){
         if(this._isDataChange(message)){
             var data = this._dataObject.getLocalData(this.getBindEntityID());
-            //todo 处理数据变化
-
+            if(data!=null&&data.length>0){
+                var voucherItemGroups = this._findVoucherItemGroups();
+                for(var i=0;i<voucherItemGroups.length;i++){
+                    var voucherItemGroup = voucherItemGroups[i];
+                    var voucherItems = voucherItemGroup.findVoucherItems();
+                    for(var t=0;t<voucherItems.length;t++){
+                        var voucherItem = voucherItems[t];
+                        if(voucherItem.getDataField().length>0){
+                            var value = data[0]['data'][voucherItem.getDataField()]['value'];
+                            voucherItem.setValue(value);
+                            voucherItem.render();
+                        }
+                    }
+                }
+            }
         }
     },
 

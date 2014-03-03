@@ -172,7 +172,7 @@ wof.bizWidget.SearchItem.prototype = {
 
     getLabelWidth: function(){
         if(this._labelWidth==null){
-            this._labelWidth = 160;
+            this._labelWidth = 100;
         }
         return this._labelWidth;
     },

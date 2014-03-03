@@ -17,20 +17,15 @@ wof.widget.Text.prototype = {
     //Text对象名称
     _name: null,
 
-    //展示形式（预制）：普通 base 、只读 readOnly 、带下划线的只读 readUnderLine
-    _displayType : null ,
+    _displayType : null , //展示形式（预制）：普通 base 、只读 readOnly 、带下划线的只读 readUnderLine
 
-    //是否验证
-    _isVerify : null ,
+    _value: null,
 
-    //验证类型 ： 对应具体数值类型或者自定义的验证
-    _verifyType : null ,
+    _initFlag: null,
 
-    //验证提示 ：显示验证提示的内容
-    _verifyAlert : null ,
+    _tip: null,
 
-    //数值格式化正则
-    _format : null ,
+    _text: null,
 
     /**
      * get/set 属性方法定义
@@ -47,24 +42,85 @@ wof.widget.Text.prototype = {
 
     getDisplayType:function(){
         if(this._displayType==null)
-            this._displayType = '';
+            this._displayType = 'base';
         return this._displayType;
     },
 
     setDisplayType: function(displayType){
         this._displayType = displayType;
     },
+
+    getWidth: function(){
+        if(this._width==null){
+            this._width = 120;
+        }
+        return this._width;
+    },
+
+    getHeight: function(){
+        if(this._height==null){
+            this._height = 25;
+        }
+        return this._height;
+    },
+
+    getValue : function (){
+        return this._value || '';
+    },
+
+    setValue : function (value){
+        this._value = value;
+    },
+
+    getTip : function (){
+        return this._tip || '';
+    },
+
+    setTip : function (tip){
+        this._tip = tip;
+    },
+
     /**
      * Render 方法定义
      */
 
     //选择实现
     beforeRender: function () {
+        if(this._initFlag == null){
+            var _this = this;
+            var timeFn = null;
+            this.getDomInstance().mousedown(function(event){
+                event.stopPropagation();
+                clearTimeout(timeFn);
+                timeFn = setTimeout(function(){
+                    _this.sendMessage('wof.widget.Text_mousedown');
+                    _this.sendMessage('wof.widget.Text_active');
+                },250);
+            });
+            this.getDomInstance().dblclick(function(event){
+                event.stopPropagation();
+                clearTimeout(timeFn);
+                _this.sendMessage('wof.widget.Text_dblclick');
+                _this.sendMessage('wof.widget.Text_active');
+            });
 
+            this._text = jQuery('<input type="text">');
+            this.getDomInstance().append(this._text);
+
+            this._initFlag = true;
+        }
     },
 
     //----------必须实现----------
     render: function () {
+        if(this.getDisplayType()=='base'){
+            this._text.removeAttr('readonly');
+        }else{
+            this._text.attr('readonly', 'readonly');
+        }
+        this._text.attr('title',this.getTip());
+        this._text.css('width',this.getWidth()+'px').css('height',this.getHeight()+'px');
+        this._text.val(this.getValue());
 
     },
 
@@ -80,14 +136,18 @@ wof.widget.Text.prototype = {
     //----------必须实现----------
     getData: function () {
         return {
-            _name : this.getName()  ,
-            _displayType : this.getDisplayType()
+            name : this.getName(),
+            displayType : this.getDisplayType(),
+            value: this.getValue(),
+            tip: this.getTip()
         };
     },
     //----------必须实现----------
     setData: function (data) {
         this.setName(data.name);
         this.setDisplayType(data.displayType);
+        this.setValue(data.value);
+        this.setTip(data.tip);
     }
 
 };

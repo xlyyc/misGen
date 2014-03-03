@@ -46,6 +46,7 @@
 <script src="src/wof/widget/Button.js"></script>
 <script src="src/wof/widget/DateBox.js"></script>
 <script src="src/wof/widget/Label.js"></script>
+<script src="src/wof/widget/Text.js"></script>
 <script src="src/wof/widget/RadioGroupItem.js"></script>
 <script src="src/wof/widget/RadioGroup.js"></script>
 <script src="src/wof/widget/ComboBox.js"></script>
@@ -166,7 +167,7 @@ jQuery(function(){
                             colspan:'1',
                             rowspan:'1',
                             isFixItem:'true',
-                            itemName:'itemName1',
+                            itemName:'xm',
                             visiable:'true',
                             itemLabel:'姓名',
                             dataField:'xm',
@@ -181,13 +182,39 @@ jQuery(function(){
                             visbleType:'select',
                             selectPattern:'',
                             useMultiSelect:'',
-                            labelWidth:'160',
+                            labelWidth:'100',
                             inputWidth:'100',
                             inputHeight:'20',
                             linkageItem:'',
                             tipValue:''
                         };
                         voucherComponent.insertVoucherItem(voucherItemData1, 1);
+                        var voucherItemData2 = {
+                            colspan:'1',
+                            rowspan:'1',
+                            isFixItem:'true',
+                            itemName:'XBref.xbmc',
+                            visiable:'true',
+                            itemLabel:'性别',
+                            dataField:'XBref.xbmc',
+                            dateTimeBoxFormat:'',
+                            readOnly:'false',
+                            required:'false',
+                            length:'',
+                            min:'',
+                            max:'',
+                            regExp:'',
+                            checkErrorInfo:'',
+                            visbleType:'select',
+                            selectPattern:'',
+                            useMultiSelect:'',
+                            labelWidth:'100',
+                            inputWidth:'100',
+                            inputHeight:'20',
+                            linkageItem:'',
+                            tipValue:''
+                        };
+                        voucherComponent.insertVoucherItem(voucherItemData2, 1);
 
                         flowLayout.insertNode(voucherComponent,{row:1,col:1},2);
 

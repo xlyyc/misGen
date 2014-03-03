@@ -69,7 +69,11 @@ wof.bizWidget.VoucherItem.prototype = {
 
     _initFlag:null,
 
+    _label: null,
 
+    _value: null,
+
+    _text: null,
 
     /**
      * get/set 属性方法定义
@@ -257,7 +261,7 @@ wof.bizWidget.VoucherItem.prototype = {
 
     getLabelWidth: function(){
         if(this._labelWidth==null){
-            this._labelWidth = 160;
+            this._labelWidth = 100;
         }
         return this._labelWidth;
     },
@@ -342,6 +346,14 @@ wof.bizWidget.VoucherItem.prototype = {
         this._colspan = colspan;
     },
 
+    getValue : function (){
+        return this._value || '';
+    },
+
+    setValue : function (value){
+        this._value = value;
+    },
+
     /**
      * Render 方法定义
      */
@@ -363,20 +375,47 @@ wof.bizWidget.VoucherItem.prototype = {
                 clearTimeout(timeFn);
                 _this.sendMessage('wof.bizWidget.VoucherItem_dblclick');
             });
+
+            var label = new wof.widget.Label();
+            label.setIsInside(true);
+            label.setLeft(0);
+            label.setIsUnderline(false);
+            label.setScale(this.getScale());
+            label.appendTo(this);
+            this._label = label;
+
+            var text = new wof.widget.Text();
+            text.setIsInside(true);
+            text.appendTo(this);
+            this._text = text;
+
             this._initFlag = true;
         }
 
-        this.getDomInstance().children().remove();
-        if(this.getItemLabel()!=''&&this.getVisbleType()!=''){
-            var label = jQuery('<label style="width:'+this.getLabelWidth()+'px;">'+(this.getItemLabel()==''?'&nbsp;':this.getItemLabel())+(this.getDataField()==''?'':'('+this.getDataField()+')')+'</label>');
-            this.getDomInstance().append(label);
-            var hr = jQuery('<hr style="width:96%;border-top:1px solid black;">');
-            this.getDomInstance().append(hr);
-            var component = this.createComponent();
-            this.getDomInstance().append(component);
-            var bgImg = jQuery('<img src="src/img/backgroud.gif" style="position:absolute;cursor:pointer;top:0px;left:0px;opacity:0;filter:alpha(opacity=0);width:100%;height:100%;">');
-            this.getDomInstance().append(bgImg);
+        this._label.setWidth(this.getLabelWidth());
+        this._label.setText(this.getItemLabel());
+
+        //this._text.setTop(this.getHeight()/2-this._text.getHeight()/2);
+        this._text.setLeft(this.getLabelWidth());
+        this._text.setWidth(this.getInputWidth());
+        this._text.setHeight(this.getInputHeight());
+
+        //this._label.setTop(this.getHeight()/2-this._text.getHeight()/2);
+
+        if(this.getReadOnly() == true){
+            this._text.setDisplayType('readOnly');
+        }else{
+            this._text.setDisplayType('base');
         }
+        this._text.setTip(this.getTipValue());
+        if(this.getDataField()!=''){
+
+            this._text.setValue(this.getValue()); //todo 需要结合当前的格式化配置来进行显示
+        }else{
+            this._text.setValue('');
+        }
+
+
     },
 
     //----------必须实现----------
@@ -386,18 +425,6 @@ wof.bizWidget.VoucherItem.prototype = {
 
     //选择实现
     afterRender: function () {
-        if(this.getLeft()!=null){
-            this.getDomInstance().css('left', (this.getLeft()*this.getScale())+'px');
-        }
-        if(this.getTop()!=null){
-            this.getDomInstance().css('top', (this.getTop()*this.getScale())+'px');
-        }
-        if(this.getWidth()!=null){
-            this.getDomInstance().css('width', (this.getWidth()*this.getScale())+'px');
-        }
-        if(this.getHeight()!=null){
-            this.getDomInstance().css('height', (this.getHeight()*this.getScale())+'px');
-        }
 
     },
 
@@ -432,7 +459,8 @@ wof.bizWidget.VoucherItem.prototype = {
             inputHeight: this.getInputHeight(),
             colspan: this.getColspan(),
             tipValue: this.getTipValue(),
-            linkageItem: this.getLinkageItem()
+            linkageItem: this.getLinkageItem(),
+            value : this.getValue()
         };
     },
     //----------必须实现----------
@@ -462,6 +490,7 @@ wof.bizWidget.VoucherItem.prototype = {
         this.setColspan(data.colspan);
         this.setTipValue(data.tipValue);
         this.setLinkageItem(data.linkageItem);
+        this.setValue(data.value);
     },
 
     //创建元件
