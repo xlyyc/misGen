@@ -596,6 +596,7 @@ jQuery(function(){
             json.layout = layout.getData();
 
             try{
+                console.log(JSON.stringify(json));
                 setPageMetas(JSON.stringify(json));
             }catch(e){
                 //alert(e);
