@@ -126,6 +126,15 @@ var wof$_aop = (function(){
                         }
                         return this._domInstance;
                     };
+                    obj[o].prototype.getRootNode = function(){
+                        var parentNode = this;
+                        while((parentNode=parentNode.parentNode())!=null){
+                            if(parentNode.getIsInside()!=true){
+                                break;
+                            }
+                        }
+                        return parentNode;
+                    };
                     obj[o].prototype.sendMessage = function(messageId, data){
                         if(this.getIsInside()==true){ //如果是内部对象 则以冒泡方式逐级向上发送消息 并且消息终止在非内部对象的那一级上
                             var parentNode = this;

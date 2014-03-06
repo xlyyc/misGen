@@ -73,7 +73,7 @@ wof.bizWidget.VoucherItem.prototype = {
 
     _value: null,
 
-    _text: null,
+    _component: null, //字段元件
 
     /**
      * get/set 属性方法定义
@@ -376,7 +376,7 @@ wof.bizWidget.VoucherItem.prototype = {
                 _this.sendMessage('wof.bizWidget.VoucherItem_dblclick');
             });
 
-            var label = new wof.widget.Label();
+            var label = wof$.create('Label');
             label.setIsInside(true);
             label.setLeft(0);
             label.setIsUnderline(false);
@@ -384,37 +384,15 @@ wof.bizWidget.VoucherItem.prototype = {
             label.appendTo(this);
             this._label = label;
 
-            var text = new wof.widget.Text();
-            text.setIsInside(true);
-            text.appendTo(this);
-            this._text = text;
-
             this._initFlag = true;
         }
 
         this._label.setWidth(this.getLabelWidth());
         this._label.setText(this.getItemLabel());
+        this._label.setTip(this.getTipValue());
 
-        //this._text.setTop(this.getHeight()/2-this._text.getHeight()/2);
-        this._text.setLeft(this.getLabelWidth());
-        this._text.setWidth(this.getInputWidth());
-        this._text.setHeight(this.getInputHeight());
-
-        //this._label.setTop(this.getHeight()/2-this._text.getHeight()/2);
-
-        if(this.getReadOnly() == true){
-            this._text.setDisplayType('readOnly');
-        }else{
-            this._text.setDisplayType('base');
-        }
-        this._text.setTip(this.getTipValue());
-        if(this.getDataField()!=''){
-
-            this._text.setValue(this.getValue()); //todo 需要结合当前的格式化配置来进行显示
-        }else{
-            this._text.setValue('');
-        }
-
+        var component = this._setComponent();
+        this._component = component;
 
     },
 
@@ -503,7 +481,7 @@ wof.bizWidget.VoucherItem.prototype = {
         }else if(this.getVisbleType()=='richTextArea'){
             component = jQuery('<textarea style="width:'+this.getInputWidth()+'px;height:'+this.getInputHeight()+'px;"></textarea>');
         }else if(this.getVisbleType()=='select'){
-            component = jQuery('<select style="width:'+this.getInputWidth()+'px;height:'+this.getInputHeight()+'px;"><option></option></option></select>');
+            component = jQuery('<select style="width:'+this.getInputWidth()+'px;height:'+this.getInputHeight()+'px;"><option></option></select>');
         }else if(this.getVisbleType()=='checkBox'){
             component = jQuery('<input type="checkBox" style="width:'+this.getInputWidth()+'px;height:'+this.getInputHeight()+'px;">');
         }else if(this.getVisbleType()=='date'){
@@ -518,7 +496,82 @@ wof.bizWidget.VoucherItem.prototype = {
         return component;
     },
 
-    //是否能够被删除
+    //根据当前的显示类型设置对应的元件
+    _setComponent: function(){
+        var state = 'View';
+        var rootNode = this.getRootNode();
+        if(rootNode!=null){
+            state = rootNode.getState();
+        }
+        console.log(state);
+
+
+        var component = null;
+        var clzName = '';
+        var setValMethod = '';
+        var visbleType = this.getVisbleType();
+        if(visbleType=='text'){
+            clzName = 'wof.widget.Text';
+            setValMethod = 'setValue';
+        }else if(visbleType=='textArea'){
+            clzName = 'wof.widget.TextArea';
+        }else if(visbleType=='richTextArea'){
+            clzName = 'wof.widget.HTMLEditor';
+        }else if(visbleType=='select'){
+            clzName = 'wof.widget.ComboBox';
+        }else if(visbleType=='checkBox'){
+            clzName = 'wof.widget.CheckBox';
+        }else if(visbleType=='date'){
+            clzName = 'wof.widget.DateBox';
+        }else if(visbleType=='radio'){
+            clzName = 'wof.widget.RadioGroup';
+        }else if(visbleType=='file'){
+            clzName = 'wof.widget.FileBox';
+        }else if(visbleType=='number'){
+            clzName = 'wof.widget.Text';
+        }
+
+        /**
+         * todo 暂时使用
+         */
+        clzName = 'wof.widget.Text';
+        setValMethod = 'setValue';
+
+        if(this._component!=null&&this._component.getClassName()==clzName){
+            component = this._component;
+        }else{
+            if(this._component!=null){
+                this._component.removeChildren(true);
+                this._component.remove(true);
+                this._component = null;
+            }
+            component = wof$.create(clzName);
+            component.setIsInside(true);
+            component.appendTo(this);
+        }
+        component.setLeft(this.getLabelWidth());
+        component.setWidth(this.getInputWidth());
+        component.setHeight(this.getInputHeight());
+      /*  if(this.getReadOnly() == true){              //todo 需要处理对应元件的只读状态
+            this._text.setDisplayType('readOnly');
+        }else{
+            this._text.setDisplayType('base');
+        }*/
+        if(this.getDataField()!=''){
+            var displayVal = '';
+            var value = this.getValue();
+            if(value!=''){
+                displayVal = value;
+            }
+            component[setValMethod](displayVal); //todo 需要结合当前的格式化配置来进行显示
+        }else{
+            component[setValMethod]('');
+        }
+
+        return component;
+    },
+
+  //是否能够被删除
     canDelete:function(){
         var f = true;
         if(this.getDataField()!=''){

@@ -31,7 +31,7 @@ wof.bizWidget.VoucherComponent.prototype = {
 
     _initActionName: null,
 
-    _state: null,  //状态
+    _state: null,  //状态  View Edit
 
     _caption: null,
 
@@ -185,6 +185,54 @@ wof.bizWidget.VoucherComponent.prototype = {
 
     _init: function(data){
         this._queryFlag = true;
+        if(data.state!=null){
+            this.setState(data.state);
+        }
+        if(data.itemHeight!=null){
+            this.setItemHeight(Number(data.itemHeight));
+        }
+        if(data.width!=null){
+            this.setWidth(Number(data.width));
+        }
+        if(data.height!=null){
+            this.setHeight(Number(data.height));
+        }
+        if(data.left!=null){
+            this.setLeft(Number(data.left));
+        }
+        if(data.top!=null){
+            this.setTop(Number(data.top));
+        }
+        if(data.zIndex!=null){
+            this.setZIndex(data.zIndex);
+        }
+        if(data.hiden!=null){
+            this.setHiden((data.hiden=='true'||data.hiden==true)?true:false);
+        }
+        if(data.position!=null){
+            this.setPosition(data.position);
+        }
+        if(data.scale!=null){
+            this.setScale(Number(data.scale));
+        }
+        if(data.onSendMessage!=null){
+            this.setOnSendMessage(data.onSendMessage);
+        }
+        if(data.onReceiveMessage!=null){
+            this.setOnReceiveMessage(data.onReceiveMessage);
+        }
+        if(data.bindEntityID!=null){
+            this.setBindEntityID(data.bindEntityID);
+        }
+        if(data.viewType!=null){
+            this.setViewType(data.viewType);
+        }
+        if(data.caption!=null){
+            this.setCaption(data.caption);
+        }
+        if(data.paramMaps!=null){
+            this.setParamMaps(data.paramMaps);
+        }
     },
 
     _onQueryDataCompleted: function(message){
@@ -579,6 +627,9 @@ wof.bizWidget.VoucherComponent.prototype = {
      */
     updateVoucherComponent: function(voucherComponentData){
         if(!jQuery.isEmptyObject(voucherComponentData)){
+            if(voucherComponentData.state!=null){
+                this.setState(voucherComponentData.state);
+            }
             if(voucherComponentData.itemHeight!=null){
                 this.setItemHeight(Number(voucherComponentData.itemHeight));
             }

@@ -201,24 +201,31 @@ wof.bizWidget.FlowLayout.prototype = {
         if(sectionIndex==null){
             sectionIndex = 1;
         }
+        var title = sectionData.title;
         var width = sectionData.width!=null?sectionData.width:this.getWidth();
         var titleHeight = sectionData.titleHeight!=null?sectionData.titleHeight:null;
         var cols = sectionData.cols!=null?sectionData.cols:this.getCols();
         var itemHeight = sectionData.itemHeight!=null?sectionData.itemHeight:this.getItemHeight();
+        var isExpand = (sectionData.isExpand==null||sectionData.isExpand=='true'||sectionData.isExpand==true)?true:false;
+        var mustInOrder = (sectionData.mustInOrder=='true'||sectionData.mustInOrder==true)?true:false;
+        var isAutoExt = (sectionData.isAutoExt=='true'||sectionData.isAutoExt==true)?true:false;
 
-        var newSection = new wof.bizWidget.FlowLayoutSection();
+        var newSection = wof$.create('FlowLayoutSection');
         newSection.setWidth(width);
         newSection.setTitleHeight(titleHeight);
-        newSection.setTitle(sectionData.title);
+        newSection.setTitle(title);
         newSection.setCols(cols);
         newSection.setItemHeight(itemHeight);
+        newSection.setIsExpand(isExpand);
+        newSection.setMustInOrder(mustInOrder);
+        newSection.setIsAutoExt(isAutoExt);
         var section = this.findSectionByIndex(sectionIndex);
         if(section!=null){
             newSection.beforeTo(section);
         }else{
             newSection.appendTo(this);
         }
-        var newItem = new wof.bizWidget.FlowLayoutItem();
+        var newItem = wof$.create('FlowLayoutItem');
         newItem.appendTo(newSection);
         if(sectionIndex==this.getActiveSectionIndex()){
             this.setActiveItemRank(null);
@@ -246,7 +253,7 @@ wof.bizWidget.FlowLayout.prototype = {
                         if(item.childNodes().length==0){
                             node.appendTo(item);
                         }else{
-                            var newItem = new wof.bizWidget.FlowLayoutItem();
+                            var newItem = wof$.create('FlowLayoutItem');
                             newItem.beforeTo(item);
                             node.appendTo(newItem);
                         }

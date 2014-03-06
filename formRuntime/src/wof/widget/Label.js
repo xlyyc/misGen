@@ -29,7 +29,17 @@ wof.widget.Label.prototype = {
 
     _type: null,
 
+    _tip: null,
+
     _ico: null,
+
+    getTip : function (){
+        return this._tip || '';
+    },
+
+    setTip : function (tip){
+        this._tip = tip;
+    },
 
     _initFlag: null,
 
@@ -181,7 +191,8 @@ wof.widget.Label.prototype = {
             isUnderline: this.getIsUnderline(),
             isBold: this.getIsBold(),
             isHighlight: this.getIsHighlight(),
-            type: this.getType()
+            type: this.getType(),
+            tip: this.getTip()
         };
     },
     //----------必须实现----------
@@ -193,6 +204,7 @@ wof.widget.Label.prototype = {
         this.setIsBold(data.isBold);
         this.setIsHighlight(data.isHighlight);
         this.setType(data.type);
+        this.setTip(data.tip);
     }
 
 };

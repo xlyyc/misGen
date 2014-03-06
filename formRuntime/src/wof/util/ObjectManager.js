@@ -22,7 +22,7 @@
                 with(wof.bizWidget)
                     with(wof.functionWidget){
                         obj = eval('new '+className+'()');
-                        if(obj._init!=null){
+                        if(obj._init!=null&& !jQuery.isEmptyObject(data)){
                             obj._init(data);
                         }
                     }

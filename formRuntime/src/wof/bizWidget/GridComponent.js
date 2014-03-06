@@ -1,77 +1,357 @@
 wof.bizWidget.GridComponent = function () {
-    //初始化监听消息
+    // 初始化监听消息
     this.setOnReceiveMessage([
-        {id: 'wof.bizWidget.DataObject_query', priority: 50, method: 'this._onQueryDataCompleted(message);'},
-        {id: 'wof.bizWidget.DataObject_add', proprity: 50, method: 'this._onAddDataCompleted(message);'},
-        {id: 'wof.bizWidget.DataObject_update', proprity: 50, method: 'this._onUpdateDataCompleted(message);'},
-        {id: 'wof.bizWidget.DataObject_delete', proprity: 50, method: 'this._onDeleteDataCompleted(message);'},
-        {id: 'wof.bizWidget.DataObject_undelete', proprity: 50, method: 'this._onUndeleteDataCompleted(message);'},
-        {id: 'wof.bizWidget.DataObject_save', proprity: 50, method: 'this._onSaveDataCompleted(message);'}
+        {
+            id: 'wof.bizWidget.DataObject_query',
+            priority: 50,
+            method: 'this._onQueryDataCompleted(message);'
+        },
+        {
+            id: 'wof.bizWidget.DataObject_add',
+            proprity: 50,
+            method: 'this._onAddDataCompleted(message);'
+        },
+        {
+            id: 'wof.bizWidget.DataObject_update',
+            proprity: 50,
+            method: 'this._onUpdateDataCompleted(message);'
+        },
+        {
+            id: 'wof.bizWidget.DataObject_delete',
+            proprity: 50,
+            method: 'this._onDeleteDataCompleted(message);'
+        },
+        {
+            id: 'wof.bizWidget.DataObject_undelete',
+            proprity: 50,
+            method: 'this._onUndeleteDataCompleted(message);'
+        },
+        {
+            id: 'wof.bizWidget.DataObject_save',
+            proprity: 50,
+            method: 'this._onSaveDataCompleted(message);'
+        }
     ]);
 };
 
 wof.bizWidget.GridComponent.prototype = {
-
-    _title: null,  // 标题
-
-    _themes: null, //主题
-
-    _dataSourceType: null, //数据源类型 do数据对象 ds数据源
-
-    _numberDisplay: null,    //序号是否显示
-
-    _headHeight: null,    //表头高度
-
-    _rowHeight: null,  // 行高
-
-    _editor: null,  // 是否编辑模式  view 显示 ，edit 编辑
-
-    _columns: null,  // 列描述
-
-    _rows: null, // 行描述
-
-    _cells: null, // 单元格描述
-
-    _pageBar: null, // 分页条
-
-    _header: null, // 表头定义
-
-    _footer: null, // 表尾定义
-
-    _bindEntityId: null, //绑定的实体id(即实体别名) 在在数据源类型为do时需要使用到
-
-    _cachePageNo: null, //缓存页号 数组类型 形如[2,3] 当前只支持缓存两页
-
-    _dataObject: null, //数据对象 在数据源类型为do时需要使用到
-
-    _dataSource: null, //数据源 在数据源类型为ds时需要使用到
-
-    _refData: null,  // 参照数据
-
-    _pageId: null,  // 页面ID
-
-    _batchSelect: null, // 是否多选
-
-    _grid: null, //内部对象 grid具体实现
     /**
-     *  初始化
+     * 设计时属性
+     */
+    _name: null,
+    _bindEntityId: null,
+    _headerHeight: null,
+    _rowHeight: null,
+    _numberDisplay: null,
+    _useMutiplePage: null,
+    _rowsCount: null,
+    _paramMaps: null,
+
+    setName: function (name) {
+        this._name = name;
+    },
+    getName: function () {
+        return this._name;
+    },
+    setBindEntityId: function (bindEntityId) {
+        this._bindEntityId = bindEntityId;
+    },
+    getBindEntityId: function () {
+        return this._bindEntityId;
+    },
+    setHeaderHeight: function (headerHeight) {
+        this._headerHeight = headerHeight;
+    },
+    getHeaderHeight: function () {
+        return this._headerHeight
+    },
+    setRowHeight: function (rowHeight) {
+        this.rowHeight = rowHeight;
+    },
+    getRowHeight: function () {
+        return this._rowHeight;
+    },
+    setNumberDisplay: function (numberDisplay) {
+        this._numberDisplay = numberDisplay;
+    },
+    getNumberDisplay: function () {
+        return this._numberDisplay;
+    },
+    setUseMutiplePage: function (useMutiplePage) {
+        this._useMutiplePage = useMutiplePage;
+    },
+    getUseMutiplePage: function () {
+        return this._useMutiplePage;
+    },
+    setRowsCount: function (rowsCount) {
+        this.setPageSize(rowsCount);
+    },
+    getRowsCount: function () {
+        return this.getPageSize();
+    },
+    setParamMaps: function (paramMaps) {
+        this._paramMaps = paramMaps;
+    },
+    getParamMaps: function () {
+        return this._paramMaps;
+    },
+    /**
+     * 子对象
+     */
+    _columns: null,
+
+    _pageBar: null,
+
+    _footer: null, // TODO 设计时需要实现
+
+    setColumns: function (columns) {
+        this._columns = columns;
+    },
+    getColumns: function () {
+        return this._columns;
+    },
+    updateColumnByIndex: function (data, columnIndex) {
+        var column = this.getColumns[columnIndex];
+        if (data.name) {
+            column.name = data.name;
+        }
+        if (data.useMultiSelect) {
+            column.useMultiSelect = data.useMultiSelect;
+        }
+        if (data.columnType) {
+            column.columnType = data.columnType;
+        }
+        if (data.caption) {
+            column.caption = data.caption;
+        }
+        if (data.columnType) {
+            column.columnType = data.columnType;
+        }
+        if (data.columnWidth) {
+            column.columnWidth = data.columnWidth;
+        }
+        if (data.columnType) {
+            column.gridId = data.gridId;
+        }
+        if (data.bindDataField) {
+            column.bindDataField = data.bindDataField;
+        }
+        if (data.display) {
+            column.display = data.display;
+        }
+        if (data.isPin) {
+            column.isPin = data.isPin;
+        }
+        if (data.dataTimeFormate) {
+            column.dataTimeFormate = data.dataTimeFormate;
+        }
+        if (data.editor) {
+            column.editor = data.editor;
+        }
+        if (data.picUrl) {
+            column.picUrl = data.picUrl;
+        }
+        if (data.selectPattern) {
+            column.selectPattern = data.selectPattern;
+        }
+        if (data.visbleType) {
+            column.visbleType = data.visbleType;
+        }
+        if (data.readOnly) {
+            column.readOnly = data.readOnly;
+        }
+        if (data.required) {
+            column.required = data.required;
+        }
+        if (data.orderbyType) {
+            column.orderbyType = data.orderbyType;
+        }
+        if (data.canSearch) {
+            column.canSearch = data.canSearch;
+        }
+        if (data.length) {
+            column.length = data.length;
+        }
+        if (data.min) {
+            column.min = data.min;
+        }
+        if (data.max) {
+            column.max = data.max;
+        }
+        if (data.intlength) {
+            column.intlength = data.intlength;
+        }
+        if (data.scaleLength) {
+            column.scaleLength = data.scaleLength;
+        }
+        if (data.regExp) {
+            column.regExp = data.regExp;
+        }
+        if (data.refSearchCondition) {
+            column.refSearchCondition = data.refSearchCondition;
+        }
+        if (data.checkErrorInfo) {
+            column.checkErrorInfo = data.checkErrorInfo;
+        }
+        if (data.inkeForm) {
+            column.inkeForm = data.inkeForm;
+        }
+    },
+    updateColumnByName: function (data, columnName) {
+        this.updateColumnByIndex(data, this._getColumnIndexByName(columnName));
+    },
+    _getColumnIndexByName: function (columName) {
+        var index = -1;
+        var columns = this.getColumns();
+        for (var i = 0; i < columns.length; i++) {
+            if (columns[i].name == columnName) {
+                index = i;
+                break;
+            }
+        }
+        return index;
+    },
+    getGridColumnDataByIndex: function (index) {
+        var column = columns[index];
+        return {
+            "width": column.columnWidth,
+            "colNo": index, // 列号 从1开始
+            "name": column.name,
+            "caption": column.caption,
+            "sortable": column.orderByType != 'none',
+            "sortType": column.orderByType,
+            "sortFun": column.sortFun,
+            "align": "center", // TODO 设计时需要实现
+            "bold": "true",// TODO 设计时需要实现
+            "underline": "true",// TODO 设计时需要实现
+            "bgColor": "#efefef",// TODO 设计时需要实现
+            "font": "宋体",// TODO 设计时需要实现
+            "fontSize": "max",// TODO 设计时需要实现
+            "fontColor": "black",// TODO 设计时需要实现
+            "style": "", // 自定义样式
+            "adjustContent": "true",
+            "format": {
+                "name": column.dataTimeFormat, // year年 yearMonth年月
+                // yearMonthDay年月日
+                // monthDay月日 url链接 percentage百分比
+                // currency货币 number数字
+                "param": "short", // TODO 设计时需要实现 // 针对name定义的参数
+                // 比如short表示为短日期格式
+                // 再比如name为currency货币 param为US 表明是美元
+                "functionName": null
+                // 自定义格式化函数名称(当没有对应预设格式的时候
+                // 设置该自定义格式化函数)
+            },
+            "isPin": column.isPin, // 是否锁定
+            "editor": editor,
+            "type": column.columnType, // string字符 number数字 time时间 date日期
+            "visbleType": column.visbleType, // number数字 text文本框 date日期
+            // select下拉框
+            "selectPattern": column.selectPattern, // 下拉框类型 normal普通 tree树形
+            // grid列表
+            "required": column.required, // 是否必填
+            "readonly": column.readOnly, // 是否只读
+            "verifyFunctionName": null, // TODO 设计时需要实现 //自定义校验回调函数名称
+            "verifyErrorInfo": column.checkErrorInfo
+            // 验证错误信息提示
+        }
+    },
+    getGridColumnsData: function () {
+        var columns = this.getColumns();
+        var columnsData = [];
+        for (var i = 0; i < columns.length; i++) {
+            var columnData = this.getGridColumnDataByIndex(columns[i]);
+            columnsData.push(columnData);
+        }
+        return columnData;
+    },
+    setPageBar: function (pageBar) {
+        this._pageBar = pageBar;
+    },
+    getPageBar: function () {
+        return this._pageBar;
+    },
+    getPageSize: function () {
+        return this.getPageBar().pageSize;
+    },
+    setPageSize: function (pageSize) {
+        return this.getPageBar().pageSize = pageSize;
+    },
+    getPageNo: function () {
+        return this.getPageBar().pageNo;
+    },
+    setPageNo: function (pageNo) {
+        this.getPageBar().pageNo = pageNo;
+    },
+    /**
+     * TODO 暂时用不到
+     */
+    _activeColumnIndex: null,
+    _callStr: null,
+    _initActionName: null,
+    /**
+     * 运行时属性
+     */
+    _pageId: null,
+    _themes: null,
+    _mode: null, // 显示还是编辑模式， view 或 edit
+    _dataSourceType: null,
+    _dataSource: null,
+    _gridId: null,
+    _cachePageNo: null,
+    _gridData: null,
+
+    getPageId: function () {
+        return this._pageId;
+    },
+    setPageId: function (pageId) {
+        this._pageId = pageId;
+    },
+    getThemes: function () {
+        return this._themes;
+    },
+    setThemes: function (themes) {
+        this._themes = themes;
+    },
+    getMode: function () {
+        return this._mode;
+    },
+    setMode: function (mode) {
+        this._mode = mode;
+    },
+    getDataSourceType: function () {
+        return this._dataSourceType;
+    },
+    setDataSourceType: function (dataSourceType) {
+        this._dataSourceType = dataSourceType;
+    },
+    getDataSource: function () {
+        return this._dataSource;
+    },
+    setDataSource: function (dataSource) {
+        this._dataSource = dataSource;
+    },
+    getGridData: function () {
+        return this._gridData;
+    },
+    setGridData: function (gridData) {
+        this._gridData = gridData;
+    },
+    /**
+     * 初始化
      */
     _init: function (data) {
         this.setPageBar({
             "pageNo": 1,
             "pageSize": 10
         });
-        this.setEditor('view');
-        this.setBatchSelect(false);
+        this.setRowsCount(10);
+        this.setColumns([]);
+        this.setMode('view');
         this.setNumberDisplay(true);
         this.setGridSchema(data);
-        if (this.getDataSourceType() == 'do') {
-            this.setRefData(this.getDo().getRefData());
-        } else {
-            //TODO ds
-        }
+        this.setRefData(this.getDataSource().getRefData());
         this.gotoPage(this.getPageNo());
-        this.render();
     },
     beforeRender: function () {
 
@@ -84,35 +364,30 @@ wof.bizWidget.GridComponent.prototype = {
                 top: this.getTop(),
                 left: this.getLeft(),
                 isHide: this.getHiden(),
-                title: this.getTitle(),
-                displayTitle: this.getTitle() ? true : false,
-                theme: this.getThemes(),
-                editor: this.getEditor(),
-                batchSelect: this.getBatchSelect(),
-                column: this.getColumns(),
-                pageBar: this.getPageBar(),
-                dataGrid: this.getGridData(),
-                numberDisplay: this.getNumberDisplay(),
-                headHeight: this.getHeadHeight(),
+                name: this.getName(),
+                bindEntityId: this.getBindEntityId(),
+                headerHeight: this.getHeaderHeight(),
                 rowHeight: this.getRowHeight(),
-                header: this.getHeader(),
-                footer: this.getFooter(),
-                cell: this.getCells(),
-                data: this.getGridData()
+                numberDisplay: this.getNumberDisplay(),
+                useMutiplePage: this.getUseMutiplePage(),
+                columns: this.getGridColumnsData(),
+                pageBar: this.getPageBar(),
+                data: this.getGridData(),
+                refData: this.setRefData()
             }
         };
         if (this._grid == null) {
             this._grid = new wof.widget.Grid();
-            if (this.getEditor() == 'view') {
-                //grid.setData(vo);
-                //grid.render();
+            if (this.getMode() == 'view') {
+                // grid.setData(vo);
+                // grid.render();
                 console.log(vo);
             } else {
-                //todo edit 没实现
+                // todo edit 没实现
             }
         } else {
-            //grid.setData(vo);
-            //grid.render();
+            // grid.setData(vo);
+            // grid.render();
             console.log(vo);
         }
     },
@@ -120,47 +395,42 @@ wof.bizWidget.GridComponent.prototype = {
         var pageNo = this.getPageNo();
         var totalPage = this.getTotalPage();
         if (pageNo >= totalPage) {
-            alert('没有下页');  //todo 调用widget下的对话框
+            alert('没有下页'); // todo 调用widget下的对话框
             return;
         }
         pageNo++;
         this.gotoPage(pageNo);
-
     },
     prevPage: function () {
         var pageNo = this.getPageNo();
         if (pageNo <= 1) {
-            alert('没有上页');  //todo 调用widget下的对话框
+            alert('没有上页'); // todo 调用widget下的对话框
             return;
         }
         pageNo--;
         this.gotoPage(pageNo);
     },
     /**
-     * 如果pageNo落在当前缓存中 直接从缓存载入数据
-     * 如果pageNo不在缓存中 则需要发起新的查询(此查询将修改相关数据和属性)
+     * 如果pageNo落在当前缓存中 直接从缓存载入数据 如果pageNo不在缓存中 则需要发起新的查询(此查询将修改相关数据和属性)
      *
      */
-    gotoPage: function (pageNo) {
+    gotoPage: function (pageNo, forceFlush) {
         if (pageNo <= 0 || pageNo > this.getTotalPage()) {
-            alert(pageNo + '页号不存在'); //todo 调用widget下的对话框
+            alert(pageNo + '页号不存在'); // todo 调用widget下的对话框
             return;
         }
         this.setPageNo(pageNo);
         var data = this._getPageDataInCache(pageNo);
-        if (data == null) { //表明pageNo不在缓存中 需要发起新的查询
+        if (data == null || true === forceFlush) { // 表明pageNo不在缓存中需要发起新的查询或者强制加载数据
             var offset = (pageNo - 1) * this.getPageSize();
             var rowsCount = this.getPageSize() * 2;
-            if (this.getDataSourceType() == 'do') {
-                this.getDo().queryData('main', null, null, offset, rowsCount);
-            } else {
-                //TODO ds没实现
-            }
+            var dataSource = this.getDataSource();
+            dataSource.queryData('all', null, null, offset, rowsCount);
         } else {
             this.setGridData(this._getPageDataInCache(this.getPageNo()));
         }
     },
-    //从缓存中获得指定页的数据
+    // 从缓存中获得指定页的数据
     _getPageDataInCache: function (pageNo) {
         if (this._isPageDataInCache(pageNo) == -1) {
             return null;
@@ -169,8 +439,10 @@ wof.bizWidget.GridComponent.prototype = {
         var offset = (cachePageNo[0] == pageNo) ? 0 : this.getPageSize();
         var cacheData = this.getDataSource().getLocalData();
         var data = [];
-        //end为指定页数据的结束下标位置(下标从0开始)
-        var end = ((offset + this.getPageSize()) < cacheData.length ? (offset + this.getPageSize()) : cacheData.length) - 1;
+        // end为指定页数据的结束下标位置(下标从0开始)
+        var end = ((offset + this.getPageSize()) < cacheData.length ? (offset + this
+            .getPageSize())
+            : cacheData.length) - 1;
         for (var i = offset; i <= end; i++) {
             data.push(cacheData[i]);
         }
@@ -188,13 +460,9 @@ wof.bizWidget.GridComponent.prototype = {
      */
     _onQueryDataCompleted: function (message) {
         if (this._isDataChange(message)) {
-            this.setCachePageNo([this.getPageNo(), this.getPageNo() + 1]);
-            var total = null;
-            if (this.getDataSourceType() == 'do') {
-                total = this.getDo().getLocalOriginalData().totalCount;
-            } else {
-                //TODO ds
-            }
+            this.setCachePageNo([ this.getPageNo(), this.getPageNo() + 1 ]);
+            var dataSource = this.getDataSource();
+            var total = dataSource.getLocalOriginalData().totalCount;
             var pageBar = this.getPageBar();
             pageBar.total = parseInt(total);
             this.setPageBar(pageBar);
@@ -203,7 +471,7 @@ wof.bizWidget.GridComponent.prototype = {
     },
     _onAddDataCompleted: function (message) {
         if (this._isDataChange(message)) {
-            //todo 在grid上面用特殊颜色标识
+            // todo 在grid上面用特殊颜色标识
             console.log(message);
         }
     },
@@ -231,7 +499,6 @@ wof.bizWidget.GridComponent.prototype = {
             console.log(message);
         }
     },
-
     _isDataChange: function (message) {
         var flag = false;
         for (var i = 0; i < message.data.length; i++) {
@@ -244,7 +511,7 @@ wof.bizWidget.GridComponent.prototype = {
     },
 
     /**
-     pageNo页面中的数据是否在缓存中索引， -1代表不在。
+     * pageNo页面中的数据是否在缓存中索引， -1代表不在。
      */
     _isPageDataInCache: function (pageNo) {
         var index = -1;
@@ -261,12 +528,209 @@ wof.bizWidget.GridComponent.prototype = {
     },
     /**
      * 获取总页数
+     *
      * @returns {Number}
      */
     getTotalPage: function () {
         var total = parseInt(this.getPageBar().total);
-        return parseInt(total % this.getPageSize() == 0 ? total / this.getPageSize()
-            : total / this.getPageSize() + 1);
+        return parseInt(total % this.getPageSize() == 0 ? total
+            / this.getPageSize() : total / this.getPageSize() + 1);
+    },
+    getColumnDisplay: function (columnName) {
+        var index = _getColumnIndexByColumnName(columnName);
+        return this.getColumns()[index].display;
+    },
+    setColumnDisplay: function (columnName, display) {
+        var index = _getColumnIndexByColumnName(columnName);
+        this.getColumns()[index].display = display;
+    },
+    _getColumnIndexByColumnName: function (columnName) {
+        var index = -1;
+        var columns = this.getColumns();
+        for (var i = 0; i < columns.length; i++) {
+            if (columns[i].name == columnName) {
+                index = i;
+                break;
+            }
+        }
+        return index;
+    },
+    deleteColumnByName: function (columnName) {
+        var index = this._getColumnIndexByColumnName();
+        if (index >= 0) {
+            var columns = this.getColumns();
+            this.setColumns(columns.slice(0, index - 1).concat(
+                columns.slice(index, columns.length)));
+        }
+    },
+    addColumnByIndex: function (columnIndex, columnData) {
+        var columns = this.getColumns();
+        if (columnIndex < 0) {
+            columns.unshift(columnData);
+        } else if (columnIndex > columns.length - 1) {
+            columns.push(columnData);
+        } else {
+            var front = columns.slice(0, columnIndex - 1);
+            front.push(columnData);
+            this.setColumns(front.concat(columns.clice(columnIndex + 1,
+                columns.length)));
+        }
+    },
+    moveColumn: function (sourceIndex, targetIndex) {
+        var columns = this.getColumns();
+        var sourceColumn = jQuery.extend(true, {}, columns[sourceIndex]);
+        columns[sourceIndex] = columns[targetIndex];
+        columns[targetIndex] = sourceColumn;
+    },
+    getGridId: function () {
+        return this.getId();
+    },
+    setRefData: function (refData) {
+        this._refData = refData;
+    },
+    getPageId: function () {
+        return this._pageId;
+    },
+    setPageId: function (pageId) {
+        this._pageId = pageId;
+    },
+    getRefData: function () {
+        return this._refData;
+    },
+    setCellValue: function (columnName, rowIndex, value) {
+        if (value !== undefined) {
+            var gridData = this.getGridData();
+            try {
+                var data = gridData[rowIndex];
+                data.data[columnName].value = value;
+                return true;
+            } catch (e) {
+                return false;
+            }
+        }
+    },
+    getCellValue: function (columnName, rowIndex) {
+        var gridData = this.getGridData();
+        try {
+            var data = gridData[rowIndex];
+            return data.data[columnName].value;
+        } catch (e) {
+            return null;
+        }
+    },
+    getCachePageNo: function () {
+        return this._cachePageNo;
+    },
+    setCachePageNo: function (cachePageNo) {
+        this._cachePageNo = cachePageNo;
+    },
+    getColumns: function () {
+        return this._columns;
+    },
+    setDo: function (dataObject) {
+        this._dataObject = dataObject;
+    },
+    getDo: function () {
+        return this._dataObject;
+    },
+    getTotalRecord: function () {
+        return this._totalRecord;
+    },
+    getBindEntityId: function () {
+        return this._bindEntityId;
+    },
+    setBindEntityId: function (bindEntityId) {
+        this._bindEntityId = bindEntityId;
+    },
+    setTotalRecord: function () {
+        return this._totalRecord;
+    },
+    getPageSize: function () {
+        return this.getPageBar().pageSize;
+    },
+    setPageSize: function (pageSize) {
+        return this.getPageBar().pageSize = pageSize;
+    },
+    getPageNo: function () {
+        return this.getPageBar().pageNo;
+    },
+    setPageNo: function (pageNo) {
+        this.getPageBar().pageNo = pageNo;
+    },
+    refreshGridData: function () {
+        this.gotoPage(this.getPageNo(), true);
+        $(this).trigger('afterRefreshData', {});
+    },
+    setDataObject: function (dataObject) {
+        this._dataObject = dataObject;
+    },
+    getDataObject: function () {
+        return this._dataObject;
+    },
+    addRow: function (data) {
+        this.getDataSource().addData(data);
+    },
+    deleteRow: function (data) {
+        this.getDataSource().deleteData(data);
+    },
+    updateRow: function (data) {
+        this.getDataSource().updateData(data);
+    },
+    undeleteData: function () {
+        this.getDataSource().undeleteData();
+    },
+    saveData: function () {
+        this.getDataSource().saveData();
+    },
+    // 事件
+    /**
+     *
+     * @param data
+     *     data.newSize 改变后大小
+     *     data.oldSize 改变前大小
+     */
+    onResize: function (data) {
+
+    },
+    /**
+     *  列表刷新
+     */
+    onRefreshData: function () {
+
+    },
+    /**
+     * 添加一行之后
+     * @param rowData
+     */
+    afterAddRow: function (data) {
+
+    },
+    /**
+     * 删除一行之后
+     * @param rowData
+     */
+    afterDeleteRow: function (data) {
+
+    },
+    /**
+     *
+     * @param data
+     *     data.columnData
+     *     data.newIndex
+     *     data.oldIndex
+     */
+    onColumnMove: function (data) {
+
+    },
+    /**
+     *
+     * @param data
+     *      data.Rank 行列号
+     *      data.newValue 改变后的值
+     *      data.oldValue 改变前的值
+     */
+    onCellValueChange: function (data) {
+
     },
     /**
      * 设置属性
@@ -329,310 +793,5 @@ wof.bizWidget.GridComponent.prototype = {
         if (options.pageId) {
             this.setPageId(options.pageId);
         }
-        if (options.batchSelect) {
-            this.setBatchSelect(options.batchSelect);
-        }
-    },
-    setRefData: function (refData) {
-        this._refData = refData;
-    },
-    getPageId: function () {
-        return this._pageId;
-    },
-    setPageId: function (pageId) {
-        this._pageId = pageId;
-    },
-    getRefData: function () {
-        return this._refData;
-    },
-    deleteColumnByIndex: function (columnIndex) {
-
-    },
-    addColumnByIndex: function (columnIndex) {
-
-    },
-    moveColumn: function (sourceIndex, targetIndex) {
-
-    },
-    setCellValue: function (columnIndex, rowIndex, value) {
-
-    },
-    getCellValue: function (columnIndex, rowIndex) {
-
-    },
-    getCachePageNo: function () {
-        return this._cachePageNo;
-    },
-    setCachePageNo: function (cachePageNo) {
-        this._cachePageNo = cachePageNo;
-    },
-    getColumns: function () {
-        return this._columns;
-    },
-    setDo: function (dataObject) {
-        this._dataObject = dataObject;
-    },
-    getDo: function () {
-        return this._dataObject;
-    },
-    setColumns: function (column) {
-        this._columns = column;
-    },
-    getColumns: function () {
-        return this._column;
-    },
-    getTotalRecord: function () {
-        return this._totalRecord;
-    },
-    getBindEntityId: function () {
-        return this._bindEntityId;
-    },
-    setBindEntityId: function (bindEntityId) {
-        this._bindEntityId = bindEntityId;
-    },
-    setTotalRecord: function () {
-        return this._totalRecord;
-    },
-    setPageBar: function (pageBar) {
-        this._pageBar = pageBar;
-    },
-    getPageBar: function () {
-        return this._pageBar;
-    },
-    getPageSize: function () {
-        return this.getPageBar().pageSize;
-    },
-    setPageSize: function (pageSize) {
-        return this.getPageBar().pageSize = pageSize;
-    },
-    getPageNo: function () {
-        return this.getPageBar().pageNo;
-    },
-    setPageNo: function (pageNo) {
-        this.getPageBar().pageNo = pageNo;
-    },
-    getDisplayMode: function () {
-        return this._displayMode;
-    },
-    setDisplayMode: function () {
-        return this._displayMode;
-    },
-    getHeader: function () {
-        return this.header;
-    },
-    setHeader: function (header) {
-        this._header = header;
-    },
-    getRowHeight: function () {
-        return this._rowHeight;
-    },
-
-    setRowHeight: function (rowHeight) {
-        this._rowHeight = rowHeight;
-    },
-    getGridData: function () {
-        return this._gridData;
-    },
-    setGridData: function (gridData) {
-        return this._gridData = gridData;
-    },
-
-    getNumberDisplay: function () {
-        return this._numberDisplay;
-    },
-
-    setNumberDisplay: function (numberDisplay) {
-        this._numberDisplay = numberDisplay;
-    },
-    getUseMutiplePage: function () {
-        return this._useMutiplePage;
-    },
-    setUseMutiplePage: function () {
-        return this._useMutiplePage;
-    },
-    getHeadHeight: function () {
-        return this._headHeight;
-    },
-    setHeadHeight: function (headHeight) {
-        this._headHeight = headHeight;
-    },
-    setTitle: function (title) {
-        this._title = title;
-    },
-    getTitle: function () {
-        return this._title;
-    },
-    setTitle: function (title) {
-        this._title = title;
-    },
-    getThemes: function () {
-        return this._themes;
-    },
-    setThemes: function (themes) {
-        this._themes = themes;
-    },
-    getDataSourceType: function () {
-        return this._dataSourceType;
-    },
-    setDataSourceType: function (dataSourceType) {
-        this._dataSourceType = dataSourceType;
-    },
-    getRows: function () {
-        return this._rows;
-    },
-    setRows: function (rows) {
-        this._rows = rows;
-    },
-    getCells: function () {
-        return this._cells;
-    },
-    setCells: function (cells) {
-        this._cells = cells;
-    },
-    getColumns: function () {
-        return this._columns;
-    },
-    setCells: function (columns) {
-        this._columns = columns;
-    },
-    getFooter: function () {
-        return this._footer;
-    },
-    setFooter: function (footer) {
-        this._footer = footer;
-    },
-    getBatchSelect: function () {
-        return this._batchSelect;
-    },
-    setBatchSelect: function (batchSelect) {
-        this._batchSelect = batchSelect;
-    },
-    refreshGridData: function () {
-
-    },
-    setDataObject: function (dataObject) {
-        this._dataObject = dataObject;
-    },
-    getDataObject: function () {
-        return this._dataObject;
-    },
-    addRow: function (data) {
-        this.getDo().addData(data);
-    },
-    deleteRow: function (data) {
-        this.getDo().deleteData(data);
-    },
-    updateRow: function (data) {
-        this.getDo().updateData(data);
-    },
-    undeleteData: function () {
-        this.getDo().undeleteData();
-    },
-    saveData: function () {
-        this.getDo().saveData();
-    },
-    getColumnName: function (columnIndex) {
-
-    },
-    setColumnName: function (columnIndex, name) {
-
-    },
-    getMultiSelect: function (columnIndex) {
-
-    },
-    setMultiSelect: function (columnIndex, selected) {
-
-    },
-    getColumnCaption: function (columnIndex) {
-
-    },
-    setColumnCaption: function (columnIndex, caption) {
-
-    },
-    getColumnDisplay: function (columnIndex) {
-
-    },
-    setColumnDisplay: function (columnIndex) {
-
-    },
-    getColumnOrderType: function (columnIndex) {
-
-    },
-    setColumnOrderType: function (columnIndex, type) {
-
-    },
-    getColumnType: function (columnIndex) {
-
-    },
-    setColumnType: function (columnIndex) {
-
-    },
-    getColumnWidth: function (columnIndex) {
-
-    },
-    setColumnWidth: function (columnIndex, width) {
-
-    },
-    getBindDataField: function (columnIndex) {
-
-    },
-    getIsPin: function (columnIndex) {
-
-    },
-    setIsPin: function (columnIndex, pin) {
-
-    },
-    getDataTimeFormat: function (columnIndex) {
-
-    },
-    setDataTimeFormat: function (columnIndex, pattern) {
-
-    },
-    getEditor: function (columnIndex) {
-        return this._editor;
-    },
-    setEditor: function (editor) {
-        this._editor = editor;
-    },
-    getPicUrl: function (columnIndex) {
-
-    },
-    setPicUrl: function (columnIndex, url) {
-
-    },
-
-//事件
-    resize: function (newSize, oldSize) {
-
-    },
-    beforeRefreshData: function () {
-
-    },
-    afterRefreshData: function () {
-
-    },
-    beforeAddRow: function (row) {
-
-    },
-    afterAddRow: function (row) {
-
-    },
-    beforeDeleteRow: function (row) {
-
-    },
-    afterDeleteRow: function (row) {
-
-    },
-    alterColumnMove: function (columnData, newIndex, oldIndex) {
-
-    },
-    onCellValueChange: function (newValue, oldValue) {
-
     }
-
 }
-//wof$.grid({});
-//var gridComponentInstance = new wof.bizWidget.GridComponent();
-//gridComponentInstance._init({height : 200});
-
-

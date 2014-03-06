@@ -51,19 +51,6 @@ wof.bizWidget.VoucherItemGroup.prototype = {
      * get/set 属性方法定义
      */
 
-    getVoucherComponent: function(){
-        if(this._voucherComponent == null){
-            var parentNode = this;
-            while((parentNode=parentNode.parentNode())!=null){
-                if(parentNode.getClassName()=='wof.bizWidget.VoucherComponent'){
-                    this._voucherComponent = parentNode;
-                    break;
-                }
-            }
-        }
-        return this._voucherComponent;
-    },
-
     getIsHead: function(){
         if(this._isHead==null){
             this._isHead = false;
@@ -85,7 +72,7 @@ wof.bizWidget.VoucherItemGroup.prototype = {
 
     getColsNum: function(){
         if(this._colsNum==null){
-            if(this.getVoucherComponent()!=null){
+            if(this.getRootNode()!=null){
                 this._colsNum = 4;
             }
         }
@@ -131,8 +118,8 @@ wof.bizWidget.VoucherItemGroup.prototype = {
 
     getItemHeight: function(){
         if(this._itemHeight==null){
-            if(this.getVoucherComponent()!=null){
-                this._itemHeight = this.getVoucherComponent().getItemHeight();
+            if(this.getRootNode()!=null){
+                this._itemHeight = this.getRootNode().getItemHeight();
             }else{
                 this._itemHeight = 70;
             }
@@ -164,8 +151,8 @@ wof.bizWidget.VoucherItemGroup.prototype = {
     },
 
     getWidth: function(){
-        if(this.getVoucherComponent()!=null){
-            this._width = this.getVoucherComponent().getWidth();
+        if(this.getRootNode()!=null){
+            this._width = this.getRootNode().getWidth();
         }
         return this._width;
     },

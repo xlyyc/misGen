@@ -149,7 +149,7 @@ jQuery(function(){
                         newFlowLayout.appendTo(container);
                         newFlowLayout.render();*/
 
-                        var voucherComponent = wof$.create('VoucherComponent');
+                        var voucherComponent = wof$.create('VoucherComponent',{'state':'View'});
                         voucherComponent.setDataObject(dataObjectInstance);
                         voucherComponent.setBindEntityID('JZGJBXXB');
                         voucherComponent.setLeft(0);
@@ -227,7 +227,7 @@ jQuery(function(){
                         voucherComponent2.setTop(0);
                         voucherComponent2.setWidth(500);
                         voucherComponent2.setItemHeight(60);
-                        voucherComponent2.setViewType('tab');
+
 
 
                         voucherComponent2.insertVoucherItemGroup({groupCaption:'表头分组3',width:500,titleHeight:25,colsNum:2,itemHeight:45});
@@ -238,6 +238,8 @@ jQuery(function(){
                         voucherComponent2.insertVoucherItemGroup({groupCaption:'表头分组5',width:500,titleHeight:25,colsNum:2,itemHeight:45});
 
                         voucherComponent2.downVoucherItemGroup(1);
+
+                        //voucherComponent2.setViewType('group');
 
                         voucherComponent2.setDataObject(dataObjectInstance);
 
@@ -250,6 +252,18 @@ jQuery(function(){
 
                         voucherComponent2.render();
 
+                        var button = new Button();
+                        button.setIsInside(true);
+                        button.setType('submit');
+                        button.setText('按钮1');
+                        button.setLeft(5);
+                        button.setTop(5);
+                        button.setWidth(100);
+                        button.setHeight(40);
+                        //button.appendTo(container);
+
+                        flowLayout.insertNode(button,{row:1,col:1},1);
+                        button.render();
                 }
     }
 	//重设工作区

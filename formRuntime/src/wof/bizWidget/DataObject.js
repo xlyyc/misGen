@@ -35,6 +35,8 @@ wof.bizWidget.DataObject.prototype = {
 
     _pageId: null,  // 页面ID
 
+    refData: null,
+
     /**
      * New 指定行是新行，但此行的列并未赋值 只适用到行
      * NewModified 指定行是新行且行中的列已经赋值 只适用到行
@@ -821,6 +823,9 @@ wof.bizWidget.DataObject.prototype = {
      *
      */
     getRefData: function(){
+        if(this.refData != null){
+            return this.refData;
+        }
         var _this = this;
         var pageId = this._pageId;
         var rsp = jQuery.ajax(
@@ -830,8 +835,9 @@ wof.bizWidget.DataObject.prototype = {
                 async:_this.getAsyncQuery()
             }
         );
-        var refData = JSON.parse(rsp.responseText);
-        return refData;
+
+        this.refData = JSON.parse(rsp.responseText);
+        return this.refData;
     },
 
     /**
