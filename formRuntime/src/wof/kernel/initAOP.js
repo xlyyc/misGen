@@ -126,7 +126,7 @@ var wof$_aop = (function(){
                         }
                         return this._domInstance;
                     };
-                    obj[o].prototype.getRootNode = function(){
+                    obj[o].prototype.getOriginNode = function(){
                         var parentNode = this;
                         while((parentNode=parentNode.parentNode())!=null){
                             if(parentNode.getIsInside()!=true){

@@ -72,7 +72,7 @@ wof.bizWidget.VoucherItemGroup.prototype = {
 
     getColsNum: function(){
         if(this._colsNum==null){
-            if(this.getRootNode()!=null){
+            if(this.getOriginNode()!=null){
                 this._colsNum = 4;
             }
         }
@@ -118,8 +118,8 @@ wof.bizWidget.VoucherItemGroup.prototype = {
 
     getItemHeight: function(){
         if(this._itemHeight==null){
-            if(this.getRootNode()!=null){
-                this._itemHeight = this.getRootNode().getItemHeight();
+            if(this.getOriginNode()!=null){
+                this._itemHeight = this.getOriginNode().getItemHeight();
             }else{
                 this._itemHeight = 70;
             }
@@ -151,8 +151,8 @@ wof.bizWidget.VoucherItemGroup.prototype = {
     },
 
     getWidth: function(){
-        if(this.getRootNode()!=null){
-            this._width = this.getRootNode().getWidth();
+        if(this.getOriginNode()!=null){
+            this._width = this.getOriginNode().getWidth();
         }
         return this._width;
     },

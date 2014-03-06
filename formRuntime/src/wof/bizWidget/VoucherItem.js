@@ -499,7 +499,7 @@ wof.bizWidget.VoucherItem.prototype = {
     //根据当前的显示类型设置对应的元件
     _setComponent: function(){
         var state = 'View';
-        var rootNode = this.getRootNode();
+        var rootNode = this.getOriginNode();
         if(rootNode!=null){
             state = rootNode.getState();
         }
