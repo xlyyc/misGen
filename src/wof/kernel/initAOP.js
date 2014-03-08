@@ -126,6 +126,15 @@ var wof$_aop = (function(){
                         }
                         return this._domInstance;
                     };
+                    obj[o].prototype.getOriginNode = function(){
+                        var parentNode = this;
+                        while((parentNode=parentNode.parentNode())!=null){
+                            if(parentNode.getIsInside()!=true){
+                                break;
+                            }
+                        }
+                        return parentNode;
+                    };
                     obj[o].prototype.sendMessage = function(messageId, data){
                         if(this.getIsInside()==true){ //如果是内部对象 则以冒泡方式逐级向上发送消息 并且消息终止在非内部对象的那一级上
                             var parentNode = this;
@@ -508,9 +517,60 @@ var wof$_aop = (function(){
                             this._setData(data);
                         };
                     }
+                    obj[o].prototype._event = null;
+                    obj[o].prototype._timeFn = null;
+                    if(obj[o].prototype.initRender!=null){
+                        obj[o].prototype._initRender = obj[o].prototype.initRender;
+                        obj[o].prototype.initRender = function(){
+                            var _this = this;
+                            this.getDomInstance().mousedown(function(event){
+                                event.stopPropagation();
+                                clearTimeout(this._timeFn);
+                                this._timeFn = setTimeout(function(){
+                                    _this._event = event;
+                                    _this.sendMessage(_this.getClassName()+'_mousedown');
+                                    _this.sendMessage(_this.getClassName()+'_active');
+                                },250);
+                            });
+                            this.getDomInstance().dblclick(function(event){
+                                event.stopPropagation();
+                                clearTimeout(this._timeFn);
+                                _this._event = event;
+                                _this.sendMessage(_this.getClassName()+'_dblclick');
+                                _this.sendMessage(_this.getClassName()+'_active');
+                            });
+                            this._initRender();
+                        };
+                    }else{
+                        obj[o].prototype.initRender = function(){
+                            var _this = this;
+                            var timeFn = null;
+                            this.getDomInstance().mousedown(function(event){
+                                event.stopPropagation();
+                                clearTimeout(timeFn);
+                                timeFn = setTimeout(function(){
+                                    _this._event = event;
+                                    _this.sendMessage(_this.getClassName()+'_mousedown');
+                                    _this.sendMessage(_this.getClassName()+'_active');
+                                },250);
+                            });
+                            this.getDomInstance().dblclick(function(event){
+                                event.stopPropagation();
+                                clearTimeout(timeFn);
+                                _this._event = event;
+                                _this.sendMessage(_this.getClassName()+'_dblclick');
+                                _this.sendMessage(_this.getClassName()+'_active');
+                            });
+                        };
+                    }
+                    obj[o].prototype._initRenderFlag = false;
                     if(obj[o].prototype.render!=null){
                         obj[o].prototype._render = obj[o].prototype.render;
                         obj[o].prototype.render = function(){
+                            if(this._initRenderFlag == false){
+                                this._initRenderFlag = true;
+                                this.initRender();
+                            }
                             if(this.beforeRender!=null){
                                 this.beforeRender();
                             }

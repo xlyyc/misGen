@@ -219,7 +219,7 @@ var wof$_aop = (function(){
                         this._css = css;
                     };
                     obj[o].prototype.clone = function(){
-                        var obj=eval('new '+this.getClassName()+'()');
+                        var obj=eval('wof$.create("'+this.getClassName()+'")');
                         obj.setData(this.getData());
                         return obj;
                     };
@@ -509,7 +509,7 @@ var wof$_aop = (function(){
                                     tempNodes.items(data.childNodes[i].id).setData(data.childNodes[i]);
                                     tempNodes.remove(data.childNodes[i].id);
                                 }else{
-                                    var node=eval("new " + data.childNodes[i].className + "();");
+                                    var node=eval("wof$.create('" + data.childNodes[i].className + "');");
                                     node.appendTo(this);
                                     node.setData(data.childNodes[i]);
                                 }
