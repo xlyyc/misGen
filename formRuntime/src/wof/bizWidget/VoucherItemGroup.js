@@ -162,47 +162,27 @@ wof.bizWidget.VoucherItemGroup.prototype = {
      * Render 方法定义
      */
 
+    initRender: function(){
+        //如果是clone过来的 会直接创建一个label对象 需要先移除
+        var nodes = this.childNodes();
+        for(var i=0;i<nodes.length;i++){
+            if(nodes[i].getClassName()=='wof.widget.Label'){
+                nodes[i].remove(true);
+                break;
+            }
+        }
+        var label = wof$.create('Label');
+        label.setIsInside(true);
+        label.setTop(0);
+        label.setLeft(0);
+        label.setIsUnderline(true);
+        label.setScale(this.getScale());
+
+        this._label = label;
+    },
+
     //选择实现
     beforeRender: function () {
-        if(this._initFlag==null){
-            var _this = this;
-            var timeFn = null;
-            this.getDomInstance().mousedown(function(event){
-                event.stopPropagation();
-                clearTimeout(timeFn);
-                timeFn = setTimeout(function(){
-                    _this.sendMessage('wof.bizWidget.VoucherItemGroup_mousedown');
-                },250);
-            });
-            this.getDomInstance().dblclick(function(event){
-                event.stopPropagation();
-                clearTimeout(timeFn);
-                if(_this.getIsExpand()==true){
-                    _this.setIsExpand(false);
-                }else{
-                    _this.setIsExpand(true);
-                }
-                _this.sendMessage('wof.bizWidget.VoucherItemGroup_dblclick');
-            });
-            //如果是clone过来的 会直接创建一个label对象 需要先移除
-            var nodes = this.childNodes();
-            for(var i=0;i<nodes.length;i++){
-                if(nodes[i].getClassName()=='wof.widget.Label'){
-                    nodes[i].remove(true);
-                    break;
-                }
-            }
-            var label = new wof.widget.Label();
-            label.setIsInside(true);
-            label.setTop(0);
-            label.setLeft(0);
-            label.setIsUnderline(true);
-            label.setScale(this.getScale());
-
-            this._label = label;
-
-            this._initFlag = true;
-        }
         this._appendLabel();
         this._flowLayout();
     },

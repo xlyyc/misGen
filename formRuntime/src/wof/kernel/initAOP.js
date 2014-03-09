@@ -219,7 +219,7 @@ var wof$_aop = (function(){
                         this._css = css;
                     };
                     obj[o].prototype.clone = function(){
-                        var obj=eval('wof$.create("'+this.getClassName()+'")');
+                        var obj=eval('new '+this.getClassName()+'()');
                         obj.setData(this.getData());
                         return obj;
                     };
@@ -509,7 +509,7 @@ var wof$_aop = (function(){
                                     tempNodes.items(data.childNodes[i].id).setData(data.childNodes[i]);
                                     tempNodes.remove(data.childNodes[i].id);
                                 }else{
-                                    var node=eval("wof$.create('" + data.childNodes[i].className + "');");
+                                    var node=eval("new " + data.childNodes[i].className + "();");
                                     node.appendTo(this);
                                     node.setData(data.childNodes[i]);
                                 }
@@ -517,9 +517,60 @@ var wof$_aop = (function(){
                             this._setData(data);
                         };
                     }
+                    obj[o].prototype._event = null;
+                    obj[o].prototype._timeFn = null;
+                    if(obj[o].prototype.initRender!=null){
+                        obj[o].prototype._initRender = obj[o].prototype.initRender;
+                        obj[o].prototype.initRender = function(){
+                            var _this = this;
+                            this.getDomInstance().mousedown(function(event){
+                                event.stopPropagation();
+                                clearTimeout(this._timeFn);
+                                this._timeFn = setTimeout(function(){
+                                    _this._event = event;
+                                    _this.sendMessage(_this.getClassName()+'_mousedown');
+                                    _this.sendMessage(_this.getClassName()+'_active');
+                                },250);
+                            });
+                            this.getDomInstance().dblclick(function(event){
+                                event.stopPropagation();
+                                clearTimeout(this._timeFn);
+                                _this._event = event;
+                                _this.sendMessage(_this.getClassName()+'_dblclick');
+                                _this.sendMessage(_this.getClassName()+'_active');
+                            });
+                            this._initRender();
+                        };
+                    }else{
+                        obj[o].prototype.initRender = function(){
+                            var _this = this;
+                            var timeFn = null;
+                            this.getDomInstance().mousedown(function(event){
+                                event.stopPropagation();
+                                clearTimeout(timeFn);
+                                timeFn = setTimeout(function(){
+                                    _this._event = event;
+                                    _this.sendMessage(_this.getClassName()+'_mousedown');
+                                    _this.sendMessage(_this.getClassName()+'_active');
+                                },250);
+                            });
+                            this.getDomInstance().dblclick(function(event){
+                                event.stopPropagation();
+                                clearTimeout(timeFn);
+                                _this._event = event;
+                                _this.sendMessage(_this.getClassName()+'_dblclick');
+                                _this.sendMessage(_this.getClassName()+'_active');
+                            });
+                        };
+                    }
+                    obj[o].prototype._initRenderFlag = false;
                     if(obj[o].prototype.render!=null){
                         obj[o].prototype._render = obj[o].prototype.render;
                         obj[o].prototype.render = function(){
+                            if(this._initRenderFlag == false){
+                                this._initRenderFlag = true;
+                                this.initRender();
+                            }
                             if(this.beforeRender!=null){
                                 this.beforeRender();
                             }
@@ -590,5 +641,6 @@ wof$_aop('wof.kernel');
 wof$_aop('wof.widget');
 wof$_aop('wof.bizWidget');
 wof$_aop('wof.functionWidget');
-var wof$ = wof.util.Selector.find;
+var wof$ = {};
+wof$.find = wof.util.Selector.find;
 wof$.create = wof.util.ObjectManager.create;

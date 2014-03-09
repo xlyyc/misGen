@@ -242,13 +242,15 @@ wof.bizWidget.FlowLayoutSection.prototype = {
 
             this._initFlag = true;
         }
+
         this._appendLabel();
-        this._flowLayout();
+
     },
 
     //----------必须实现----------
     render: function () {
 
+        this._flowLayout();
         this._resetStyle();
     },
 
@@ -620,7 +622,7 @@ wof.bizWidget.FlowLayoutSection.prototype = {
             for(var i=0;i<items.length;i++){
                 var ns = items[i].childNodes();
                 if(ns.length>0){
-                    ns[0].render();
+                    //ns[0].render();
                     var itemHeight = ns[0].getHeight();
                     var rowspan = items[i].getRowspan();
                     if(maxItemScrollHeight<Math.ceil(itemHeight/rowspan)){
@@ -737,12 +739,15 @@ wof.bizWidget.FlowLayoutSection.prototype = {
                 }
             }
         }
+        this.setRows(rows-removeRowCount);
+
         //添加到dom节点
         for(var i=0; i<layoutItems.length; i++){
             var item = layoutItems[i];
             item.afterTo(label);
         }
-        this.setRows(rows-removeRowCount);
+
+
         //设置section div容器高度和宽度
         if(this.getIsExpand()==true){
             this.setHeight(itemHeight*this.getRows()+this.getTitleHeight());
