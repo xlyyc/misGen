@@ -641,5 +641,6 @@ wof$_aop('wof.kernel');
 wof$_aop('wof.widget');
 wof$_aop('wof.bizWidget');
 wof$_aop('wof.functionWidget');
-var wof$ = wof.util.Selector.find;
+var wof$ = {};
+wof$.find = wof.util.Selector.find;
 wof$.create = wof.util.ObjectManager.create;
