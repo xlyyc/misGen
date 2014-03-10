@@ -1,0 +1,103 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN">
+<head>
+    <title>javascript-taskbar</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="Content-Language" content="zh-CN"/>
+    <meta content="all" name="robots"/>
+    <meta name="author" content="178518(at)gmail.com,赵云"/>
+    <meta name="Copyright" content="www.wisedu.com"/>
+    <meta name="description" content="基于HTML，CSS，JAVASCRIPT的简洁灵活的流行前端框架及交互组件集"/>
+    <meta name="keywords" content="lovey,CSS框架,JS框架"/>
+    <!--lovey核心css-->
+    <link href="../../../../lovey/style/css/lovey.css" rel="stylesheet" type="text/css"/>
+    <!--API全局样式-->
+    <link rel="stylesheet" href="../../../../docs/assets/css/api.css" type="text/css" media="screen, projection"/>
+    <!--自定义样式-->
+    <link rel="stylesheet" href="../../../../docs/assets/css/docs.css" type="text/css"/>
+
+</head>
+
+<body>
+<div id="nav" class="ui_container_fluid">
+    <div class="page_header">
+        <h1>任务栏组件
+            <small>taskbar.js</small>
+        </h1>
+    </div>
+    <ul class="ui_list_h">
+        <li><a href="api.html" target="_blank" class="ui_btn ui_btn_primary">API</a></li>
+        <!--<li><a href="manager.html" target="_blank" class="ui_btn ui_btn_success">接口</a></li>-->
+    </ul>
+    <h3>组件效果展示</h3>
+    <a class="ui_btn ui_btn_small" href="javascript:fav()">添加</a>
+    <a class="ui_btn ui_btn_small" href="javascript:unFav()">移除</a>
+    <!------------------------效果预览------------------------>
+    <div class="bs-docs-example pb30">
+        <div id="footer">
+
+            <div class="ui_taskbar">
+                <ul class="taskbar_menu" id="taskbar">
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--jquery核心js文件-->
+<script src="../../../../lovey/js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+<!--懒加载核心js文件-->
+<script src="../../../../lovey/js/easyloader.js" type="text/javascript"></script>
+<!--加载语法高亮css和js文件-->
+<link type="text/css" rel="stylesheet" href="../syntaxhighlighter/styles/easy.css"/>
+<script type="text/javascript" src="../syntaxhighlighter/scripts/shCore.js"></script>
+<script type="text/javascript" src="../syntaxhighlighter/scripts/shBrushJScript.js"></script>
+<script type="text/javascript" src="../syntaxhighlighter/scripts/shBrushPhp.js"></script>
+<script type="text/javascript" src="../syntaxhighlighter/helper.js"></script>
+<script type="text/javascript">
+    easyloader.dialogCssName = "dialog_style02";
+    easyloader.isIframe = true;
+    //项目的部署路径
+    var taskbar = null;
+    $(document).ready(function () {
+        using([ "dialog", "taskbar", "iframe"], function () {
+            var taskbarElement = $("#taskbar");
+
+            taskbarElement.loveyTaskBar({
+                favUrl: "post.json",
+                unFavUrl: "post.json",
+                initJson: [
+                    {taskid: "1", url: "list.html", title: "百度", icon: "01.png"},
+                    {taskid: "2", url: "list02.html", title: "新浪", icon: "02.png"}
+                ],
+                withTab: false,
+                iconPath: "default/images/icons/"
+            });
+            $.loveyIframe.auto();
+            taskbar = taskbarElement.loveyGetTaskBarManager();
+        });
+    });
+
+    //收藏当前选中的TAB
+    function fav() {
+        taskbar.addTaskBar({
+            taskid: 3,
+            url: "http://www.taobao.com",
+            title: "淘宝",
+            icon: "03.png",
+            favCompleteFunction: function () {
+                alert("AA");
+            }
+        });
+    }
+
+    //取消收藏的tab
+    function unFav() {
+        taskbar.removeTaskBar(1, function () {
+            alert("BB");
+        });
+    }
+</script>
+</body>
+</html>

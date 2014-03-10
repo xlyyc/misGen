@@ -11,6 +11,15 @@ wof.widget.TextArea = function () {
 };
 
 wof.widget.TextArea.prototype = {
+
+    _name: null,
+    _disable: null,
+    _readonly: null,
+    _row: null,
+    _cols: null,
+    _autoFocus: null,
+    _placeholder: null,
+    _wrap: null,
     /**
      * 属性声明 （private ，用"_"标识）
      */
@@ -18,7 +27,6 @@ wof.widget.TextArea.prototype = {
     /**
      * get/set 属性方法定义
      */
-
 
     /**
      * Render 方法定义
@@ -33,6 +41,7 @@ wof.widget.TextArea.prototype = {
     render: function () {
 
     },
+
 
     //选择实现
     afterRender: function () {

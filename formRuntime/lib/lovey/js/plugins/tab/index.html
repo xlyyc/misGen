@@ -1,0 +1,107 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+ * Developed By: ywwei
+ * Mail: ywwei@wisedu.com
+ * Version:1.0
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta http-equiv="Content-Language" content="zh-CN"/>
+    <meta content="all" name="robots"/>
+    <meta name="author" content="ywwei@wisedu.com,魏言文"/>
+    <meta name="copyright" content="www.wiscom.com.cn,自由版权,任意转载"/>
+    <meta name="description" content="css框架"/>
+    <meta name="keywords" content="css框架,web2.0"/>
+    <title>tab</title>
+    <!--lovey核心css-->
+    <link href="../../../../lovey/style/css/lovey.css" rel="stylesheet" type="text/css"/>
+    <!--API全局样式-->
+    <link rel="stylesheet" href="../../../../docs/assets/css/api.css" type="text/css" media="screen, projection"/>
+    <!--自定义样式-->
+    <link rel="stylesheet" href="../../../../docs/assets/css/docs.css" type="text/css"/>
+</head>
+<body>
+<div id="nav" class="ui_container_fluid">
+    <div class="page_header">
+        <h1>页标签
+            <small>tab.js</small>
+        </h1>
+    </div>
+    <div class="ui_alert ui_alert_block  ui_alert_info">
+        <strong>特殊说明</strong>固定Tab不允许删除和覆盖，固定tab可以在初始化的时候通过<code>fix="true"</code>属性设定，动态添加的tab没有这个属性，并可以通过选择前后事件进行业务判断，相应也可以进行左侧的抽屉菜单联动事件。
+    </div>
+
+    <ul class="ui_list_h">
+        <li><a href="tab_style.html" target="_blank" class="ui_btn ui_btn_danger">插件风格(style)</a></li>
+        <li><a href="../../../../docs/LigerUI/api/document/tab/index.html" target="_blank" class="ui_btn ui_btn_primary">API</a></li>
+        <li><a href="../../../../docs/LigerUI/api/document/tab/manager.html" target="_blank" class="ui_btn ui_btn_success">接口</a></li>
+        <li><a href="demo.html" target="_blank" class="ui_btn ui_btn_success">演示</a></li>
+    </ul>
+
+    <h3>组件效果展示</h3>
+    <!------------------------效果预览------------------------>
+    <div class="bs-docs-example">
+        <div id="tab01">
+            <div title="tab1" tabid="01">
+                这里是TAB1
+            </div>
+            <div title="tab2" tabid="02">
+                这里是TAB2
+            </div>
+            <div title="tab3" tabid="03">
+                这里是TAB3
+            </div>
+        </div>
+    </div>
+
+    <p>JS部分,引用<code>tab</code>组件，并指定ID</p>
+  <pre class="brush:javascript;">
+ 	 $(document).ready(function(){
+            using("tab",function(){
+            $("#tab01").ligerTab({
+                className: "tab_style06"
+            });
+		})
+	 })
+  </pre>
+
+    <p>HTML部分</p>
+  <pre class="brush:javascript;">
+    <div id="tab01">
+        <div title="tab1" tabid="01">
+            tab1内容
+        </div>
+        <div title="tab2" tabid="02">
+            tab2内容
+        </div>
+        <div title="tab3" tabid="03">
+            tab3内容
+        </div>
+    </div>
+ </pre>
+
+</div>
+<!--jquery1.7.1核心js文件-->
+<script src="../../jquery.min.js" type="text/javascript" charset="utf-8"></script>
+<!--懒加载核心js文件-->
+<script type="text/javascript" src="../../easyloader.js"></script>
+<!--加载语法高亮css和js文件-->
+<link type="text/css" rel="stylesheet" href="../syntaxhighlighter/styles/easy.css"/>
+<script type="text/javascript" src="../syntaxhighlighter/scripts/shCore.js"></script>
+<script type="text/javascript" src="../syntaxhighlighter/scripts/shBrushJScript.js"></script>
+<script type="text/javascript" src="../syntaxhighlighter/scripts/shBrushPhp.js"></script>
+<script type="text/javascript" src="../syntaxhighlighter/helper.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        using(["tab","iframe"], function () {
+            $("#tab01").ligerTab({
+                className: "tab_style06"
+            });
+            $.loveyIframe.auto();
+        })
+    })
+</script>
+</body>
+</html>

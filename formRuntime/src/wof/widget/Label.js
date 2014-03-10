@@ -41,8 +41,6 @@ wof.widget.Label.prototype = {
         this._tip = tip;
     },
 
-    _initFlag: null,
-
     /**
      * get/set 属性方法定义
      */
@@ -116,34 +114,14 @@ wof.widget.Label.prototype = {
     /**
      * Render 方法定义
      */
+    initRender: function(){
+        this._label = jQuery('<span style="position:absolute;top:4px;cursor:pointer;">'+this.getText()+'</span>');
+        this.getDomInstance().append(this._label);
+    },
 
     //选择实现
     beforeRender: function () {
-		if(this._initFlag==null){
-            var _this = this;
-            var timeFn = null;
-            this.getDomInstance().mousedown(function(event){
-                event.stopPropagation();
-                clearTimeout(timeFn);
-                timeFn = setTimeout(function(){
-                    var positionX = event.pageX;
-                    var positionY = event.pageY;
-                    _this.sendMessage('wof.widget.Label_mousedown',{x:positionX,y:positionY});
-                    _this.sendMessage('wof.widget.Label_active');
-                },250);
-            });
-            this.getDomInstance().dblclick(function(event){
-                event.stopPropagation();
-                clearTimeout(timeFn);
-                var positionX = event.pageX;
-                var positionY = event.pageY;
-                _this.sendMessage('wof.widget.Label_dblclick',{x:positionX,y:positionY});
-                _this.sendMessage('wof.widget.Label_active');
-            });
-            this._label = jQuery('<span style="position:absolute;top:4px;cursor:pointer;">'+this.getText()+'</span>');
-            this.getDomInstance().append(this._label);
-            this._initFlag = true;
-		}
+
         this.getDomInstance().children('hr').remove();
         this.getDomInstance().children('img').remove();
     },

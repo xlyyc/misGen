@@ -1,0 +1,59 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>javascript-menubar</title>
+    <!--lovey ui-->
+    <link href="../../../../lovey/style/css/lovey.css" rel="stylesheet" type="text/css"/>
+    <!--文档自定义样式-->
+    <link href="../../../../docs/assets/css/docs.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div class="ui_container example_tree">
+    <h2>默认风格</h2>
+    <div id="menubar"></div>
+    <h2>menubar_style02</h2>
+    <p>待添加...</p>
+</div>
+<!--jquery核心文件-->
+<script src="../../../../lovey/js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+<!--懒加载核心js文件-->
+<script src="../../../../lovey/js/easyloader.js" type="text/javascript"></script>
+<script type="text/javascript">
+    var menu1,menu2;
+    $(document).ready(function(){
+        using(['menu','menubar','dialog'],function(){
+            menu1 = {width: 120, items:[
+                { text: "<a href=\'http://www.baidu.com\'>增加</a>", click: onclick11 ,icon:"add"},
+                { text: "修改", click: onclick11,disable:true ,icon:"update"},
+                { line: true },
+                { text: "查看", click: onclick11 ,icon:"view"},
+                { text: "关闭", click: onclick112,icon:"close" }
+            ]
+            };
+            menu2 = {width:120, items:[
+                {text:"添加",click:onclick11},
+                {text:"子菜单",children:[
+                    {text:"word",click:onclick11},
+                    {text:"excel",click:onclick11,icon:"add"}
+                ]
+                }
+            ]};
+            $("#menubar").ligerMenuBar({ items: [
+                { text: "文件", menu: menu1 },
+                { text: "导出", menu: menu2 }
+            ]
+            });
+        });
+    });
+
+    function onclick11(item, i){
+        $.ligerDialog.success(item.text);
+    }
+    function onclick112(){
+        menu1.hide();
+    }
+</script>
+</body>
+</html>

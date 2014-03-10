@@ -1,0 +1,193 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--声明XHTML1.0过渡类型,注释不要放在开头，否则会有问题-->
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta http-equiv="Content-Language" content="zh-CN"/>
+    <meta content="all" name="robots"/>
+    <meta name="author" content="yzhao(at)mail.wiscom.cn,赵云"/>
+    <meta name="copyright" content="www.wiscom.com.cn,自由版权,任意转载"/>
+    <meta name="description" content="css框架"/>
+    <meta name="keywords" content="css框架,web2.0"/>
+    <title>CCS CSS框架</title>
+    <!--API全局样式-->
+    <link rel="stylesheet" href="../../../../docs/assets/css/api.css" type="text/css" media="screen, projection"/>
+    <!--jquery1.7.1核心js文件-->
+    <script src="../../jquery.min.js" type="text/javascript" charset="utf-8"></script>
+
+    <!--懒加载核心js文件-->
+    <script type="text/javascript" src="../../easyloader.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            using("validationengine", function() {
+
+                $.validationEngineLanguage.allRules.ajaxCheck = {
+                    "file":"check.json",
+                    "alertTextOk":"* 可以使用.",
+                    "alertTextLoad":"* 正在检查中, 请稍侯...",
+                    "alertText":"* 已被占用."
+                };
+
+
+                $("#formID").validationEngine();
+            });
+        });
+
+    </script>
+</head>
+<body>
+<div id="container2">
+    <div class="head">
+        <h1>表单样式、验证页面</h1>
+
+    </div>
+    <hr>
+    <div class="content">
+        <form method="post" id="formID" action="submit.jsp">
+            <table align="center">
+                <tr>
+                    <td>身份证号：</td>
+                    <td><input type="text" name="card" id="card" class="validate[optional,custom[idCard]] text-input">
+                    </td>
+                </tr>
+                <tr>
+                    <td>真实姓名：</td>
+                    <td><input type="text" name="name" id="name"
+                               class="validate[required,custom[chinese],length[2,15],ajax[ajaxCheck]] text-input"></td>
+                </tr>
+                <tr>
+                    <td>id：</td>
+                    <td><input type="text" name="username" id="username"
+                               class="validate[required,custom[noSpecialCaracters],length[2,10]] text-input"></td>
+                </tr>
+                <tr>
+                    <td>英文名：</td>
+                    <td><input type="text" name="nick" id="nick"
+                               class="validate[required,custom[onlyLetter]] text-input"></td>
+                </tr>
+                <tr>
+                    <td>主页：</td>
+                    <td><input type="text" name="homepage" id="url" class="validate[optional,custom[url]] text-input">
+                    </td>
+                </tr>
+                <tr>
+                    <td>密码：</td>
+                    <td><input type="text" name="password" id="password"
+                               class="validate[required,length[6,12]] text-input"></td>
+                </tr>
+                <tr>
+                    <td>重复：</td>
+                    <td><input type="text" name="repeat" id="chkPassword"
+                               class="validate[required,equals[password]] text-input"></td>
+                </tr>
+                <tr>
+                    <td>信箱：</td>
+                    <td><input type="text" name="email" id="email" class="validate[optional,custom[email]] text-input">
+                    </td>
+                </tr>
+                <tr>
+                    <td>qq：</td>
+                    <td><input type="text" name="qq" id="qq" class="validate[optional,custom[qq]] text-input"></td>
+                </tr>
+                <tr>
+                    <td>电话：</td>
+                    <td><input type="text" name="phone" id="phone" class="validate[optional,custom[phone]] text-input">
+                    </td>
+                </tr>
+                <tr>
+                    <td>手机：</td>
+                    <td><input type="text" name="mobile" id="mobile"
+                               class="validate[optional,custom[mobilephone]] text-input"></td>
+                </tr>
+                <tr>
+                    <td>生日：</td>
+                    <td><input type="text" name="birthday" id="birthday"
+                               class="validate[optional,custom[date]] text-input"></td>
+                </tr>
+                <tr>
+                    <td>IP：</td>
+                    <td><input type="text" name="ip" id="ip" class="validate[optional,custom[ip]] text-input"></td>
+                </tr>
+                <tr>
+                    <td>整数：</td>
+                    <td><input type="text" name="integer" id="integer"
+                               class="validate[optional,custom[onlyInteger]] text-input"></td>
+                </tr>
+                <tr>
+                    <td>数字：</td>
+                    <td><input type="text" name="number" id="number"
+                               class="validate[optional,custom[onlyNumber]] text-input"></td>
+                </tr>
+                <tr>
+                    <td>大于0：</td>
+                    <td><input type="text" name="zero" id="zero" class="validate[optional,custom[notZero]] text-input">
+                    </td>
+                </tr>
+                <tr>
+                    <td>操作系统：</td>
+                    <td><select name="operation" id="operation" class="validate[required] text-input">
+                        <option value="">选择您所用的操作系统</option>
+                        <option value="win98">win98</option>
+                        <option value="win2k">win2k</option>
+                        <option value="winxp">winxp</option>
+                    </select></td>
+                </tr>
+                <tr>
+                    <td>所在省份：</td>
+                    <td>
+                        广东<input name="province" value="1" type="radio" id="radio1" class="validate[required] radio">
+                        陕西<input name="province" value="2" type="radio" id="radio2" class="validate[required] radio">
+                        浙江<input name="province" value="3" type="radio" id="radio3" class="validate[required] radio">
+                        江西<input name="province" value="4" type="radio" id="radio4" class="validate[required] radio">
+                    </td>
+                </tr>
+                <tr>
+                    <td>最少2项目：</td>
+                    <td>
+                        运动<input name="favorite1" value="1" type="checkbox" id="checkbox1"
+                                 class="validate[minCheckbox[2]] checkbox">
+                        上网<input name="favorite1" value="2" type="checkbox" id="checkbox2"
+                                 class="validate[minCheckbox[2]] checkbox">
+                        听音乐<input name="favorite1" value="3" type="checkbox" id="checkbox3"
+                                  class="validate[minCheckbox[2]] checkbox">
+                        看书<input name="favorite1" value="4" type="checkbox" id="checkbox4"
+                                 class="validate[minCheckbox[2]] checkbox">
+                    </td>
+                </tr>
+                <tr>
+                    <td>最多3项目：</td>
+                    <td>
+                        运动<input name="favorite2" value="1" type="checkbox" id="checkbox11"
+                                 class="validate[maxCheckbox[3]] checkbox">
+                        上网<input name="favorite2" value="2" type="checkbox" id="checkbox22"
+                                 class="validate[maxCheckbox[3]] checkbox">
+                        听音乐<input name="favorite2" value="3" type="checkbox" id="checkbox33"
+                                  class="validate[maxCheckbox[3]] checkbox">
+                        看书<input name="favorite2" value="4" type="checkbox" id="checkbox44"
+                                 class="validate[maxCheckbox[3]] checkbox">
+                    </td>
+                </tr>
+                <td>自我介绍：</td>
+                <td><textarea name="description" id="description"
+                              class="validate[required,custom[chinese],length[10,100]] text-input">中文是一个字</textarea>
+                </td>
+                </tr>
+                </tr>
+                <tr>
+                    <td>相片上传：</td>
+                    <td><input name="up" type="file" id="file"
+                               class="validate[optional,accept[gif:png:jpg]] text-input"></td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <input name="submit" type="submit" value="确定提交">
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+
+</div>
+</body>
+</html>

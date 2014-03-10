@@ -1,0 +1,409 @@
+.cmtlist li {
+    position: relative;
+    min-height: 54px;
+    _height: 54px;
+    margin: 4px 0;
+}
+
+.cmtlist .avatar {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.cmtlist .cmt-content {
+    margin-left: 56px;
+}
+
+.cmtlist-noavatar .cmt-content {
+    margin-left: 0;
+}
+
+.cmtlist .hd {
+    position: relative;
+    z-index: 0;
+    padding: 3px 10px 1px 10px;
+    background: #f5f5f5;
+    border-top: 1px solid #1461A9;
+    border-bottom: 1px solid #ddd;
+    line-height: 1.2;
+}
+
+.cmtlist .hd span {
+    margin-right: 1em;
+    color: #999;
+}
+
+.cmtlist .hd {
+    padding-bottom: 3px;
+}
+
+.cmtlist .cmt-action {
+    position: absolute;
+    z-index: 1;
+    top: 4px;
+    right: 1px;
+    padding-right: 18px;
+}
+
+.cmtlist .hd .delete {
+    right: 0;
+    top: 0;
+}
+
+.cmtlist .hd .delete:hover {
+    background-position: 0 -14px;
+}
+
+.cmtlist .bd {
+    padding: 5px 10px;
+    overflow: hidden;
+}
+
+.cmtlist .ft .act {
+    margin: 0 8px;
+    text-align: right;
+}
+
+.inputdiv .image {
+    float: left;
+    margin-left: 7px;
+    margin-top: 7px;
+}
+
+.inputdiv {
+    width: 100%;
+    height: 100%;
+}
+
+.cmtinput {
+    width: 96%;
+    border: 1px solid rgb(189, 199, 216);
+    overflow-y: auto;
+    height: 16px;
+    color: rgb(136, 136, 136);
+    margin: 7px 0 7px 6px;
+
+}
+
+.cmtinput1 {
+    width: 85%;
+    border: 1px solid black;
+    overflow-y: auto;
+    height: 40px;
+    color: black;
+
+    margin: 4px;
+
+}
+
+.cmtul .image {
+    margin: 4px 4px 4px 4px !important;
+
+}
+
+.cmtul {
+    width: 100%;
+    height: 100%;
+    border-bottom: 1px solid white;
+}
+
+.cmtul .post {
+    background: none repeat scroll 0 0 #EBF3F7;
+    min-height: 55px;
+}
+.cmtul .info,.cmtdiv .inputdiv  {
+    background: #EBF3F7;
+}
+
+.cmtul .info {
+    margin-left: 0px !important;
+    border-top: 0px;
+    border: none;
+    padding: 3px 5px 2px 2px;
+}
+
+.cmtdiv .content {
+    margin: 0 5px 2px 2px;
+    font-size: 12px;
+    line-height: 150%;
+    padding: 0;
+}
+
+.cmtdiv {
+    /*width: 450px;
+    margin-left: 57px;*/
+    margin-left:0px;
+}
+
+.cmtdiv .inputdiv {
+    width: 100%;
+}
+.text-content{
+    width: 99%;
+}
+
+.cmtdiv .stat {
+    width: 100%;
+    color: #999999;
+}
+
+.cmtact {
+    height: 30px;
+    width: 85%;
+    margin-left: 63px;
+}
+
+.cmtul ol {
+    margin-bottom: 0em;
+    /*border-bottom: 1px solid #CCC;*/
+}
+
+.post {
+    position: relative;
+    padding-left: 60px;
+    min-height: 60px;
+    _height: 60px;
+    /*width:390px;*/
+    *zoom: 1;
+
+    overflow-x: hidden;
+}
+
+.na {
+    padding-left: 0;
+}
+
+.post:after, .post .info:after {
+    content: "";
+    display: block;
+    height: 0;
+    overflow: hidden;
+    visibility: hidden;
+    clear: both;
+}
+
+.post .image {
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+.post .info {
+    padding: 0 5px 0 8px;
+    background: #eee;
+    border-top: 1px solid #2782d6;
+    border-bottom: 1px solid #ddd;
+    color: #666;
+    line-height: 180%;
+    text-align: right;
+    margin-top: 5px;
+    *zoom: 1;
+}
+
+.post .info .author, .post .info .time, .post .info .subinfo, .post .info .actions {
+    float: left;
+    margin-right: .5em;
+}
+
+.info .floor, .post .info span.delete {
+    float: right;
+    margin-left: .5em;
+}
+
+.info .time, .post .info .subinfo {
+    color: #999;
+}
+
+.info span.delete a, .post-attachment-file span.delete a {
+    display: block;
+    width: 13px;
+    height: 14px;
+    margin-top: 4px;
+    background: url(images/delete.gif) 0 0 no-repeat;
+    text-indent: -999em;
+    text-align: left;
+    overflow: hidden;
+}
+
+.info span.delete a:hover, .post-attachment-file span.delete a:hover {
+    background-position: 0 -14px;
+}
+
+.post .content {
+    padding: 5px 5px 5px 8px;
+    margin-left: 0;
+}
+
+.post .content form .act {
+    margin-top: 10px;
+}
+
+.post .content .tip {
+    color: #666;
+    margin-bottom: 5px;
+}
+
+.post .content .dummy {
+    color: #999;
+}
+
+.post .post-mtime {
+    margin-top: 1em;
+    text-align: right;
+    color: #999;
+}
+
+.info .author {
+    margin-right: .5em;
+}
+
+.info .time {
+    color: #999;
+}
+
+.visitor_online {
+    margin-top: 5px;
+    white-space: nowrap;
+    overflow: hidden;
+    background: transparent url(images/online_status.gif) 0 0 no-repeat;
+    padding-left: 20px;
+    text-align: left;
+    width: 90px;
+}
+
+.online_width {
+    margin-top: 5px;
+    overflow: hidden;
+    white-space: nowrap;
+    width: 60px;
+}
+
+.a-pointer{
+    cursor: pointer;
+}
+
+.hidden {
+    display: none;
+}
+
+.my-dialog {
+    font-size: 12px;
+    margin: 0;
+    padding: 0;
+}
+.my-dialog {
+    display: none;
+    position: absolute;
+    z-index: 100000;
+}
+
+.pagination {
+    margin: 1.5em 0;
+    text-align: center;
+}
+
+.pagination a {
+    background: none repeat scroll 0 0 #FFFFFF;
+    border: 1px solid #CCCCCC;
+    margin: 0 2px;
+    padding: 1px 4px;
+    cursor: pointer;
+}
+
+.pagination a:hover {
+    background: none repeat scroll 0 0 #0066CC;
+    color: #FFFFFF;
+    text-decoration: none;
+}
+.pagination strong {
+    padding: 1px 4px;
+}
+
+.quietly {
+    color: #000000;
+    font-weight: bold;
+    padding-left: 20px;
+}
+
+.f-button {
+    -moz-border-bottom-colors: none;
+    -moz-border-image: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background: none repeat scroll 0 0 #2782D6;
+    border-color: #DDDDDD #264F6E #264F6E #DDDDDD;
+    border-style: solid;
+    border-width: 1px;
+    color: #FFFFFF;
+    height: 21px;
+    letter-spacing: 1px;
+    line-height: 17px;
+    padding: 1px 10px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.sect-brief {
+    background: none repeat scroll 0 0 #EEEEEE;
+    border-top: 1px solid #DDDDDD;
+    color: #666666;
+    height: 1.6em;
+    line-height: 1.6em;
+    padding: 0 10px;
+    position: relative;
+    font-size:12px;
+}
+
+.ceibs-app-title-700{
+    background: none repeat scroll 0 0 #C7E3CC;
+    border-top: 1px solid #639977;
+    font-size: 12px;
+    line-height: 180%;
+    text-indent: 10px;
+    font-weight: bold;
+}
+
+.reply-top{
+   margin-bottom: 40px;
+}
+
+.cluetip-comment {
+    background-color: #FFFFFF !important;
+    _border: 1px solid #AAAAAA;
+}
+
+
+.cluetip-default .ui-cluetip-header {
+    background-color: #CCCCCC;
+}
+
+.ui-cluetip-header, .ui-cluetip-content {
+    background-color: #FFFFFF;
+}
+
+.cluetip-comment .cluetip-close{
+    float: right;
+    margin-right: 5px;
+}
+.ui-cluetip-header, .ui-cluetip-content {
+    padding: 0 !important;
+}
+
+.comment-face{
+  float:left;
+  margin-top: 7px;
+}
+.comment-face a{
+    background:url(../../../../../images/face/02.gif) no-repeat 0 0 ;
+    cursor:pointer;
+    float:left;
+    color:#000;
+    text-decoration:none;
+    display:block;
+    width:30px;
+    height:18px;
+    padding-left: 19px;
+}
+

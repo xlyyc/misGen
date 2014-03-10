@@ -1,0 +1,266 @@
+/* global */
+.cluetip{
+    background-color: #fff;
+}
+div.ui-cluetip {
+    font-size: 1em;
+}
+.ui-cluetip-header,
+.ui-cluetip-content {
+    padding: 5px 0;
+    border:0 !important;
+}
+.ui-cluetip-header {
+    font-size: 1em;
+    margin: 0;
+    overflow: hidden;
+}
+
+.cluetip-title .cluetip-close {
+    float: right;
+    position: relative;
+}
+.cluetip-close img {
+    border: 0;
+}
+
+#cluetip-waitimage {
+    width: 43px;
+    height: 11px;
+    position: absolute;
+    background-image: url(images/wait.gif);
+}
+.cluetip-arrows {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: -7px;
+    width: 12px;
+    height: 6px;
+    background-repeat: no-repeat;
+    background-position: 0 0;
+    border:none;
+}
+.cluetip-extra {
+    display: none;
+}
+
+/***************************************
+   =cluetipClass: 'default'
+-------------------------------------- */
+.cluetip-outer{
+    border: #eee 1px solid;
+    background: #fff;
+}
+.cluetip-default,
+.cluetip-default .cluetip-outer {
+    background-color: #fff;
+    border-radius: 5px;
+}
+.cluetip-default .ui-cluetip-header {
+    background-color: #87876a;
+}
+.cluetip-default #cluetip-outer {
+  position: relative;
+  margin: 0;
+  background-color: #d9d9c2;
+}
+.cluetip-default h3#cluetip-title {
+  margin: 0 0 5px;
+  padding: 8px 10px 4px;
+  font-size: 1.1em;
+  font-weight: normal;
+  background-color: #87876a;
+  color: #fff;
+}
+.cluetip-default #cluetip-title a {
+  color: #d9d9c2;
+  font-size: 0.95em;
+}
+.cluetip-default .cluetip-inner {
+  padding: 5px;
+}
+.cluetip-default div#cluetip-close {
+  text-align: right;
+  margin: 0 5px 5px;
+  color: #900;
+}
+.cluetip-inner li{
+    line-height: 18px;
+    _height: 20px;
+}
+.cluetip-inner a:hover{
+    text-decoration: none;
+}
+/* default arrows */
+.cluetip-default .cluetip-arrows {
+    border-width: 0;
+    left: -6px;
+    background: transparent none;
+}
+.clue-right-default .cluetip-arrows {
+    width: 6px;
+    height: 12px;
+    background-image: url(images/darrowleft.gif);
+}
+.clue-left-default .cluetip-arrows {
+    width: 6px;
+    height: 12px;
+    background-image: url(images/darrowright.gif);
+    left: 100%;
+    margin-right: -11px;
+}
+.clue-top-default .cluetip-arrows {
+    background: url(images/darrowdown.gif) no-repeat;
+    top: auto;
+    bottom: -5px;
+    left: 50%;
+    margin-left: -12px;
+    width: 12px;
+    height: 6px;
+}
+.clue-bottom-default .cluetip-arrows {
+    background: url(images/darrowup.gif) no-repeat;
+    top: -5px;
+    left: 50%;
+    margin-left: -12px;
+    width: 12px;
+    height: 6px;
+}
+.menu_group{
+    width: 100%;
+}
+.menu_group li a{
+    display: block;
+    padding:2px 5px;
+    background-color: #fff;
+    text-decoration: none;
+    color:#666;
+}
+.menu_group li a:hover{
+    background-color: #08c;
+    color:#fff;
+}
+/***************************************
+   =cluetipClass: 'jtip'
+-------------------------------------- */
+.cluetip-jtip {
+    background-color: #fff;
+}
+.cluetip-jtip .cluetip-outer {
+    border: 2px solid #ccc;
+    position: relative;
+    background-color: #fff;
+}
+
+.cluetip-jtip .cluetip-inner {
+    padding: 5px;
+}
+.cluetip-jtip div.cluetip-close {
+    text-align: right;
+    margin: 0 5px 0;
+    color: #900;
+}
+
+.cluetip-jtip .ui-cluetip-header {
+    background-color: #ccc;
+    padding: 6px;
+    /*  margin-bottom: 1em;*/
+}
+
+/* jtip arrows */
+.cluetip-jtip .cluetip-arrows {
+    width: 22px;
+    height: 11px;
+    overflow: hidden;
+    left: -11px;
+}
+.clue-right-jtip .cluetip-arrows {
+    width: 11px;
+    height: 22px;
+    background-image: url(images/arrowleft.gif);
+}
+.clue-left-jtip .cluetip-arrows {
+    width: 11px;
+    height: 22px;
+    background-image: url(images/arrowright.gif);
+    left: 100%;
+    margin-right: -11px;
+}
+.clue-top-jtip .cluetip-arrows {
+    background-image: url(images/arrowdown.gif);
+    top: 100%;
+    left: 50%;
+    width: 22px;
+    height: 11px;
+    margin-left: -11px;
+}
+.clue-bottom-jtip .cluetip-arrows {
+    background-image: url(images/arrowup.gif);
+    top: -11px;
+    left: 50%;
+    width: 22px;
+    height: 11px;
+    margin-left: -11px;
+}
+
+/***************************************
+   =cluetipClass: 'rounded'
+-------------------------------------- */
+.cluetip-rounded {
+    border-radius: 6px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+}
+
+.cluetip-rounded .cluetip-outer {
+    border-radius: 6px;
+    background-color: #fff;
+}
+
+.cluetip-rounded  .cluetip-arrows {
+    width: 22px;
+    height: 11px;
+    overflow: hidden;
+}
+.clue-right-rounded .cluetip-arrows {
+    width: 11px;
+    height: 22px;
+    left: -11px;
+    background-image: url(images/arrowleft.gif);
+}
+.clue-left-rounded .cluetip-arrows {
+    width: 11px;
+    height: 22px;
+    left: auto;
+    right: -11px;
+    background-image: url(images/arrowright.gif);
+
+}
+.clue-top-rounded .cluetip-arrows {
+    background-image: url(images/arrowdown.gif);
+    top: 100%;
+    left: 50%;
+    width: 22px;
+    height: 11px;
+    margin-left: -11px;
+}
+.clue-bottom-rounded .cluetip-arrows {
+    background-image: url(images/arrowup.gif);
+    top: -11px;
+    left: 50%;
+    width: 22px;
+    height: 11px;
+    margin-left: -11px;
+
+}
+
+/*className:nobg*/
+.cluetip-nobg {
+    box-shadow: none !important;
+}
+.cluetip-nobg,
+.cluetip-nobg .cluetip-outer {
+    background-color: transparent;
+    border: none;
+}

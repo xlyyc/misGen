@@ -12,8 +12,6 @@ wof.bizWidget.FlowLayoutSection = function () {
     this.getDomInstance().css('overflow','hidden');
 
     this._backgroundImg = jQuery('<img src="src/img/backgroud.gif" style="position:absolute;cursor:pointer;opacity:0;filter:alpha(opacity=0);width:100%;height:100%;">');
-
-
 };
 wof.bizWidget.FlowLayoutSection.prototype = {
     /**
@@ -39,8 +37,6 @@ wof.bizWidget.FlowLayoutSection.prototype = {
     _backgroundImg: null,
 
     _mustInOrder: null,   //item是否严格遵循次序排列
-
-    _initFlag: null,
 
     _isAutoExt: null,
 
@@ -159,47 +155,26 @@ wof.bizWidget.FlowLayoutSection.prototype = {
      * Render 方法定义
      */
 
+    initRender: function(){
+        //如果是clone过来的 会直接创建一个label对象 需要先移除
+        var nodes = this.childNodes();
+        for(var i=0;i<nodes.length;i++){
+            if(nodes[i].getClassName()=='wof.widget.Label'){
+                nodes[i].remove(true);
+                break;
+            }
+        }
+        var label = new wof.widget.Label();
+        label.setIsInside(true);
+        label.setTop(0);
+        label.setLeft(0);
+        label.setIsUnderline(true);
+        label.setScale(this.getScale());
+
+        this._label = label;
+    },
     //选择实现
     beforeRender: function () {
-        if(this._initFlag==null){
-            var _this = this;
-            var timeFn = null;
-            this.getDomInstance().mousedown(function(event){
-                event.stopPropagation();
-                clearTimeout(timeFn);
-                timeFn = setTimeout(function(){
-                    _this.sendMessage('wof.bizWidget.FlowLayoutSection_mousedown');
-                },250);
-            });
-            this.getDomInstance().dblclick(function(event){
-                event.stopPropagation();
-                clearTimeout(timeFn);
-                if(_this.getIsExpand()==true){
-                    _this.setIsExpand(false);
-                }else{
-                    _this.setIsExpand(true);
-                }
-                _this.sendMessage('wof.bizWidget.FlowLayoutSection_dblclick');
-            });
-            //如果是clone过来的 会直接创建一个label对象 需要先移除
-            var nodes = this.childNodes();
-            for(var i=0;i<nodes.length;i++){
-                if(nodes[i].getClassName()=='wof.widget.Label'){
-                    nodes[i].remove(true);
-                    break;
-                }
-            }
-            var label = new wof.widget.Label();
-            label.setIsInside(true);
-            label.setTop(0);
-            label.setLeft(0);
-            label.setIsUnderline(true);
-            label.setScale(this.getScale());
-
-            this._label = label;
-
-            this._initFlag = true;
-        }
         this._appendLabel();
         this._flowLayout();
     },

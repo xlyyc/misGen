@@ -21,8 +21,6 @@ wof.widget.Tab.prototype = {
 
     _initDOMFlag:null,
 
-    _initFlag:null,
-
     _updateFlag:null,
 
     /**
@@ -46,25 +44,7 @@ wof.widget.Tab.prototype = {
 
     //选择实现
     beforeRender: function () {
-        if(this._initFlag==null){
-            var _this = this;
-            var timeFn = null;
-            this.getDomInstance().mousedown(function(event){
-                event.stopPropagation();
-                clearTimeout(timeFn);
-                timeFn = setTimeout(function(){
-                    _this.sendMessage('wof.widget.Tab_mousedown');
-                    _this.sendMessage('wof.widget.Tab_active');
-                },250);
-            });
-            this.getDomInstance().dblclick(function(event){
-                event.stopPropagation();
-                clearTimeout(timeFn);
-                _this.sendMessage('wof.widget.Tab_dblclick');
-                _this.sendMessage('wof.widget.Tab_active');
-            });
-            this._initFlag = true;
-        }
+
         this.getDomInstance().children('ul').remove();
 
         var ul = jQuery('<ul>');

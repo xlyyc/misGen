@@ -1,0 +1,188 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN">
+<head>
+    <title>金智教育管理应用平台</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="Content-Language" content="zh-CN"/>
+    <meta content="all" name="robots"/>
+    <meta name="author" content="ywwei@wisedu.com,魏言文"/>
+    <meta name="Copyright" content="www.wisedu.com"/>
+    <meta name="description" content="基于HTML，CSS，JAVASCRIPT的简洁灵活的流行前端框架及交互组件集"/>
+    <meta name="keywords" content="lovey,CSS框架,JS框架"/>
+    <!--lovey核心css-->
+    <link href="../../../../lovey/style/css/lovey.css" rel="stylesheet" type="text/css"/>
+    <style type="text/css">
+        html {
+            overflow: auto
+        }
+    </style>
+</head>
+
+<body>
+<ul class="ui_nav_breadcrumb_style02">
+    <li><a href="javascript:void(0)" class="homepage"></a><span class="divider"></span></li>
+    <li class="active">数据范围包定义</li>
+</ul>
+
+
+<FIELDSET class=ui_form_group>
+    <LEGEND jQuery17101576360308029407="4">个人信息</LEGEND>
+    <TABLE>
+        <TBODY>
+        <TR>
+            <TD class=form_cent>
+                <LABEL class=form_cent_label for="">姓名</LABEL>
+
+                <DIV class=form_cent_text>张三</DIV>
+            </TD>
+            <TD class=form_cent>
+                <LABEL class=form_cent_label for="">出生日期</LABEL>
+
+                <DIV class=form_cent_text>1987-02-10</DIV>
+            </TD>
+            <TD class=form_cent>
+                <LABEL class=form_cent_label for="">民族</LABEL>
+
+                <DIV class=form_cent_text>汉族</DIV>
+            </TD>
+            <TD class=form_pic rowSpan=4><IMG alt="" src="../assets/images/glyphicons_042_group.png" width=110
+                                              height=135></TD>
+        </TR>
+        <TR>
+            <TD class=form_cent>
+                <LABEL class=form_cent_label for="">性别</LABEL>
+
+                <DIV class=form_cent_text>男</DIV>
+            </TD>
+            <TD class=form_cent>
+                <LABEL class=form_cent_label for="">身高</LABEL>
+
+                <DIV class=form_cent_text>176 公分</DIV>
+            </TD>
+            <TD class=form_cent>
+                <LABEL class=form_cent_label for="">体重</LABEL>
+
+                <DIV class=form_cent_text>65 公斤</DIV>
+            </TD>
+        </TR>
+        <TR>
+            <TD class=form_cent>
+                <LABEL class=form_cent_label for="">血型</LABEL>
+
+                <DIV class=form_cent_text>B型</DIV>
+            </TD>
+            <TD class=form_cent>
+                <LABEL class=form_cent_label for="">性格</LABEL>
+
+                <DIV class=form_cent_text>低调</DIV>
+            </TD>
+            <TD class=form_cent>
+                <LABEL class=form_cent_label for="">婚姻状况</LABEL>
+
+                <DIV class=form_cent_text>未婚</DIV>
+            </TD>
+        </TR>
+        <TR>
+            <TD class=form_cent>
+                <LABEL class=form_cent_label for="">血型</LABEL>
+
+                <DIV class=form_cent_text>B型</DIV>
+            </TD>
+            <TD class=form_cent>
+                <LABEL class=form_cent_label for="">性格</LABEL>
+
+                <DIV class=form_cent_text>低调</DIV>
+            </TD>
+            <TD class=form_cent>
+                <LABEL class=form_cent_label for="">婚姻状况</LABEL>
+
+                <DIV class=form_cent_text>未婚</DIV>
+            </TD>
+        </TR>
+        <TR>
+            <TD class=form_cent>
+                <LABEL class=form_cent_label for="">籍贯</LABEL>
+
+                <DIV class=form_cent_text>江苏 南京</DIV>
+            </TD>
+            <TD class=form_cent>
+                <LABEL class=form_cent_label for="">联系电话</LABEL>
+
+                <DIV class=form_cent_text>13579246810</DIV>
+            </TD>
+            <TD class=form_cent colSpan=2>
+                <LABEL class=form_cent_label for="">详细住址</LABEL>
+
+                <DIV class=form_cent_text>江苏省南京市江宁区百家湖</DIV>
+            </TD>
+        </TR>
+        </TBODY>
+    </TABLE>
+</FIELDSET>
+
+<FIELDSET class=ui_form_group>
+    <LEGEND jQuery17101576360308029407="5">学籍信息</LEGEND>
+    <div id="ambitsGrid"></div>
+</FIELDSET>
+
+
+<!--jquery核心文件-->
+<script src="../../../../lovey/js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+<!--懒加载核心js文件-->
+<script src="../../../../lovey/js/easyloader.js" type="text/javascript"></script>
+<!--CustomersData 表格内数据-->
+<script src="../../../../docs/LigerUI/demos/grid/CustomersData.js" type="text/javascript"></script>
+<script type="text/javascript">
+    //判断当前页面是否被Iframe集成
+    easyloader.isIframe = (window != top);
+    $(document).ready(function () {
+        $(".ui_form_group legend").click(function () {
+            var clickElement = $(this);
+            if (clickElement.parent().hasClass("ui_form_group_open")) {
+                clickElement.parent().removeClass("ui_form_group_open");
+                $(this).siblings().css({"display": "block"});
+            } else {
+                clickElement.parent().addClass("ui_form_group_open");
+                $(this).siblings().css({"display": "none"});
+            }
+        });
+        using("grid", function () {
+            /*$("#ambitsGrid").ligerGrid({
+             columns: [
+             { display: "操作用户", name: "User", width: "10%" },
+             { display: "站点", name: "Site", width: "10%" },
+             { display: "模块名称", name: "Model", width: "15%" },
+             { display: "功能项", name: "Tool", width: "10%" },
+             { display: "时间", name: "Time", width: "15%" },
+             { display: "IP地址", name: "IP", width: "15%" },
+             { display: "日志内容名", name: "Daily", width: "15%" },
+             { display: "查看详情", name: "View" }
+             ],
+             data:affairDate,
+             checkbox:true,
+             width: "100%",
+             height: "80%",
+             pageSizeOptions:[5,10,15,20]
+             });*/
+
+            $("#ambitsGrid").ligerGrid({
+                columns: [
+                    { display: '顾客', name: 'CustomerID', align: 'left'},
+                    { display: '公司名', name: 'CompanyName'},
+                    { display: '联系名', name: 'ContactName'},
+                    { display: '城市', name: 'City'}
+                ],
+                url: "grid.json",
+                onSuccess: function (data) {
+                    window.console && console.log(data);
+                },
+                allowAdjustColWidth: true,
+                doServerUrl: "toggle.json",
+                sortName: 'CustomerID'
+            });
+        });
+    });
+</script>
+</body>
+</html>

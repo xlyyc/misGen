@@ -1,0 +1,29 @@
+{
+    "status": 1,
+    "files": [
+        {
+            "downLoadUrl":"123",
+            "filePath": "/opt/wiscom/abc.png",
+            "fileUrl":"/lovey/js/plugins/ckeditor/icon_app03.png",
+            "deleteUrl":"server.json",
+            "fileSuffix":"png",
+            "size": 84384,
+            "name": "apihook.dll",
+            "created": 1366166371825,
+            "creator": "赵云",
+            "id": 691922
+        },
+        {
+            "downLoadUrl":"123",
+            "filePath": "/opt/wiscom/abc.png",
+            "fileUrl":"/lovey/js/plugins/ckeditor/icon_app03.png",
+            "deleteUrl":"server.json",
+            "fileSuffix":"jpg",
+            "size": 879394,
+            "name": "Chrysanthemum.jpg",
+            "created": 1366166371825,
+            "creator": "赵云",
+            "id": 691933
+        }
+    ]
+}

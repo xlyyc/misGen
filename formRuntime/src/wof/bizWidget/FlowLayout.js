@@ -28,8 +28,6 @@ wof.bizWidget.FlowLayout.prototype = {
     //聚焦item行、列号
     _activeItemRank: null,
 
-    _initFlag: null,
-
     /**
      * get/set 属性方法定义
      */
@@ -82,30 +80,7 @@ wof.bizWidget.FlowLayout.prototype = {
 
     //选择实现
     beforeRender: function () {
-        if(this._initFlag==null){
-            var _this = this;
-            var timeFn = null;
-            this.getDomInstance().mousedown(function(event){
-                event.stopPropagation();
-                clearTimeout(timeFn);
-                timeFn = setTimeout(function(){
-                    _this.sendMessage('wof.bizWidget.FlowLayout_mousedown');
-                    _this.sendMessage('wof.bizWidget.FlowLayout_active');
-                },250);
-            });
-            this.getDomInstance().dblclick(function(event){
-                event.stopPropagation();
-                clearTimeout(timeFn);
-                if(_this.getIsExpand()==true){
-                    _this.setIsExpand(false);
-                }else{
-                    _this.setIsExpand(true);
-                }
-                _this.sendMessage('wof.bizWidget.FlowLayout_dblclick');
-                _this.sendMessage('wof.bizWidget.FlowLayout_active');
-            });
-            this._initFlag = true;
-        }
+
     },
 
     //----------必须实现----------
@@ -156,6 +131,11 @@ wof.bizWidget.FlowLayout.prototype = {
         'wof.bizWidget.FlowLayoutSection_dblclick':function(message){
             console.log(message.id+'   '+this.getClassName());
             var section = wof.util.ObjectManager.get(message.sender.id);
+            if(section.getIsExpand()==true){
+                section.setIsExpand(false);
+            }else{
+                section.setIsExpand(true);
+            }
             var sectionIndex = section.getIndex();
             this.setActiveSectionIndex(sectionIndex);
             this.setActiveItemRank(null);

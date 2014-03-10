@@ -1,0 +1,146 @@
+.btn_folder input {
+    float: left;
+}
+
+.btn_folder textarea {
+    float: left;
+}
+
+.btn_folder {
+    float: left;
+    height: auto;
+    line-height: 25px;
+}
+
+.upload_img {
+    float: left;
+}
+
+.upload_img  .btn_upload{
+    background: url(images/btn_folder.gif) no-repeat scroll 0 0 transparent;
+    cursor: pointer;
+    display: block;
+    float: left;
+    height: 23px;
+    width: 23px;
+    text-indent: -9999px;
+}
+.attachmentPanel {
+    overflow: hidden;
+}
+.attachments_list{
+    margin: 0 0 0 28px;
+    _display: inline;
+}
+.attachments_list li {
+    background: url(images/icon_attachments.gif) no-repeat scroll left center #FAF0A9;
+    border: 1px solid #F4E369;
+    border-radius: 2px 2px 2px 2px;
+    color: #555;
+    float: left;
+    height: 20px;
+    line-height: 20px;
+    margin: 0 5px 4px 2px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.attachments_list li span {
+    color: #000000;
+    float: left;
+    margin-left: 15px;
+    margin-right: 2px;
+}
+
+.attachments_list li a {
+    background: url(images/icon-close.gif) no-repeat scroll 0 0 transparent;
+    cursor: pointer;
+    display: block;
+    float: left;
+    height: 15px;
+    margin-top: 5px;
+    text-align: right;
+    width: 12px;
+}
+
+.btn_folder input {
+    float: left;
+}
+.btn_upload i{
+    display: none;
+}
+#selectFiles{
+    padding: 10px;
+}
+.attachments_list .attach_name{
+    background: none;
+    margin: 0;
+    font-size: 14px;
+    width: auto;
+    color: #3E62A6;
+}
+/*为了兼容文件上传中调用tab样式 by sjsong01@wisedu.com*/
+.tab_style06 .l-tab {
+    position:relative !important;
+}
+/*隐藏dialog滚动条 by sjsong01@wisedu.com*/
+.l-dialog-content {
+    overflow: hidden;
+}
+/*上边框不显示BUG by sjsong01@wisedu.com*/
+.l-panel {
+    border: 1px solid #CCCCCC !important ;
+    /*解决IE6-7上面模块margin-bottom失效问题*/
+    *margin-top: 5px;
+}
+.tab_style06 .l-tab-content {
+    padding-top: 0 !important;
+}
+.l-tab-content-item .l-toolbar {
+    margin-left: 0;
+}
+/*.btn_upload {*/
+    /*background: url("images/ui_btn_normal.gif") repeat-x  left bottom #FCFCFC;*/
+    /*border: 1px solid #D0D0D0;*/
+    /*border-radius: 4px 4px 4px 4px;*/
+    /*color: #333333 !important;*/
+    /*cursor: pointer;*/
+    /*display: inline-block;*/
+    /*font-size: 14px;*/
+    /*height: 22px;*/
+    /*line-height: 20px;*/
+    /*margin-bottom: 0;*/
+    /*overflow: visible;*/
+    /*padding: 0 6px;*/
+    /*text-align: center;*/
+    /*text-decoration: none;*/
+    /*text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);*/
+    /*vertical-align: middle;*/
+    /*width: auto;*/
+/*}*/
+/*.btn_upload:visited {*/
+    /*background: url("images/ui_btn_normal.gif") repeat-x  left bottom #FCFCFC;*/
+    /*color: #333333;*/
+    /*text-decoration: none !important;*/
+/*}*/
+/*.btn_upload:hover, .btn_upload:active, .btn_upload .active, .btn_upload .disabled, .btn_upload[disabled] {*/
+    /*background: none repeat scroll 0 0 #FCFCFC;*/
+    /*color: #333333;*/
+    /*text-decoration: none !important;*/
+/*}*/
+/*.btn_upload:first-child {*/
+/*}*/
+/*.btn_upload:focus {*/
+    /*outline: thin dotted #333333;*/
+    /*outline-offset: -2px;*/
+/*}*/
+/*.btn_upload:active {*/
+    /*box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15) inset, 0 1px 2px rgba(0, 0, 0, 0.05);*/
+    /*outline: 0 none;*/
+/*}*/
+/*.btn_upload .disabled, .btn_upload[disabled] {*/
+    /*box-shadow: none;*/
+    /*cursor: default;*/
+    /*opacity: 0.65;*/
+/*}*/

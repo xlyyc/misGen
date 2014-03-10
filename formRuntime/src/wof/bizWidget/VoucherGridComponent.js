@@ -23,7 +23,6 @@ wof.bizWidget.VoucherGridComponent.prototype = {
      * 属性声明 （private ，用"_"标识）
      */
 
-    _initFlag:null,
 
     _borderStyle: null,
 
@@ -258,26 +257,7 @@ wof.bizWidget.VoucherGridComponent.prototype = {
 
     //选择实现
     beforeRender: function () {
-        if(this._initFlag==null){
-            var _this = this;
-            var timeFn = null;
-            this.getDomInstance().mousedown(function(event){
-                event.stopPropagation();
-                clearTimeout(timeFn);
-                timeFn = setTimeout(function(){
-                    _this.sendMessage('wof.bizWidget.VoucherGridComponent_mousedown');
-                    _this.sendMessage('wof.bizWidget.VoucherGridComponent_active');
-                },250);
-            });
-            this.getDomInstance().dblclick(function(event){
-                event.stopPropagation();
-                clearTimeout(timeFn);
-                _this.sendMessage('wof.bizWidget.VoucherGridComponent_dblclick');
-                _this.sendMessage('wof.bizWidget.VoucherGridComponent_active');
-            });
-            this._initFlag = true;
 
-        }
         this.getDomInstance().children('div:not([oid])').remove();
     },
 

@@ -20,8 +20,6 @@ wof.bizWidget.VoucherItemGroup.prototype = {
      * 属性声明 （private ，用"_"标识）
      */
 
-    _initFlag: null,
-
     _mustInOrder: null,   //组内各项是否严格遵循次序排列
 
     _itemHeight: null,  //表头单元格高度
@@ -171,7 +169,7 @@ wof.bizWidget.VoucherItemGroup.prototype = {
                 break;
             }
         }
-        var label = wof$.create('Label');
+        var label = new wof.widget.Label();
         label.setIsInside(true);
         label.setTop(0);
         label.setLeft(0);
@@ -183,6 +181,7 @@ wof.bizWidget.VoucherItemGroup.prototype = {
 
     //选择实现
     beforeRender: function () {
+
         this._appendLabel();
         this._flowLayout();
     },

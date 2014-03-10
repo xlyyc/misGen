@@ -7,82 +7,74 @@
 
 wof.widget.ComboBox = function () {
     this._version = '1.0';
-
+    this._selectBoxWidth = 200;
+    this._multiSelectSplit = ',';
 };
 
 wof.widget.ComboBox.prototype = {
-    /**
-     * 属性声明 （private ，用"_"标识）
-     */
-    _options: [],
 
-    _select: null,
+    _url: null, // 加载数据url
 
-    _selectedOption: null,
+    _comboboxData: null, // 下拉框时数据格式： [{text:'男',value:'1'},{'text':'女',value:2}]
 
-    /**
-     * get/set 属性方法定义
-     */
-    setOptions: function (options) {
-        this._options = options;
+    _tree: null, // 下拉树
+
+    _grid: null, // 下拉表格
+
+    _isMultiSelect: null, // 是否可多选
+
+    _multiSelectSplit: null, // 多选后显示、值分隔符
+
+    _selectedValue: null, // 当前选中的值
+
+    _selectedText: null, //  当前选中的文本
+
+    _selectBoxHeight: null, //  下拉框的高度
+
+    _selectBoxWidth: null, //  下拉框的宽度
+
+    initRender: function () {
+        var _this = this;
+        using("combobox", function () {
+            _this.ligerComboboxInput = jQuery('<input type="text">');
+            _this.getDomInstance().append(_this.ligerComboboxInput);
+            _this.ligerComboboxInput.ligerComboBox({
+                width: _this.getSelectBoxWidth(),
+                textField: "text",
+                data: _this.getComboboxData()
+            });
+        })
     },
-    getOptions: function (options) {
-        return this._options;
+    getSelectBoxWidth: function () {
+        return this._getSelectBoxWidth;
     },
 
-    /**
-     * Render 方法定义
-     */
+    getComboboxData: function () {
+        return this._comboboxData;
+    },
 
-    //选择实现
+    setComboboxData: function (comboboxData) {
+        this._comboboxData = comboboxData;
+    },
+
     beforeRender: function () {
-        if (this._select != null) {
-            this._select.remove();
-        }
+
     },
 
-    //----------必须实现----------
     render: function () {
-        this._select = jQuery('<select>');
-        if (this._options) {
-            for (var i = 0; i < this._options.length; i++) {
-                var option = this._options[i];
-                var optionDom = jQuery('<option>').val(option.value).text(option.text)
-                    .appendTo(this._select);
-                if (this._selectedOption && this._selectedOption.value === option.value) {
-                    optionDom.attr('selected', 'selected');
-                }
-            }
-        }
-
-        this.getDomInstance().append(this._select);
+        //TODO lovey中如何改变已实例化的属性?
     },
 
-    //选择实现
     afterRender: function () {
-        var that = this;
-        this._select.multiselect({selectedList: 1, multiple: false, click: function (event, ui) {
-            if (ui.checked === true) {
-                that._selectedOption = {text: ui.text, value: ui.value};
-            } else {
-                that._selectedOption = null;
-            }
-        }});
+
     },
 
-    /**
-     * getData/setData 方法定义
-     */
-
-    //----------必须实现----------
     getData: function () {
         return {
-            options: this.getOptions()
+
         };
     },
-    //----------必须实现----------
-    setData: function (data) {
-        this.setOptions(data.options);
-    }
 
+    setData: function (data) {
+    }
 };

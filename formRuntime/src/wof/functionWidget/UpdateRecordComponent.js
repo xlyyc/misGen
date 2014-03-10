@@ -36,8 +36,6 @@ wof.functionWidget.UpdateRecordComponent.prototype = {
 
     _btn: null,
 
-    _initFlag: null,
-
     _paramMaps:null,
 
     _formFunctionId:null,
@@ -146,39 +144,21 @@ wof.functionWidget.UpdateRecordComponent.prototype = {
      * Render 方法定义
      */
 
+    initRender: function(){
+        var button = new wof.widget.Button();
+        button.setIsInside(true);
+        button.setType('submit');
+        button.setLeft(0);
+        button.setTop(0);
+        button.setWidth(this.getWidth());
+        button.setHeight(this.getHeight());
+        button.appendTo(this);
+        this._btn = button;
+    },
+
     //选择实现
     beforeRender: function () {
-        if(this._initFlag==null){
-            var _this = this;
-            var timeFn = null;
-            this.getDomInstance().mousedown(function(event){
-                event.stopPropagation();
-                clearTimeout(timeFn);
-                timeFn = setTimeout(function(){
-                    _this.sendMessage('wof.functionWidget.UpdateRecordComponent_mousedown');
-                    _this.sendMessage('wof.functionWidget.UpdateRecordComponent_active');
-                },250);
-            });
 
-            this.getDomInstance().dblclick(function(event){
-                event.stopPropagation();
-                clearTimeout(timeFn);
-                _this.sendMessage('wof.functionWidget.UpdateRecordComponent_dblclick');
-                _this.sendMessage('wof.functionWidget.UpdateRecordComponent_active');
-            });
-
-            var button = new wof.widget.Button();
-            button.setIsInside(true);
-            button.setType('submit');
-            button.setLeft(0);
-            button.setTop(0);
-            button.setWidth(this.getWidth());
-            button.setHeight(this.getHeight());
-            button.appendTo(this);
-            this._btn = button;
-
-            this._initFlag = true;
-        }
         this._btn.setText(this.getCallItemCaption());
     },
 

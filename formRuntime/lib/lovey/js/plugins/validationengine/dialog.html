@@ -1,0 +1,39 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--声明XHTML1.0过渡类型,注释不要放在开头，否则会有问题-->
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta http-equiv="Content-Language" content="zh-CN"/>
+    <meta content="all" name="robots"/>
+    <meta name="author" content="yzhao(at)mail.wiscom.cn,赵云"/>
+    <meta name="copyright" content="www.wiscom.com.cn,自由版权,任意转载"/>
+    <meta name="description" content="css框架"/>
+    <meta name="keywords" content="css框架,web2.0"/>
+    <title>CCS CSS框架</title>
+    <!--lovey ui-->
+    <link href="../../../style/css/lovey.css" rel="stylesheet" type="text/css"/>
+    <!--jquery1.7.1核心js文件-->
+    <script src="../../jquery.min.js" type="text/javascript" charset="utf-8"></script>
+    <!--懒加载核心js文件-->
+    <script type="text/javascript" src="../../easyloader.js"></script>
+    <script type="text/javascript">
+        easyloader.dialogCssName = "dialog_style02";
+
+        $(document).ready(function() {
+            using("dialog", function() {
+                $.ligerDialog.ajaxFormSubmit({
+                    formUrl:"form.html",
+                    formId:"form1",
+                    width:800,
+                    height:600,
+                    scroll:true
+                })
+            });
+        });
+
+    </script>
+</head>
+<body>
+</body>
+</html>

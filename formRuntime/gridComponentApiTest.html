@@ -1,0 +1,169 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>业务设计器</title>
+    <link href="lib/jquery.ui/themes/redmond/jquery-ui.min.css" rel="stylesheet">
+    <link href="lib/jquery.ui.multiselect/css/jquery.multiselect.css" rel="stylesheet">
+    <link href="lib/jquery.ui.multiselect/css/jquery.multiselect.filter.css" rel="stylesheet">
+    <link href="lib/jquery.ztree/css/zTreeStyle/zTreeStyle.css" rel="stylesheet">
+    <link href="lib/lovey/style/css/lovey.css" rel="stylesheet" type="text/css">
+    <style type="text/css">
+        <!--
+        * {
+            margin: 0;
+            padding: 0
+        }
+
+        body {
+            font: 12px "Trebuchet MS", sans-serif;
+        }
+
+        -->
+    </style>
+    <script src="lib/jquery/jquery.min.js"></script>
+    <script src="lib/jquery.ui/jquery-ui-1.10.1.custom.min.js"></script>
+    <script src="lib/jquery.ui.multiselect/js/jquery.multiselect.min.js"></script>
+    <script src="lib/jquery.ui.multiselect/js/jquery.multiselect.filter.min.js"></script>
+    <script src="lib/jquery.ztree/js/jquery.ztree.all-3.5.js"></script>
+    <script src="lib/json2.js"></script>
+    <script src="lib/fixConsole.js"></script>
+    <script src="lib/jsonpath-0.8.0.js"></script>
+    <script src="src/wof/kernel/initNamespace.js"></script>
+
+
+    <script src="src/wof/util/Hashtable.js"></script>
+    <script src="src/wof/util/ObjectManager.js"></script>
+    <script src="src/wof/util/Observer.js"></script>
+    <script src="src/wof/util/ArrayList.js"></script>
+    <script src="src/wof/util/Selector.js"></script>
+    <script src="src/wof/util/SelectorList.js"></script>
+    <script src="src/wof/util/GlobalObject.js"></script>
+    <script src="src/wof/util/Tool.js"></script>
+
+    <script src="src/wof/widget/Mediator.js"></script>
+
+
+    <script src="src/wof/widget/Tab.js"></script>
+    <script src="src/wof/widget/TabItem.js"></script>
+    <script src="src/wof/widget/Toolbar.js"></script>
+    <script src="src/wof/widget/ToolbarItem.js"></script>
+    <script src="src/wof/widget/Grid.js"></script>
+    <script src="src/wof/widget/Button.js"></script>
+    <script src="src/wof/widget/DateBox.js"></script>
+    <script src="src/wof/widget/Label.js"></script>
+    <script src="src/wof/widget/RadioGroupItem.js"></script>
+    <script src="src/wof/widget/RadioGroup.js"></script>
+    <script src="src/wof/widget/ComboBox.js"></script>
+    <script src="src/wof/widget/Tree.js"></script>
+    <script src="src/wof/widget/Text.js"></script>
+
+
+    <script src="src/wof/bizWidget/FlowLayout.js"></script>
+    <script src="src/wof/bizWidget/FlowLayoutSection.js"></script>
+    <script src="src/wof/bizWidget/FlowLayoutItem.js"></script>
+    <script src="src/wof/bizWidget/GridLayout.js"></script>
+    <script src="src/wof/bizWidget/VoucherComponent.js"></script>
+    <script src="src/wof/bizWidget/VoucherItemGroup.js"></script>
+    <script src="src/wof/bizWidget/VoucherItem.js"></script>
+    <script src="src/wof/bizWidget/VoucherGridComponent.js"></script>
+    <script src="src/wof/bizWidget/VoucherGridComponentColumn.js"></script>
+    <script src="src/wof/bizWidget/GridComponent.js"></script>
+
+    <script src="src/wof/bizWidget/GridComponentColumn.js"></script>
+    <script src="src/wof/bizWidget/VoucherGridComponent.js"></script>
+    <script src="src/wof/bizWidget/SearchComponent.js"></script>
+    <script src="src/wof/bizWidget/SearchItem.js"></script>
+
+    <script src="src/wof/bizWidget/DataObject.js"></script>
+
+    <script src="src/wof/functionWidget/CommitComponent.js"></script>
+    <script src="src/wof/functionWidget/ViewRecordComponent.js"></script>
+    <script src="src/wof/functionWidget/UpdateRecordComponent.js"></script>
+    <script src="src/wof/functionWidget/DeleteRecordComponent.js"></script>
+    <script src="src/wof/functionWidget/AddRecordComponent.js"></script>
+
+
+    <script src="src/wof/kernel/initAOP.js"></script>
+    <script src="lib/lovey/js/easyloader.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        //部署路径
+        easyloader.URI = 'formRuntime';
+    </script>
+
+    <script>
+
+        var emap_pageId = '350058851451944960';
+        var emap_dataObject = new wof.bizWidget.DataObject();
+        emap_dataObject.setPageId(emap_pageId);
+
+        var gridComponentData = {
+            column : [{name : '列名',useMultiSelect : '下拉框是否多选',columnType : '列类型',caption : '显示名称',
+            columnWidth : '列宽度',bindDataField:'绑定实体属性',gridId : '下拉框表格id',display : '是否显示',isPin : '是否钉住',
+            dataTimeFormate:'时间格式',editor : '是否行编辑',picUrl : '图片地址',selectPattern : '下拉框显示模式',
+                visbleType : '显示类型',readOnly:'是否只读',required :'是否必填',orderbyType : '排序类型',
+                canSearch : '使用快捷查询',length : '字符长度',min : '最小值',max : '最大值',intlength : '整数部分位数',
+                scaleLength : '小数部分位数',regExp : '校验正则表达式',refSearchCondition : '参照查询条件',
+                checkErrorInfo:'校验失败提示',inkeForm : '窗体链接列'}],
+        };
+
+
+    using("combobox", function () {
+    var combobox = new wof.widget.ComboBox();
+    combobox.setComboboxData([
+        { id:1, text:"金智科技"},
+        { id:2, text:"金智教育"},
+        { id:3, text:"金智投资"},
+        { id:4, text:"金智智能"}
+    ]);
+    combobox.render();
+
+        combobox.setComboboxData([
+            { id:1, text:"金智科技11"},
+            { id:2, text:"金智教育22"},
+            { id:3, text:"金智投资"},
+            { id:4, text:"金智智能"}
+        ]);
+        combobox.render();
+    $('#comboboxTest').append(combobox.getDomInstance());
+
+
+    });
+        jQuery(function () {
+            gridComponent = new wof.bizWidget.GridComponent();
+            gridComponent._init({
+                dataObject: emap_dataObject,
+                dataSourceType: 'do',
+                bindEntityId: 'JZGJBXXB',
+                columns: gridComponentData.columns
+            });
+            gridComponent.render();
+
+            var a = new wof.widget.Text();
+            a.setName('name');
+            a.setValue('val');
+            a.render();
+            a.setName('name11');
+            a.setValue('val1111');
+            a.render()
+            $('#textTest').html(a.getDomInstance().html());
+        });
+    </script>
+</head>
+<body>
+<button onclick="gridComponent.prevPage();gridComponent.render();">上一页</button>
+<button onclick="gridComponent.nextPage();gridComponent.render();">下一页</button>
+
+<button onclick="gridComponent.addRow([{'zglbref.lbbz':'好员工222','zgid': '362646149296820224'}]);">添加</button>
+<button onclick="gridComponent.updateRow([{'zglbref.lbbz': '外聘员工111', 'zgid': '362646149296820224'}]);">修改</button>
+<button onclick="gridComponent.deleteRow([{'zgid':'362646149296820224'}]);">删除</button>
+
+<button onclick="gridComponent.undeleteData();">撤销删除</button>
+<button onclick="gridComponent.saveData();">保存</button>
+<div id="textTest"></div>
+
+<div id="comboboxTest"></div>
+
+</body>
+</html>

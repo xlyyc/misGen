@@ -30,8 +30,6 @@ wof.bizWidget.SearchComponent.prototype = {
 
     _colsNum:null,
 
-    _initFlag: null,
-
     _mustInOrder: null,   //各项是否严格遵循次序排列
 
     _itemHeight: null,  //单元格高度
@@ -225,10 +223,28 @@ wof.bizWidget.SearchComponent.prototype = {
      * Render 方法定义
      */
 
+    initRender: function(){
+        //如果是clone过来的 会直接创建一个label对象 需要先移除
+        var nodes = this.childNodes();
+        for(var i=0;i<nodes.length;i++){
+            if(nodes[i].getClassName()=='wof.widget.Label'){
+                nodes[i].remove(true);
+                break;
+            }
+        }
+        var label = new wof.widget.Label();
+        label.setIsInside(true);
+        label.setTop(0);
+        label.setLeft(0);
+        label.setIsUnderline(true);
+        label.setScale(this.getScale());
+
+        this._label = label;
+    },
+
     //选择实现
     beforeRender: function () {
-        if(this._initFlag==null){
-            var _this = this;
+           /* var _this = this;
             var timeFn = null;
             this.getDomInstance().mousedown(function(event){
                 event.stopPropagation();
@@ -252,27 +268,7 @@ wof.bizWidget.SearchComponent.prototype = {
                 _this.render();
                 _this.sendMessage('wof_object_resize');
                 _this.sendMessage('wof.bizWidget.SearchComponent_active');
-            });
-            //如果是clone过来的 会直接创建一个label对象 需要先移除
-            var nodes = this.childNodes();
-            for(var i=0;i<nodes.length;i++){
-                if(nodes[i].getClassName()=='wof.widget.Label'){
-                    nodes[i].remove(true);
-                    break;
-                }
-            }
-            var label = new wof.widget.Label();
-            label.setIsInside(true);
-            label.setTop(0);
-            label.setLeft(0);
-            label.setIsUnderline(true);
-            label.setScale(this.getScale());
-
-            this._label = label;
-
-            this._initFlag = true;
-        }
-
+            });*/
         this._appendLabel();
         this._flowLayout();
     },

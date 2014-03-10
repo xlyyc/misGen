@@ -1,0 +1,343 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+ * Developed By: ywwei
+ * Mail: ywwei@wisedu.com
+ * Version:1.0
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta http-equiv="Content-Language" content="zh-CN"/>
+    <meta content="all" name="robots"/>
+    <meta name="author" content="ywwei@wisedu.com,魏言文"/>
+    <meta name="copyright" content="www.wiscom.com.cn,自由版权,任意转载"/>
+    <meta name="description" content="css框架"/>
+    <meta name="keywords" content="css框架,web2.0"/>
+    <title>select</title>
+    <!--lovey核心css-->
+    <link href="../../../../lovey/style/css/lovey.css" rel="stylesheet" type="text/css"/>
+    <!--API全局样式-->
+    <link rel="stylesheet" href="../../../../docs/assets/css/api.css" type="text/css" media="screen, projection"/>
+    <!--自定义样式-->
+    <link rel="stylesheet" href="../../../../docs/assets/css/docs.css" type="text/css"/>
+</head>
+<body>
+<div id="nav" class="ui_container_fluid">
+    <div class="page_header">
+        <h1>选择组件
+            <small>select.js</small>
+        </h1>
+    </div>
+    <ul class="ui_list_h">
+        <li><a href="select_style.html" target="_blank" class="ui_btn ui_btn_danger">插件风格(style)</a></li>
+        <li><a href="../../../../docs/LigerUI/api/document/select/index.html" target="_blank"
+               class="ui_btn ui_btn_primary">API</a></li>
+        <li><a href="/ucp/plugins/ucpselect" target="_blank" class="ui_btn ui_btn_warning">外部插件开发(UCP)</a></li>
+    </ul>
+    <div class="ui_alert ui_alert_block  ui_alert_info">
+        <strong>特殊说明</strong>关于中文post提交测试。<a href="/oa/post.html" target="_blank">中文post测试</a>
+        get方式提交的中文参数必选使用encodeURI进行编码,post不用特殊设置。
+        <br>
+        1、web.xml
+        <pre class="brush:javascript;">
+        <filter>
+            <filter-name>SetCharacterEncoding</filter-name>
+            <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+            <init-param>
+                <param-name>encoding</param-name>
+                <param-value>UTF-8</param-value>
+            </init-param>
+            <init-param>
+                <param-name>forceEncoding</param-name>
+                <param-value>true</param-value>
+            </init-param>
+        </filter>
+
+
+        <filter-mapping>
+            <filter-name>SetCharacterEncoding</filter-name>
+            <url-pattern>/*</url-pattern>
+        </filter-mapping>
+            </pre>
+        2、JSP
+        <pre class="brush:javascript;">
+        <%@ page language="java" contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
+            </pre>
+        3、Tomcat
+        <pre class="brush:javascript;">
+        <Connector port="8090" URIEncoding="UTF-8"
+                   maxThreads="150" minSpareThreads="25" maxSpareThreads="75" maxPostSize="0"
+                   enableLookups="false" redirectPort="8443" acceptCount="100"
+                   debug="0" connectionTimeout="20000"
+                   disableUploadTimeout="true"/>
+            </pre>
+    </div>
+    <h3>组件效果展示</h3>
+    <!------------------------效果预览------------------------>
+    <div class="bs-docs-example pb30" style="_position: static">
+        <div id="userId1"></div>
+        <div class="clearfix"></div>
+        <br>
+        <div id="userId"></div>
+        <div class="clearfix"></div>
+        <br>
+        <div id="adminId"></div>
+        <div class="clearfix"></div>
+        <br>
+        <a onclick="openSelect()" class="ui_btn ui_btn_small hand">点击弹出选人</a>
+    </div>
+
+    <p>HTML部分,指定ID</p>
+<pre class="brush:javascript;">
+<div id="userId1"></div>
+<div class="clearfix"></div>
+<div id="userId"></div>
+<div class="clearfix"></div>
+<div id="adminId"></div>
+<div class="clearfix"></div>
+<div onclick="openSelect()" class="hand">点击弹出选人</div>
+</pre>
+    <p>JS部分,引用<code>select</code>组件，并指定ID</p>
+<pre class="brush:javascript;">
+ $(document).ready(function () {
+        using("select", function () {;
+            //选择组件演示数据
+            $("#adminId").ligerDialogSelect({
+                rightItemName: "firstName",
+                rightItemValue: "id",
+                //selectType:"radio",
+                initJson: [
+                    { id: 1254305, firstName: '校办秘书一'},
+                    { id: 1254306, firstName: '校办秘书二'},
+                    { id: 1254308, firstName: '教务副处长'}
+                ],
+                items: [
+                    {
+                        title: "用户",
+                        leftUrl: "org.json",
+                        rightUrl: "user.json",
+                        roleUrl: "role.json"
+                    },
+                    {
+                        title: "用户2",
+                        leftUrl: "org.json",
+                        rightUrl: "user.json"
+                    }
+                ],
+                inputName: "adminId",
+                roleUrl: "role.json",
+                moveSelect: true,
+                displayMode: true,
+                shortCutUrl: "shortCutUrl.json",
+                submitFunction: function (callObject) {
+                    alert("支持回调函数");
+                },
+                wattingTime:60000
+            });
+            $("#userId").ligerDialogSelect({
+                rightItemName: "firstName",
+                rightItemValue: "id",
+                initJson: [
+                    { id: 1254305, firstName: '校办秘书一'},
+                    { id: 1254306, firstName: '校办秘书二'},
+                    { id: 1254308, firstName: '教务副处长'}
+                ],
+                items: [
+                    {
+                        title: "用户",
+                        leftUrl: "org.json",
+                        rightUrl: "user.json",
+                        roleUrl: "role.json"
+                    },
+                    {
+                        title: "用户2",
+                        leftUrl: "org.json",
+                        rightUrl: "user.json"
+                    }
+                ],
+                inputName: "adminId",
+                roleUrl: "role.json",
+                moveSelect: true,
+                submitFunction: function (callObject) {
+                    alert("支持回调函数");
+                }
+            });
+            $("#userId1").ligerDialogSelect({
+                rightItemName: "firstName",
+                rightItemValue: "id",
+                initJson: [
+                    { id: 1254305, firstName: '校办秘书一'},
+                    { id: 1254306, firstName: '校办秘书二'},
+                    { id: 1254308, firstName: '教务副处长'}
+                ],
+                items: [
+                    {
+                        title: "用户",
+                        leftUrl: "org.json",
+                        rightUrl: "user.json",
+                        roleUrl: "role.json"
+                    },
+                    {
+                        title: "用户2",
+                        leftUrl: "org.json",
+                        rightUrl: "user.json"
+                    }
+                ],
+                inputName: "adminId",
+                roleUrl: "role.json",
+                readOnly: true,
+                moveSelect: true,
+                submitFunction: function (callObject) {
+                    alert("支持回调函数");
+                }
+            });
+        });
+    });
+    //取得父节点的元素，并模拟点击动作
+    function openSelect() {
+        $("#adminId").parent().next().click();
+    }
+  </pre>
+
+</div>
+
+<!--jquery1.7.1核心js文件-->
+<script src="../../jquery.min.js" type="text/javascript" charset="utf-8"></script>
+<!--懒加载核心js文件-->
+<script type="text/javascript" src="../../easyloader.js"></script>
+<!--加载语法高亮css和js文件-->
+<link type="text/css" rel="stylesheet" href="../syntaxhighlighter/styles/easy.css"/>
+<script type="text/javascript" src="../syntaxhighlighter/scripts/shCore.js"></script>
+<script type="text/javascript" src="../syntaxhighlighter/scripts/shBrushJScript.js"></script>
+<script type="text/javascript" src="../syntaxhighlighter/scripts/shBrushPhp.js"></script>
+<script type="text/javascript" src="../syntaxhighlighter/helper.js"></script>
+<script type="text/javascript">
+    easyloader.dialogCssName = "dialog_style02";
+    //判断当前页面是否被Iframe集成
+    easyloader.isIframe = (window != top);
+    easyloader.useDisable = true;
+
+    $(document).ready(function () {
+        using(["select", "iframe"], function () {
+            $.loveyIframe.auto();
+            //选择组件演示数据
+            var width = $(window).width() * 0.9;
+            $("#userId").ligerDialogSelect({
+                rightItemName: "firstName",
+                rightItemValue: "id",
+                initJson: [
+                    { id: 1254305, firstName: '校办秘书一'},
+                    { id: 1254306, firstName: '校办秘书二'},
+                    { id: 1254308, firstName: '教务副处长'}
+                ],
+                items: [
+                    {
+                        title: "用户",
+                        leftUrl: "/lovey/js/plugins/select/org.json",
+                        rightUrl: "/lovey/js/plugins/select/user.json",
+                        roleUrl: "/lovey/js/plugins/select/role.json"
+                    },
+                    {
+                        title: "用户2",
+                        leftUrl: "/lovey/js/plugins/select/org.json",
+                        rightUrl: "/lovey/js/plugins/select/user.json"
+                    }
+                ],
+                inputName: "adminId",
+                roleUrl: "/lovey/js/plugins/select/role.json",
+                moveSelect: true,
+                submitFunction: function (callObject) {
+                    alert("支持回调函数");
+                }
+            });
+            $("#userId1").ligerDialogSelect({
+                rightItemName: "firstName",
+                rightItemValue: "id",
+                initJson: [
+                    { id: 1254305, firstName: '校办秘书一'},
+                    { id: 1254306, firstName: '校办秘书二'},
+                    { id: 1254308, firstName: '教务副处长'},
+                    { id: 1254305, firstName: '校办秘书一'},
+                    { id: 1254306, firstName: '校办秘书二'},
+                    { id: 1254308, firstName: '教务副处长'},
+                    { id: 1254305, firstName: '校办秘书一'},
+                    { id: 1254306, firstName: '校办秘书二'},
+                    { id: 1254308, firstName: '教务副处长'},
+                    { id: 1254305, firstName: '校办秘书一'},
+                    { id: 1254306, firstName: '校办秘书二'},
+                    { id: 1254308, firstName: '教务副处长'},
+                    { id: 1254305, firstName: '校办秘书一'},
+                    { id: 1254306, firstName: '校办秘书二'},
+                    { id: 1254308, firstName: '教务副处长'}
+
+                ],
+                items: [
+                    {
+                        title: "用户",
+                        leftUrl: "/lovey/js/plugins/select/org.json",
+                        rightUrl: "/lovey/js/plugins/select/user.json",
+                        roleUrl: "/lovey/js/plugins/select/role.json"
+                    },
+                    {
+                        title: "用户2",
+                        leftUrl: "/lovey/js/plugins/select/org.json",
+                        rightUrl: "/lovey/js/plugins/select/user.json"
+                    }
+                ],
+                inputName: "adminId",
+                roleUrl: "/lovey/js/plugins/select/role.json",
+                readOnly: true,
+                moveSelect: true,
+                submitFunction: function (callObject) {
+                    alert("支持回调函数");
+                }
+            });
+            $("#adminId").ligerDialogSelect({
+                rightItemName: "firstName",
+                rightItemValue: "id",
+                width: width,
+                //selectType:"radio",
+                initJson: [
+                    { id: 1254305, firstName: '校办秘书一'},
+                    { id: 1254306, firstName: '校办秘书二'},
+                    { id: 1254308, firstName: '教务副处长'}
+                ],
+                items: [
+                    {
+                        title: "用户",
+                        leftUrl: "/lovey/js/plugins/select/org.json",
+                        rightUrl: "/lovey/js/plugins/select/user.json",
+                        roleUrl: "/lovey/js/plugins/select/role.json"
+                    },
+                    {
+                        title: "用户2",
+                        leftUrl: "/lovey/js/plugins/select/org.json",
+                        rightUrl: "/lovey/js/plugins/select/user.json"
+                    }
+                ],
+                inputName: "adminId",
+                roleUrl: "role.json",
+                moveSelect: true,
+                displayMode: true,
+                shortCutUrl: "/lovey/js/plugins/select/shortCutUrl.json",
+                submitFunction: function (callObject) {
+                    alert("支持回调函数");
+                }/*,
+                 callback:{
+                 selectAllClick0: function(clickObj,hasChecked,objData){
+                 alert("AA");
+                 }
+                 }*/,
+                wattingTime: 3000
+            });
+
+        });
+    });
+    //取得父节点的元素，并模拟点击动作
+    function openSelect() {
+        $("#adminId").parent().next().click();
+    }
+</script>
+</body>
+</html>

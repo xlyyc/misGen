@@ -24,6 +24,8 @@ wof.widget.Text.prototype = {
     _readonly: null,
     _placeholder: null,
 
+    _input: null,
+
     getName: function () {
         return this._name;
     },
@@ -37,7 +39,21 @@ wof.widget.Text.prototype = {
         this._value = value;
     },
 
+    getReadonly: function(){
+        if(this._readonly==null){
+            this._readonly = false;
+        }
+        return this._readonly;
+    },
 
+    setReadonly: function(readonly){
+        this._readonly = readonly;
+    },
+
+    initRender: function () {
+        this._input = jQuery('<input type="text">');
+        this.getDomInstance().append(this._input);
+    },
     //选择实现
     beforeRender: function () {
 
@@ -45,10 +61,13 @@ wof.widget.Text.prototype = {
 
     //----------必须实现----------
     render: function () {
-
-        var input = jQuery('<input type="text" name="' + this.getName() + '" value="' + this.getValue() + '">');
-        this.getDomInstance().append(input);
-
+        this._input.attr('name', this.getName());
+        this._input.attr('value', this.getValue());
+        if(this.getReadonly()==true){
+            this._input.attr('readonly', 'readonly');
+        }else{
+            this._input.attr('readonly', '');
+        }
     },
 
     //选择实现

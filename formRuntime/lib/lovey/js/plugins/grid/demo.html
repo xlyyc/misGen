@@ -1,0 +1,122 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>表格</title>
+    <!--lovey ui-->
+    <link href="../../../style/css/lovey.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+
+<div class="ui_container w1000 m10">
+    <h2>表格</h2>
+
+    <div class="show">
+        <div id="maingrid"></div>
+    </div>
+    <h2>本地排序</h2>
+
+    <div class="show">
+        <div id="maingrid1"></div>
+    </div>
+
+    <h2>服务器排序</h2>
+    <div class="show">
+        <div id="maingrid2"></div>
+    </div>
+</div>
+
+
+<script src="../../jquery.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../easyloader.js" type="text/javascript"></script>
+<script src="../../../../docs/LigerUI/demos/grid/CustomersData.js" type="text/javascript"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        using(["grid","utils"], function () {
+            // 选中的数据
+            var initCustomerIDList = [ ];
+            $("#maingrid").ligerGrid({
+                columns: [
+                    { display: "主键", name: "CustomerID", width: "20%" },
+                    { display: "公司名", name: "CompanyName", width: "30%" },
+                    { display: "联系名", name: "ContactName", width: "30%",isAllowHide:false },
+                    { display: "城市", name: "City", width: "20%" ,editor: { type: 'text' }}
+                ],
+               // checkbox:true,
+                pkName:"CustomerID",
+                data:CustomersData,
+                isScroll:false,
+                width: "100%",
+               // rownumbers:true,
+                //enabledEdit: true,
+                //dblClickToEdit:true,
+                pageSizeOptions:[5,10,15,20],
+                allowAdjustColWidth:false,
+				//pageSize:3,
+                allowUnSelectRow:true,
+                allowdblclick:false,
+                //selectRowButtonOnly:true,
+                isChecked:function(item){
+                   return (_.indexOf(initCustomerIDList,item.CustomerID)>0);
+                },
+                onSelectRow:function(data){
+                    window.console && console.log("单行选中");
+                    window.console && console.log(data);
+                },
+                onUnSelectRow:function(data){
+                    window.console && console.log("取消单行选中");
+                    window.console && console.log(data);
+                },
+                onCheckRow:function(status,data){
+                    if(status)
+                    {
+                        window.console && console.log("复选框选中单行数据");
+                    }
+                    else
+                    {
+                        window.console &&  console.log("复选框取消单行数据");
+                    }
+                    window.console && console.log(data);
+                },
+                onBeforeCheckAllRow:function(status,grid,dataList){
+                    window.console &&  console.log("全选之前");
+                    window.console &&  console.log(dataList);
+                },
+                onCheckAllRow:function(status,grid,dataList){
+                    window.console &&  console.log("全选之后");
+                    window.console &&  console.log(dataList);
+                }
+                //rowDraggable:true
+            });
+
+            $("#maingrid1").ligerGrid({
+                    columns:[
+                        { display: "int", name: "ContentId",type:"int"},
+                        { display: "string", name: "UserName",type:"string" },
+                        { display: "float", name: "Money",type:"float" },
+                        { display: "date", name: "Birthday",type:"date"}
+                    ],
+                    data:CustomersData3
+            });
+
+            $("#maingrid2").ligerGrid({
+                columns: [
+                    { display: "主键", name: "CustomerID"},
+                    { display: "公司名", name: "CompanyName"},
+                    { display: "联系名", name: "ContactName"},
+                    { display: "城市", name: "City"}
+                ],
+                parms: [
+                    {"name":"CustomerID","value":"desc"},
+                    {"name":"CompanyName","value":"desc"},
+                    {"name":"ContactName","value":"desc"}
+                ],
+                url:"data/grid_data.jsp"
+            });
+
+        })
+    })
+</script>
+</body>
+</html>

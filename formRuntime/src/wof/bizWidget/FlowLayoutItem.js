@@ -82,23 +82,6 @@ wof.bizWidget.FlowLayoutItem.prototype = {
 
     //选择实现
     beforeRender: function () {
-        if(this._initFlag==null){
-            var _this = this;
-            var timeFn = null;
-            this.getDomInstance().mousedown(function(event){
-                event.stopPropagation();
-                clearTimeout(timeFn);
-                timeFn = setTimeout(function(){
-                    _this.sendMessage('wof.bizWidget.FlowLayoutItem_mousedown');
-                },250);
-            });
-            this.getDomInstance().dblclick(function(event){
-                event.stopPropagation();
-                clearTimeout(timeFn);
-                _this.sendMessage('wof.bizWidget.FlowLayoutItem_dblclick');
-            });
-            this._initFlag = true;
-        }
 
     },
 

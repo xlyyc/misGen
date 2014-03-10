@@ -67,8 +67,6 @@ wof.bizWidget.VoucherItem.prototype = {
 
     _linkageItem: null,
 
-    _initFlag:null,
-
     _label: null,
 
     _value: null,
@@ -357,36 +355,17 @@ wof.bizWidget.VoucherItem.prototype = {
     /**
      * Render 方法定义
      */
-
+    initRender:function(){
+        var label = wof$.create('Label');
+        label.setIsInside(true);
+        label.setLeft(0);
+        label.setIsUnderline(false);
+        label.setScale(this.getScale());
+        label.appendTo(this);
+        this._label = label;
+    },
     //选择实现
     beforeRender: function () {
-        if(this._initFlag==null){
-            var _this = this;
-            var timeFn = null;
-            this.getDomInstance().mousedown(function(event){
-                event.stopPropagation();
-                clearTimeout(timeFn);
-                timeFn = setTimeout(function(){
-                    _this.sendMessage('wof.bizWidget.VoucherItem_mousedown');
-                },250);
-            });
-            this.getDomInstance().dblclick(function(event){
-                event.stopPropagation();
-                clearTimeout(timeFn);
-                _this.sendMessage('wof.bizWidget.VoucherItem_dblclick');
-            });
-
-            var label = wof$.create('Label');
-            label.setIsInside(true);
-            label.setLeft(0);
-            label.setIsUnderline(false);
-            label.setScale(this.getScale());
-            label.appendTo(this);
-            this._label = label;
-
-            this._initFlag = true;
-        }
-
         this._label.setWidth(this.getLabelWidth());
         this._label.setText(this.getItemLabel());
         this._label.setTip(this.getTipValue());
@@ -509,6 +488,7 @@ wof.bizWidget.VoucherItem.prototype = {
         var component = null;
         var clzName = '';
         var setValMethod = '';
+        var readonlyMethod = '';
         var visbleType = this.getVisbleType();
         if(visbleType=='text'){
             clzName = 'wof.widget.Text';
@@ -536,6 +516,7 @@ wof.bizWidget.VoucherItem.prototype = {
          */
         clzName = 'wof.widget.Text';
         setValMethod = 'setValue';
+        readonlyMethod = 'setReadonly';
 
         if(this._component!=null&&this._component.getClassName()==clzName){
             component = this._component;
@@ -552,11 +533,6 @@ wof.bizWidget.VoucherItem.prototype = {
         component.setLeft(this.getLabelWidth());
         component.setWidth(this.getInputWidth());
         component.setHeight(this.getInputHeight());
-      /*  if(this.getReadOnly() == true){              //todo 需要处理对应元件的只读状态
-            this._text.setDisplayType('readOnly');
-        }else{
-            this._text.setDisplayType('base');
-        }*/
         if(this.getDataField()!=''){
             var displayVal = '';
             var value = this.getValue();
@@ -567,7 +543,15 @@ wof.bizWidget.VoucherItem.prototype = {
         }else{
             component[setValMethod]('');
         }
-
+        if(state=='View'){
+            component[readonlyMethod](true);
+        }else{
+            if(this.getReadOnly() == true){
+                component[readonlyMethod](true);
+            }else{
+                component[readonlyMethod](false);
+            }
+        }
         return component;
     },
 

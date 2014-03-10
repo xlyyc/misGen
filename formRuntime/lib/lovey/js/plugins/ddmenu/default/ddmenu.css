@@ -1,0 +1,246 @@
+/*
+	LEVEL ONE
+*/
+.ddmenu_style01 {
+    position: relative;
+    z-index: 1000;
+}
+.ddmenu_style01 li {
+    position: relative;
+    float: left;
+    zoom: 1;
+    background: #2585d0;
+    color: #fff;
+    border-right: 1px solid #1979c4;
+    border-left: 1px solid #338cd2;
+    vertical-align: middle;
+}
+.ddmenu_style01 a,
+.ddmenu_style01 a:link {
+    display: block;
+    padding: 8px 14px;
+    color: #fff;
+    font-size: 14px;
+    text-decoration: none;
+}
+.ddmenu_style01 a:hover {
+    color: #fff;
+    text-decoration: none;
+}
+/* Doesn't work in IE */
+.ddmenu_style01 li .hover,
+.ddmenu_style01 li:hover {
+    background: #2585D0;
+    color: #999;
+    position: relative;
+}
+.ddmenu_style01 .hover {
+    color: #999;
+    background: #2585D0;
+}
+/*
+	LEVEL TWO
+*/
+.ddmenu_style01 ul ul {
+    width: 100px;
+    visibility: hidden;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    border: 1px solid #ccc;
+    box-shadow: #AAA 2px 2px 3px;
+}
+.ddmenu_style01 ul ul li {
+    font-weight: normal;
+    background: #fff;
+    color: #0066cc;
+    float: none;
+    border: 0;
+    _float: left;
+    _zoom: 1;
+    width: 100%;
+}
+/*
+	LEVEL THREE
+*/
+.ddmenu_style01 ul ul ul {
+    left: 100%;
+    top: 0;
+}
+.ddmenu_style01 ul ul ul li a{
+    color:#000;
+}
+.ddmenu_style01 ul ul li a,
+.ddmenu_style01 ul ul li a:link{
+    color:#000;
+    _height:100%;/*修复IE6下a链接只有文字大小问题*/
+}
+.ddmenu_style01 ul ul li a:hover{
+    color:#fff;
+}
+.ddmenu_style01 ul ul li .text_color {
+    color:#fff !important;
+}
+.ddmenu_style01 ul li:hover > ul {
+    visibility: visible;
+}
+.menu_arrow_down{
+    position: absolute;
+    right:6px;
+    top:14px;
+    display: inline-block;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+    line-height: 0;
+    font-size: 0;
+    vertical-align: middle;
+    border-top-width: 4px;
+    border-top-style: solid;
+    border-top-color: #777;
+    border-bottom: 0 none !important;
+    border-left-width: 4px;
+    border-left-style: solid;
+    border-left-color: transparent !important;
+    border-right-width: 4px;
+    border-right-style: solid;
+    border-right-color: transparent !important;
+    _color: #FF3FFF;
+    _filter: chroma(color=#FF3FFF);
+}
+.menu_arrow_white{
+    border-top-color: #fff;
+    border-right-color: #fff;
+    border-bottom-color: #fff;
+    border-left-color: #fff;
+}
+
+/* sjsong01@wisedu.com*/
+.ddmenu_style02 {
+    position: relative;
+    z-index: 1000;
+}
+.ddmenu_style02 li {
+    position: relative;
+    float: left;
+    zoom: 1;
+    border-right: 1px solid #1979c4;
+    vertical-align: middle;
+}
+.ddmenu_style02 a,
+.ddmenu_style02 a:link {
+    display: block;
+    padding: 7px 14px;
+    color: #fff;
+    font-size: 12px;
+    text-decoration: none;
+}
+.ddmenu_style02 a:hover {
+    text-decoration: none;
+    background: url("images/ui_nav_overmenu.gif");
+}
+/* Doesn't work in IE */
+.ddmenu_style02 li .hover,
+.ddmenu_style02 li:hover {
+    background: url("images/ui_nav_overmenu.gif");
+    position: relative;
+}
+.ddmenu_style02 .hover {
+    background: url("images/ui_nav_overmenu.gif");
+}
+
+.ddmenu_style02 ul ul {
+    display: block;
+    visibility: hidden;
+    border:#ccc 1px solid;
+    overflow: hidden;
+    width: auto;
+    _width:0;
+    *overflow: visible;
+    position: absolute;
+    cursor: default;
+    top:29px;
+    left: -1px;
+    background-color: #fff;
+    box-shadow:3px 3px 5px #eee;
+    border-radius:0 4px 5px 5px ;
+}
+.ddmenu_style02 ul ul li {
+    float: none;
+    border-bottom: #eee 1px dashed;
+    background: white;
+    border-left: none;
+    border-right: none;
+    display: block;
+    white-space: nowrap;
+    width: auto;
+    *overflow: visible;
+}
+.ddmenu_style02  ul li .hover,
+.ddmenu_style02 ul ul li:hover {
+    background: none !important;
+}
+.ddmenu_style02 ul ul li a,
+.ddmenu_style02 ul ul li a:link{
+    display: inline-block;
+    *display: inline;
+    *zoom: 1;
+    padding: 10px 14px;
+    width: 90px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: top;
+    white-space: nowrap;
+    font-size: 12px;
+    color:#000;
+    _height:100%;/*修复IE6下a链接只有文字大小问题*/
+}
+.ddmenu_style02 ul ul li a:hover{
+}
+.ddmenu_style02 ul ul li .text_color {
+}
+.ddmenu_style02 ul ul li a:hover{
+    background: none ;
+    background-color: #f4f4f4 ;
+}
+
+/*
+	LEVEL THREE
+*/
+.ddmenu_style02 ul ul ul {
+    visibility: hidden;
+    width: 325px;
+    position: relative;
+    top: 0;
+    left: 0;
+    border: none;
+    box-shadow: none;
+    display: inline-block;
+    *display: inline;
+    *zoom:1;
+}
+.ddmenu_style02 ul .hover ul ul {
+    visibility: visible;
+}
+.ddmenu_style02 ul ul ul li {
+    display: inline-block;
+    *display: inline;
+    *zoom:1;
+    float: left;
+    padding-top: 0;
+    padding-bottom: 0;
+    border: none;
+}
+.ddmenu_style02 ul ul ul li a,
+.ddmenu_style02 ul ul ul li a:link{
+    font-weight: normal;
+    color:#000;
+    width: 80px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+/*
+
+.ddmenu_style02 ul li:hover > ul {
+    visibility: visible;
+}*/

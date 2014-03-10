@@ -1,0 +1,120 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+ * Developed By: ywwei
+ * Mail: ywwei@wisedu.com
+ * Version:1.0
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta http-equiv="Content-Language" content="zh-CN"/>
+    <meta content="all" name="robots"/>
+    <meta name="author" content="ywwei@wisedu.com,魏言文"/>
+    <meta name="copyright" content="www.wiscom.com.cn,自由版权,任意转载"/>
+    <meta name="description" content="css框架"/>
+    <meta name="keywords" content="css框架,web2.0"/>
+    <title>tab</title>
+    <!--lovey核心css-->
+    <link href="../../../../lovey/style/css/lovey.css" rel="stylesheet" type="text/css"/>
+    <!--API全局样式-->
+    <link rel="stylesheet" href="../../../../docs/assets/css/api.css" type="text/css" media="screen, projection"/>
+    <!--自定义样式-->
+    <link rel="stylesheet" href="../../../../docs/assets/css/docs.css" type="text/css"/>
+</head>
+<body>
+<div id="nav" class="ui_container_fluid">
+    <div class="page_header">
+        <h1>步骤向导
+            <small>wizard.js</small>
+        </h1>
+    </div>
+    <ul class="ui_list_h">
+        <li><a href="wizard_style.html" target="_blank" class="ui_btn ui_btn_danger">插件风格(style)</a></li>
+        <li><a href="api.html" target="_blank" class="ui_btn ui_btn_primary">API</a></li>
+    </ul>
+    <h3>组件效果展示</h3>
+    <!------------------------效果预览------------------------>
+    <div class="bs-docs-example" style="height: 120px">
+
+                <div class="ui_wizard_style02 ml10">
+                    <ul id="wizard">
+                    </ul>
+                </div>
+
+                <form method="post" action="" id="form_step">
+                    <div id="step1" class="p10">
+                            步骤向导-1-内容
+                    </div>
+
+                    <div id="step2" class="p10">
+                        步骤向导-2-内容
+                    </div>
+                </form>
+                <div id="btn_container" class="p10 pull_right"></div>
+    </div>
+
+    <p>JS部分,引用<code>wizard</code>组件，并指定ID</p>
+<pre class="brush:javascript;">
+$(document).ready(function () {
+    using("wizard", function () {
+        var wizardElement = $('#wizard');
+        wizardElement.loveyInitWizard({
+            items: [
+                {stepId: "step1", active: "true", title: "步骤向导-1",nextFunction:function(){
+                    alert("点击确定，进入下一步。。。");
+                }},
+                {stepId: "step2", title: "步骤向导-2"}
+            ]
+        });
+    })
+});
+</pre>
+
+    <p>HTML部分</p>
+<pre class="brush:javascript;">
+<div class="ui_wizard_style02 ml10">
+    <ul id="wizard">
+    </ul>
+</div>
+<form method="post" action="" id="form_step">
+    <div id="step1" class="p10">
+        步骤向导-1-内容
+    </div>
+    <div id="step2" class="p10">
+        步骤向导-2-内容
+    </div>
+</form>
+<div id="btn_container" class="p10 pull_right"></div>
+ </pre>
+
+</div>
+<!--jquery1.7.1核心js文件-->
+<script src="../../jquery.min.js" type="text/javascript" charset="utf-8"></script>
+<!--懒加载核心js文件-->
+<script type="text/javascript" src="../../easyloader.js"></script>
+<!--加载语法高亮css和js文件-->
+<link type="text/css" rel="stylesheet" href="../syntaxhighlighter/styles/easy.css"/>
+<script type="text/javascript" src="../syntaxhighlighter/scripts/shCore.js"></script>
+<script type="text/javascript" src="../syntaxhighlighter/scripts/shBrushJScript.js"></script>
+<script type="text/javascript" src="../syntaxhighlighter/scripts/shBrushPhp.js"></script>
+<script type="text/javascript" src="../syntaxhighlighter/helper.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        using(["wizard","iframe"], function () {
+            var wizardElement = $('#wizard');
+            wizardElement.loveyInitWizard({
+                liEvent:true,
+                items: [
+                    {stepId: "step1", active: "true", title: "步骤向导-1",nextFunction:function(){
+                        alert("点击确定，进入第二步。。。");
+                    }},
+                    {stepId: "step2", title: "步骤向导-2"}
+                ]
+            });
+            $.loveyIframe.auto();
+        })
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,258 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+ * Developed By: zwzhao
+ * Mail: zwzhao@wisedu.com
+ * Version:1.0
+ * History:
+
+  菜单栏API
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta http-equiv="Content-Language" content="zh-CN"/>
+    <meta content="all" name="robots"/>
+    <meta name="author" content="zwzhao@wisedu.com,赵政伟"/>
+    <meta name="copyright" content="www.wiscom.com.cn,自由版权,任意转载"/>
+    <meta name="description" content="css框架"/>
+    <meta name="keywords" content="css框架,web2.0"/>
+    <title>工具条</title>
+    <!--API全局样式-->
+    <link rel="stylesheet" href="../../../../docs/assets/css/api.css" type="text/css" media="screen, projection"/>
+    <!--引入自定义样式-->
+    <link rel="stylesheet" href="menubar-extra.css" type="text/css" media="screen, projection"/>
+    <!--jquery1.7.1核心js文件-->
+    <script src="../../jquery.min.js" type="text/javascript" charset="utf-8"></script>
+    <!--懒加载核心js文件-->
+    <script type="text/javascript" src="../../easyloader.js"></script>
+
+    <!--加载语法高亮css和js文件-->
+    <link type="text/css" rel="stylesheet" href="../syntaxhighlighter/styles/easy.css"/>
+    <script type="text/javascript" src="../syntaxhighlighter/scripts/shCore.js"></script>
+    <script type="text/javascript" src="../syntaxhighlighter/scripts/shBrushJScript.js"></script>
+    <script type="text/javascript" src="../syntaxhighlighter/scripts/shBrushPhp.js"></script>
+    <script type="text/javascript" src="../syntaxhighlighter/helper.js"></script>
+
+    <script type="text/javascript">
+     $(document).ready(function(){
+         using(['menu','toolbar','dialog'],function(){
+            $("#toolbar1").ligerToolBar({ items: [
+                { text: '增加', click: onclick11 },
+                { text: '修改', click: onclick11 },
+                { text: '删除', click: onclick11 }
+            ]
+            });
+         });
+     });
+
+     function onclick11(item, i){
+         $.ligerDialog.success(item.text);
+     }
+
+    </script>
+
+</head>
+<body>
+<div class="demos">
+
+</div>
+<!--content-->
+<div id="content">
+<!-- ============================== class title ============================ -->
+
+
+<!-- ============================== class summary ========================== -->
+			<p class="description">
+
+
+
+
+			</p>
+
+<!-- ============================== constructor summary ==================== -->
+
+
+<!-- ============================== properties summary ===================== -->
+
+
+<!-- ============================== methods summary ======================== -->
+
+
+
+				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class _global_.">
+					<caption>插件方法列表</caption>
+					<tbody>
+
+						<tr>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="#ligerToolBar">ligerToolBar</a></b>(p)
+								</div>
+								<div class="description"><ul>
+<li>菜单栏</li>
+</ul></div>
+							</td>
+						</tr>
+
+					</tbody>
+				</table>
+
+
+
+
+<!-- ============================== events summary ======================== -->
+
+
+<!-- ============================== constructor details ==================== -->
+
+
+<!-- ============================== field details ========================== -->
+
+
+<!-- ============================== method details ========================= -->
+
+				<div class="sectionTitle">
+					插件方法详细
+				</div>
+
+					<a name="ligerToolBar"> </a>
+					<div class="fixedFont">
+
+					<span class="light">{ligerToolBar)}</span>
+					<b>ligerToolBar</b>(p)
+
+					</div>
+					<dl class="detailList">
+						<dt class="heading">描述:</dt>
+					<div class="description"><ul>
+<li>菜单栏</li>
+</ul></div>
+                    例子：
+                    1.javascript代码
+                    <pre class="brush:js">
+     $(document).ready(function(){
+         using(['menu','toolbar','dialog'],function(){
+            $("#toptoolbar").ligerToolBar({ items: [
+                { text: '增加', click: onclick11 },
+                { text: '修改', click: onclick11 },
+                { text: '删除', click: onclick11 }
+            ]
+            });
+         });
+     });
+
+     function onclick11(item, i){
+         $.ligerDialog.success(item.text);
+     }
+                    </pre>
+                    2.html代码
+                    <pre class="brush:js">
+                    <div id="toolbar"></div>
+                    </pre>
+                    <div id="toolbar1"></div>
+					</dl>
+
+
+
+							<dl class="detailList">
+							<dt class="heading">参数列表:</dt>
+
+							<table class='l-params-table' cellpadding="0" cellspacing="0">
+								<tr>
+								<td class='l-params-hd-cell l-params-hd-cell-name'>参
+                                    数名</td>
+								<td class='l-params-hd-cell l-params-hd-cell-type'>类型</td>
+								<td class='l-params-hd-cell l-params-hd-cell-desc'>描述</td>
+								<td class='l-params-hd-cell l-params-hd-cell-default'>默认值</td>
+								</tr>
+
+								<tr class = 'l-row-Object'>
+								<td class='l-params-row-cell'>p</td>
+								<td class='l-params-row-cell'><span class="light fixedFont">{Object}</span> </td>
+								<td class='l-params-row-cell'>主要参数</td>
+								<td class='l-params-row-cell'></td>
+								</tr>
+
+								<tr class = 'l-row-Array'>
+								<td class='l-params-row-cell'>p.items</td>
+								<td class='l-params-row-cell'><span class="light fixedFont">{Array}</span> </td>
+								<td class='l-params-row-cell'>项列表</td>
+								<td class='l-params-row-cell'>null</td>
+								</tr>
+
+								<tr class = 'l-row-String'>
+								<td class='l-params-row-cell'>p.items[i].id</td>
+								<td class='l-params-row-cell'><span class="light fixedFont">{String}</span> </td>
+								<td class='l-params-row-cell'>id</td>
+								<td class='l-params-row-cell'>null</td>
+								</tr>
+
+								<tr class = 'l-row-String'>
+								<td class='l-params-row-cell'>p.items[i].text</td>
+								<td class='l-params-row-cell'><span class="light fixedFont">{String}</span> </td>
+								<td class='l-params-row-cell'>文本</td>
+								<td class='l-params-row-cell'>null</td>
+								</tr>
+
+								<tr class = 'l-row-String'>
+								<td class='l-params-row-cell'>p.items[i].icon</td>
+								<td class='l-params-row-cell'><span class="light fixedFont">{String}</span> </td>
+								<td class='l-params-row-cell'>图标</td>
+								<td class='l-params-row-cell'>null</td>
+								</tr>
+
+								<tr class = 'l-row-Bool'>
+								<td class='l-params-row-cell'>p.items[i].line</td>
+								<td class='l-params-row-cell'><span class="light fixedFont">{Bool}</span> </td>
+								<td class='l-params-row-cell'>是否为割线</td>
+								<td class='l-params-row-cell'>false</td>
+								</tr>
+
+								<tr class = 'l-row-Bool'>
+								<td class='l-params-row-cell'>p.items[i].disable</td>
+								<td class='l-params-row-cell'><span class="light fixedFont">{Bool}</span> </td>
+								<td class='l-params-row-cell'>是否不可用</td>
+								<td class='l-params-row-cell'>false</td>
+								</tr>
+
+								<tr class = 'l-row-Function'>
+								<td class='l-params-row-cell'>p.items[i].click</td>
+								<td class='l-params-row-cell'><span class="light fixedFont">{Function}</span> </td>
+								<td class='l-params-row-cell'>点击事件
+<ul class='l-cell-Function-parms'>
+<li>参数1：item</li>
+</ul></td>
+								<td class='l-params-row-cell'>null</td>
+								</tr>
+
+							</table>
+							</dl>
+
+
+
+
+
+							<dl class="detailList">
+							<dt class="heading">返回值:</dt>
+
+								<dd><span class="light fixedFont">{$.ligerManagers.Toolbar}</span> Toolbar 组件管理器</dd>
+
+							</dl>
+
+
+
+
+
+
+
+
+<!-- ============================== event details ========================= -->
+
+
+			<hr />
+		</div>
+
+
+
+</body>
+</html>

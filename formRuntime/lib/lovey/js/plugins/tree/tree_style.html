@@ -1,0 +1,119 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>javascript-tree</title>
+    <!--lovey ui-->
+    <link href="../../../../lovey/style/css/lovey.css" rel="stylesheet" type="text/css"/>
+    <!--文档自定义样式-->
+    <link href="../../../../docs/assets/css/docs.css" rel="stylesheet" type="text/css"/>
+
+    <style type="text/css">
+        #tree05 .l-tree-icon-myfolder{
+            background-position: -22px -154px;
+        }
+
+        #tree05 .l-tree-icon-myfolder-open{
+            background-position: -66px -155px;
+        }
+    </style>
+</head>
+<body>
+<div class="ui_container example_tree">
+    <h2>默认风格</h2>
+    <div class="show">
+        <div><a href="javascript:void(0);" onclick="expandAll(this);">全部展开</a><a href="javascript:void(0);" onclick="collapseAll(this);" class="hidden">全部收起</a></div>
+        <ul id="tree01"></ul>
+    </div>
+
+    <div class="show">
+        <ul id="tree02"></ul>
+    </div>
+
+    <div class="show">
+        <ul id="tree03"></ul>
+    </div>
+    <h2>延时加载</h2>
+    <div class="show">
+        <ul id="tree04"></ul>
+    </div>
+    <h2>自定义节点图标</h2>
+    <div class="show">
+        <ul id="tree05"></ul>
+    </div>
+</div>
+<!--jquery核心文件-->
+<script src="../../../../lovey/js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+<!--懒加载核心js文件-->
+<script src="../../../../lovey/js/easyloader.js" type="text/javascript"></script>
+<script type="text/javascript">
+    var treeManage = null;
+    var tree1Manage = null;
+
+    $(document).ready(function () {
+        using(["tree","json2js"],function(){
+            $("#tree01").ligerTree({
+                url:"tree.json"
+            });
+            $("#tree02").ligerTree({
+                url:"tree.json",
+                checkbox: false
+            });
+            $("#tree03").ligerTree({
+                url:"tree.json",
+                checkbox: false,
+                parentIcon: null,
+                childIcon: null
+            });
+            $("#tree04").ligerTree({
+                checkbox: false,
+                url: "tree2.json",
+                onBeforeSelect: function (node) {
+                    if (node.data.depth<=1) {
+                        return false;
+                    }
+                },
+                onSelect: function (node) {
+                    //选择事件
+                    if (node.data.leaf) {
+                        navtab.addTabItem({
+                            text: node.data.treeNodeName,
+                            url: node.data.url,
+                            tabid: node.data.pkId,
+                            resizeFrame: true
+                        });
+                    }
+                },
+                onBeforeExpand: function (node) {
+                    //展开前事件,如果孩子为空且非叶子节点，则进行异步加载
+                    if ($(".l-children>li", node.target).length == 0 && !(node.data.leaf)) {
+                        //异步将数据加载到tree2.json节点下
+                        treeManage.loadData(node.target, "tree3.json",{nodeDate:JSON.stringify(node.data)});
+                    }
+                }
+            });
+            treeManage = $("#tree04").ligerGetTreeManager();
+
+            tree1Manage = $("#tree01").ligerGetTreeManager();
+
+            $("#tree05").ligerTree({
+                url:"tree.json",
+                parentIcon:"myfolder"
+            });
+        });
+    });
+
+    function expandAll(thisObj){
+        tree1Manage.expandAll();
+        $(thisObj).hide();
+        $(thisObj).next().show();
+    }
+    function collapseAll(thisObj){
+        tree1Manage.collapseAll();
+        $(thisObj).hide();
+        $(thisObj).prev().show();
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,83 @@
+		/*
+			Load CSS before JavaScript
+		*/
+		
+		/*
+			Slides container
+			Important:
+			Set the width of your slides container
+			Set to display none, prevents content flash
+		*/
+		#slides,#slides2,#slides3,#slides4{position:relative}
+
+		.slides_container {
+			width:550px;
+			display:block;
+		}
+
+		/*
+			Each slide
+			Important:
+			Set the width of your slides
+			If height not specified height will be set by the slide content
+			Set to display block
+		*/
+		.slides_container  .list_style2{
+			width:550px;
+			height:365px;
+			display:block;
+		}
+		
+		/*
+			Optional:
+			Reset list default style
+		*/
+		.slides_pagination{
+			list-style:none;
+			margin:0;
+			padding:0;
+			position:absolute;
+			top:14px;
+			right:55px;
+			z-index:90;
+		}
+
+		/* 
+			Optional:
+			Show the current slide in the pagination
+		*/
+		.slides_pagination li{ float:left; margin:0 3px;}
+		.slides_pagination a{
+		    background: url(images/icon_arrow_dian.gif) no-repeat;
+			width:7px;
+			overflow:hidden;
+			height:0;
+			padding-top:7px;
+			display:block;
+			} 
+		.slides_pagination .current a {
+			background: url(images/icon_arrow_dian_over.gif) no-repeat;
+			width:7px;
+		}
+		#slides .prev,.next{ display:block; width:17px; height:17px; vertical-align:middle; float:left; margin:0 2px;}
+		#slides .prev{background: url(images/icon_arrow_left.gif) no-repeat;}
+		#slides .prev:hover{background: url(images/icon_arrow_left_over.gif) no-repeat;}
+		#slides .next{background: url(images/icon_arrow_right.gif) no-repeat;}
+		#slides .next:hover{background: url(images/icon_arrow_right_over.gif) no-repeat;}
+		
+	    #slides2 .prev2,.next2{ display:block; width:17px; height:17px; vertical-align:middle; float:left; margin:0 2px;}
+		#slides2 .prev2{background: url(images/icon_arrow_left.gif) no-repeat;}
+		#slides2 .prev2:hover{background: url(images/icon_arrow_left_over.gif) no-repeat;}
+		#slides2 .next2{background: url(images/icon_arrow_right.gif) no-repeat;}
+		#slides2 .next2:hover{background: url(images/icon_arrow_right_over.gif) no-repeat;}
+		
+		#slides3 .prev3,.next3{ display:block; width:17px; height:17px; vertical-align:middle; float:left; margin:0 2px;}
+		#slides3 .prev3{background: url(images/icon_arrow_left.gif) no-repeat;}
+		#slides3 .prev3:hover{background: url(images/icon_arrow_left_over.gif) no-repeat;}
+		#slides3 .next3{background: url(images/icon_arrow_right.gif) no-repeat;}
+		#slides3 .next3:hover{background: url(images/icon_arrow_right_over.gif) no-repeat;}
+		
+		
+		
+		
+		

@@ -7,6 +7,7 @@
 <link href="lib/jquery.ui.multiselect/css/jquery.multiselect.css" rel="stylesheet">
 <link href="lib/jquery.ui.multiselect/css/jquery.multiselect.filter.css" rel="stylesheet">
 <link href="lib/jquery.ztree/css/zTreeStyle/zTreeStyle.css" rel="stylesheet">
+<link href="lib/lovey/style/css/lovey.css" rel="stylesheet" type="text/css">
 <style type="text/css">
 <!--
 	* {
@@ -74,6 +75,11 @@
 <script src="src/wof/functionWidget/AddRecordComponent.js"></script>
 
 <script src="src/wof/kernel/initAOP.js"></script>
+<script src="lib/lovey/js/easyloader.js" type="text/javascript"></script>
+<script type="text/javascript">
+    //部署路径
+    easyloader.URI = 'formRuntime';
+</script>
 <script>
 
 jQuery(function(){
@@ -220,15 +226,13 @@ jQuery(function(){
 
                         voucherComponent.render();
 
-                        var json = voucherComponent.getData();
+                      /*  var json = voucherComponent.getData();
                         var voucherComponent2 = wof$.create('VoucherComponent');
 
                         voucherComponent2.setLeft(0);
                         voucherComponent2.setTop(0);
                         voucherComponent2.setWidth(500);
                         voucherComponent2.setItemHeight(60);
-
-
 
                         voucherComponent2.insertVoucherItemGroup({groupCaption:'表头分组3',width:500,titleHeight:25,colsNum:2,itemHeight:45});
                         voucherComponent2.insertVoucherItemGroup({groupCaption:'表头分组4',width:500,titleHeight:25,colsNum:2,itemHeight:45});
@@ -250,9 +254,9 @@ jQuery(function(){
 
                         voucherComponent2.downVoucherItemGroup(1);
 
-                        voucherComponent2.render();
+                        voucherComponent2.render();*/
 
-                        var button = new Button();
+                       /* var button = new Button();
                         button.setIsInside(true);
                         button.setType('submit');
                         button.setText('按钮1');
@@ -263,7 +267,9 @@ jQuery(function(){
                         //button.appendTo(container);
 
                         flowLayout.insertNode(button,{row:1,col:1},1);
-                        button.render();
+                        button.render();*/
+
+
                 }
     }
 	//重设工作区
@@ -293,5 +299,6 @@ window.getContentLayout = function(){
 </head>
 <body>
 <div id="container" style="position:absolute;"></div>
+<input type="text"/>
 </body>
 </html>

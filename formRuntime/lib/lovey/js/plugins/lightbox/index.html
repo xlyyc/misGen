@@ -1,0 +1,188 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--声明XHTML1.0过渡类型,注释不要放在开头，否则会有问题-->
+<!--
+ * Developed By: zwzhao
+ * Mail: zwzhao@wisedu.com
+ * Version:1.0
+ * History:
+
+  图片展示
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta http-equiv="Content-Language" content="zh-CN"/>
+    <meta content="all" name="robots"/>
+    <meta name="author" content="zwzhao@wisedu.com,赵政伟"/>
+    <meta name="copyright" content="www.wiscom.com.cn,自由版权,任意转载"/>
+    <meta name="description" content="css框架"/>
+    <meta name="keywords" content="css框架,web2.0"/>
+    <title>图片展示</title>
+    <!--API全局样式-->
+    <link rel="stylesheet" href="../../../../docs/assets/css/api.css" type="text/css" media="screen, projection"/>
+    <!--jquery1.7.1核心js文件-->
+    <script src="../../jquery.min.js" type="text/javascript" charset="utf-8"></script>
+
+    <!--懒加载核心js文件-->
+    <script type="text/javascript" src="../../easyloader.js"></script>
+
+    <!--加载语法高亮css和js文件-->
+    <link type="text/css" rel="stylesheet" href="../syntaxhighlighter/styles/easy.css"/>
+    <script type="text/javascript" src="../syntaxhighlighter/scripts/shCore.js"></script>
+    <script type="text/javascript" src="../syntaxhighlighter/scripts/shBrushJScript.js"></script>
+    <script type="text/javascript" src="../syntaxhighlighter/scripts/shBrushPhp.js"></script>
+    <script type="text/javascript" src="../syntaxhighlighter/helper.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            using('lightbox', function () {
+                $("#gallery1 a").lightBox();
+            });
+        });
+    </script>
+
+</head>
+<body>
+
+<!--content-->
+<div id="content">
+    <p class="description">
+    </p>
+
+    <table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class _global_.">
+        <caption>插件方法列表</caption>
+        <tbody>
+
+        <tr>
+            <td class="nameDescription">
+                <div class="fixedFont"><b><a href="#lightbox">lightbox</a></b>()
+                </div>
+                <div class="description">
+                    <ul>
+                        <li>图片展示</li>
+                    </ul>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+
+    <!-- ============================== events summary ======================== -->
+
+
+    <!-- ============================== constructor details ==================== -->
+
+
+    <!-- ============================== field details ========================== -->
+
+
+    <!-- ============================== method details ========================= -->
+
+    <div class="sectionTitle">
+        插件方法详细
+    </div>
+
+    <a name="lightbox"> </a>
+
+    <div class="fixedFont">
+
+        <span class="light">{jQuery}</span>
+        <b>lightbox</b>()
+
+    </div>
+    <dl class="detailList">
+        <dt class="heading">描述:</dt>
+        <div class="description">
+            <ul>
+                <li>图片效果展示</li>
+            </ul>
+        </div>
+    </dl>
+
+    <dl class="detailList">
+        <dt class="heading">例子:</dt>
+        1.javascript代码
+                    <pre class="brush: javascript;">
+        $(document).ready(function(){
+            using("lightbox",function(){
+               $("#gallery a").lightBox();
+            });
+        });
+                    </pre>
+        2.html代码
+                    <pre class="brush: php;">
+<div id="gallery">
+    <ul>
+        <li>
+            <a title="图片标题：图片描述<br><font color=red>支持html语法</font>" href="images/photos/1.jpg">
+                <img border="0" width="72" height="72" alt="" src="images/photos/1.jpg">
+            </a>
+        </li>
+        <li>
+            <a title="For this example: $('#gallery a').lightBox();" href="images/photos/2.jpg">
+                <img border="0" width="72" height="72" alt="" src="images/photos/2.jpg">
+            </a>
+        </li>
+    </ul>
+</div>
+                    </pre>
+        3.演示
+        <div id="gallery1">
+            <ul>
+                <li>
+                    <a title="图片标题：图片描述<br><font color=red>支持html语法</font>" href="images/photos/1.jpg">
+                        <img border="0" width="72" height="72" alt="" src="images/photos/1.jpg">
+                    </a>
+                </li>
+                <li>
+                    <a title="For this example: $('#gallery a').lightBox();" href="images/photos/2.jpg">
+                        <img border="0" width="72" height="72" alt="" src="images/photos/2.jpg">
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <br><br>
+    </dl>
+
+
+    <dl class="detailList">
+        <dt class="heading">参数列表:</dt>
+
+        <table class='l-params-table' cellpadding="0" cellspacing="0">
+            <tr>
+                <td class='l-params-hd-cell l-params-hd-cell-name'>参数名</td>
+                <td class='l-params-hd-cell l-params-hd-cell-type'>类型</td>
+                <td class='l-params-hd-cell l-params-hd-cell-desc'>描述</td>
+                <td class='l-params-hd-cell l-params-hd-cell-default'>默认值</td>
+            </tr>
+
+            <tr class='l-row-String'>
+                <td class='l-params-row-cell' colspan="4">无</td>
+            </tr>
+        </table>
+    </dl>
+
+    <dl class="detailList">
+        <dt class="heading">在线API:</dt>
+
+        <dd><a href="http://leandrovieira.com/projects/jquery/lightbox/" target="_top">传送门</a> </dd>
+
+    </dl>
+
+
+    <dl class="detailList">
+        <dt class="heading">返回值:</dt>
+
+        <dd><span class="light fixedFont">{jQuery}</span> jQuery对象</dd>
+
+    </dl>
+
+
+    <hr/>
+
+</div>
+
+</body>
+</html>

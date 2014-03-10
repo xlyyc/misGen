@@ -56,7 +56,6 @@ wof.bizWidget.SearchItem.prototype = {
 
     _rowspan: null,   //纵跨行数
 
-    _initFlag:null,
 
     /**
      * get/set 属性方法定义
@@ -267,73 +266,6 @@ wof.bizWidget.SearchItem.prototype = {
 
     //选择实现
     beforeRender: function () {
-        if(this._initFlag==null){
-            var _this = this;
-            var timeFn = null;
-            this.getDomInstance().mousedown(function(event){
-                event.stopPropagation();
-                clearTimeout(timeFn);
-                timeFn = setTimeout(function(){
-                    _this.sendMessage('wof.bizWidget.SearchItem_mousedown');
-                },250);
-            });
-            this.getDomInstance().dblclick(function(event){
-                event.stopPropagation();
-                clearTimeout(timeFn);
-                _this.sendMessage('wof.bizWidget.SearchItem_dblclick');
-            });
-            this.getDomInstance().droppable({
-                snap:true,
-                accept:function(draggable){
-                    var b=false;
-                    var draggableObj = wof.util.ObjectManager.get(draggable.attr('oid'));
-                    if(draggableObj!=null){
-                        if(draggableObj.getClassName()=='wof.bizWidget.SearchItem'){
-                            if(_this.parentNode()==null){
-                                b=false;
-                            }else{
-                                var searchComponent = draggableObj.parentNode();
-                                var thisSearchComponent = _this.parentNode();
-                                if(thisSearchComponent.getId()==searchComponent.getId()){
-                                    b=true;
-                                }
-                            }
-                        }
-                    }
-                    return b;
-                },
-                hoverClass: 'ui-state-hover',
-                drop:function(event,ui){
-                    event.stopPropagation();
-                    var obj = wof.util.ObjectManager.get(ui.draggable.attr('oid'));
-                    if(obj!=null){
-                        if(obj.getClassName()=='wof.bizWidget.SearchItem'){
-                            _this.sendMessage('wof.bizWidget.SearchItem_searchItemDrop', {'searchItemId':ui.draggable.attr('oid')});
-                        }
-                    }
-                }
-            });
-            this.getDomInstance().draggable({
-                cursor:"move",
-                opacity: 0.7,
-                cursorAt:{
-                    top:0,
-                    left:0
-                },
-                containment: 'div[oid="'+this.parentNode().getId()+'"]',  //限定拖放只能在当前分组内
-                scroll: false,
-                start:function(event,ui){
-                    event.stopPropagation();
-                    clearTimeout(timeFn);
-                    _this.getDomInstance().css('zIndex',60000);
-                },
-                stop:function(event,ui){
-                    event.stopPropagation();
-                    _this.getDomInstance().css('zIndex','auto');
-                }
-            });
-            this._initFlag = true;
-        }
 
         this.getDomInstance().children().remove();
         if(this.getCaption()!=''&&this.getVisbleType()!=''){

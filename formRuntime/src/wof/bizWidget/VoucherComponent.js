@@ -25,7 +25,6 @@ wof.bizWidget.VoucherComponent.prototype = {
      * 属性声明 （private ，用"_"标识）
      */
 
-    _initFlag:null,
 
     _callStr: null,    //调用字符串，格式为 构件类型唯一识别串:构件版本，例如【VoucherComponent:1.0.0】
 
@@ -271,30 +270,12 @@ wof.bizWidget.VoucherComponent.prototype = {
      * Render 方法定义
      */
 
+    initRender: function(){
+        this._setInternalVariables();
+    },
+
     //选择实现
     beforeRender: function () {
-        if(this._initFlag==null){
-            var _this = this;
-            var timeFn = null;
-            this.getDomInstance().mousedown(function(event){
-                event.stopPropagation();
-                clearTimeout(timeFn);
-                timeFn = setTimeout(function(){
-                    _this.sendMessage('wof.bizWidget.VoucherComponent_mousedown');
-                    _this.sendMessage('wof.bizWidget.VoucherComponent_active');
-                },250);
-            });
-            this.getDomInstance().dblclick(function(event){
-                event.stopPropagation();
-                clearTimeout(timeFn);
-                _this.sendMessage('wof.bizWidget.VoucherComponent_dblclick');
-                _this.sendMessage('wof.bizWidget.VoucherComponent_active');
-            });
-
-            this._setInternalVariables();
-
-            this._initFlag = true;
-        }
 
         for(var i=0;i<this._voucherItemGroups.length;i++){
             var group = this._voucherItemGroups[i];
@@ -376,6 +357,11 @@ wof.bizWidget.VoucherComponent.prototype = {
         'wof.bizWidget.VoucherItemGroup_dblclick':function(message){
             console.log(message.id+'   '+this.getClassName());
             var voucherItemGroup = wof.util.ObjectManager.get(message.sender.id);
+            if(voucherItemGroup.getIsExpand()==true){
+                voucherItemGroup.setIsExpand(false);
+            }else{
+                voucherItemGroup.setIsExpand(true);
+            }
             var voucherItemGroupIndex = voucherItemGroup.getIndex();
             this.setActiveVoucherItemGroupIndex(voucherItemGroupIndex);
             this.setActiveVoucherItemRank(null);
