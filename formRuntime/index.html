@@ -95,182 +95,173 @@ jQuery(function(){
 	function initContent(){
 		var windowWidth = jQuery(window).width();
 		var windowHeight = jQuery(window).height();
-        with(wof.widget)
-            with(wof.bizWidget)
-                with(wof.kernel)
-                    with(wof.util){
 
-                        //创建数据对象
-                        var dataObjectInstance = wof$.create('DataObject', {'pageId':'pageId1'});
-                        //查询数据
-                        //dataObjectInstance.queryData('main', null, null, 0, 100);
-                        //修改数据
-                        //dataObjectInstance.updateData([{"zglbref.lbbz":"外聘员工111","zgid":"362646149296820224"}]);
-                        //删除数据
-                        //dataObjectInstance.deleteData([{"zgid":"362646149296820224"}]);
-                        //增加数据
-                        //dataObjectInstance.addData([{"zglbref.lbbz":"好员工222","zgid":wof.util.Tool.uuid()}]);
-                        //撤销删除数据
-                        //dataObjectInstance.undeleteData();
-                        //保存数据
-                        //dataObjectInstance.saveData();
+        //创建数据对象
+        var dataObjectInstance = wof$.create('DataObject', {'pageId':'pageId1'});
+        //查询数据
+        //dataObjectInstance.queryData('main', null, null, 0, 100);
+        //修改数据
+        //dataObjectInstance.updateData([{"zglbref.lbbz":"外聘员工111","zgid":"362646149296820224"}]);
+        //删除数据
+        //dataObjectInstance.deleteData([{"zgid":"362646149296820224"}]);
+        //增加数据
+        //dataObjectInstance.addData([{"zglbref.lbbz":"好员工222","zgid":wof.util.Tool.uuid()}]);
+        //撤销删除数据
+        //dataObjectInstance.undeleteData();
+        //保存数据
+        //dataObjectInstance.saveData();
 
+        var flowLayout = wof$.create('FlowLayout');
+        flowLayout.setLeft(0);
+        flowLayout.setTop(0);
+        flowLayout.setWidth(windowWidth-10);
+        flowLayout.setCols(4);
+        flowLayout.setItemHeight(60);
 
+        flowLayout.insertSection({title:'默认分组1',titleHeight:30,cols:3});
 
-                        var windowWidth = jQuery(window).width();
-                        var flowLayout = wof$.create('FlowLayout');
-                        flowLayout.setLeft(0);
-                        flowLayout.setTop(0);
-                        flowLayout.setWidth(windowWidth-10);
-                        flowLayout.setCols(4);
-                        flowLayout.setItemHeight(60);
+        flowLayout.insertSection({title:'默认分组2',titleHeight:30,cols:2,itemHeight:300});
 
-                        flowLayout.insertSection({title:'默认分组1',titleHeight:30,cols:3});
+        flowLayout.appendTo(container);
 
-                        flowLayout.insertSection({title:'默认分组2',titleHeight:30,cols:2,itemHeight:300});
+        flowLayout.render();
 
-                        flowLayout.appendTo(container);
+        var flowLayout2 = wof$.create('FlowLayout');
+        flowLayout2.setLeft(0);
+        flowLayout2.setTop(0);
+        flowLayout2.setWidth(400);
+        flowLayout2.setCols(2);
+        flowLayout2.setItemHeight(60);
+        var sectionData = {title:'嵌套流式',titleHeight:30,cols:2,itemHeight:200};
+        flowLayout2.insertSection(sectionData);
 
-                        flowLayout.render();
+        flowLayout.insertNode(flowLayout2,{row:1,col:2},1);
 
-                        var flowLayout2 = wof$.create('FlowLayout');
-                        flowLayout2.setLeft(0);
-                        flowLayout2.setTop(0);
-                        flowLayout2.setWidth(400);
-                        flowLayout2.setCols(2);
-                        flowLayout2.setItemHeight(60);
-                        var sectionData = {title:'嵌套流式',titleHeight:30,cols:2,itemHeight:200};
-                        flowLayout2.insertSection(sectionData);
+        flowLayout.render();
 
-                        flowLayout.insertNode(flowLayout2,{row:1,col:2},1);
+        /*var newFlowLayout = wof$.create('FlowLayout');
+        var flData = flowLayout.getData();
+        console.log(JSON.stringify(flData));
+        newFlowLayout.setData(flData);
+        newFlowLayout.setTop(300);
+        newFlowLayout.downSection(1);
+        newFlowLayout.appendTo(container);
+        newFlowLayout.render();*/
 
-                        flowLayout.render();
+        /*var voucherComponent = wof$.create('VoucherComponent',{'state':'View'});
+        voucherComponent.setDataObject(dataObjectInstance);
+        voucherComponent.setBindEntityID('JZGJBXXB');
+        voucherComponent.setLeft(0);
+        voucherComponent.setTop(0);
+        voucherComponent.setWidth(500);
+        voucherComponent.setItemHeight(60);
+        voucherComponent.setViewType('tab');
 
-                        /*var newFlowLayout = wof$.create('FlowLayout');
-                        var flData = flowLayout.getData();
-                        console.log(JSON.stringify(flData));
-                        newFlowLayout.setData(flData);
-                        newFlowLayout.setTop(300);
-                        newFlowLayout.downSection(1);
-                        newFlowLayout.appendTo(container);
-                        newFlowLayout.render();*/
+        var voucherItemGroupData1 = {groupCaption:'表头分组1',width:500,titleHeight:25,colsNum:4,itemHeight:45};
+        voucherComponent.insertVoucherItemGroup(voucherItemGroupData1);
+        var voucherItemGroupData2 = {groupCaption:'表头分组2',width:500,titleHeight:25,colsNum:2,itemHeight:45};
+        voucherComponent.insertVoucherItemGroup(voucherItemGroupData2);
 
-                        var voucherComponent = wof$.create('VoucherComponent',{'state':'View'});
-                        voucherComponent.setDataObject(dataObjectInstance);
-                        voucherComponent.setBindEntityID('JZGJBXXB');
-                        voucherComponent.setLeft(0);
-                        voucherComponent.setTop(0);
-                        voucherComponent.setWidth(500);
-                        voucherComponent.setItemHeight(60);
-                        voucherComponent.setViewType('tab');
+        var voucherItemData1 = {
+            colspan:'1',
+            rowspan:'1',
+            isFixItem:'true',
+            itemName:'xm',
+            visiable:'true',
+            itemLabel:'姓名',
+            dataField:'xm',
+            dateTimeBoxFormat:'',
+            readOnly:'false',
+            required:'false',
+            length:'',
+            min:'',
+            max:'',
+            regExp:'',
+            checkErrorInfo:'',
+            visbleType:'select',
+            selectPattern:'',
+            useMultiSelect:'',
+            labelWidth:'100',
+            inputWidth:'100',
+            inputHeight:'20',
+            linkageItem:'',
+            tipValue:''
+        };
+        voucherComponent.insertVoucherItem(voucherItemData1, 1);
+        var voucherItemData2 = {
+            colspan:'1',
+            rowspan:'1',
+            isFixItem:'true',
+            itemName:'XBref.xbmc',
+            visiable:'true',
+            itemLabel:'性别',
+            dataField:'XBref.xbmc',
+            dateTimeBoxFormat:'',
+            readOnly:'false',
+            required:'false',
+            length:'',
+            min:'',
+            max:'',
+            regExp:'',
+            checkErrorInfo:'',
+            visbleType:'select',
+            selectPattern:'',
+            useMultiSelect:'',
+            labelWidth:'100',
+            inputWidth:'100',
+            inputHeight:'20',
+            linkageItem:'',
+            tipValue:''
+        };
+        voucherComponent.insertVoucherItem(voucherItemData2, 1);
 
-                        var voucherItemGroupData1 = {groupCaption:'表头分组1',width:500,titleHeight:25,colsNum:4,itemHeight:45};
-                        voucherComponent.insertVoucherItemGroup(voucherItemGroupData1);
-                        var voucherItemGroupData2 = {groupCaption:'表头分组2',width:500,titleHeight:25,colsNum:2,itemHeight:45};
-                        voucherComponent.insertVoucherItemGroup(voucherItemGroupData2);
+        flowLayout.insertNode(voucherComponent,{row:1,col:1},2);
 
-                        var voucherItemData1 = {
-                            colspan:'1',
-                            rowspan:'1',
-                            isFixItem:'true',
-                            itemName:'xm',
-                            visiable:'true',
-                            itemLabel:'姓名',
-                            dataField:'xm',
-                            dateTimeBoxFormat:'',
-                            readOnly:'false',
-                            required:'false',
-                            length:'',
-                            min:'',
-                            max:'',
-                            regExp:'',
-                            checkErrorInfo:'',
-                            visbleType:'select',
-                            selectPattern:'',
-                            useMultiSelect:'',
-                            labelWidth:'100',
-                            inputWidth:'100',
-                            inputHeight:'20',
-                            linkageItem:'',
-                            tipValue:''
-                        };
-                        voucherComponent.insertVoucherItem(voucherItemData1, 1);
-                        var voucherItemData2 = {
-                            colspan:'1',
-                            rowspan:'1',
-                            isFixItem:'true',
-                            itemName:'XBref.xbmc',
-                            visiable:'true',
-                            itemLabel:'性别',
-                            dataField:'XBref.xbmc',
-                            dateTimeBoxFormat:'',
-                            readOnly:'false',
-                            required:'false',
-                            length:'',
-                            min:'',
-                            max:'',
-                            regExp:'',
-                            checkErrorInfo:'',
-                            visbleType:'select',
-                            selectPattern:'',
-                            useMultiSelect:'',
-                            labelWidth:'100',
-                            inputWidth:'100',
-                            inputHeight:'20',
-                            linkageItem:'',
-                            tipValue:''
-                        };
-                        voucherComponent.insertVoucherItem(voucherItemData2, 1);
+        voucherComponent.render();
+*/
+      /*  var json = voucherComponent.getData();
+        var voucherComponent2 = wof$.create('VoucherComponent');
 
-                        flowLayout.insertNode(voucherComponent,{row:1,col:1},2);
+        voucherComponent2.setLeft(0);
+        voucherComponent2.setTop(0);
+        voucherComponent2.setWidth(500);
+        voucherComponent2.setItemHeight(60);
 
-                        voucherComponent.render();
-
-                      /*  var json = voucherComponent.getData();
-                        var voucherComponent2 = wof$.create('VoucherComponent');
-
-                        voucherComponent2.setLeft(0);
-                        voucherComponent2.setTop(0);
-                        voucherComponent2.setWidth(500);
-                        voucherComponent2.setItemHeight(60);
-
-                        voucherComponent2.insertVoucherItemGroup({groupCaption:'表头分组3',width:500,titleHeight:25,colsNum:2,itemHeight:45});
-                        voucherComponent2.insertVoucherItemGroup({groupCaption:'表头分组4',width:500,titleHeight:25,colsNum:2,itemHeight:45});
+        voucherComponent2.insertVoucherItemGroup({groupCaption:'表头分组3',width:500,titleHeight:25,colsNum:2,itemHeight:45});
+        voucherComponent2.insertVoucherItemGroup({groupCaption:'表头分组4',width:500,titleHeight:25,colsNum:2,itemHeight:45});
 
 
-                        voucherComponent2.setData(json);
-                        voucherComponent2.insertVoucherItemGroup({groupCaption:'表头分组5',width:500,titleHeight:25,colsNum:2,itemHeight:45});
+        voucherComponent2.setData(json);
+        voucherComponent2.insertVoucherItemGroup({groupCaption:'表头分组5',width:500,titleHeight:25,colsNum:2,itemHeight:45});
 
-                        voucherComponent2.downVoucherItemGroup(1);
+        voucherComponent2.downVoucherItemGroup(1);
 
-                        //voucherComponent2.setViewType('group');
+        //voucherComponent2.setViewType('group');
 
-                        voucherComponent2.setDataObject(dataObjectInstance);
-
-
-                        flowLayout.insertNode(voucherComponent2,{row:1,col:2},2);
-
-                        voucherComponent2.render();
-
-                        voucherComponent2.downVoucherItemGroup(1);
-
-                        voucherComponent2.render();*/
-
-                       /* var button = new Button();
-                        button.setIsInside(true);
-                        button.setType('submit');
-                        button.setText('按钮1');
-                        button.setLeft(5);
-                        button.setTop(5);
-                        button.setWidth(100);
-                        button.setHeight(40);
-                        //button.appendTo(container);
-
-                        flowLayout.insertNode(button,{row:1,col:1},1);
-                        button.render();*/
+        voucherComponent2.setDataObject(dataObjectInstance);
 
 
-                }
+        flowLayout.insertNode(voucherComponent2,{row:1,col:2},2);
+
+        voucherComponent2.render();
+
+        voucherComponent2.downVoucherItemGroup(1);
+
+        voucherComponent2.render();*/
+
+       /* var button = new Button();
+        button.setIsInside(true);
+        button.setType('submit');
+        button.setText('按钮1');
+        button.setLeft(5);
+        button.setTop(5);
+        button.setWidth(100);
+        button.setHeight(40);
+        //button.appendTo(container);
+
+        flowLayout.insertNode(button,{row:1,col:1},1);
+        button.render();*/
+
     }
 	//重设工作区
 	function resizeContent(){
@@ -299,6 +290,5 @@ window.getContentLayout = function(){
 </head>
 <body>
 <div id="container" style="position:absolute;"></div>
-<input type="text"/>
 </body>
 </html>

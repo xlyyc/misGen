@@ -136,6 +136,7 @@ wof.bizWidget.FlowLayout.prototype = {
             }else{
                 section.setIsExpand(true);
             }
+            section.calcLayout();
             var sectionIndex = section.getIndex();
             this.setActiveSectionIndex(sectionIndex);
             this.setActiveItemRank(null);
@@ -207,9 +208,11 @@ wof.bizWidget.FlowLayout.prototype = {
         }
         var newItem = wof$.create('FlowLayoutItem');
         newItem.appendTo(newSection);
+
         if(sectionIndex==this.getActiveSectionIndex()){
             this.setActiveItemRank(null);
         }
+        newSection.calcLayout();
     },
 
     /**
