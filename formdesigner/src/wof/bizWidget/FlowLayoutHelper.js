@@ -7,8 +7,8 @@
 wof.bizWidget.FlowLayoutHelper = function () {
     this._version = '1.0';
 
-    var method = 'this._calcLayout(message);';
-    this.setOnReceiveMessage([{id:'wof_object_resize',priority:99,method:method}]);
+    this.setOnReceiveMessage([{id:'wof_object_resize',priority:99,method:'this._calcLayout(message);'}]);
+
 };
 wof.bizWidget.FlowLayoutHelper.prototype = {
     /**
@@ -56,7 +56,7 @@ wof.bizWidget.FlowLayoutHelper.prototype = {
      * 直到根节点或者在分组为不随内容扩展的节点上停止
      */
     _calcLayout: function(message){
-        var obj=wof.util.ObjectManager.get(message.sender.id);
+        var obj = wof.util.ObjectManager.get(message.sender.id);
         if(obj!=null){
             var rootNode = obj;
             var parentNode = obj.parentNode();
@@ -65,12 +65,10 @@ wof.bizWidget.FlowLayoutHelper.prototype = {
                     if(parentNode.getClassName()=='wof.bizWidget.FlowLayoutSection'){
                         var section = parentNode;
                         if(section.getIsAutoExt()==true){
-                            var flowLayout = parentNode.getOriginNode();
+                            var flowLayout = section.parentNode();
                             rootNode = flowLayout;
-                            if(flowLayout.getId()==this.getId()){
-                                section.calcLayout();
-                                flowLayout.calcLayout();
-                            }
+                            section.calcLayout();
+                            flowLayout.calcLayout();
                         }else{
                             break;
                         }

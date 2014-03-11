@@ -509,16 +509,6 @@ jQuery(function(){
 
 
 
-
-
-
-
-
-
-
-
-
-
                             }
                         }
     }
@@ -530,12 +520,7 @@ jQuery(function(){
 			var layout = getContentLayout();
             layout.setWidth(windowWidth-sidebar1Width-sidebar2Width);
             layout.setHeight(windowHeight-headerHeight-5);
-            var childNodes = layout.childNodes();
-            for(var i=0;i<childNodes.length;i++){
-                var node = childNodes[i];
-                node.calcLayout();
-            }
-            layout.calcLayout();
+            layout.resize();
             layout.render();
 		}catch(e){}
 	}

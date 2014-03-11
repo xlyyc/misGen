@@ -702,6 +702,25 @@ wof.bizWidget.FlowLayout.prototype = {
 
     },
 
+    resize: function(){
+        var childNodes = this.childNodes();
+        for(var i=0;i<childNodes.length;i++){
+            var node = childNodes[i];
+            node.calcLayout();
+            var items = node.childNodes();
+            for(var t=0;t<items.length;t++){
+                var item = items[t];
+                var obj = item.childNodes()[0];
+                if(obj!=null&&obj.getClassName()=='wof.bizWidget.FlowLayout'){
+                    obj.setWidth(item.getWidth());
+                    obj.setHeight(item.getHeight());
+                    obj.resize();
+                }
+            }
+        }
+        this.calcLayout();
+    },
+
     //创建新的FlowLayout
     createSelf: function(width, height){
         var node = wof$.create('FlowLayout');
