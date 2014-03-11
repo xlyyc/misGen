@@ -232,8 +232,6 @@ wof.bizWidget.spanner.FlowLayoutSpanner.prototype = {
 
                             flowLayout.deleteSection(activeSectionIndex);
 
-                            flowLayout.render();
-
                             flowLayout.sendMessage('wof_object_resize');
                             flowLayout.sendMessage('wof.bizWidget.FlowLayout_active');
                             jQuery(this).dialog('close');
@@ -253,8 +251,6 @@ wof.bizWidget.spanner.FlowLayoutSpanner.prototype = {
             var activeSectionIndex = _this.getPropertys().activeSectionIndex;
             var sectionData = {title:'未命名分组'};
             flowLayout.insertSection(sectionData,activeSectionIndex);
-
-            flowLayout.render();
 
             flowLayout.sendMessage('wof_object_resize');
             flowLayout.sendMessage('wof.bizWidget.FlowLayout_active');
@@ -284,8 +280,6 @@ wof.bizWidget.spanner.FlowLayoutSpanner.prototype = {
             flowLayout.addItemColspan(activeItemRank, activeSectionIndex);
             flowLayout.setActiveItemRank(null);
 
-            flowLayout.render();
-
             flowLayout.sendMessage('wof_object_resize');
             flowLayout.sendMessage('wof.bizWidget.FlowLayout_active');
         });
@@ -296,8 +290,6 @@ wof.bizWidget.spanner.FlowLayoutSpanner.prototype = {
             var activeItemRank = _this.getPropertys().activeItemRank;
             flowLayout.reduceItemColspan(activeItemRank, activeSectionIndex);
             flowLayout.setActiveItemRank(null);
-
-            flowLayout.render();
 
             flowLayout.sendMessage('wof_object_resize');
             flowLayout.sendMessage('wof.bizWidget.FlowLayout_active');
@@ -310,8 +302,6 @@ wof.bizWidget.spanner.FlowLayoutSpanner.prototype = {
             flowLayout.reduceItemRowspan(activeItemRank, activeSectionIndex);
             flowLayout.setActiveItemRank(null);
 
-            flowLayout.render();
-
             flowLayout.sendMessage('wof_object_resize');
             flowLayout.sendMessage('wof.bizWidget.FlowLayout_active');
         });
@@ -322,8 +312,6 @@ wof.bizWidget.spanner.FlowLayoutSpanner.prototype = {
             var activeItemRank = _this.getPropertys().activeItemRank;
             flowLayout.addItemRowspan(activeItemRank, activeSectionIndex);
             flowLayout.setActiveItemRank(null);
-
-            flowLayout.render();
 
             flowLayout.sendMessage('wof_object_resize');
             flowLayout.sendMessage('wof.bizWidget.FlowLayout_active');
@@ -370,8 +358,6 @@ wof.bizWidget.spanner.FlowLayoutSpanner.prototype = {
                             flowLayout.insertNode(newObj, activeItemRank, activeSectionIndex);
                             flowLayout.setActiveItemRank(null);
 
-                            flowLayout.render();
-
                             flowLayout.sendMessage('wof_object_resize');
                             flowLayout.sendMessage('wof.bizWidget.FlowLayout_active');
                         }
@@ -388,8 +374,6 @@ wof.bizWidget.spanner.FlowLayoutSpanner.prototype = {
                             var activeItemRank = _this.getPropertys().activeItemRank;
                             flowLayout.insertNode(obj, activeItemRank, activeSectionIndex);
                             flowLayout.setActiveItemRank(null);
-
-                            flowLayout.render();
 
                             flowLayout.sendMessage('wof_object_resize');
                             flowLayout.sendMessage('wof.bizWidget.FlowLayout_active');
@@ -424,8 +408,6 @@ wof.bizWidget.spanner.FlowLayoutSpanner.prototype = {
                             flowLayout.setActiveSectionIndex(null);
                             flowLayout.setActiveItemRank(null);
 
-                            flowLayout.render();
-
                             flowLayout.sendMessage('wof_object_resize');
                             flowLayout.sendMessage('wof.bizWidget.FlowLayout_active');
                             jQuery(this).dialog('close');
@@ -441,8 +423,6 @@ wof.bizWidget.spanner.FlowLayoutSpanner.prototype = {
                 flowLayout.deleteItem(activeItemRank, activeSectionIndex);
                 flowLayout.setActiveSectionIndex(null);
                 flowLayout.setActiveItemRank(null);
-
-                flowLayout.render();
 
                 flowLayout.sendMessage('wof_object_resize');
                 flowLayout.sendMessage('wof.bizWidget.FlowLayout_active');

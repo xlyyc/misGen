@@ -180,9 +180,7 @@ wof.bizWidget.FlowLayoutSection.prototype = {
 
     //----------必须实现----------
     render: function () {
-        this._appendLabel();
         this._flowLayout();
-        this._resetStyle();
     },
 
     //选择实现
@@ -224,19 +222,7 @@ wof.bizWidget.FlowLayoutSection.prototype = {
     },
 
     _insideOnReceiveMessage:{
-        'wof.bizWidget.FlowLayoutItem_itemDrop':function(message){
-            console.log(message.id+'   '+this.getClassName());
-            var insertItem = wof.util.ObjectManager.get(message.data.itemId);
-            var item = wof.util.ObjectManager.get(message.sender.id);
-            insertItem.remove();
-            insertItem.beforeTo(item);
 
-            this.parentNode().render();
-
-            this.parentNode().sendMessage('wof_object_resize');
-            this.parentNode().sendMessage('wof.bizWidget.FlowLayout_active');
-            return false;
-        }
     },
 
     //找到指定行列号的item
@@ -252,17 +238,6 @@ wof.bizWidget.FlowLayoutSection.prototype = {
             }
         }
         return item;
-    },
-
-    //重置样式
-    _resetStyle: function(){
-        this._label.setIsBold(false);
-        this._label.setIsHighlight(false);
-        this._label.render();
-        var items = this._getItems();
-        for(var i=0;i<items.length;i++){
-            items[i].getDomInstance().css('backgroundColor','#fff');
-        }
     },
 
     //判断是否可以删除item
@@ -284,13 +259,11 @@ wof.bizWidget.FlowLayoutSection.prototype = {
             item.removeChildren(true);
             item.remove(true);
         }
-        this.calcLayout();
     },
 
 	//减少列数
     reduceItemColspan: function(item){
         item.setColspan(item.getColspan()-1);
-        this.calcLayout();
 	},
 
     //判断是否可以减少列数
@@ -322,7 +295,6 @@ wof.bizWidget.FlowLayoutSection.prototype = {
 	//增加列数
     addItemColspan: function(item){
         item.setColspan(item.getColspan()+1);
-        this.calcLayout();
 	},
 
     //判断是否可以增加行数
@@ -337,7 +309,6 @@ wof.bizWidget.FlowLayoutSection.prototype = {
     //增加行数
     addItemRowspan: function(item){
         item.setRowspan(item.getRowspan()+1);
-        this.calcLayout();
     },
 
     //判断是否可以减少行数
@@ -384,7 +355,6 @@ wof.bizWidget.FlowLayoutSection.prototype = {
     //减少列数
     reduceItemRowspan: function(item){
         item.setRowspan(item.getRowspan()-1);
-        this.calcLayout();
     },
 
     //设置当前激活的section样式
@@ -399,21 +369,6 @@ wof.bizWidget.FlowLayoutSection.prototype = {
         //设置当前选中item背景
         activeItem.getDomInstance().css('backgroundColor','#efefef');
     },
-	
-	//设置并插入label标题到第一个位置
-	_appendLabel: function(){
-		var label = this._label;
-        label.setIsInside(true);
-        label.remove();
-		label.setWidth(this.getWidth());
-		label.setHeight(this.getTitleHeight());
-		label.setText(this.getTitle());
-		if(this.childNodes().length>0){
-			label.beforeTo(this.childNodes()[0]);
-        }else{
-			label.appendTo(this);
-        }
-	},
 
     //找到所有item
     findItems: function(){
@@ -429,26 +384,6 @@ wof.bizWidget.FlowLayoutSection.prototype = {
         return items;
     },
 
-	//获得所有item 并且重设item行列号
-	_getItems: function(){
-		var items = this.findItems();
-		if(items.length>0){
-            var itemHeight = this.getItemHeight();
-            var itemWidth = items[0].getWidth()/items[0].getColspan();
-            var labelHeight = this._label.getHeight();
-            for(var i=0;i<items.length;i++){
-                var item = items[i];
-                var top = item.getTop()-labelHeight;
-                var left = item.getLeft();
-                var row = Math.ceil(top/itemHeight)+1;
-                var col = Math.ceil(left/itemWidth)+1;
-                item.setRow(row);
-                item.setCol(col);
-            }
-		}
-		return items;
-	},
-
     //计算布局
     calcLayout: function(){
         var placeItemTable = new wof.util.Hashtable(); //位置对应item table
@@ -462,6 +397,7 @@ wof.bizWidget.FlowLayoutSection.prototype = {
         var rows = null;
         var items = [];
         var _this = this;
+        var labelHeight = this.getTitleHeight();
         //为指定的item查找到可以进行布局的位置
         function findCanLayoutSpace(item){
             var space = null;
@@ -471,12 +407,12 @@ wof.bizWidget.FlowLayoutSection.prototype = {
             var startC = 1;
             if(_this.getMustInOrder()==true){
                 if(currSpace!=null){
-                    startR = (currSpace.top - _this.getTitleHeight())/itemHeight+1;
+                    startR = (currSpace.top - labelHeight)/itemHeight+1;
                     startC = currSpace.left/itemWidth+1;
                 }
             }
             for(var r=1;space==null;r++){
-                var top = (r-1) * itemHeight + _this.getTitleHeight();
+                var top = (r-1) * itemHeight + labelHeight;
                 for(var c=1;c<=_this.getCols();c++){
                     if((startR==r&&startC<=c)||startR<r){
                         var flag = true;
@@ -512,7 +448,7 @@ wof.bizWidget.FlowLayoutSection.prototype = {
             var b = false;
             var count = 0;
             if(r>1){
-                var top = (r-1) * itemHeight + _this.getTitleHeight();
+                var top = (r-1) * itemHeight + labelHeight;
                 for(var c=_this.getCols(); c>=1; c--){
                     var left = (c-1) * itemWidth;
                     var obj = placeItemTable.items(top+','+left);
@@ -544,7 +480,7 @@ wof.bizWidget.FlowLayoutSection.prototype = {
                         maxH = tempH;
                     }
                 }
-                rs = Math.ceil((maxH-_this.getTitleHeight())/_this.getItemHeight());
+                rs = Math.ceil((maxH-labelHeight)/_this.getItemHeight());
             }
             return rs;
         }
@@ -592,7 +528,7 @@ wof.bizWidget.FlowLayoutSection.prototype = {
             var col = fixItem.getCol();
             var colspan = fixItem.getColspan();
             var rowspan = fixItem.getRowspan();
-            var top = (row-1) * itemHeight + this.getTitleHeight();
+            var top = (row-1) * itemHeight + labelHeight;
             var left = (col-1) * itemWidth;
             fixItem.setTop(top);
             fixItem.setLeft(left);
@@ -623,7 +559,7 @@ wof.bizWidget.FlowLayoutSection.prototype = {
         //补全每行空缺的item
         rows = calcRows();
         for(var r=1; r<=rows; r++){
-            var top = (r-1) * itemHeight + this.getTitleHeight();
+            var top = (r-1) * itemHeight + labelHeight;
             for(var c=1; c<=this.getCols(); c++){
                 var left = (c-1) * itemWidth;
                 var obj = placeItemTable.items(top+','+left);
@@ -642,7 +578,7 @@ wof.bizWidget.FlowLayoutSection.prototype = {
         var canRemoveRow = true;
         var removeRowCount = 0;
         for(var r=rows; r>=1; r--){
-            var top = (r-1) * itemHeight + this.getTitleHeight();
+            var top = (r-1) * itemHeight + labelHeight;
             if(canRemoveRow==true){
                 if(isEmptyRow(r)==false){
                     for(var c=this.getCols(); c>=1; c--){
@@ -675,21 +611,51 @@ wof.bizWidget.FlowLayoutSection.prototype = {
         }
         this.setRows(rows-removeRowCount);
         //添加到dom节点
-        for(var i=0; i<layoutItems.length; i++){
+        for(var i=layoutItems.length-1; i>=0; i--){
             var item = layoutItems[i];
             item.appendTo(this);
-            //item.afterTo(label);
         }
         if(this.getIsExpand()==true){
-            this.setHeight(itemHeight*this.getRows()+this.getTitleHeight());
+            this.setHeight(itemHeight*this.getRows()+labelHeight);
         }else{
-            this.setHeight(this.getTitleHeight());
+            this.setHeight(labelHeight);
+        }
+        //重设行列号
+        items = this.findItems();
+        if(items.length>0){
+            var itemHeight = this.getItemHeight();
+            var itemWidth = items[0].getWidth()/items[0].getColspan();
+            for(var i=0;i<items.length;i++){
+                var item = items[i];
+                var top = item.getTop()-labelHeight;
+                var left = item.getLeft();
+                var row = Math.ceil(top/itemHeight)+1;
+                var col = Math.ceil(left/itemWidth)+1;
+                item.setRow(row);
+                item.setCol(col);
+            }
         }
     },
 
     //进行流式布局
     _flowLayout: function(){
+
+        //添加label
         var label = this._label;
+        label.setIsInside(true);
+        label.remove();
+        label.setWidth(this.getWidth());
+        label.setHeight(this.getTitleHeight());
+        label.setText(this.getTitle());
+        if(this.childNodes().length>0){
+            label.beforeTo(this.childNodes()[0]);
+        }else{
+            label.appendTo(this);
+        }
+        this._label.setIsBold(false);
+        this._label.setIsHighlight(false);
+        this._label.render();
+
         //设置section div容器高度和宽度
         this.getDomInstance().css('height', (this.getHeight()*this.getScale())+'px');
         this.getDomInstance().css('width', (this.getWidth()*this.getScale())+'px');
@@ -699,6 +665,10 @@ wof.bizWidget.FlowLayoutSection.prototype = {
         //屏蔽label对象的事件
         label.getDomInstance().after(this._backgroundImg);
 
+        var items = this.findItems();
+        for(var i=0;i<items.length;i++){
+            items[i].getDomInstance().css('backgroundColor','#fff');
+        }
     }
 
 };

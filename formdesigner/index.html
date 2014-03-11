@@ -64,6 +64,7 @@
 <script src="src/wof/bizWidget/FlowLayout.js"></script>
 <script src="src/wof/bizWidget/FlowLayoutSection.js"></script>
 <script src="src/wof/bizWidget/FlowLayoutItem.js"></script>
+<script src="src/wof/bizWidget/FlowLayoutHelper.js"></script>
 <script src="src/wof/bizWidget/GridLayout.js"></script>
 <script src="src/wof/bizWidget/PageComponent.js"></script>
 <script src="src/wof/bizWidget/PropertyBar.js"></script>
@@ -386,6 +387,7 @@ jQuery(function(){
                         with(wof.functionWidget.spanner)
                         with(wof.kernel){
 
+                            var flowLayoutHelper = wof$.create('FlowLayoutHelper');
 
 
                            /* var gridLayout = new GridLayout();
@@ -528,6 +530,12 @@ jQuery(function(){
 			var layout = getContentLayout();
             layout.setWidth(windowWidth-sidebar1Width-sidebar2Width);
             layout.setHeight(windowHeight-headerHeight-5);
+            var childNodes = layout.childNodes();
+            for(var i=0;i<childNodes.length;i++){
+                var node = childNodes[i];
+                node.calcLayout();
+            }
+            layout.calcLayout();
             layout.render();
 		}catch(e){}
 	}

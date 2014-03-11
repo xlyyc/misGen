@@ -9,6 +9,8 @@ wof.bizWidget.FlowLayoutItem = function () {
 
     this.setIsInside(true);
 
+    this.getDomInstance().css('overflow','hidden');
+
 };
 wof.bizWidget.FlowLayoutItem.prototype = {
     /**

@@ -116,15 +116,13 @@ jQuery(function(){
         flowLayout.setTop(0);
         flowLayout.setWidth(windowWidth-10);
         flowLayout.setCols(4);
-        flowLayout.setItemHeight(60);
+        flowLayout.setItemHeight(200);
 
-        flowLayout.insertSection({title:'默认分组1',titleHeight:30,cols:3});
+        flowLayout.insertSection({title:'默认分组1',titleHeight:30,cols:8});
 
-        flowLayout.insertSection({title:'默认分组2',titleHeight:30,cols:2,itemHeight:300});
+        flowLayout.insertSection({title:'默认分组2',titleHeight:30,cols:4,itemHeight:50,isAutoExt:true});
 
         flowLayout.appendTo(container);
-
-        flowLayout.render();
 
         var flowLayout2 = wof$.create('FlowLayout');
         flowLayout2.setLeft(0);
@@ -132,8 +130,7 @@ jQuery(function(){
         flowLayout2.setWidth(400);
         flowLayout2.setCols(2);
         flowLayout2.setItemHeight(60);
-        var sectionData = {title:'嵌套流式',titleHeight:30,cols:2,itemHeight:200};
-        flowLayout2.insertSection(sectionData);
+        flowLayout2.insertSection({title:'嵌套流式',titleHeight:30,cols:2,itemHeight:200});
 
         flowLayout.insertNode(flowLayout2,{row:1,col:2},1);
 

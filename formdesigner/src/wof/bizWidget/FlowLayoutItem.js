@@ -9,6 +9,8 @@ wof.bizWidget.FlowLayoutItem = function () {
 
     this.setIsInside(true);
 
+    this.getDomInstance().css('overflow','hidden');
+
 };
 wof.bizWidget.FlowLayoutItem.prototype = {
     /**
@@ -162,7 +164,7 @@ wof.bizWidget.FlowLayoutItem.prototype = {
             scroll: false,
             start:function(event,ui){
                 event.stopPropagation();
-                clearTimeout(timeFn);
+                clearTimeout(_this._timeFn);
                 _this.getDomInstance().css('zIndex',60000);
             },
             stop:function(event,ui){

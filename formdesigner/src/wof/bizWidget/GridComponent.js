@@ -231,6 +231,14 @@ wof.bizWidget.GridComponent.prototype = {
      * Render 方法定义
      */
 
+    _init: function(data){
+
+    },
+
+    initRender: function(){
+
+    },
+
     //选择实现
     beforeRender: function () {
 

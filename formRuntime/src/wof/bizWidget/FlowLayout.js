@@ -137,6 +137,7 @@ wof.bizWidget.FlowLayout.prototype = {
                 section.setIsExpand(true);
             }
             section.calcLayout();
+            this.calcLayout();
             var sectionIndex = section.getIndex();
             this.setActiveSectionIndex(sectionIndex);
             this.setActiveItemRank(null);
@@ -208,11 +209,11 @@ wof.bizWidget.FlowLayout.prototype = {
         }
         var newItem = wof$.create('FlowLayoutItem');
         newItem.appendTo(newSection);
-
+        newSection.calcLayout();
+        this.calcLayout();
         if(sectionIndex==this.getActiveSectionIndex()){
             this.setActiveItemRank(null);
         }
-        newSection.calcLayout();
     },
 
     /**
@@ -239,6 +240,11 @@ wof.bizWidget.FlowLayout.prototype = {
                             var newItem = wof$.create('FlowLayoutItem');
                             newItem.beforeTo(item);
                             node.appendTo(newItem);
+                        }
+                        //如果该分组内容自适应高度 则需要重新计算
+                        if(section.getIsAutoExt()==true){
+                            section.calcLayout();
+                            this.calcLayout();
                         }
                     }else{
                         console.log('不存在item 请先插入新的item');
@@ -285,6 +291,7 @@ wof.bizWidget.FlowLayout.prototype = {
                 this.setActiveSectionIndex(sectionIndex-1);
                 this.setActiveItemRank(null);
             }
+            this.calcLayout();
         }
     },
 
@@ -302,6 +309,7 @@ wof.bizWidget.FlowLayout.prototype = {
                 this.setActiveSectionIndex(sectionIndex+1);
                 this.setActiveItemRank(null);
             }
+            this.calcLayout();
         }
     },
 
@@ -316,6 +324,7 @@ wof.bizWidget.FlowLayout.prototype = {
             section.remove(true);
             this.setActiveSectionIndex(null);
             this.setActiveItemRank(null);
+            this.calcLayout();
         }
     },
 
@@ -361,6 +370,13 @@ wof.bizWidget.FlowLayout.prototype = {
             if(flowLayoutData.onReceiveMessage!=null){
                 this.setOnReceiveMessage(flowLayoutData.onReceiveMessage);
             }
+
+            var childNodes = this.childNodes();
+            for(var i=0;i<childNodes.length;i++){
+                var node = childNodes[i];
+                node.calcLayout();
+            }
+            this.calcLayout();
         }
     },
 
@@ -407,6 +423,8 @@ wof.bizWidget.FlowLayout.prototype = {
                 if(sectionData.isAutoExt!=null){
                     section.setIsAutoExt((sectionData.isAutoExt=='true'||sectionData.isAutoExt==true)?true:false);
                 }
+                section.calcLayout();
+                this.calcLayout();
             }
         }
     },
@@ -434,6 +452,8 @@ wof.bizWidget.FlowLayout.prototype = {
                     if(itemData.rowspan!=null){
                         item.setRowspan(Number(itemData.rowspan));
                     }
+                    section.calcLayout();
+                    this.calcLayout();
                 }
             }
         }
@@ -449,7 +469,9 @@ wof.bizWidget.FlowLayout.prototype = {
         if(section!=null){
             var item = section.findItemByRank(itemRank);
             if(item!=null){
-                section.deleteItem(item)
+                section.deleteItem(item);
+                section.calcLayout();
+                this.calcLayout();
             }
         }
     },
@@ -507,6 +529,8 @@ wof.bizWidget.FlowLayout.prototype = {
             var item = section.findItemByRank(itemRank);
             if(item!=null){
                 section.reduceItemColspan(item);
+                section.calcLayout();
+                this.calcLayout();
             }
         }
     },
@@ -533,13 +557,6 @@ wof.bizWidget.FlowLayout.prototype = {
         }
     },
 
-    //重设布局大小
-    resize:function(width, height){
-        this.setWidth(width);
-        this.setHeight(height);
-        this.render();
-    },
-
     //根据itemRank和sectionIndex定位到item并增加列数
     addItemColspan:function(itemRank, sectionIndex){
         var section = this.findSectionByIndex(sectionIndex);
@@ -547,6 +564,8 @@ wof.bizWidget.FlowLayout.prototype = {
             var item = section.findItemByRank(itemRank);
             if(item!=null){
                 section.addItemColspan(item);
+                section.calcLayout();
+                this.calcLayout();
             }
         }
     },
@@ -558,6 +577,8 @@ wof.bizWidget.FlowLayout.prototype = {
             var item = section.findItemByRank(itemRank);
             if(item!=null){
                 section.reduceItemRowspan(item);
+                section.calcLayout();
+                this.calcLayout();
             }
         }
     },
@@ -569,6 +590,8 @@ wof.bizWidget.FlowLayout.prototype = {
             var item = section.findItemByRank(itemRank);
             if(item!=null){
                 section.addItemRowspan(item);
+                section.calcLayout();
+                this.calcLayout();
             }
         }
     },
@@ -586,8 +609,8 @@ wof.bizWidget.FlowLayout.prototype = {
         return node;
     },
 
-    //进行布局
-    _layout: function(){
+    //计算布局
+    calcLayout: function(){
         var height = 0;
         var sections = this._findSections();
         for(var i=0;i<sections.length;i++){
@@ -602,9 +625,17 @@ wof.bizWidget.FlowLayout.prototype = {
                 height += section.getHeight();
             }
             section.setIndex(i+1);
-            section.getDomInstance().css('top', section.getTop()*this.getScale()+'px');
         }
         this.setHeight(height);
+    },
+
+    //进行布局
+    _layout: function(){
+        var sections = this._findSections();
+        for(var i=0;i<sections.length;i++){
+            var section = sections[i];
+            section.getDomInstance().css('top', section.getTop()*this.getScale()+'px');
+        }
         this.getDomInstance().css('height',(this.getHeight()*this.getScale())+'px');
         this.getDomInstance().css('width', (this.getWidth()*this.getScale())+'px');
 
