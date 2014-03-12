@@ -520,8 +520,8 @@ jQuery(function(){
 			var layout = getContentLayout();
             layout.setWidth(windowWidth-sidebar1Width-sidebar2Width);
             layout.setHeight(windowHeight-headerHeight-5);
-            layout.resize();
-            layout.render();
+
+            layout.sendMessage('wof.bizWidget.FlowLayout_resize');
 		}catch(e){}
 	}
 	jQuery(window).load(function(){

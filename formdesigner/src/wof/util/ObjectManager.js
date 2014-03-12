@@ -16,13 +16,17 @@
 			return wof.util.ObjectManager._objs.remove(oId);
 		},
 
+        oIds: function(){
+            return wof.util.ObjectManager._objs.keys();
+        },
+
         create: function(className, data){
             var obj = null;
             with(wof.widget)
                 with(wof.bizWidget)
                     with(wof.functionWidget){
                         obj = eval('new '+className+'()');
-                        if(obj._init!=null){
+                        if(obj._init!=null&& !jQuery.isEmptyObject(data)){
                             obj._init(data);
                         }
                     }

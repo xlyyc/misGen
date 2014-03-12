@@ -7,7 +7,10 @@
 wof.bizWidget.FlowLayoutHelper = function () {
     this._version = '1.0';
 
-    this.setOnReceiveMessage([{id:'wof_object_resize',priority:99,method:'this._calcLayout(message);'}]);
+    var onReceiveMessage = [];
+    onReceiveMessage.push({id:'wof_object_resize',priority:99,method:'this._calcLayoutAndRender(message);'});
+    onReceiveMessage.push({id:'wof.bizWidget.FlowLayout_resize',priority:99,method:'this._flowlayoutResize(message);'});
+    this.setOnReceiveMessage(onReceiveMessage);
 
 };
 wof.bizWidget.FlowLayoutHelper.prototype = {
@@ -55,7 +58,7 @@ wof.bizWidget.FlowLayoutHelper.prototype = {
      * 从叶子节点开始上向计算
      * 直到根节点或者在分组为不随内容扩展的节点上停止
      */
-    _calcLayout: function(message){
+    _calcLayoutAndRender: function(message){
         var obj = wof.util.ObjectManager.get(message.sender.id);
         if(obj!=null){
             var rootNode = obj;
@@ -78,6 +81,18 @@ wof.bizWidget.FlowLayoutHelper.prototype = {
             rootNode.render();
         }
 
+    },
+
+    /**
+     *
+     * 流式布局重设大小
+     */
+    _flowlayoutResize: function(message){
+        var obj = wof.util.ObjectManager.get(message.sender.id);
+        if(obj!=null && obj.getClassName()=='wof.bizWidget.FlowLayout'){
+            obj.resize();
+            obj.render();
+        }
     }
 
 
