@@ -1,0 +1,21 @@
+{
+    "hjxxchild":{
+        "rows":[
+            {
+                "data":{
+                    "jxbh":{"value":"001","status":"NotModified"},
+                    "hjmc":{"value":"优秀团队4444","status":"NotModified"},
+                    "jxjlid":{"value":"1","status":"NotModified"}
+                },
+                "rowId":"111111111111111",
+                "status":"NotModified"
+            }
+        ],
+        "entityAlias":"hjxxchild",
+        "rowsCount":"1",
+        "offset":"0",
+        "idPro":"jxjlid",
+        "entityType":"child",
+        "entityName":"HJXX"
+    }
+}

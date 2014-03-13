@@ -1,0 +1,54 @@
+﻿1 查询数据
+message id:
+    wof.bizWidget.DataObject_query
+data:
+    ["实体别名1","实体别名2"]
+    查询数据所涉及到的实体 如果为空数组 表明数据查询范围为所有实体
+
+该消息会在接收到服务器端返回数据后发出
+
+2 修改数据
+message id:
+    wof.bizWidget.DataObject_update
+data:
+    ['实体别名1','实体别名2']
+    修改数据所涉及到的实体
+
+该消息会在修改数据成功后发出(未提交到服务端)
+
+3 新增数据
+message id:
+    wof.bizWidget.DataObject_add
+data:
+    ['实体别名1']
+    新增数据所涉及到的实体
+
+该消息会在新增数据成功后发出(未提交到服务端)
+
+4 删除数据
+message id:
+    wof.bizWidget.DataObject_delete
+data:
+    ['实体别名1']
+    删除数据所涉及到的实体
+
+该消息会在删除数据成功后发出(未提交到服务端)
+
+5 撤销删除数据
+message id:
+    wof.bizWidget.DataObject_undelete
+data:
+    ['实体别名1']
+    撤销删除数据所涉及到的实体
+
+该消息会在撤销删除数据成功后发出(未提交到服务端)
+
+6 提交保存数据
+message id:
+    wof.bizWidget.DataObject_save
+data:
+    ['实体别名1']
+    保存数据所涉及到的实体 如果为空数组 表明数据保存范围为所有实体
+
+该消息会在保存数据成功后发出(提交到服务器)
+

@@ -1,0 +1,261 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>业务设计器</title>
+<link href="lib/jquery.ui/themes/redmond/jquery-ui.min.css" rel="stylesheet">
+<link href="lib/jquery.ui.multiselect/css/jquery.multiselect.css" rel="stylesheet">
+<link href="lib/jquery.ui.multiselect/css/jquery.multiselect.filter.css" rel="stylesheet">
+<link href="lib/jquery.ztree/css/zTreeStyle/zTreeStyle.css" rel="stylesheet">
+<style type="text/css">
+<!--
+	* {
+		margin:0;
+		padding:0
+	}
+	body{
+		font: 12px "Trebuchet MS", sans-serif;
+	}
+-->
+</style>
+<script src="lib/jquery/jquery.min.js"></script>
+<script src="lib/jquery.ui/jquery-ui-1.10.1.custom.min.js"></script>
+<script src="lib/jquery.ui.multiselect/js/jquery.multiselect.min.js"></script>
+<script src="lib/jquery.ui.multiselect/js/jquery.multiselect.filter.min.js"></script>
+<script src="lib/jquery.ztree/js/jquery.ztree.all-3.5.js"></script>
+<script src="lib/json2.js"></script>
+<script src="lib/fixConsole.js"></script>
+<script src="lib/jsonpath-0.8.0.js"></script>
+<script src="src/wof/kernel/initNamespace.js"></script>
+
+
+<script src="src/wof/util/Hashtable.js"></script>
+<script src="src/wof/util/ObjectManager.js"></script>
+<script src="src/wof/util/Observer.js"></script>
+<script src="src/wof/util/ArrayList.js"></script>
+<script src="src/wof/util/Selector.js"></script>
+<script src="src/wof/util/SelectorList.js"></script>
+<script src="src/wof/util/GlobalObject.js"></script>
+<script src="src/wof/util/Tool.js"></script>
+
+<script src="src/wof/widget/Tab.js"></script>
+<script src="src/wof/widget/TabItem.js"></script>
+<script src="src/wof/widget/Toolbar.js"></script>
+<script src="src/wof/widget/ToolbarItem.js"></script>
+<script src="src/wof/widget/Grid.js"></script>
+<script src="src/wof/widget/Button.js"></script>
+<script src="src/wof/widget/DateBox.js"></script>
+<script src="src/wof/widget/Label.js"></script>
+<script src="src/wof/widget/Text.js"></script>
+<script src="src/wof/widget/RadioGroupItem.js"></script>
+<script src="src/wof/widget/RadioGroup.js"></script>
+<script src="src/wof/widget/ComboBox.js"></script>
+<script src="src/wof/widget/Tree.js"></script>
+
+<script src="src/wof/bizWidget/FlowLayout.js"></script>
+<script src="src/wof/bizWidget/FlowLayoutSection.js"></script>
+<script src="src/wof/bizWidget/FlowLayoutItem.js"></script>
+<script src="src/wof/bizWidget/FlowLayoutHelper.js"></script>
+<script src="src/wof/bizWidget/GridLayout.js"></script>
+<script src="src/wof/bizWidget/VoucherComponent.js"></script>
+<script src="src/wof/bizWidget/VoucherItemGroup.js"></script>
+<script src="src/wof/bizWidget/VoucherItem.js"></script>
+<script src="src/wof/bizWidget/VoucherGridComponent.js"></script>
+<script src="src/wof/bizWidget/VoucherGridComponentColumn.js"></script>
+<script src="src/wof/bizWidget/GridComponentColumn.js"></script>
+<script src="src/wof/bizWidget/VoucherGridComponent.js"></script>
+<script src="src/wof/bizWidget/SearchComponent.js"></script>
+<script src="src/wof/bizWidget/SearchItem.js"></script>
+<script src="src/wof/bizWidget/DataObject.js"></script>
+
+<script src="src/wof/functionWidget/CommitComponent.js"></script>
+<script src="src/wof/functionWidget/ViewRecordComponent.js"></script>
+<script src="src/wof/functionWidget/UpdateRecordComponent.js"></script>
+<script src="src/wof/functionWidget/DeleteRecordComponent.js"></script>
+<script src="src/wof/functionWidget/AddRecordComponent.js"></script>
+
+<script src="src/wof/kernel/initAOP.js"></script>
+
+
+
+<script src="lib/wis/src/wis/kernel/initNamespace.js"></script>
+
+<script src="lib/wis/src/wis/util/Hashtable.js"></script>
+<script src="lib/wis/src/wis/util/ObjectManager.js"></script>
+<script src="lib/wis/src/wis/util/Observer.js"></script>
+<script src="lib/wis/src/wis/util/ArrayList.js"></script>
+<script src="lib/wis/src/wis/util/Selector.js"></script>
+<script src="lib/wis/src/wis/util/SelectorList.js"></script>
+<script src="lib/wis/src/wis/util/GlobalObject.js"></script>
+<script src="lib/wis/src/wis/util/Tool.js"></script>
+
+<script src="lib/wis/src/wis/widget/Button.js"></script>
+
+<script src="lib/wis/src/wis/kernel/initSystem.js"></script>
+
+<script>
+
+jQuery(function(){
+	var container = jQuery('#container');
+	function layout(){
+		var windowWidth = jQuery(window).width();
+		var windowHeight = jQuery(window).height();
+		container.css('width', windowWidth+'px');
+		container.css('height', windowHeight+'px');
+		container.css('left', '0px');
+		container.css('top', '0px');
+	}
+	function initContent(){
+		var windowWidth = jQuery(window).width();
+		var windowHeight = jQuery(window).height();
+
+        //创建数据对象
+        var dataObjectInstance = wof$.create('DataObject', {'pageId':'pageId1'});
+        //查询数据
+        //dataObjectInstance.queryData('main', null, null, 0, 100);
+        //修改数据
+        //dataObjectInstance.updateData([{"zglbref.lbbz":"外聘员工111","zgid":"362646149296820224"}]);
+        //删除数据
+        //dataObjectInstance.deleteData([{"zgid":"362646149296820224"}]);
+        //增加数据
+        //dataObjectInstance.addData([{"zglbref.lbbz":"好员工222","zgid":wof.util.Tool.uuid()}]);
+        //撤销删除数据
+        //dataObjectInstance.undeleteData();
+        //保存数据
+        //dataObjectInstance.saveData();
+
+        var flowLayoutHelper = wof$.create('FlowLayoutHelper');
+
+        var flowLayout = wof$.create('FlowLayout');
+        flowLayout.setLeft(0);
+        flowLayout.setTop(0);
+        flowLayout.setWidth(windowWidth-10);
+        flowLayout.setCols(4);
+        flowLayout.setItemHeight(300);
+
+        flowLayout.insertSection({title:'默认分组1',titleHeight:30,cols:2});
+
+        flowLayout.insertSection({title:'默认分组2',titleHeight:30,cols:4,itemHeight:50,isAutoExt:true});
+
+        flowLayout.appendTo(container);
+
+        var flowLayout2 = wof$.create('FlowLayout');
+        flowLayout2.setLeft(0);
+        flowLayout2.setTop(0);
+        flowLayout2.setWidth(400);
+        flowLayout2.setCols(2);
+        flowLayout2.setItemHeight(60);
+        flowLayout2.insertSection({title:'嵌套流式',titleHeight:30,cols:2,itemHeight:200});
+
+        flowLayout.insertNode(flowLayout2,{row:1,col:2},1);
+
+        flowLayout.render();
+
+        var voucherComponent = wof$.create('VoucherComponent',{'state':'View'});
+        voucherComponent.setDataObject(dataObjectInstance);
+        voucherComponent.setBindEntityID('JZGJBXXB');
+        voucherComponent.setLeft(0);
+        voucherComponent.setTop(0);
+        voucherComponent.setWidth(500);
+        voucherComponent.setItemHeight(60);
+        voucherComponent.setViewType('tab');
+
+        var voucherItemGroupData1 = {groupCaption:'表头分组1',width:500,titleHeight:25,colsNum:4,itemHeight:45};
+        voucherComponent.insertVoucherItemGroup(voucherItemGroupData1);
+        var voucherItemGroupData2 = {groupCaption:'表头分组2',width:500,titleHeight:25,colsNum:2,itemHeight:45};
+        voucherComponent.insertVoucherItemGroup(voucherItemGroupData2);
+
+        var voucherItemData1 = {
+            colspan:'1',
+            rowspan:'1',
+            isFixItem:'true',
+            itemName:'xm',
+            visiable:'true',
+            itemLabel:'姓名',
+            dataField:'xm',
+            dateTimeBoxFormat:'',
+            readOnly:'false',
+            required:'false',
+            length:'',
+            min:'',
+            max:'',
+            regExp:'',
+            checkErrorInfo:'',
+            visbleType:'select',
+            selectPattern:'',
+            useMultiSelect:'',
+            labelWidth:'100',
+            inputWidth:'100',
+            inputHeight:'20',
+            linkageItem:'',
+            tipValue:''
+        };
+        voucherComponent.insertVoucherItem(voucherItemData1, 1);
+        var voucherItemData2 = {
+            colspan:'1',
+            rowspan:'1',
+            isFixItem:'true',
+            itemName:'XBref.xbmc',
+            visiable:'true',
+            itemLabel:'性别',
+            dataField:'XBref.xbmc',
+            dateTimeBoxFormat:'',
+            readOnly:'false',
+            required:'false',
+            length:'',
+            min:'',
+            max:'',
+            regExp:'',
+            checkErrorInfo:'',
+            visbleType:'select',
+            selectPattern:'',
+            useMultiSelect:'',
+            labelWidth:'100',
+            inputWidth:'100',
+            inputHeight:'20',
+            linkageItem:'',
+            tipValue:''
+        };
+        voucherComponent.insertVoucherItem(voucherItemData2, 1);
+
+        flowLayout.insertNode(voucherComponent,{row:1,col:1},2);
+
+        voucherComponent.render();
+
+    }
+	//重设工作区
+	function resizeContent(){
+		try{
+			var windowWidth = jQuery(window).width();
+			var windowHeight = jQuery(window).height();
+			var layout = getContentLayout();
+            layout.setWidth(windowWidth-10);
+
+            layout.sendMessage('wof.bizWidget.FlowLayout_resize');
+		}catch(e){
+        }
+	}
+	jQuery(window).load(function(){
+		layout();
+        initContent();
+	});
+	jQuery(window).resize(function(){
+		layout();
+        resizeContent();
+	});
+});
+window.getContentLayout = function(){
+    var oid = jQuery('#container').children('div[oid]').first().attr('oid');
+    var objs = wof$.find('*');
+    for(var i=0;i<objs.size();i++){
+        var obj = objs.get(i);
+        console.log('obj.getClassName()==='+obj.getClassName());
+    }
+    return wof$.find('#'+oid).get(0);
+}
+</script>
+</head>
+<body>
+<div id="container" style="position:absolute;"></div>
+</body>
+</html>
