@@ -14,7 +14,7 @@ wof.bizWidget.DataObject = function () {
     this._filterBuffer = {};
     this._deleteBuffer = {};
 
-    this.setDataServicesUrl('data.json');
+    this.setDataServicesUrl('/component/doCmd');
 };
 /**
  * 数据对象
@@ -34,8 +34,6 @@ wof.bizWidget.DataObject.prototype = {
     _asyncSave:null, //是否异步保存数据 默认同步
 
     _pageId: null,  // 页面ID
-
-    refData: null,
 
     /**
      * New 指定行是新行，但此行的列并未赋值 只适用到行
@@ -68,6 +66,7 @@ wof.bizWidget.DataObject.prototype = {
 
     _init: function(data){
         this.setPageId(data.pageId);
+		this.setDataServicesUrl('component/doCmd');
     },
 
     /**
@@ -477,7 +476,7 @@ wof.bizWidget.DataObject.prototype = {
                 }
             var rsp = jQuery.ajax(
                 {
-                    //url:_this.getDataServicesUrl()+'/query',
+                    //url:_this.getDataServicesUrl()+'/query?pageId=' + this._pageId ,
                     url:_this.getDataServicesUrl(),
                     async:_this.getAsyncQuery()
                 }
@@ -742,14 +741,17 @@ wof.bizWidget.DataObject.prototype = {
         }
         this.sendMessage('wof.bizWidget.DataObject_save',aliasArr);
         console.log('提交数据:'+JSON.stringify(data));
-       /* var rsp = jQuery.ajax(
+       var rsp = jQuery.ajax(
             {
                 url:_this.getDataServicesUrl()+'/saveOrUpdate',
-                async:_this.getAsyncSave()
+                async:_this.getAsyncSave(),
+				data : {data:JSON.stringify(data),pageId : this._pageId},
+				type:'post',
+				
             }
         );
         console.log('服务器返回:'+rsp.responseText);
-        */
+        
     },
 
     /**
@@ -830,12 +832,12 @@ wof.bizWidget.DataObject.prototype = {
         var pageId = this._pageId;
         var rsp = jQuery.ajax(
             {
-                //url:_this.getDataServicesUrl()+'/query',
-                url:'refData.json',
+                url:_this.getDataServicesUrl()+'/refListByPage?pageId=' + pageId,
+                //url:'refData.json',
                 async:_this.getAsyncQuery()
             }
         );
-
+        
         this.refData = JSON.parse(rsp.responseText);
         return this.refData;
     },

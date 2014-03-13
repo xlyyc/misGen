@@ -7,7 +7,6 @@
 <link href="lib/jquery.ui.multiselect/css/jquery.multiselect.css" rel="stylesheet">
 <link href="lib/jquery.ui.multiselect/css/jquery.multiselect.filter.css" rel="stylesheet">
 <link href="lib/jquery.ztree/css/zTreeStyle/zTreeStyle.css" rel="stylesheet">
-<link href="lib/lovey/style/css/lovey.css" rel="stylesheet" type="text/css">
 <style type="text/css">
 <!--
 	* {
@@ -56,6 +55,7 @@
 <script src="src/wof/bizWidget/FlowLayout.js"></script>
 <script src="src/wof/bizWidget/FlowLayoutSection.js"></script>
 <script src="src/wof/bizWidget/FlowLayoutItem.js"></script>
+<script src="src/wof/bizWidget/FlowLayoutHelper.js"></script>
 <script src="src/wof/bizWidget/GridLayout.js"></script>
 <script src="src/wof/bizWidget/VoucherComponent.js"></script>
 <script src="src/wof/bizWidget/VoucherItemGroup.js"></script>
@@ -75,11 +75,24 @@
 <script src="src/wof/functionWidget/AddRecordComponent.js"></script>
 
 <script src="src/wof/kernel/initAOP.js"></script>
-<script src="lib/lovey/js/easyloader.js" type="text/javascript"></script>
-<script type="text/javascript">
-    //部署路径
-    easyloader.URI = 'formRuntime';
-</script>
+
+
+
+<script src="lib/wis/src/wis/kernel/initNamespace.js"></script>
+
+<script src="lib/wis/src/wis/util/Hashtable.js"></script>
+<script src="lib/wis/src/wis/util/ObjectManager.js"></script>
+<script src="lib/wis/src/wis/util/Observer.js"></script>
+<script src="lib/wis/src/wis/util/ArrayList.js"></script>
+<script src="lib/wis/src/wis/util/Selector.js"></script>
+<script src="lib/wis/src/wis/util/SelectorList.js"></script>
+<script src="lib/wis/src/wis/util/GlobalObject.js"></script>
+<script src="lib/wis/src/wis/util/Tool.js"></script>
+
+<script src="lib/wis/src/wis/widget/Button.js"></script>
+
+<script src="lib/wis/src/wis/kernel/initSystem.js"></script>
+
 <script>
 
 jQuery(function(){
@@ -111,14 +124,16 @@ jQuery(function(){
         //保存数据
         //dataObjectInstance.saveData();
 
+        var flowLayoutHelper = wof$.create('FlowLayoutHelper');
+
         var flowLayout = wof$.create('FlowLayout');
         flowLayout.setLeft(0);
         flowLayout.setTop(0);
         flowLayout.setWidth(windowWidth-10);
         flowLayout.setCols(4);
-        flowLayout.setItemHeight(200);
+        flowLayout.setItemHeight(300);
 
-        flowLayout.insertSection({title:'默认分组1',titleHeight:30,cols:8});
+        flowLayout.insertSection({title:'默认分组1',titleHeight:30,cols:2});
 
         flowLayout.insertSection({title:'默认分组2',titleHeight:30,cols:4,itemHeight:50,isAutoExt:true});
 
@@ -136,16 +151,7 @@ jQuery(function(){
 
         flowLayout.render();
 
-        /*var newFlowLayout = wof$.create('FlowLayout');
-        var flData = flowLayout.getData();
-        console.log(JSON.stringify(flData));
-        newFlowLayout.setData(flData);
-        newFlowLayout.setTop(300);
-        newFlowLayout.downSection(1);
-        newFlowLayout.appendTo(container);
-        newFlowLayout.render();*/
-
-        /*var voucherComponent = wof$.create('VoucherComponent',{'state':'View'});
+        var voucherComponent = wof$.create('VoucherComponent',{'state':'View'});
         voucherComponent.setDataObject(dataObjectInstance);
         voucherComponent.setBindEntityID('JZGJBXXB');
         voucherComponent.setLeft(0);
@@ -215,49 +221,6 @@ jQuery(function(){
         flowLayout.insertNode(voucherComponent,{row:1,col:1},2);
 
         voucherComponent.render();
-*/
-      /*  var json = voucherComponent.getData();
-        var voucherComponent2 = wof$.create('VoucherComponent');
-
-        voucherComponent2.setLeft(0);
-        voucherComponent2.setTop(0);
-        voucherComponent2.setWidth(500);
-        voucherComponent2.setItemHeight(60);
-
-        voucherComponent2.insertVoucherItemGroup({groupCaption:'表头分组3',width:500,titleHeight:25,colsNum:2,itemHeight:45});
-        voucherComponent2.insertVoucherItemGroup({groupCaption:'表头分组4',width:500,titleHeight:25,colsNum:2,itemHeight:45});
-
-
-        voucherComponent2.setData(json);
-        voucherComponent2.insertVoucherItemGroup({groupCaption:'表头分组5',width:500,titleHeight:25,colsNum:2,itemHeight:45});
-
-        voucherComponent2.downVoucherItemGroup(1);
-
-        //voucherComponent2.setViewType('group');
-
-        voucherComponent2.setDataObject(dataObjectInstance);
-
-
-        flowLayout.insertNode(voucherComponent2,{row:1,col:2},2);
-
-        voucherComponent2.render();
-
-        voucherComponent2.downVoucherItemGroup(1);
-
-        voucherComponent2.render();*/
-
-       /* var button = new Button();
-        button.setIsInside(true);
-        button.setType('submit');
-        button.setText('按钮1');
-        button.setLeft(5);
-        button.setTop(5);
-        button.setWidth(100);
-        button.setHeight(40);
-        //button.appendTo(container);
-
-        flowLayout.insertNode(button,{row:1,col:1},1);
-        button.render();*/
 
     }
 	//重设工作区
@@ -267,7 +230,8 @@ jQuery(function(){
 			var windowHeight = jQuery(window).height();
 			var layout = getContentLayout();
             layout.setWidth(windowWidth-10);
-            layout.render();
+
+            layout.sendMessage('wof.bizWidget.FlowLayout_resize');
 		}catch(e){
         }
 	}
@@ -281,7 +245,13 @@ jQuery(function(){
 	});
 });
 window.getContentLayout = function(){
-    return wof.util.ObjectManager.get(jQuery('#container').children('div[oid]').first().attr('oid'));
+    var oid = jQuery('#container').children('div[oid]').first().attr('oid');
+    var objs = wof$.find('*');
+    for(var i=0;i<objs.size();i++){
+        var obj = objs.get(i);
+        console.log('obj.getClassName()==='+obj.getClassName());
+    }
+    return wof$.find('#'+oid).get(0);
 }
 </script>
 </head>

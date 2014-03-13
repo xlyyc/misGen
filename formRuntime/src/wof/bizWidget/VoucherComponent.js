@@ -506,6 +506,7 @@ wof.bizWidget.VoucherComponent.prototype = {
         }
 
         this._setInternalVariables();
+
         //重设index并且依次插入当前表头
         this._voucherItemGroups.splice(voucherItemGroupIndex-1,0,newVoucherItemGroup);
         for(var i=0;i<this._voucherItemGroups.length;i++){
@@ -513,6 +514,10 @@ wof.bizWidget.VoucherComponent.prototype = {
             group.setIndex(i+1);
             group.remove();
             group.appendTo(this);
+        }
+        for(var i=0;i<this._voucherItemGroups.length;i++){
+            var group = this._voucherItemGroups[i];
+            group.calcLayout();
         }
     },
 
@@ -809,7 +814,7 @@ wof.bizWidget.VoucherComponent.prototype = {
         if(!jQuery.isEmptyObject(voucherItemData)){
             var voucherItemGroup = this.findVoucherItemGroupByIndex(voucherItemGroupIndex);
             if(voucherItemGroup!=null){
-                var newVoucherItem = new wof.bizWidget.VoucherItem();
+                var newVoucherItem = wof$.create('VoucherItem');
                 //newVoucherItem.setWidth(voucherItemWidth);
                 newVoucherItem.setHeight(voucherItemGroup.getItemHeight());
                 //newVoucherItem.setTop(top);

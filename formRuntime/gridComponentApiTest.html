@@ -8,7 +8,6 @@
     <link href="lib/jquery.ui.multiselect/css/jquery.multiselect.css" rel="stylesheet">
     <link href="lib/jquery.ui.multiselect/css/jquery.multiselect.filter.css" rel="stylesheet">
     <link href="lib/jquery.ztree/css/zTreeStyle/zTreeStyle.css" rel="stylesheet">
-    <link href="lib/lovey/style/css/lovey.css" rel="stylesheet" type="text/css">
     <style type="text/css">
         <!--
         * {
@@ -57,7 +56,6 @@
     <script src="src/wof/widget/RadioGroup.js"></script>
     <script src="src/wof/widget/ComboBox.js"></script>
     <script src="src/wof/widget/Tree.js"></script>
-    <script src="src/wof/widget/Text.js"></script>
 
 
     <script src="src/wof/bizWidget/FlowLayout.js"></script>
@@ -86,68 +84,54 @@
 
 
     <script src="src/wof/kernel/initAOP.js"></script>
-    <script src="lib/lovey/js/easyloader.js" type="text/javascript"></script>
-    <script type="text/javascript">
-        //部署路径
-        easyloader.URI = 'formRuntime';
-    </script>
-
     <script>
-
-        var emap_pageId = '350058851451944960';
+        var emap_pageId = '${pageId}';
         var emap_dataObject = new wof.bizWidget.DataObject();
-        emap_dataObject.setPageId(emap_pageId);
-
-        var gridComponentData = {
-            column : [{name : '列名',useMultiSelect : '下拉框是否多选',columnType : '列类型',caption : '显示名称',
-            columnWidth : '列宽度',bindDataField:'绑定实体属性',gridId : '下拉框表格id',display : '是否显示',isPin : '是否钉住',
-            dataTimeFormate:'时间格式',editor : '是否行编辑',picUrl : '图片地址',selectPattern : '下拉框显示模式',
-                visbleType : '显示类型',readOnly:'是否只读',required :'是否必填',orderbyType : '排序类型',
-                canSearch : '使用快捷查询',length : '字符长度',min : '最小值',max : '最大值',intlength : '整数部分位数',
-                scaleLength : '小数部分位数',regExp : '校验正则表达式',refSearchCondition : '参照查询条件',
-                checkErrorInfo:'校验失败提示',inkeForm : '窗体链接列'}],
-        };
-
-
-    using("combobox", function () {
-    var combobox = new wof.widget.ComboBox();
-    combobox.setComboboxData([
-        { id:1, text:"金智科技"},
-        { id:2, text:"金智教育"},
-        { id:3, text:"金智投资"},
-        { id:4, text:"金智智能"}
-    ]);
-    combobox.render();
-
-        combobox.setComboboxData([
-            { id:1, text:"金智科技11"},
-            { id:2, text:"金智教育22"},
-            { id:3, text:"金智投资"},
-            { id:4, text:"金智智能"}
-        ]);
-        combobox.render();
-    $('#comboboxTest').append(combobox.getDomInstance());
-
-
-    });
+        var emap_dataObject.setPageId(pageId);
+        var columns = [
+            {
+                "width": "50",
+                "colNo": "1",    //列号 从1开始
+                "name": "table1.name1",
+                "caption":'标题',
+                "sortable": "true",
+                "sortType": "none",
+                "sortFun": "",
+                "align": "center",
+                "bold": "true",
+                "underline": "true",
+                "bgColor": "#efefef",
+                "font": "宋体",
+                "fontSize": "max",
+                "fontColor": "black",
+                "style": "", //自定义样式
+                "adjustContent": "true",
+                "format": {
+                    "name": "yearMonthDay", //year年 yearMonth年月 yearMonthDay年月日 monthDay月日 url链接 percentage百分比 currency货币 number数字
+                    "param": "short", //针对name定义的参数 比如short表示为短日期格式 再比如name为currency货币 param为US 表明是美元
+                    "functionName": "functionName1" //自定义格式化函数名称(当没有对应预设格式的时候 设置该自定义格式化函数)
+                },
+                "isPin": "false", //是否锁定
+                "editor": "true",
+                "type": "date", //string字符 number数字 time时间 date日期
+                "visbleType": "", // number数字 text文本框 date日期 select下拉框
+                "selectPattern": "tree", //下拉框类型 normal普通 tree树形 grid列表
+                "required": "false", //是否必填
+                "readonly": "true", //是否只读
+                "verifyFunctionName": "verifyFunctionName1", //自定义校验回调函数名称
+                "verifyErrorInfo": "验证错误" //验证错误信息提示
+            }
+        ];
         jQuery(function () {
             gridComponent = new wof.bizWidget.GridComponent();
             gridComponent._init({
-                dataObject: emap_dataObject,
+                pageNo: 1, pageSize: 10, dataObject: emapRuntimeDataObject,
                 dataSourceType: 'do',
                 bindEntityId: 'JZGJBXXB',
-                columns: gridComponentData.columns
+                columns: columns
             });
-            gridComponent.render();
 
-            var a = new wof.widget.Text();
-            a.setName('name');
-            a.setValue('val');
-            a.render();
-            a.setName('name11');
-            a.setValue('val1111');
-            a.render()
-            $('#textTest').html(a.getDomInstance().html());
+            gridComponent.render();
         });
     </script>
 </head>
@@ -161,9 +145,5 @@
 
 <button onclick="gridComponent.undeleteData();">撤销删除</button>
 <button onclick="gridComponent.saveData();">保存</button>
-<div id="textTest"></div>
-
-<div id="comboboxTest"></div>
-
 </body>
 </html>

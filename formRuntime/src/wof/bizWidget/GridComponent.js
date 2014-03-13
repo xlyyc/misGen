@@ -30,6 +30,11 @@ wof.bizWidget.GridComponent = function () {
             id: 'wof.bizWidget.DataObject_save',
             proprity: 50,
             method: 'this._onSaveDataCompleted(message);'
+        },
+        {
+            id: 'wof.functionWidget.DeleteRecordComponent_active',
+            proprity: 50,
+            method: 'this._onDeleteRecordComponent_active(message)'
         }
     ]);
 };
@@ -46,6 +51,7 @@ wof.bizWidget.GridComponent.prototype = {
     _useMutiplePage: null,
     _rowsCount: null,
     _paramMaps: null,
+
 
     setName: function (name) {
         this._name = name;
@@ -212,7 +218,7 @@ wof.bizWidget.GridComponent.prototype = {
         return index;
     },
     getGridColumnDataByIndex: function (index) {
-        var column = columns[index];
+        var column = this.getColumns()[index];
         return {
             "width": column.columnWidth,
             "colNo": index, // 列号 从1开始
@@ -243,7 +249,7 @@ wof.bizWidget.GridComponent.prototype = {
                 // 设置该自定义格式化函数)
             },
             "isPin": column.isPin, // 是否锁定
-            "editor": editor,
+            "display": column.display,
             "type": column.columnType, // string字符 number数字 time时间 date日期
             "visbleType": column.visbleType, // number数字 text文本框 date日期
             // select下拉框
@@ -260,10 +266,10 @@ wof.bizWidget.GridComponent.prototype = {
         var columns = this.getColumns();
         var columnsData = [];
         for (var i = 0; i < columns.length; i++) {
-            var columnData = this.getGridColumnDataByIndex(columns[i]);
+            var columnData = this.getGridColumnDataByIndex(i);
             columnsData.push(columnData);
         }
-        return columnData;
+        return columnsData;
     },
     setPageBar: function (pageBar) {
         this._pageBar = pageBar;
@@ -337,6 +343,9 @@ wof.bizWidget.GridComponent.prototype = {
     setGridData: function (gridData) {
         this._gridData = gridData;
     },
+    getSelectedRows: function () {
+        return [{zgid : '1'}];
+    },
     /**
      * 初始化
      */
@@ -376,6 +385,7 @@ wof.bizWidget.GridComponent.prototype = {
                 refData: this.setRefData()
             }
         };
+        console.log(this.getGridData());
         if (this._grid == null) {
             this._grid = new wof.widget.Grid();
             if (this.getMode() == 'view') {
@@ -454,6 +464,14 @@ wof.bizWidget.GridComponent.prototype = {
         }
         return null;
     },
+    _onDeleteRecordComponent_active: function (message) {
+        var bindComponentId = message.sender.bindComponents;
+        if (bindComponentId == this.getComponentId()) {
+            console.log('删除按钮点击。。');
+            var selectedRows = this.getSelectedRows();
+            this.deleteRow(selectedRows);
+        }
+    },
     /**
      *
      * 查询完成后 将触发此函数
@@ -477,26 +495,22 @@ wof.bizWidget.GridComponent.prototype = {
     },
     _onUpdateDataCompleted: function (message) {
         if (this._isDataChange(message)) {
-            // 刷新本页数据
-            console.log(message);
+            this.gotoPage(this.getPageNo());
         }
     },
     _onDeleteDataCompleted: function (message) {
         if (this._isDataChange(message)) {
-            // 刷新本页数据
-            console.log(message);
+            this.gotoPage(this.getPageNo());
         }
     },
     _onUndeleteDataCompleted: function (message) {
         if (this._isDataChange(message)) {
-            // 刷新本页数据
-            console.log(message);
+            this.gotoPage(this.getPageNo());
         }
     },
     _onSaveDataCompleted: function (message) {
         if (this._isDataChange(message)) {
-            // 跳转到第一页
-            console.log(message);
+            this.gotoPage(1);
         }
     },
     _isDataChange: function (message) {
@@ -792,6 +806,9 @@ wof.bizWidget.GridComponent.prototype = {
         }
         if (options.pageId) {
             this.setPageId(options.pageId);
+        }
+        if (options.componentId) {
+            this.setComponentId(options.componentId)
         }
     }
 }

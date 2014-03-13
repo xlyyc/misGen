@@ -563,6 +563,13 @@ var wof$_aop = (function(){
                             });
                         };
                     }
+                    obj[o].prototype._componentId = null;
+                    obj[o].prototype.getComponentId = function (){
+                        return this._componentId;
+                    }
+                    obj[o].prototype.setComponentId = function (componentId){
+                        this._componentId = componentId;
+                    }
                     obj[o].prototype._initRenderFlag = false;
                     if(obj[o].prototype.render!=null){
                         obj[o].prototype._render = obj[o].prototype.render;

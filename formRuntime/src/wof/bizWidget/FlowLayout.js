@@ -7,9 +7,6 @@
 wof.bizWidget.FlowLayout = function () {
     this._version = '1.0';
 
-    var method = 'this.autoExt(message);';
-    this.setOnReceiveMessage([{id:'wof_object_resize',priority:50,method:method}]);
-
 };
 wof.bizWidget.FlowLayout.prototype = {
     /**
@@ -141,8 +138,6 @@ wof.bizWidget.FlowLayout.prototype = {
             var sectionIndex = section.getIndex();
             this.setActiveSectionIndex(sectionIndex);
             this.setActiveItemRank(null);
-
-            this.render();
 
             this.sendMessage('wof_object_resize');
             this.sendMessage('wof.bizWidget.FlowLayout_active');
@@ -652,21 +647,23 @@ wof.bizWidget.FlowLayout.prototype = {
 
     },
 
-    autoExt: function(message){
-        var obj=wof.util.ObjectManager.get(message.sender.id);
-        if(obj!=null&&obj.parentNode()!=null){
-            var parentNode = obj.parentNode();
-            if(parentNode.getClassName()=="wof.bizWidget.FlowLayoutItem"){
-                if(parentNode.parentNode().getIsAutoExt()==true){
-                    while(parentNode.parentNode()!=null){
-                        parentNode = parentNode.parentNode();
-                    }
-                    if(parentNode.getId()==this.getId()){
-                        parentNode.render();
-                    }
+    resize: function(){
+        var childNodes = this.childNodes();
+        for(var i=0;i<childNodes.length;i++){
+            var node = childNodes[i];
+            node.calcLayout();
+            var items = node.childNodes();
+            for(var t=0;t<items.length;t++){
+                var item = items[t];
+                var obj = item.childNodes()[0];
+                if(obj!=null&&obj.getClassName()=='wof.bizWidget.FlowLayout'){
+                    obj.setWidth(item.getWidth());
+                    obj.setHeight(item.getHeight());
+                    obj.resize();
                 }
             }
         }
+        this.calcLayout();
     }
 
 };

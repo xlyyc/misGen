@@ -370,8 +370,7 @@ wof.bizWidget.VoucherItem.prototype = {
         this._label.setText(this.getItemLabel());
         this._label.setTip(this.getTipValue());
 
-        var component = this._setComponent();
-        this._component = component;
+        this._setComponent();
 
     },
 
@@ -552,7 +551,6 @@ wof.bizWidget.VoucherItem.prototype = {
                 component[readonlyMethod](false);
             }
         }
-        return component;
     },
 
   //是否能够被删除

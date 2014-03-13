@@ -40,7 +40,7 @@ if (!wof.util.Selector) {
                 for(var i=0;i<selectors.length;i++){
                     var ss = selectors[i];
                     if(ss.type=='*'){
-                        console.log('查找所有对象');
+                        sls = wof.util.Selector._getAllObjects();
                     }else if(ss.type=='#'){
                         sls = wof.util.Selector._getObjectById(ss.query);
                     }else if(ss.type=='className'){
@@ -57,12 +57,27 @@ if (!wof.util.Selector) {
             _getObjectById: function(oid) {
                 var sls = new wof.util.SelectorList();
                 var obj = wof.util.ObjectManager.get(oid);
-                sls.add(obj);
+                if(obj.getIsInside()!=true){
+                    sls.add(obj);
+                }
+                return sls;
+            },
+
+            /**
+             * 获得所有的对象
+             * return 对象集合
+             */
+            _getAllObjects: function() {
+                var sls = new wof.util.SelectorList();
+                var oIds = wof.util.ObjectManager.oIds();
+                for(var i=0;i<oIds.length;i++){
+                    var obj = wof.util.ObjectManager.get(oIds[i]);
+                    if(obj.getIsInside()!=true){
+                        sls.add(obj);
+                    }
+                }
                 return sls;
             }
-
-
-
 
         };
 }

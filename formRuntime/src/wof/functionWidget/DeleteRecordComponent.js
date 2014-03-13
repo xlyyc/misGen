@@ -33,106 +33,128 @@ wof.functionWidget.DeleteRecordComponent.prototype = {
 
     _btn: null,
 
-    _paramMaps:null,
+    _paramMaps: null,
 
 
-    _componentId:null,
+    _componentId: null,
 
     /**
      * get/set 属性方法定义
      */
 
-    getComponentId: function(){
-        if(this._componentId==null){
-            this._componentId=this.getId();
+    getComponentId: function () {
+        if (this._componentId == null) {
+            this._componentId = this.getId();
         }
         return this._componentId;
     },
 
-    setComponentId: function(componentId){
+    setComponentId: function (componentId) {
         this._componentId = componentId;
     },
 
-    getParamMaps: function(){
-        if(this._paramMaps==null){
+    getParamMaps: function () {
+        if (this._paramMaps == null) {
             this._paramMaps = {};
         }
         return this._paramMaps;
     },
 
-    setParamMaps: function(paramMaps){
+    setParamMaps: function (paramMaps) {
         this._paramMaps = paramMaps;
     },
 
-    getCallStr : function (){
+    getCallStr: function () {
         return this._callStr || 'deleteRecordCmd:0_0_1';
     },
 
-    setCallStr : function (callStr){
+    setCallStr: function (callStr) {
         this._callStr = callStr;
     },
 
-    getCommandItemID : function (){
+    getCommandItemID: function () {
         return this._commandItemID || '';
     },
 
-    setCommandItemID : function (commandItemID){
+    setCommandItemID: function (commandItemID) {
         this._commandItemID = commandItemID;
     },
 
-    getISPermissionControl : function (){
+    getISPermissionControl: function () {
         return this._iSPermissionControl || false;
     },
 
-    setISPermissionControl : function (iSPermissionControl){
+    setISPermissionControl: function (iSPermissionControl) {
         this._iSPermissionControl = iSPermissionControl;
     },
 
-    getFunctionID : function (){
+    getFunctionID: function () {
         return this._functionID || wof.util.Tool.uuid();
     },
 
-    setFunctionID : function (functionID){
+    setFunctionID: function (functionID) {
         this._functionID = functionID;
     },
 
-    getCallItemName : function (){
+    getCallItemName: function () {
         return this._callItemName || 'deleteRecord';
     },
 
-    setCallItemName : function (callItemName){
+    setCallItemName: function (callItemName) {
         this._callItemName = callItemName || '';
     },
 
-    getCallItemCaption : function (){
+    getCallItemCaption: function () {
         return this._callItemCaption || '';
     },
 
-    setCallItemCaption : function (callItemCaption){
+    setCallItemCaption: function (callItemCaption) {
         this._callItemCaption = callItemCaption;
     },
 
-    getCallType : function (){
+    getCallType: function () {
         return this._callType || 'JS';
     },
 
-    setCallType : function (callType){
+    setCallType: function (callType) {
         this._callType = callType;
     },
 
-    getBindComponents : function (){
+    getBindComponents: function () {
         return this._bindComponents || '';
     },
 
-    setBindComponents : function (bindComponents){
+    setBindComponents: function (bindComponents) {
         this._bindComponents = bindComponents;
+    },
+    _init: function (data) {
+        this.setWidth(110);
+        this.setHeight(30);
+        this.setSchema(data);
+    },
+    setSchema: function (data) {
+        if (data.width) {
+            this.setWidth(data.width);
+        }
+        if (data.width) {
+            this.setWidth(data.width);
+        }
+        if (data.height) {
+            this.setHeight(data.height);
+        }
+        if (data.callItemCaption) {
+            this.setCallItemCaption(data.callItemCaption);
+        }
+        if (data.bindComponents) {
+            this.setBindComponents(data.bindComponents);
+        }
     },
 
     /**
      * Render 方法定义
      */
 
-    initRender: function(){
+    initRender: function () {
         var button = new wof.widget.Button();
         button.setIsInside(true);
         button.setType('submit');
@@ -193,38 +215,38 @@ wof.functionWidget.DeleteRecordComponent.prototype = {
         this.setCallType(data.callType);
     },
 
-    _insideOnReceiveMessage:{
-        'wof.widget.Button_mousedown':function(message){
-            console.log(message.id+'   '+this.getClassName());
+    _insideOnReceiveMessage: {
+        'wof.widget.Button_mousedown': function (message) {
+            console.log(message.id + '   ' + this.getClassName());
             this.sendMessage('wof.functionWidget.DeleteRecordComponent_active');
             return false;
         },
-        'wof.widget.Button_dblclick':function(message){
-            console.log(message.id+'   '+this.getClassName());
+        'wof.widget.Button_dblclick': function (message) {
+            console.log(message.id + '   ' + this.getClassName());
             this.sendMessage('wof.functionWidget.DeleteRecordComponent_active');
             return false;
         }
 
     },
 
-    updateDeleteRecordComponent: function(data){
-        if(!jQuery.isEmptyObject(data)){
-            if(data.bindComponents!=null){
+    updateDeleteRecordComponent: function (data) {
+        if (!jQuery.isEmptyObject(data)) {
+            if (data.bindComponents != null) {
                 this.setBindComponents(data.bindComponents);
             }
-            if(data.commandItemID!=null){
+            if (data.commandItemID != null) {
                 this.setCommandItemID(data.commandItemID);
             }
-            if(data.iSPermissionControl!=null){
-                this.setISPermissionControl((data.iSPermissionControl=='true'||data.iSPermissionControl==true)?true:false);
+            if (data.iSPermissionControl != null) {
+                this.setISPermissionControl((data.iSPermissionControl == 'true' || data.iSPermissionControl == true) ? true : false);
             }
-            if(data.functionID!=null){
+            if (data.functionID != null) {
                 this.setFunctionID(data.functionID);
             }
-            if(data.callItemCaption!=null){
+            if (data.callItemCaption != null) {
                 this.setCallItemCaption(data.callItemCaption);
             }
-            if(data.paramMaps!=null){
+            if (data.paramMaps != null) {
                 this.setParamMaps(data.paramMaps);
             }
 
@@ -232,7 +254,7 @@ wof.functionWidget.DeleteRecordComponent.prototype = {
     },
 
     //创建初始化的button
-    createSelf: function(width, height){
+    createSelf: function (width, height) {
         var node = new wof.functionWidget.DeleteRecordComponent();
         node.setLeft(0);
         node.setTop(0);

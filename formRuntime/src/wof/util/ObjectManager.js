@@ -16,6 +16,10 @@
 			return wof.util.ObjectManager._objs.remove(oId);
 		},
 
+        oIds: function(){
+            return wof.util.ObjectManager._objs.keys();
+        },
+
         create: function(className, data){
             var obj = null;
             with(wof.widget)
