@@ -156,22 +156,7 @@ wof.bizWidget.FlowLayoutSection.prototype = {
      */
 
     initRender: function(){
-        //如果是clone过来的 会直接创建一个label对象 需要先移除
-        var nodes = this.childNodes();
-        for(var i=0;i<nodes.length;i++){
-            if(nodes[i].getClassName()=='wof.widget.Label'){
-                nodes[i].remove(true);
-                break;
-            }
-        }
-        var label = wof$.create('Label');
-        label.setIsInside(true);
-        label.setTop(0);
-        label.setLeft(0);
-        label.setIsUnderline(true);
-        label.setScale(this.getScale());
 
-        this._label = label;
     },
     //选择实现
     beforeRender: function () {
@@ -219,6 +204,15 @@ wof.bizWidget.FlowLayoutSection.prototype = {
 		this.setItemHeight(data.itemHeight);
         this.setIsExpand(data.isExpand);
         this.setIndex(data.index);
+
+        //如果是clone过来的 会直接创建一个label对象 需要先移除
+        var nodes = this.childNodes();
+        for(var i=0;i<nodes.length;i++){
+            if(nodes[i].getClassName()=='wof.widget.Label'){
+                nodes[i].remove(true);
+                break;
+            }
+        }
     },
 
     _insideOnReceiveMessage:{
@@ -635,35 +629,42 @@ wof.bizWidget.FlowLayoutSection.prototype = {
                 item.setCol(col);
             }
         }
+        //添加label
+        if(this._label==null){
+            var label = wof$.create('Label');
+            label.setIsInside(true);
+            label.setTop(0);
+            label.setLeft(0);
+            label.setIsUnderline(true);
+            label.setScale(this.getScale());
+            label.setWidth(this.getWidth());
+            label.setHeight(this.getTitleHeight());
+            label.setText(this.getTitle());
+            label.setIsBold(false);
+            label.setIsHighlight(false);
+            this._label = label;
+        }
+        this._label.remove();
+        if(this.childNodes().length>0){
+            this._label.beforeTo(this.childNodes()[0]);
+        }else{
+            this._label.appendTo(this);
+        }
+
     },
 
     //进行流式布局
     _flowLayout: function(){
+        //设置label
+        this._label.getDomInstance().css('width',(this.getWidth()*this.getScale()-4)+'px');
+        this._label.getDomInstance().css('height',(this.getTitleHeight()*this.getScale())+'px');
 
-        //添加label
-        var label = this._label;
-        label.setIsInside(true);
-        label.remove();
-        label.setWidth(this.getWidth());
-        label.setHeight(this.getTitleHeight());
-        label.setText(this.getTitle());
-        if(this.childNodes().length>0){
-            label.beforeTo(this.childNodes()[0]);
-        }else{
-            label.appendTo(this);
-        }
-        this._label.setIsBold(false);
-        this._label.setIsHighlight(false);
-        this._label.render();
+        //屏蔽label对象的事件
+        this._label.getDomInstance().after(this._backgroundImg);
 
         //设置section div容器高度和宽度
         this.getDomInstance().css('height', (this.getHeight()*this.getScale())+'px');
         this.getDomInstance().css('width', (this.getWidth()*this.getScale())+'px');
-        label.getDomInstance().css('width',(this.getWidth()*this.getScale()-4)+'px');
-        label.getDomInstance().css('height',(this.getTitleHeight()*this.getScale())+'px');
-
-        //屏蔽label对象的事件
-        label.getDomInstance().after(this._backgroundImg);
 
         var items = this.findItems();
         for(var i=0;i<items.length;i++){
