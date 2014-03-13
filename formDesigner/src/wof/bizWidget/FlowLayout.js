@@ -685,6 +685,7 @@ wof.bizWidget.FlowLayout.prototype = {
         for(var i=0;i<sections.length;i++){
             var section = sections[i];
             section.getDomInstance().css('top', section.getTop()*this.getScale()+'px');
+            section.setSectionStyle(false);
         }
         this.getDomInstance().css('height',(this.getHeight()*this.getScale())+'px');
         this.getDomInstance().css('width', (this.getWidth()*this.getScale())+'px');
@@ -696,7 +697,7 @@ wof.bizWidget.FlowLayout.prototype = {
             if(activeItem!=null){
                 activeSection.activeItemStyle(activeItem);
             }else{
-                activeSection.activeSectionStyle();
+                activeSection.setSectionStyle(true);
             }
         }
 

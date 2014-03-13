@@ -213,6 +213,7 @@ wof.bizWidget.FlowLayoutSection.prototype = {
                 break;
             }
         }
+        this.calcLayout();
     },
 
     _insideOnReceiveMessage:{

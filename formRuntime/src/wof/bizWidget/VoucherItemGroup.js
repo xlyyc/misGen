@@ -217,6 +217,7 @@ wof.bizWidget.VoucherItemGroup.prototype = {
                 break;
             }
         }
+        this.calcLayout();
     },
 
     _insideOnReceiveMessage:{
