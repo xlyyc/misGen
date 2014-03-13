@@ -358,10 +358,13 @@ wof.bizWidget.VoucherItemGroup.prototype = {
         voucherItem.setRowspan(voucherItem.getRowspan()-1);
     },
 
-    //设置当前激活的voucherItemGroup样式
-    activeVoucherItemGroupStyle: function(){
-        this._label.setIsBold(true);
-        this._label.setIsHighlight(true);
+    /**
+     * 设置当前VoucherItemGroup 标题样式
+     * flag true 高亮 false 不高亮
+     */
+    setVoucherItemGroupStyle: function(flag){
+        this._label.setIsBold(flag);
+        this._label.setIsHighlight(flag);
         this._label.render();
     },
 
@@ -518,6 +521,7 @@ wof.bizWidget.VoucherItemGroup.prototype = {
         voucherItemGroupWidth = voucherItemWidth * this.getColsNum();
         for(var i=0;i<voucherItems.length;i++){
             var voucherItem = voucherItems[i];
+
             voucherItem.setWidth(voucherItemWidth*voucherItem.getColspan());
             voucherItem.setHeight(itemHeight*voucherItem.getRowspan());
             voucherItem.remove();
@@ -652,10 +656,10 @@ wof.bizWidget.VoucherItemGroup.prototype = {
             label.setScale(this.getScale());
             label.setHeight(this.getTitleHeight());
             label.setText(this.getGroupCaption());
-            label.setIsBold(false);
-            label.setIsHighlight(false);
             this._label = label;
         }
+        this._label.setIsBold(false);
+        this._label.setIsHighlight(false);
         this._label.setWidth(this.getWidth());
         this._label.remove();
         if(this.childNodes().length>0){

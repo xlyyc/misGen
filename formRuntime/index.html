@@ -151,6 +151,11 @@ jQuery(function(){
 
         flowLayout.render();
 
+        var flowLayout3 = flowLayout2.clone();
+        flowLayout.insertNode(flowLayout3,{row:1,col:3},1);
+
+        flowLayout3.render();
+
         var voucherComponent = wof$.create('VoucherComponent',{'state':'View'});
         voucherComponent.setDataObject(dataObjectInstance);
         voucherComponent.setBindEntityID('JZGJBXXB');
@@ -222,6 +227,10 @@ jQuery(function(){
 
         voucherComponent.render();
 
+        var voucherComponent2 = voucherComponent.clone();
+        voucherComponent2.setDataObject(dataObjectInstance);
+        flowLayout.insertNode(voucherComponent2,{row:1,col:2},2);
+        voucherComponent2.render();
     }
 	//重设工作区
 	function resizeContent(){
