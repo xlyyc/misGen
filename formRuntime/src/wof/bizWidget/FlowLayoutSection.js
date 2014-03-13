@@ -351,10 +351,13 @@ wof.bizWidget.FlowLayoutSection.prototype = {
         item.setRowspan(item.getRowspan()-1);
     },
 
-    //设置当前激活的section样式
-    activeSectionStyle: function(){
-        this._label.setIsBold(true);
-        this._label.setIsHighlight(true);
+    /**
+     * 设置当前section 标题样式
+     * flag true 高亮 false 不高亮
+     */
+    setSectionStyle: function(flag){
+        this._label.setIsBold(flag);
+        this._label.setIsHighlight(flag);
         this._label.render();
     },
 
@@ -639,10 +642,11 @@ wof.bizWidget.FlowLayoutSection.prototype = {
             label.setScale(this.getScale());
             label.setHeight(this.getTitleHeight());
             label.setText(this.getTitle());
-            label.setIsBold(false);
-            label.setIsHighlight(false);
+
             this._label = label;
         }
+        this._label.setIsBold(false);
+        this._label.setIsHighlight(false);
         this._label.setWidth(this.getWidth());
         this._label.remove();
         if(this.childNodes().length>0){

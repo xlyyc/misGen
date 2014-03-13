@@ -161,22 +161,7 @@ wof.bizWidget.VoucherItemGroup.prototype = {
      */
 
     initRender: function(){
-        //如果是clone过来的 会直接创建一个label对象 需要先移除
-        var nodes = this.childNodes();
-        for(var i=0;i<nodes.length;i++){
-            if(nodes[i].getClassName()=='wof.widget.Label'){
-                nodes[i].remove(true);
-                break;
-            }
-        }
-        var label = new wof.widget.Label();
-        label.setIsInside(true);
-        label.setTop(0);
-        label.setLeft(0);
-        label.setIsUnderline(true);
-        label.setScale(this.getScale());
 
-        this._label = label;
     },
 
     //选择实现
@@ -223,6 +208,15 @@ wof.bizWidget.VoucherItemGroup.prototype = {
         this.setTitleHeight(data.titleHeight);
         this.setRows(data.rows);
         this.setIsExpand(data.isExpand);
+
+        //如果是clone过来的 会直接创建一个label对象 需要先移除
+        var nodes = this.childNodes();
+        for(var i=0;i<nodes.length;i++){
+            if(nodes[i].getClassName()=='wof.widget.Label'){
+                nodes[i].remove(true);
+                break;
+            }
+        }
     },
 
     _insideOnReceiveMessage:{
@@ -374,21 +368,6 @@ wof.bizWidget.VoucherItemGroup.prototype = {
     activeVoucherItemStyle: function(activeVoucherItem){
         //设置当前选中voucherItem背景
         activeVoucherItem.getDomInstance().css('backgroundColor','#efefef');
-    },
-
-    //设置并插入label标题到第一个位置
-    _appendLabel: function(){
-        var label = this._label;
-        label.setIsInside(true);
-        label.remove();
-        label.setWidth(this.getWidth());
-        label.setHeight(this.getTitleHeight());
-        label.setText(this.getGroupCaption());
-        if(this.childNodes().length>0){
-            label.beforeTo(this.childNodes()[0]);
-        }else{
-            label.appendTo(this);
-        }
     },
 
     //找到所有voucherItem
@@ -662,276 +641,47 @@ wof.bizWidget.VoucherItemGroup.prototype = {
                 item.setColNum(col);
             }
         }
+
+        //添加label
+        if(this._label==null){
+            var label = wof$.create('Label');
+            label.setTop(0);
+            label.setLeft(0);
+            label.setIsUnderline(true);
+            label.setScale(this.getScale());
+            label.setHeight(this.getTitleHeight());
+            label.setText(this.getGroupCaption());
+            label.setIsBold(false);
+            label.setIsHighlight(false);
+            this._label = label;
+        }
+        this._label.setWidth(this.getWidth());
+        this._label.remove();
+        if(this.childNodes().length>0){
+            this._label.beforeTo(this.childNodes()[0]);
+        }else{
+            this._label.appendTo(this);
+        }
+
     },
 
     //进行流式布局
     _flowLayout: function(){
+        //设置label
+        this._label.getDomInstance().css('width',(this.getWidth()*this.getScale()-4)+'px');
+        this._label.getDomInstance().css('height',(this.getTitleHeight()*this.getScale())+'px');
 
-        //添加label
-        var label = this._label;
-        label.setIsInside(true);
-        label.remove();
-        label.setWidth(this.getWidth());
-        label.setHeight(this.getTitleHeight());
-        label.setText(this.getGroupCaption());
-        if(this.childNodes().length>0){
-            label.beforeTo(this.childNodes()[0]);
-        }else{
-            label.appendTo(this);
-        }
-        this._label.setIsBold(false);
-        this._label.setIsHighlight(false);
-        this._label.render();
+        //屏蔽label对象的事件
+        this._label.getDomInstance().after(this._backgroundImg);
 
         //设置section div容器高度和宽度
         this.getDomInstance().css('height', (this.getHeight()*this.getScale())+'px');
         this.getDomInstance().css('width', (this.getWidth()*this.getScale())+'px');
-        label.getDomInstance().css('width',(this.getWidth()*this.getScale()-4)+'px');
-        label.getDomInstance().css('height',(this.getTitleHeight()*this.getScale())+'px');
-
-        //屏蔽label对象的事件
-        label.getDomInstance().after(this._backgroundImg);
 
         var voucherItems = this.findVoucherItems();
         for(var i=0;i<voucherItems.length;i++){
             voucherItems[i].getDomInstance().css('backgroundColor','#fff');
         }
     }
-
-
-
-
-    //进行流式布局
-/*    _flowLayout: function(){
-        var placeVoucherItemTable = new wof.util.Hashtable(); //位置对应voucherItem table
-        var notFixedVoucherItems = []; //尚未布局的非fix类型的voucherItem列表
-        var layoutVoucherItems = []; //所有需要布局的voucherItem
-        var fixVoucherItems = []; //fix类型的voucherItem列表
-        var currSpace = null; //当前布局space
-        var itemHeight = null;
-        var voucherItemWidth = null;
-        var voucherItemGroupWidth = null;
-        var rows = null;
-        var voucherItems = [];
-        var label = this._label;
-        var _this = this;
-        //为指定的voucherItem查找到可以进行布局的位置
-        function findCanLayoutSpace(voucherItem){
-            var space = null;
-            var colspan = voucherItem.getColspan();
-            var rowspan = voucherItem.getRowspan();
-            var startR = 1;
-            var startC = 1;
-            if(_this.getMustInOrder()==true){
-                if(currSpace!=null){
-                    startR = (currSpace.top - label.getHeight())/itemHeight+1;
-                    startC = currSpace.left/voucherItemWidth+1;
-                }
-            }
-            for(var r=1;space==null;r++){
-                var top = (r-1) * itemHeight + label.getHeight();
-                for(var c=1;c<=_this.getColsNum();c++){
-                    if((startR==r&&startC<=c)||startR<r){
-                        var flag = true;
-                        var left = (c-1) * voucherItemWidth;
-                        for(var rs=0;rs<rowspan;rs++){
-                            for(var cs=0;cs<colspan;cs++){
-                                var placeTop = top+(itemHeight*rs);
-                                var placeLeft = left+(voucherItemWidth*cs);
-                                if((placeLeft+voucherItemWidth)<=voucherItemGroupWidth){ //位置的left不能超过当前voucherItemGroup的width
-                                    var obj = placeVoucherItemTable.items(placeTop+','+placeLeft);
-                                    if(obj!=null){ //如果该位置已经存在voucherItem
-                                        flag = false;
-                                        break;
-                                    }
-                                }else{
-                                    flag = false;
-                                    break;
-                                }
-                            }
-                        }
-                        if(flag==true){
-                            space = {top:top,left:left};
-                            break;
-                        }
-                    }
-                }
-            }
-            currSpace = space;
-            return space;
-        }
-        //检查指定的行是否是空行
-        function isEmptyRow(r){
-            var b = false;
-            var count = 0;
-            if(r>1){
-                var top = (r-1) * itemHeight + label.getHeight();
-                for(var c=_this.getColsNum(); c>=1; c--){
-                    var left = (c-1) * voucherItemWidth;
-                    var obj = placeVoucherItemTable.items(top+','+left);
-                    if(obj.getTop()==top){
-                        if(obj.canDelete()==true){
-                            count++;
-                        }else{
-                            break;
-                        }
-                    }else{
-                        break;
-                    }
-                }
-            }
-            if(count==_this.getColsNum()){
-                b = true;
-            }
-            return b;
-        }
-        //计算行数
-        function calcRows(){
-            var rows = 0;
-            if(voucherItems.length>0){
-                var maxH = voucherItems[0].getTop()+voucherItems[0].getHeight();
-                for(var i=1;i<voucherItems.length;i++){
-                    var voucherItem = voucherItems[i];
-                    var tempH = voucherItem.getTop()+voucherItem.getHeight();
-                    if(maxH<tempH){
-                        maxH = tempH;
-                    }
-                }
-                rows = Math.ceil((maxH-label.getHeight())/_this.getItemHeight());
-            }
-            return rows;
-        }
-        voucherItems = this.findVoucherItems();
-        if(voucherItems.length==0){
-            var newVoucherItem = new wof.bizWidget.VoucherItem();
-            voucherItems.push(newVoucherItem);
-        }
-        if(voucherItems.length>0){
-            itemHeight = this.getItemHeight();
-            voucherItemWidth = Math.floor(this.getWidth()/this.getColsNum());
-            voucherItemGroupWidth = voucherItemWidth * this.getColsNum();
-            for(var i=0;i<voucherItems.length;i++){
-                var voucherItem = voucherItems[i];
-                voucherItem.setWidth(voucherItemWidth*voucherItem.getColspan());
-                voucherItem.setHeight(itemHeight*voucherItem.getRowspan());
-                voucherItem.remove();
-                if(voucherItem.getIsFixItem()==true && voucherItem.getRowNum()!=null && voucherItem.getColNum()!=null){ //fix类型的voucherItem
-                    fixVoucherItems.push(voucherItem);
-                }else{
-                    notFixedVoucherItems.push(voucherItem);
-                }
-            }
-        }
-        //fix类型voucherItem先行安排
-        for(var i=fixVoucherItems.length-1;i>=0;i--){
-            var fixVoucherItem = fixVoucherItems[i];
-            var rowNum = fixVoucherItem.getRowNum();
-            var colNum = fixVoucherItem.getColNum();
-            var colspan = fixVoucherItem.getColspan();
-            var rowspan = fixVoucherItem.getRowspan();
-            var top = (rowNum-1) * itemHeight + label.getHeight();
-            var left = (colNum-1) * voucherItemWidth;
-            fixVoucherItem.setTop(top);
-            fixVoucherItem.setLeft(left);
-            for(var rs=0;rs<rowspan;rs++){
-                for(var cs=0;cs<colspan;cs++){
-                    var placeTop = top+(itemHeight*rs);
-                    var placeLeft = left+(voucherItemWidth*cs);
-                    placeVoucherItemTable.add(placeTop+','+placeLeft, fixVoucherItem);
-                }
-            }
-        }
-        //处理尚未布局的非fix类型的voucherItem
-        for(var i=0;i<notFixedVoucherItems.length;i++){
-            var voucherItem = notFixedVoucherItems[i];
-            var space = findCanLayoutSpace(voucherItem);
-            voucherItem.setTop(space.top);
-            voucherItem.setLeft(space.left);
-            var colspan = voucherItem.getColspan();
-            var rowspan = voucherItem.getRowspan();
-            for(var rs=0;rs<rowspan;rs++){
-                for(var cs=0;cs<colspan;cs++){
-                    var placeTop = voucherItem.getTop()+(itemHeight*rs);
-                    var placeLeft = voucherItem.getLeft()+(voucherItemWidth*cs);
-                    placeVoucherItemTable.add(placeTop+','+placeLeft, voucherItem);
-                }
-            }
-        }
-        //补全每行空缺的voucherItem
-        rows = calcRows();
-        for(var r=1; r<=rows; r++){
-            var top = (r-1) * itemHeight + label.getHeight();
-            for(var c=1; c<=this.getColsNum(); c++){
-                var left = (c-1) * voucherItemWidth;
-                var obj = placeVoucherItemTable.items(top+','+left);
-                if(obj==null){
-                    var newVoucherItem = new wof.bizWidget.VoucherItem();
-                    newVoucherItem.setWidth(voucherItemWidth);
-                    newVoucherItem.setHeight(itemHeight);
-                    newVoucherItem.setTop(top);
-                    newVoucherItem.setLeft(left);
-                    newVoucherItem.setScale(this.getScale());
-                    placeVoucherItemTable.add(top+','+left, newVoucherItem);
-                }
-            }
-        }
-        //反向查找过滤掉空行 如果一行中所有voucherItem都没有内容 并且colspan和rowspan为1 则将此行移除
-        var canRemoveRow = true;
-        var removeRowCount = 0;
-        for(var r=rows; r>=1; r--){
-            var top = (r-1) * itemHeight + label.getHeight();
-            if(canRemoveRow==true){
-                if(isEmptyRow(r)==false){
-                    for(var c=this.getColsNum(); c>=1; c--){
-                        var left = (c-1) * voucherItemWidth;
-                        var obj = placeVoucherItemTable.items(top+','+left);
-                        if(obj.getTop()==top && obj.getLeft()==left){
-                            layoutVoucherItems.push(obj);
-                        }
-                    }
-                    canRemoveRow = false;
-                }else{
-                    for(var c=this.getColsNum(); c>=1; c--){
-                        var left = (c-1) * voucherItemWidth;
-                        var obj = placeVoucherItemTable.items(top+','+left);
-                        if(obj.getTop()==top && obj.getLeft()==left){
-                            obj.remove(true);
-                        }
-                    }
-                    removeRowCount++;
-                }
-            }else{
-                for(var c=this.getColsNum(); c>=1; c--){
-                    var left = (c-1) * voucherItemWidth;
-                    var obj = placeVoucherItemTable.items(top+','+left);
-                    if(obj.getTop()==top && obj.getLeft()==left){
-                        layoutVoucherItems.push(obj);
-                    }
-                }
-            }
-        }
-        //添加到dom节点
-        for(var i=0; i<layoutVoucherItems.length; i++){
-            var voucherItem = layoutVoucherItems[i];
-            voucherItem.afterTo(label);
-        }
-        this.setRows(rows-removeRowCount);
-        //设置voucherItemGroup div容器高度和宽度
-        if(this.getIsExpand()==true){
-            this.setHeight(itemHeight*this.getRows()+this.getTitleHeight());
-            this.getDomInstance().css('height', (this.getHeight()*this.getScale())+'px');
-        }else{
-            this.setHeight(this.getTitleHeight());
-            this.getDomInstance().css('height', (this.getHeight()*this.getScale())+'px');
-        }
-        this.getDomInstance().css('width', (this.getWidth()*this.getScale())+'px');
-        this._label.getDomInstance().css('width',(this.getWidth()*this.getScale()-4)+'px');
-        this._label.getDomInstance().css('height',(this.getTitleHeight()*this.getScale())+'px');
-
-        //屏蔽label对象的事件
-        label.getDomInstance().after(this._backgroundImg);
-
-    }*/
-
 
 };

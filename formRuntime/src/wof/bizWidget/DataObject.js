@@ -739,8 +739,7 @@ wof.bizWidget.DataObject.prototype = {
             data[this._mainEntityAlias] = _getEnt(this._mainEntityAlias);
             console.log('只保存主实体数据');
         }
-        this.sendMessage('wof.bizWidget.DataObject_save',aliasArr);
-        console.log('提交数据:'+JSON.stringify(data));
+
        var rsp = jQuery.ajax(
             {
                 url:_this.getDataServicesUrl()+'/saveOrUpdate',
@@ -751,7 +750,8 @@ wof.bizWidget.DataObject.prototype = {
             }
         );
         console.log('服务器返回:'+rsp.responseText);
-        
+        this.sendMessage('wof.bizWidget.DataObject_save',aliasArr);
+        console.log('提交数据:'+JSON.stringify(data));
     },
 
     /**
