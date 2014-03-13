@@ -380,12 +380,7 @@ jQuery(function(){
 	function initContent(){
 		var windowWidth = jQuery(window).width();
 		var windowHeight = jQuery(window).height();
-        with(wof.widget)
-            with(wof.bizWidget)
-                with(wof.bizWidget.spanner)
-                    with(wof.widget.spanner)
-                        with(wof.functionWidget.spanner)
-                        with(wof.kernel){
+
 
                             var flowLayoutHelper = wof$.create('FlowLayoutHelper');
 
@@ -428,7 +423,7 @@ jQuery(function(){
                                 var itemHeight = 70;
                                 var width = 811;
 
-                                var flowLayout = new FlowLayout();
+                                var flowLayout = wof$.create('FlowLayout');
                                 flowLayout.setLeft(0);
                                 flowLayout.setTop(0);
                                 flowLayout.setWidth(width);
@@ -445,14 +440,14 @@ jQuery(function(){
                                 var sectionData1 = {title:'默认分组1',width:width,titleHeight:30,cols:2,itemHeight:300};
                                 flowLayout.insertSection(sectionData1);
 
-                                flowLayout.appendTo(content);
+
 
 
 
 
                                 flowLayout.render();
 
-
+                                flowLayout.appendTo(content);
 
                                 var voucherComponent = wof$.create('VoucherComponent');
                                 voucherComponent.setLeft(0);
@@ -510,7 +505,7 @@ jQuery(function(){
 
 
                             }
-                        }
+
     }
 	//重设工作区
 	function resizeContent(){
