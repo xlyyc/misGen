@@ -1030,7 +1030,6 @@ wof.bizWidget.VoucherComponent.prototype = {
             group.remove();
             group.appendTo(this);
         }
-
         //删除tab下所有的item
         this._tab.deleteItem();
 
