@@ -225,7 +225,7 @@ wof.widget.Tab.prototype = {
      * 如果itemIndex为null 缺省在最后插入
      */
     insertItem: function(itemData, itemIndex){
-        var newItem = new wof.widget.TabItem();
+        var newItem = wof$.create('TabItem');
         newItem.setTitle(itemData.title!=null?itemData.title:'');
         if(item!=null){
             var item = this.findItemByIndex(itemIndex);
@@ -237,7 +237,7 @@ wof.widget.Tab.prototype = {
         }else{
             newItem.appendTo(this);
         }
-        var gridLayout = new wof.bizWidget.GridLayout();
+        var gridLayout = wof$.create('GridLayout');
         gridLayout.setIsInside(true);
         gridLayout.setOverflow('auto');
         gridLayout.setWidth(this.getWidth()-4);
