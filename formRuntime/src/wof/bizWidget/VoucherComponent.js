@@ -366,7 +366,9 @@ wof.bizWidget.VoucherComponent.prototype = {
             var voucherItemGroupIndex = voucherItemGroup.getIndex();
             this.setActiveVoucherItemGroupIndex(voucherItemGroupIndex);
             this.setActiveVoucherItemRank(null);
-            this.render();
+
+            voucherItemGroup.calcLayout();
+            this.calcLayout();
 
             this.sendMessage('wof_object_resize');
             this.sendMessage('wof.bizWidget.VoucherComponent_active');
