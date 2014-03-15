@@ -215,16 +215,18 @@ wof.bizWidget.FlowLayout.prototype = {
      * 在指定item插入节点
      * 如果itemRank和sectionIndex为null 则在当前焦点的item中插入
      * node 节点对象
-     * itemIndex 在指定item序号内插入(序号从1开始)
+     * itemRank 在指定item内插入
      * sectionIndex section 序号
      */
     insertNode: function(node, itemRank, sectionIndex){
         if(node!=null){
-            if(itemRank==null && sectionIndex==null){
+            if(sectionIndex==null){
                 sectionIndex = this.getActiveSectionIndex();
+            }
+            if(jQuery.isEmptyObject(itemRank)){
                 itemRank = this.getActiveItemRank();
             }
-            if(itemRank!=null && sectionIndex!=null){
+            if(!jQuery.isEmptyObject(itemRank) && sectionIndex!=null){
                 var section = this.findSectionByIndex(sectionIndex);
                 if(section!=null){
                     var item = section.findItemByRank(itemRank);
@@ -233,7 +235,7 @@ wof.bizWidget.FlowLayout.prototype = {
                             node.appendTo(item);
                         }else{
                             var newItem = wof$.create('FlowLayoutItem');
-                            newItem.beforeTo(item);
+                            newItem.afterTo(item);
                             node.appendTo(newItem);
                         }
                         //如果该分组内容自适应高度 则需要重新计算
@@ -242,7 +244,7 @@ wof.bizWidget.FlowLayout.prototype = {
                             this.calcLayout();
                         }
                     }else{
-                        console.log('不存在item 请先插入新的item');
+                        console.log('不存在的item');
                     }
                 }else{
                     console.log('不存在section 请先插入新的section');

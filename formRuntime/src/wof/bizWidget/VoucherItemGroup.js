@@ -477,7 +477,7 @@ wof.bizWidget.VoucherItemGroup.prototype = {
                     var left = (c-1) * voucherItemWidth;
                     var obj = placeVoucherItemTable.items(top+','+left);
                     if(obj.getTop()==top){
-                        if(obj.getColspan()==1 && obj.getRowspan()==1 && obj.childNodes().length==0 && obj.getIsFixItem()==false){
+                        if(obj.getColspan()==1 && obj.getRowspan()==1 && obj.childNodes().length==0 && obj.getIsFixItem()!=true){
                             count++;
                         }else{
                             break;
@@ -510,33 +510,28 @@ wof.bizWidget.VoucherItemGroup.prototype = {
         }
 
         voucherItems = this.findVoucherItems();
-
-        if(voucherItems.length==0){
-            var newVoucherItem = wof$.create('VoucherItem');
-            voucherItems.push(newVoucherItem);
-        }
-
-        itemHeight = this.getItemHeight();
-        voucherItemWidth = Math.floor(this.getWidth()/this.getColsNum());
-        voucherItemGroupWidth = voucherItemWidth * this.getColsNum();
-        for(var i=0;i<voucherItems.length;i++){
-            var voucherItem = voucherItems[i];
-
-            voucherItem.setWidth(voucherItemWidth*voucherItem.getColspan());
-            voucherItem.setHeight(itemHeight*voucherItem.getRowspan());
-            voucherItem.remove();
-            if(voucherItem.getIsFixItem()==true && voucherItem.getRowNum()!=null && voucherItem.getColNum()!=null){ //fix类型的voucherItem
-                fixVoucherItems.push(voucherItem);
-            }else{
-                notFixedVoucherItems.push(voucherItem);
+        if(voucherItems.length>0){
+            itemHeight = this.getItemHeight();
+            voucherItemWidth = Math.floor(this.getWidth()/this.getColsNum());
+            voucherItemGroupWidth = voucherItemWidth * this.getColsNum();
+            for(var i=0;i<voucherItems.length;i++){
+                var voucherItem = voucherItems[i];
+                voucherItem.setWidth(voucherItemWidth*voucherItem.getColspan());
+                voucherItem.setHeight(itemHeight*voucherItem.getRowspan());
+                voucherItem.remove();
+                if(voucherItem.getIsFixItem()==true && voucherItem.getRowNum()!=null && voucherItem.getColNum()!=null){ //fix类型的voucherItem
+                    fixVoucherItems.push(voucherItem);
+                }else{
+                    notFixedVoucherItems.push(voucherItem);
+                }
             }
         }
 
         //fix类型item先行安排
         for(var i=fixVoucherItems.length-1;i>=0;i--){
             var fixItem = fixVoucherItems[i];
-            var row = fixItem.getRow();
-            var col = fixItem.getCol();
+            var row = fixItem.getRowNum();
+            var col = fixItem.getColNum();
             var colspan = fixItem.getColspan();
             var rowspan = fixItem.getRowspan();
             var top = (row-1) * itemHeight + labelHeight;
@@ -551,6 +546,7 @@ wof.bizWidget.VoucherItemGroup.prototype = {
                 }
             }
         }
+
         //处理尚未布局的非fix类型的item
         for(var i=0;i<notFixedVoucherItems.length;i++){
             var item = notFixedVoucherItems[i];
@@ -650,6 +646,7 @@ wof.bizWidget.VoucherItemGroup.prototype = {
         //添加label
         if(this._label==null){
             var label = wof$.create('Label');
+            label.setIsInside(true);
             label.setTop(0);
             label.setLeft(0);
             label.setIsUnderline(true);

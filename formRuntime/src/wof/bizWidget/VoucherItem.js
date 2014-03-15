@@ -553,19 +553,19 @@ wof.bizWidget.VoucherItem.prototype = {
         }
     },
 
-  //是否能够被删除
-    canDelete:function(){
-        var f = true;
+    //是否已经被修改过数据
+    isChange:function(){
+        var f = false;
         if(this.getDataField()!=''){
-            f = false;
+            f = true;
         }else if(this.getItemLabel()!=''){
-            f = false;
+            f = true;
         }else if(this.getIsFixItem()==true){
-            f = false;
+            f = true;
         }else if(this.getRowspan()>1){
-            f = false;
+            f = true;
         }else if(this.getColspan()>1){
-            f = false;
+            f = true;
         }
         return f;
     }

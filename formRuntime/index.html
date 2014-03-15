@@ -195,7 +195,7 @@ jQuery(function(){
             linkageItem:'',
             tipValue:''
         };
-        voucherComponent.insertVoucherItem(voucherItemData1, 1);
+        voucherComponent.insertVoucherItem(voucherItemData1,{rowNum:1,colNum:1}, 1);
         var voucherItemData2 = {
             colspan:'1',
             rowspan:'1',
@@ -221,7 +221,9 @@ jQuery(function(){
             linkageItem:'',
             tipValue:''
         };
-        voucherComponent.insertVoucherItem(voucherItemData2, 1);
+        voucherComponent.insertVoucherItem(voucherItemData2,{rowNum:1,colNum:2}, 1);
+
+        //voucherComponent.updateVoucherItem(voucherItemData1,{rowNum:1,colNum:2}, 1);
 
         flowLayout.insertNode(voucherComponent,{row:1,col:1},2);
 

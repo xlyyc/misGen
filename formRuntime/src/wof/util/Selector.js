@@ -44,6 +44,7 @@ if (!wof.util.Selector) {
                     }else if(ss.type=='#'){
                         sls = wof.util.Selector._getObjectById(ss.query);
                     }else if(ss.type=='className'){
+                        sls = wof.util.Selector._getObjectByClassName(ss.query);
                         console.log('查找className='+ss.query+'的对象');
                     }
                 }
@@ -77,7 +78,24 @@ if (!wof.util.Selector) {
                     }
                 }
                 return sls;
+            },
+
+            /**
+             * 根据类型查找对象
+             * return 对象集合
+             */
+            _getObjectByClassName: function(clzName) {
+                var sls = new wof.util.SelectorList();
+                var tempSls = wof.util.Selector._getAllObjects();
+                for(var i=0;i<tempSls.size;i++){
+                    var obj = tempSls.get(i);
+                    if(obj.getClassName()==clzName){
+                        sls.push(obj);
+                    }
+                }
+                return sls;
             }
+
 
         };
 }
