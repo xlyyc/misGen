@@ -63,11 +63,8 @@ wof.widget.Text.prototype = {
     render: function () {
         this._input.attr('name', this.getName());
         this._input.attr('value', this.getValue());
-        if(this.getReadonly()==true){
-            this._input.attr('readonly', 'readonly');
-        }else{
-            this._input.attr('readonly', '');
-        }
+        this._input.attr('readonly', this.getReadonly());
+
     },
 
     //选择实现

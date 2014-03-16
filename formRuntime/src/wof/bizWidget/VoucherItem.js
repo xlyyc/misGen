@@ -528,6 +528,7 @@ wof.bizWidget.VoucherItem.prototype = {
             component = wof$.create(clzName);
             component.setIsInside(true);
             component.appendTo(this);
+            this._component = component;
         }
         component.setLeft(this.getLabelWidth());
         component.setWidth(this.getInputWidth());
