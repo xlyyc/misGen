@@ -287,8 +287,6 @@ wof.bizWidget.spanner.VoucherComponentSpanner.prototype = {
                             var activeVoucherItemGroupIndex = _this.getPropertys().activeVoucherItemGroupIndex;
                             voucherComponent.deleteVoucherItemGroup(activeVoucherItemGroupIndex);
                             voucherComponent.render();
-
-                            voucherComponent.sendMessage('wof_object_resize');
                             voucherComponent.sendMessage('wof.bizWidget.VoucherComponent_active');
                             jQuery(this).dialog('close');
                             jQuery(this).remove();
@@ -308,8 +306,6 @@ wof.bizWidget.spanner.VoucherComponentSpanner.prototype = {
             var sectionData = {groupCaption:'未命名分组'};
             voucherComponent.insertVoucherItemGroup(sectionData,activeVoucherItemGroupIndex);
             voucherComponent.render();
-
-            voucherComponent.sendMessage('wof_object_resize');
             voucherComponent.sendMessage('wof.bizWidget.VoucherComponent_active');
         });
         this._upVoucherItemGroupIco.mousedown(function(event){
@@ -317,6 +313,7 @@ wof.bizWidget.spanner.VoucherComponentSpanner.prototype = {
             var voucherComponent = wof.util.ObjectManager.get(_this.getPropertys().id);
             var activeVoucherItemGroupIndex = _this.getPropertys().activeVoucherItemGroupIndex;
             voucherComponent.upVoucherItemGroup(activeVoucherItemGroupIndex);
+
             voucherComponent.render();
             voucherComponent.sendMessage('wof.bizWidget.VoucherComponent_active');
         });
@@ -337,8 +334,6 @@ wof.bizWidget.spanner.VoucherComponentSpanner.prototype = {
             voucherComponent.addVoucherItemColspan(activeVoucherItemRank, activeVoucherItemGroupIndex);
             voucherComponent.setActiveVoucherItemRank(null);
             voucherComponent.render();
-
-            voucherComponent.sendMessage('wof_object_resize');
             voucherComponent.sendMessage('wof.bizWidget.VoucherComponent_active');
         });
         this._splitVoucherItemArrow.mousedown(function(event){
@@ -349,8 +344,6 @@ wof.bizWidget.spanner.VoucherComponentSpanner.prototype = {
             voucherComponent.reduceVoucherItemColspan(activeVoucherItemRank, activeVoucherItemGroupIndex);
             voucherComponent.setActiveVoucherItemRank(null);
             voucherComponent.render();
-
-            voucherComponent.sendMessage('wof_object_resize');
             voucherComponent.sendMessage('wof.bizWidget.VoucherComponent_active');
         });
         this._reduceVoucherItemRowspanArrow.mousedown(function(event){
@@ -361,7 +354,6 @@ wof.bizWidget.spanner.VoucherComponentSpanner.prototype = {
             voucherComponent.reduceVoucherItemRowspan(activeVoucherItemRank, activeVoucherItemGroupIndex);
             voucherComponent.setActiveVoucherItemRank(null);
             voucherComponent.render();
-            voucherComponent.sendMessage('wof_object_resize');
             voucherComponent.sendMessage('wof.bizWidget.VoucherComponent_active');
         });
         this._addVoucherItemRowspanArrow.mousedown(function(event){
@@ -372,7 +364,6 @@ wof.bizWidget.spanner.VoucherComponentSpanner.prototype = {
             voucherComponent.addVoucherItemRowspan(activeVoucherItemRank, activeVoucherItemGroupIndex);
             voucherComponent.setActiveVoucherItemRank(null);
             voucherComponent.render();
-            voucherComponent.sendMessage('wof_object_resize');
             voucherComponent.sendMessage('wof.bizWidget.VoucherComponent_active');
         });
 
@@ -405,8 +396,6 @@ wof.bizWidget.spanner.VoucherComponentSpanner.prototype = {
             voucherComponent.setActiveVoucherItemGroupIndex(null);
             voucherComponent.setActiveVoucherItemRank(null);
             voucherComponent.render();
-
-            voucherComponent.sendMessage('wof_object_resize');
             voucherComponent.sendMessage('wof.bizWidget.VoucherComponent_active');
         });
     },

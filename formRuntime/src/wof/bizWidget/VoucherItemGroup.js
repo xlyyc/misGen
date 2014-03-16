@@ -407,7 +407,6 @@ wof.bizWidget.VoucherItemGroup.prototype = {
         return voucherItems;
     },
 
-
     //计算布局
     calcLayout: function(){
         var placeVoucherItemTable = new wof.util.Hashtable(); //位置对应item table

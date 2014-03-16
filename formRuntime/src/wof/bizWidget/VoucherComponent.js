@@ -434,6 +434,9 @@ wof.bizWidget.VoucherComponent.prototype = {
             this._tab = tab;
         }
         this._voucherItemGroups = [];
+        this._voucherItemGroups.sort(function(a, b) {
+            return a.getIndex() - b.getIndex();
+        });
         if(this.getViewType()=='tab'){
             var ic = this._tab.getItemsCount();
             for(var i=0;i<ic;i++){
@@ -447,9 +450,6 @@ wof.bizWidget.VoucherComponent.prototype = {
                 var headGroup = groups[i];
                 this._voucherItemGroups.push(headGroup);
             }
-            this._voucherItemGroups.sort(function(a, b) {
-                return a.getIndex() - b.getIndex();
-            });
         }else{
             var groups = this._findGroups();
             for(var i=0;i<groups.length;i++){
@@ -561,14 +561,10 @@ wof.bizWidget.VoucherComponent.prototype = {
                 this.setActiveVoucherItemGroupIndex(voucherItemGroupIndex-1);
                 this.setActiveVoucherItemRank(null);
             }
-
-            this._voucherItemGroups.splice(voucherItemGroupIndex-1,1);
-            this._voucherItemGroups.splice(voucherItemGroupIndex-2,0,voucherItemGroup);
-            //重设index
-            for(var i=0;i<this._voucherItemGroups.length;i++){
-                var group = this._voucherItemGroups[i];
-                group.setIndex(i+1);
-            }
+            voucherItemGroup.setIndex(voucherItemGroup.getIndex()-1);
+            prevVoucherItemGroup.setIndex(prevVoucherItemGroup.getIndex()+1);
+            this._setInternalVariables();
+            this.calcLayout()
         }
     },
 
@@ -586,14 +582,10 @@ wof.bizWidget.VoucherComponent.prototype = {
                 this.setActiveVoucherItemGroupIndex(voucherItemGroupIndex+1);
                 this.setActiveVoucherItemRank(null);
             }
-
-            this._voucherItemGroups.splice(voucherItemGroupIndex-1,1);
-            this._voucherItemGroups.splice(voucherItemGroupIndex,0,voucherItemGroup);
-            //重设index
-            for(var i=0;i<this._voucherItemGroups.length;i++){
-                var group = this._voucherItemGroups[i];
-                group.setIndex(i+1);
-            }
+            voucherItemGroup.setIndex(voucherItemGroup.getIndex()+1);
+            nextVoucherItemGroup.setIndex(nextVoucherItemGroup.getIndex()-1);
+            this._setInternalVariables();
+            this.calcLayout();
         }
     },
 
@@ -615,6 +607,7 @@ wof.bizWidget.VoucherComponent.prototype = {
                 var group = this._voucherItemGroups[i];
                 group.setIndex(i+1);
             }
+            this.calcLayout();
         }
     },
 
