@@ -395,13 +395,15 @@ wof.bizWidget.VoucherComponent.prototype = {
         var titleHeight = voucherItemGroupData.titleHeight!=null?voucherItemGroupData.titleHeight:null;
         var colsNum = voucherItemGroupData.colsNum!=null?voucherItemGroupData.colsNum:null;
         var itemHeight = voucherItemGroupData.itemHeight!=null?voucherItemGroupData.itemHeight:this.getItemHeight();
+        var isHead = (voucherItemGroupData.isHead=='true'||voucherItemGroupData.isHead==true)?true:false;
 
-        var newVoucherItemGroup = new wof.bizWidget.VoucherItemGroup();
+        var newVoucherItemGroup = wof$.create('VoucherItemGroup');
         newVoucherItemGroup.setWidth(width);
         newVoucherItemGroup.setTitleHeight(titleHeight);
         newVoucherItemGroup.setGroupCaption(voucherItemGroupData.groupCaption);
         newVoucherItemGroup.setColsNum(colsNum);
         newVoucherItemGroup.setItemHeight(itemHeight);
+        newVoucherItemGroup.setIsHead(isHead);
 
         if(voucherItemGroupIndex==this.getActiveVoucherItemGroupIndex()){
             this.setActiveVoucherItemRank(null);

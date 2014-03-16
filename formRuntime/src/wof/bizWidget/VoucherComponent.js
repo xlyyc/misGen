@@ -363,12 +363,12 @@ wof.bizWidget.VoucherComponent.prototype = {
             }else{
                 voucherItemGroup.setIsExpand(true);
             }
-            voucherItemGroup.calcLayout();
-            this.calcLayout();
-
             var voucherItemGroupIndex = voucherItemGroup.getIndex();
             this.setActiveVoucherItemGroupIndex(voucherItemGroupIndex);
             this.setActiveVoucherItemRank(null);
+
+            voucherItemGroup.calcLayout();
+            this.calcLayout();
 
             this.render();
             this.sendMessage('wof.bizWidget.VoucherComponent_active');
@@ -429,6 +429,7 @@ wof.bizWidget.VoucherComponent.prototype = {
             this._tab.setIsInside(true);
             this._tab.setLeft(0);
             this._tab.appendTo(this);
+            this._tab.render();
         }else{
             this._tab = tab;
         }
@@ -485,8 +486,8 @@ wof.bizWidget.VoucherComponent.prototype = {
     /**
      * 插入新的VoucherItemGroup
      * voucherItemGroupData VoucherItemGroup数据
-     * voucherItemGroupIndex 在指定VoucherItemGroup序号前插入(序号从1开始)
-     * 如果voucherItemGroupIndex为null 缺省在开头插入
+     * voucherItemGroupIndex 在指定VoucherItemGroup序号后插入(序号从1开始)
+     * 如果voucherItemGroupIndex为null 在开头插入
      */
     insertVoucherItemGroup: function(voucherItemGroupData, voucherItemGroupIndex){
         if(voucherItemGroupIndex==null){
@@ -496,6 +497,7 @@ wof.bizWidget.VoucherComponent.prototype = {
         var titleHeight = voucherItemGroupData.titleHeight!=null?voucherItemGroupData.titleHeight:null;
         var colsNum = voucherItemGroupData.colsNum!=null?voucherItemGroupData.colsNum:null;
         var itemHeight = voucherItemGroupData.itemHeight!=null?voucherItemGroupData.itemHeight:this.getItemHeight();
+        var isHead = (voucherItemGroupData.isHead=='true'||voucherItemGroupData.isHead==true)?true:false;
 
         var newVoucherItemGroup = wof$.create('VoucherItemGroup');
         newVoucherItemGroup.setWidth(width);
@@ -503,6 +505,7 @@ wof.bizWidget.VoucherComponent.prototype = {
         newVoucherItemGroup.setGroupCaption(voucherItemGroupData.groupCaption);
         newVoucherItemGroup.setColsNum(colsNum);
         newVoucherItemGroup.setItemHeight(itemHeight);
+        newVoucherItemGroup.setIsHead(isHead);
 
         if(voucherItemGroupIndex==this.getActiveVoucherItemGroupIndex()){
             this.setActiveVoucherItemRank(null);
@@ -511,7 +514,7 @@ wof.bizWidget.VoucherComponent.prototype = {
         this._setInternalVariables();
 
         //插入新建分组并重设所有分组的index
-        this._voucherItemGroups.splice(voucherItemGroupIndex-1,0,newVoucherItemGroup);
+        this._voucherItemGroups.splice(voucherItemGroupIndex,0,newVoucherItemGroup);
         for(var i=0;i<this._voucherItemGroups.length;i++){
             var group = this._voucherItemGroups[i];
             group.setIndex(i+1);
@@ -520,6 +523,7 @@ wof.bizWidget.VoucherComponent.prototype = {
         }
         var newItem = wof$.create('VoucherItem');
         newItem.appendTo(newVoucherItemGroup);
+
         newVoucherItemGroup.calcLayout();
         this.calcLayout();
     },

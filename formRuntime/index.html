@@ -165,7 +165,7 @@ jQuery(function(){
         voucherComponent.setItemHeight(60);
         voucherComponent.setViewType('tab');
 
-        var voucherItemGroupData1 = {groupCaption:'表头分组1',width:500,titleHeight:25,colsNum:4,itemHeight:45};
+        var voucherItemGroupData1 = {groupCaption:'表头分组1',width:500,titleHeight:25,colsNum:3,itemHeight:45,isHead:false};
         voucherComponent.insertVoucherItemGroup(voucherItemGroupData1);
         var voucherItemGroupData2 = {groupCaption:'表头分组2',width:500,titleHeight:25,colsNum:2,itemHeight:45};
         voucherComponent.insertVoucherItemGroup(voucherItemGroupData2);
@@ -195,7 +195,7 @@ jQuery(function(){
             linkageItem:'',
             tipValue:''
         };
-        voucherComponent.insertVoucherItem(voucherItemData1,{rowNum:1,colNum:1}, 1);
+        voucherComponent.insertVoucherItem(voucherItemData1,{rowNum:1,colNum:1}, 2);
         var voucherItemData2 = {
             colspan:'1',
             rowspan:'1',
