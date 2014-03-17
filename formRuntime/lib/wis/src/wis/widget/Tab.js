@@ -177,7 +177,7 @@ wis.widget.Tab.prototype = {
             var div = this.getDomInstance().children('#'+item['name']);
             div.append(node);
         }else{
-            console.log('dom对象为null 不能插入');
+            console.log('node对象为null 不能插入');
         }
     }
 
