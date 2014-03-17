@@ -8,32 +8,32 @@ wof.bizWidget.GridComponent = function () {
         },
         {
             id: 'wof.bizWidget.DataObject_add',
-            proprity: 50,
+            priority: 50,
             method: 'this._onAddDataCompleted(message);'
         },
         {
             id: 'wof.bizWidget.DataObject_update',
-            proprity: 50,
+            priority: 50,
             method: 'this._onUpdateDataCompleted(message);'
         },
         {
             id: 'wof.bizWidget.DataObject_delete',
-            proprity: 50,
+            priority: 50,
             method: 'this._onDeleteDataCompleted(message);'
         },
         {
             id: 'wof.bizWidget.DataObject_undelete',
-            proprity: 50,
+            priority: 50,
             method: 'this._onUndeleteDataCompleted(message);'
         },
         {
             id: 'wof.bizWidget.DataObject_save',
-            proprity: 50,
+            priority: 50,
             method: 'this._onSaveDataCompleted(message);'
         },
         {
             id: 'wof.functionWidget.DeleteRecordComponent_active',
-            proprity: 50,
+            priority: 50,
             method: 'this._onDeleteRecordComponent_active(message)'
         }
     ]);
@@ -307,6 +307,7 @@ wof.bizWidget.GridComponent.prototype = {
     _cachePageNo: null,
     _gridData: null,
     _currentRow:null,
+    _grid:null,
 
     getCurrentRow: function () {
     	return this.getGridData()[0];
@@ -374,6 +375,12 @@ wof.bizWidget.GridComponent.prototype = {
     beforeRender: function () {
 
     },
+    initRender:function (){
+    	this.grid = wis$.create('Grid',{
+    		  width: this.getWidth(),
+              height: this.getHeight()
+    	});
+    },
     render: function () {
         var vo = {
             grid: {
@@ -394,7 +401,17 @@ wof.bizWidget.GridComponent.prototype = {
                 refData: this.setRefData()
             }
         };
-        console.log(this.getGridData());
+        var grid = this.grid;
+        grid.setTitle("表格示范");
+        grid.setWidth(800);
+        grid.setHeight(600);
+        grid.setCheckbox(true);
+        grid.onCheckRow(function(){
+            alert("AA");
+        });
+        grid.render();
+        grid.appendTo(this.getDomInstance());
+
         if (this._grid == null) {
             this._grid = new wof.widget.Grid();
             if (this.getMode() == 'view') {
@@ -444,7 +461,7 @@ wof.bizWidget.GridComponent.prototype = {
             var offset = (pageNo - 1) * this.getPageSize();
             var rowsCount = this.getPageSize() * 2;
             var dataSource = this.getDataSource();
-            dataSource.queryData('all', null, null, offset, rowsCount);
+            dataSource.queryData('main', null, null, offset, rowsCount);
         } else {
             this.setGridData(this._getPageDataInCache(this.getPageNo()));
         }

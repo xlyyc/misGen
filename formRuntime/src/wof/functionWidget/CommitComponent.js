@@ -4,10 +4,8 @@
  * @copyright author
  * @Time: 13-8-7 上午10:49
  */
-
 wof.functionWidget.CommitComponent = function () {
     this._version = '1.0';
-
 };
 
 wof.functionWidget.CommitComponent.prototype = {
@@ -140,27 +138,137 @@ wof.functionWidget.CommitComponent.prototype = {
     setBindComponents : function (bindComponents){
         this._bindComponents = bindComponents;
     },
-
+    /**
+     * 运行时参数
+     */
+    _dataSourceType: null,
+    _dataSource: null,// 没用到
+    _dataObject: null,
+    setDataSourceType: function (dataSourceType) {
+        this._dataSourceType = dataSourceType;
+    },
+    setDataSource: function (dataSource) {
+        this._dataSource = dataSource;
+    },
+    setDo: function (dataObject) {
+        this._dataObject = dataObject;
+    },
+    getDataSourceType: function () {
+        return this._dataSourceType;
+    },
+    getDataSource: function () {
+        if (this.getDataSourceType() == 'do') {
+            return this.getDo();
+        }
+        return null;
+    },
+    getDo: function () {
+    	return this._dataObject;
+    },
+    /**
+     * 初始化_init 方法定义
+     */
+    _init: function (data) {
+        this.setWidth(110);
+        this.setHeight(30);
+        this.setSchema(data);// 生成器中设置的参数，如绑定组件等
+    },
+    setSchema: function (data) {
+        if (data.width) {
+            this.setWidth(data.width);
+        }
+        if (data.width) {
+            this.setWidth(data.width);
+        }
+        if (data.height) {
+            this.setHeight(data.height);
+        }
+        if (data.callItemCaption) {
+            this.setCallItemCaption(data.callItemCaption);
+        }
+        if (data.bindComponents) {
+            this.setBindComponents(data.bindComponents);
+        }
+        if (data.dataSourceType) {
+            this.setDataSourceType(data.dataSourceType);
+        }
+        if (data.dataObject) {
+            this.setDo(data.dataObject);
+        }
+    },
     /**
      * Render 方法定义
      */
-
     initRender: function(){
-        var button = new wof.widget.Button();
-        button.setIsInside(true);
-        button.setType('submit');
-        button.setLeft(0);
-        button.setTop(0);
-        button.setWidth(this.getWidth());
-        button.setHeight(this.getHeight());
-        button.appendTo(this);
+    	var that = this;
+    	var button = wis$.create("Button",{value:"提交",
+        	click:function(){
+        			var dataType = "all";
+                	var entityParameter = [];
+                	if(that.getBindComponents()!=null){
+            		    var hasMain = false;
+            		    var comps = that.getBindComponents().split(",");// 拆分为数组
+        				for(var compi=0;compi<comps.length;compi++){
+        					var comp = comps[compi]; // 组件ID
+        					//获取绑定的组件对象
+        					var bindComp = that._getObjByComponentId(comp);
+        					// 类型为表头或列表，则为主实体
+        					if(bindComp!=null&&bindComp.getClassName()!=null&&(bindComp.getClassName()=="wof.bizWidget.GridComponent"
+        							||bindComp.getClassName()=="wof.bizWidget.VoucherComponent")){
+        						hasMain = true;// 判断是否包含主实体，TODO 当前类型中默认都包含主实体？
+        					// 类型为表体，则为子实体
+        					}else if(bindComp!=null&&bindComp.getClassName()!=null&&bindComp.getClassName()=="wof.bizWidget.VoucherGridComponent"){
+        						var entityParam = {};
+        						var bindMainCompID = bindComp.getBindComponents(); //TODO getBindComponents()方法名待定
+        						if(bindMainCompID!=null){
+        							var mainComp = that._getObjByComponentId(bindMainCompID);
+        							if(mainComp!=null){
+        								// 读取与表体相关联的列表或者表头的当前行ID,TODO getSelected()方法名待确定
+        								var mainRowId = mainComp.getSelected()!=null?mainComp.getSelected():null;
+        								var bindEntityAlias = bindComp.getBindEntityId();//读取表体对象绑定的实体，
+        																		 	//TODO getBindEntityId()方法名待确定
+        								if(mainRowId!=null&&bindEntityAlias!=null){
+        									entityParam.childEntityAlias = bindEntityAlias;
+        									entityParam.mainRowId = mainRowId;
+        									entityParameter.push(entityParam);
+        								}
+        							}
+        						}
+        					}
+        				}	
+                		if(hasMain){
+                			if(jQuery.isEmptyObject(entityParameter)){
+                				dataType = "main";
+                			}else{  
+                				dataType = "mainAndChild";
+                			}
+                		}else if(jQuery.isEmptyObject(entityParameter)){
+                			// dataType = "child";// 目前不存在只有子实体的情形，因【当前类型中默认都包含主实体？】用以下代替
+                			dataType = "mainAndChild";
+                		}else{
+                			dataType = null;//绑定的组件在本页中不存在或未绑定实体
+                		}
+                	}
+                	if(dataType!=null){
+                		that._saveDataToDO(dataType,entityParameter);
+                	}
+                    return false;
+        		}
+        		});
+       //button.setIsInside(true);
+       //button.getName('submit');
+       // button.setLeft(0);
+       // button.setTop(0);
+       // button.setWidth(this.getWidth());
+       // button.setHeight(this.getHeight());
+        button.render();
+        button.appendTo(this.getDomInstance());
         this._btn = button;
     },
 
     //选择实现
     beforeRender: function () {
-
-        this._btn.setText(this.getCallItemCaption());
+        //this._btn.setText(this.getCallItemCaption());
     },
 
     //----------必须实现----------
@@ -172,7 +280,21 @@ wof.functionWidget.CommitComponent.prototype = {
     afterRender: function () {
 
     },
-
+    // ----------内部方法----------
+    _getObjByComponentId: function (compId) {
+    	var objs = wof$.find('*');
+	    for(var i=0;i<objs.size();i++){
+	        var obj = objs.get(i);
+	        if(obj!=null&&obj.getComponentId()!=null&&obj.getComponentId()==compId){
+	        	return obj;
+	        }
+	    }
+	    return null;
+    }, 
+    _saveDataToDO: function (dataType,entityParameter) {
+    	this.getDataSource().saveData(dataType,entityParameter);
+    }, 
+    
     /**
      * getData/setData 方法定义
      */
@@ -207,21 +329,6 @@ wof.functionWidget.CommitComponent.prototype = {
         this.setCallItemCaption(data.callItemCaption);
         this.setCallType(data.callType);
     },
-
-    _insideOnReceiveMessage:{
-        'wof.widget.Button_mousedown':function(message){
-            console.log(message.id+'   '+this.getClassName());
-            this.sendMessage('wof.functionWidget.CommitComponent_active');
-            return false;
-        },
-        'wof.widget.Button_dblclick':function(message){
-            console.log(message.id+'   '+this.getClassName());
-            this.sendMessage('wof.functionWidget.CommitComponent_active');
-            return false;
-        }
-
-    },
-
     updateCommitComponent: function(data){
         if(!jQuery.isEmptyObject(data)){
             if(data.bindComponents!=null){
@@ -245,9 +352,6 @@ wof.functionWidget.CommitComponent.prototype = {
             if(data.paramMaps!=null){
                 this.setParamMaps(data.paramMaps);
             }
-
-
-
         }
     },
 

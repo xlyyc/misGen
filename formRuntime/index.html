@@ -90,6 +90,7 @@
 <script src="lib/wis/src/wis/util/Tool.js"></script>
 
 <script src="lib/wis/src/wis/widget/Button.js"></script>
+<script src="lib/wis/src/wis/widget/Tab.js"></script>
 
 <script src="lib/wis/src/wis/kernel/initSystem.js"></script>
 
@@ -233,6 +234,21 @@ jQuery(function(){
         voucherComponent2.setDataObject(dataObjectInstance);
         flowLayout.insertNode(voucherComponent2,{row:1,col:2},2);
         voucherComponent2.render();
+
+
+        var tab = new wis.widget.Tab();
+        tab.addItem({name:'name1',width:100,label:'label1',closeable:true,icon:'add',iconPosition:'left'});
+        tab.addItem({name:'name2',width:100,label:'label2',closeable:true,icon:'add',iconPosition:'left'});
+        tab.addItem({name:'name3',width:100,label:'label3',closeable:true,icon:'add',iconPosition:'left'});
+        tab.appendTo(container);
+        tab.render();
+        tab.render();
+        tab.removeItemByName('name2');
+        tab.render();
+        tab.render();
+        tab.removeItemByIndex(1);
+        tab.render();
+        tab.render();
     }
 	//重设工作区
 	function resizeContent(){

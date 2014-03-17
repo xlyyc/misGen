@@ -112,7 +112,13 @@ wis.widget.Button.prototype = {
      * 初始化方法
      */
     _init: function (data) {
-
+    	if(data.value){
+    		this.setValue(data.value);
+    	}
+    	if(data.click){
+    		this._onClick = data.click;
+    	}
+        
     },
 
     /**
@@ -120,7 +126,11 @@ wis.widget.Button.prototype = {
      * 仅在第一次调用render时执行
      */
     initRender: function () {
-
+    	var that = this;
+        this._input = jQuery('<button>'+this.getValue()+'</button>').click(function (e){
+             that._onClick();
+        });
+        this.getDomInstance().append(this._input);
     },
 
     _bindEvents: function () {
