@@ -128,7 +128,7 @@ wis.widget.Tab.prototype = {
     addItem: function(item){
         var items = this.getItems();
         items.push(item);
-        var div = '<div id="'+item['name']+'">'+item['label']+'</div>';
+        var div = '<div id="'+item['name']+'"></div>';
         this.getDomInstance().append(div);
         this.setItems(items);
     },
@@ -160,6 +160,25 @@ wis.widget.Tab.prototype = {
         this.getDomInstance().children('#'+item['name']).remove();
         items.splice(index-1,1);
         this.setItems(items);
+    },
+
+    /**
+     * 在指定item插入node节点
+     * 如果itemIndex为null 则在当前激活的item中插入
+     * node dom节点
+     * itemIndex 在指定item序号内插入(序号从1开始)
+     */
+    insertNode: function(node, itemIndex){
+        if(itemIndex==null){
+            itemIndex = this.getActiveItemIndex();
+        }
+        if(node!=null){
+            var item = this.getItems()[itemIndex-1];
+            var div = this.getDomInstance().children('#'+item['name']);
+            div.append(node);
+        }else{
+            console.log('dom对象为null 不能插入');
+        }
     }
 
 };
