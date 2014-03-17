@@ -236,22 +236,29 @@ jQuery(function(){
         voucherComponent2.render();
 
 
-        var tab = new wis.widget.Tab();
-        tab.addItem({name:'name1',width:100,label:'label1',closeable:true,icon:'add',iconPosition:'left'});
-        tab.addItem({name:'name2',width:100,label:'label2',closeable:true,icon:'add',iconPosition:'left'});
-        tab.addItem({name:'name3',width:100,label:'label3',closeable:true,icon:'add',iconPosition:'left'});
+        var tab = wis$.create('Tab');
+        tab.setHeight(200);
+        tab.insertItem({name:'name1',width:100,label:'label1',closeable:true,icon:'add',iconPosition:'left'});
+        tab.insertItem({name:'name2',width:100,label:'label2',closeable:true,icon:'add',iconPosition:'left'});
+        tab.insertItem({name:'name3',width:100,label:'label3',closeable:true,icon:'add',iconPosition:'left'});
         tab.appendTo(container);
         tab.render();
         tab.render();
         tab.removeItemByName('name2');
         tab.render();
         tab.render();
-        tab.removeItemByIndex(1);
+       // tab.removeItemByIndex(1);
         tab.render();
 
         tab.insertNode(jQuery('<div>我的测试哈哈</div>'),1);
 
         tab.render();
+
+        var newTab = tab.clone();
+        newTab.setTop(300);
+        newTab.insertNode(jQuery('<div>wwwwwww</div>'),1);
+        newTab.appendTo(container);
+        newTab.render();
     }
 	//重设工作区
 	function resizeContent(){

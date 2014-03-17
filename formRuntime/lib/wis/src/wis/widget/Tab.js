@@ -1,6 +1,6 @@
 /**
  *
- * 标签页  l
+ * 标签页
  *
  */
 wis.widget.Tab = function () {
@@ -80,7 +80,7 @@ wis.widget.Tab.prototype = {
         for(var i=items.length-1;i>=0;i--){
             var item = items[i];
             var li = '<li><a href="#'+item['name']+'">'+item['label']+'</a></li>';
-            this._tab.prepend(li);
+            this._tab.prepend(jQuery(li));
         }
         for(var i=0;i<items.length;i++){
             var item = items[i];
@@ -93,10 +93,18 @@ wis.widget.Tab.prototype = {
 
     //渲染后处理方法
     afterRender: function () {
+        var _this = this;
+        this.getDomInstance().tabs({
+            heightStyle:'fill',
+            activate: function(event,ui){
+                event.stopPropagation();
+                var name = ui.newPanel.attr('id');
+                var index = _this.getIndexByName(name);
+                _this.setActiveItemIndex(index);
+            }
+        });
         this.getDomInstance().tabs('refresh');
-        if(this.getActiveItemIndex()!=null){
-            this.getDomInstance().tabs({active:(this.getActiveItemIndex()-1)});
-        }
+        this.getDomInstance().tabs({active:(this.getActiveItemIndex()-1)});
     },
 
     /**
@@ -119,15 +127,27 @@ wis.widget.Tab.prototype = {
         this.setName(data.name);
         this.setItems(data.items);
         this.setActiveItemIndex(data.activeItemIndex);
+
+        var items = this.getItems();
+        this.setItems([]);
+        for(var i=0;i<items.length;i++){
+            var item = items[i];
+            this.insertItem(item);
+        }
     },
 
     /**
      *
      * 增加item
+     * index 在指定index后插入 index从1开始
      */
-    addItem: function(item){
+    insertItem: function(item, index){
         var items = this.getItems();
-        items.push(item);
+        if(index==null){
+            items.push(item);
+        }else{
+            items.splice(index-1,0,item);
+        }
         var div = '<div id="'+item['name']+'"></div>';
         this.getDomInstance().append(div);
         this.setItems(items);
@@ -160,6 +180,23 @@ wis.widget.Tab.prototype = {
         this.getDomInstance().children('#'+item['name']).remove();
         items.splice(index-1,1);
         this.setItems(items);
+    },
+
+    /**
+     *
+     * 根据name查找index  index从1开始
+     */
+    getIndexByName: function(name){
+        var index = 0;
+        var items = this.getItems();
+        for(var i=0;i<items.length;i++){
+            var item = items[i];
+            if(item['name']==name){
+                index = i+1;
+                break;
+            }
+        }
+        return index;
     },
 
     /**

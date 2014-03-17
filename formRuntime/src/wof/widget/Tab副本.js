@@ -23,8 +23,6 @@ wof.widget.Tab.prototype = {
 
     _updateFlag:null,
 
-    _tab: null,
-
     /**
      * get/set 属性方法定义
      */
@@ -44,24 +42,23 @@ wof.widget.Tab.prototype = {
      * Render 方法定义
      */
 
-    initRender: function(){
-        var tab = wis$.create('Tab');
-        tab.appendTo(this.getDomInstance());
-        this._tab = tab;
-    },
-
     //选择实现
     beforeRender: function () {
+
+        this.getDomInstance().children('ul').remove();
+
+        var ul = jQuery('<ul>');
+        this.getDomInstance().prepend(ul);
         for(var i=0; i<this.childNodes().length; i++){
             var child = this.childNodes()[i];
-            this._tab.insertItem({name:child.getId(),width:100,label:child.getTitle(),closeable:true,icon:'add',iconPosition:'left'});
+            var li = jQuery('<li>');
+            var a = jQuery('<a href="#'+child.getId()+'">'+child.getTitle()+'</a>');
+            li.append(a);
+            ul.append(li);
+
             child.childNodes()[0].setWidth(this.getWidth()-4);
             child.childNodes()[0].setHeight(this.getHeight()-52);
-            child.getDomInstance().detach();
-            this._tab.insertNode(child.getDomInstance(),i+1);
         }
-
-
     },
 
     //----------必须实现----------
@@ -71,14 +68,7 @@ wof.widget.Tab.prototype = {
 
     //选择实现
     afterRender: function(){
-
-        this._tab.render();
-
-        if(this.childNodes().length>0){
-            console.log(this.childNodes()[0].getDomInstance().html());
-        }
-
-        /*var _this = this;
+        var _this = this;
         this._updateFlag = true;
         this.getDomInstance().tabs({
             heightStyle:'fill',
@@ -106,7 +96,7 @@ wof.widget.Tab.prototype = {
             this.getDomInstance().tabs({active:(this.getActiveIndex()-1)});
             this.sendMessage('wof.widget.Tab_active');
         }
-        this._initDOMFlag = true;*/
+        this._initDOMFlag = true;
         this.sendMessage('wof.widget.Tab_render');
     },
 

@@ -45,7 +45,7 @@ wof.widget.TabItem.prototype = {
 
     //----------必须实现----------
     render: function () {
-         //this.getDomInstance().attr('id', this.getId());
+         this.getDomInstance().attr('id', this.getId());
     },
 
     //选择实现
