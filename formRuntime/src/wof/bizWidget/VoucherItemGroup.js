@@ -622,7 +622,7 @@ wof.bizWidget.VoucherItemGroup.prototype = {
             item.appendTo(this);
         }
         if(this.getIsExpand()==true){
-            this.setHeight(itemHeight*this.getRows()+labelHeight);
+            this.setHeight(itemHeight*this.getRows()+labelHeight+80);
         }else{
             this.setHeight(labelHeight);
         }

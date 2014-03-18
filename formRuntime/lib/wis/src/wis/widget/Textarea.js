@@ -145,7 +145,36 @@ wis.widget.Textarea.prototype = {
      * 仅在第一次调用render时执行
      */
     initRender: function () {
+        var that = this;
+        var textarea = $.loveyInput.create({
+            cid: this.getCid(),
+            name: this.getName(),
+            customValidate: this.getCustomValidate(),
+            value: this.getValue(),
+            errorMsg: this.getErrorMsg(),
+            displayType: this.getDisplayType(),
+            //  maxLength: this.getMaxlength(),
+            placeholder: this.getPlaceholder(),
+            disabled: this.getDisabled(),
+            readonly: this.getReadonly(),
+            rows: this.getRows(),
+            cols: this.getCols(),
+            warp: this.getWrap(),
 
+            onchange: function (e) {
+                typeof that._onChange == "function" ? that._onChange() : null
+            },
+            onclick: function (e) {
+                typeof that._onClick == "function" ? that._onClick() : null
+            },
+            onblur: function (e) {
+                typeof that._onBlur == "function" ? that._onBlur() : null
+            },
+            onfocus: function (e) {
+                typeof that._onFocus == "function" ? that._onFocus() : null
+            }
+        });
+        $('#container').append(textarea.root);
     },
 
     _bindEvents: function () {

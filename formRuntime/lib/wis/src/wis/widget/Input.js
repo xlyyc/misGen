@@ -123,50 +123,37 @@ wis.widget.Input.prototype = {
      * 仅在第一次调用render时执行
      */
     initRender: function () {
-        this.rootObj = $('<input type="text"/>');
-        this.getDomInstance().append(this._rootObj);
+        var that = this;
+        var input = $.loveyInput.create({
+            cid: this.getCid(),
+            name: this.getName(),
+            customValidate: this.getCustomValidate(),
+            value: this.getValue(),
+            errorMsg: this.getErrorMsg(),
+            displayType: this.getDisplayType(),
+            //  maxLength: this.getMaxlength(),
+            placeholder: this.getPlaceholder(),
+            disabled: this.getDisabled(),
+            readonly: this.getReadonly(),
+            onchange: function (e) {
+                typeof that._onChange == "function" ? that._onChange() : null
+            },
+            onclick: function (e) {
+                typeof that._onClick == "function" ? that._onClick() : null
+            },
+            onblur: function (e) {
+                typeof that._onBlur == "function" ? that._onBlur() : null
+            },
+            onfocus: function (e) {
+                typeof that._onFocus == "function" ? that._onFocus() : null
+            }
+        });
 
-        this._bindEvents();
+        this.getDomInstance().append(input.root);
+
     },
 
     _bindEvents: function () {
-        var that = this;
-        this.rootObj.on('focus', function (e) {
-            if (that.onfocus) {
-                that.onfocus(e);
-            }
-
-            var value = that.rootObj.val();
-            //when the input is focused and the value is palceholder then clear the value.
-            if (value == that.getPlaceholder()) {
-                that.rootObj.val('');
-            }
-        });
-
-        this.rootObj.on('blur', function (e) {
-            if (that.onblur) {
-                that.onblur(e);
-            }
-
-            var value = that.rootObj.val();
-            if (!value) that.rootObj.val(that.getPlaceholder());
-        });
-
-        this.rootObj.on('change', function (e) {
-            var value = that.rootObj.val();
-
-            var handler = that.onChange;
-            if (handler) {
-                handler(value);
-            }
-           // that.text = value;
-        });
-
-        this.rootObj.on('click', function (e) {
-            if (that.onclick) {
-                that.onclick(e);
-            }
-        });
     },
 
     //渲染前处理方法
@@ -176,14 +163,14 @@ wis.widget.Input.prototype = {
 
     //渲染方法
     render: function () {
-        if (this.getCid()) this._rootObj.attr('id', this.getCid());
-        if (this.getName()) this._rootObj.attr('name', this.getName());
-        if (this.getValue()) this._rootObj.attr('value', this.getValue());
-        //if (this.getDisplayType()) this.rootObj.attr('value', this.getDisplayType());
-        if (this.getMaxlength()) this._rootObj.attr('maxlength', this.getMaxlength());
-        if (this.getPlaceholder) this._rootObj.attr('placeholder', this.getPlaceholder());
-        if (this.getDisabled) this._rootObj.attr('disabled', this.getDisabled());
-        if (this.getReadonly) this._rootObj.attr('readonly', this.getReadonly());
+        /* if (this.getCid()) this._rootObj.attr('id', this.getCid());
+         if (this.getName()) this._rootObj.attr('name', this.getName());
+         if (this.getValue()) this._rootObj.attr('value', this.getValue());
+         //if (this.getDisplayType()) this.rootObj.attr('value', this.getDisplayType());
+         if (this.getMaxlength()) this._rootObj.attr('maxlength', this.getMaxlength());
+         if (this.getPlaceholder) this._rootObj.attr('placeholder', this.getPlaceholder());
+         if (this.getDisabled) this._rootObj.attr('disabled', this.getDisabled());
+         if (this.getReadonly) this._rootObj.attr('readonly', this.getReadonly());*/
     },
 
     //渲染后处理方法

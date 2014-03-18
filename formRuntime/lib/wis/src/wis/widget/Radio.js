@@ -7,7 +7,7 @@ wis.widget.Radio = function () {
     this._version = '1.0';
 
 };
-wis.widget.Checkbox.prototype = {
+wis.widget.Radio.prototype = {
 
     _cid: null,  //radio的id
     _name: null,  //radio的名称
@@ -97,6 +97,21 @@ wis.widget.Checkbox.prototype = {
      * 仅在第一次调用render时执行
      */
     initRender: function () {
+        var that = this;
+        var radio = $.loveyRadio.create({
+            cid: this.getCid(),
+            name: this.getName(),
+            text: this.getLabel(),
+            value: this.getValue(),
+            disabled: this.getDisabled(),
+            // checked: this.getChecked(),
+            onchecked: function (e) {
+                typeof that._onSelect == "function" ? that._onSelect() : null
+            },
+            onclick: function (e) {
+                typeof that._onClick == "function" ? that._onClick() : null
+            }});
+        this.getDomInstance().append(radio.root);
 
     },
 
@@ -131,6 +146,7 @@ wis.widget.Checkbox.prototype = {
             cid: this.getCid(),
             name: this.getName(),
             customValidate: this.getCustomValidate(),
+            label: this.getLabel(),
             value: this.getValue(),
             disabled: this.getDisabled(),
             checked: this.getChecked()

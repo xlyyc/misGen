@@ -6,7 +6,7 @@
 wis.widget.Tab = function () {
     this._version = '1.0';
 
-    this.getDomInstance().css('overflow','hidden');
+    //this.getDomInstance().css('overflow','hidden');
 };
 wis.widget.Tab.prototype = {
 
@@ -16,6 +16,8 @@ wis.widget.Tab.prototype = {
     _activeItemIndex:null, //当前激活的标签项index
 
     _tab:null,
+
+    _renderFlag:null,
 
     getCid: function () {
         if(this._cid==null){
@@ -45,7 +47,7 @@ wis.widget.Tab.prototype = {
     },
 
     getActiveItemIndex: function () {
-        return this._activeItemIndex || 1;
+        return this._activeItemIndex;
     },
 
     setActiveItemIndex: function (activeItemIndex) {
@@ -64,13 +66,26 @@ wis.widget.Tab.prototype = {
      * 仅在第一次调用render时执行
      */
     initRender: function(){
+        var _this = this;
         this._tab = jQuery('<ul>');
         this.getDomInstance().append(this._tab);
-        this.getDomInstance().tabs();
+        this.getDomInstance().tabs({
+            heightStyle:'fill',
+            activate: function(event,ui){
+                event.stopPropagation();
+                if(_this._renderFlag==false){ //如果不是在render过程中触发
+                    var name = ui.newPanel.attr('id');
+                    var index = _this.getIndexByName(name);
+                    _this.setActiveItemIndex(index);
+                    _this._onClick();
+                }
+            }
+        });
     },
 
     //渲染前处理方法
     beforeRender: function () {
+        this._renderFlag = true;
         this._tab.children().remove();
     },
 
@@ -93,18 +108,10 @@ wis.widget.Tab.prototype = {
 
     //渲染后处理方法
     afterRender: function () {
-        var _this = this;
-        this.getDomInstance().tabs({
-            heightStyle:'fill',
-            activate: function(event,ui){
-                event.stopPropagation();
-                var name = ui.newPanel.attr('id');
-                var index = _this.getIndexByName(name);
-                _this.setActiveItemIndex(index);
-            }
-        });
         this.getDomInstance().tabs('refresh');
-        this.getDomInstance().tabs({active:(this.getActiveItemIndex()-1)});
+        console.log();
+        this.getDomInstance().tabs({'active':(this.getActiveItemIndex()-1)});
+        this._renderFlag = false;
     },
 
     /**
@@ -203,18 +210,42 @@ wis.widget.Tab.prototype = {
      * 在指定item插入node节点
      * 如果itemIndex为null 则在当前激活的item中插入
      * node dom节点
-     * itemIndex 在指定item序号内插入(序号从1开始)
+     * index 在指定item序号内插入(序号从1开始)
      */
-    insertNode: function(node, itemIndex){
-        if(itemIndex==null){
-            itemIndex = this.getActiveItemIndex();
+    insertNode: function(node, index){
+        if(index==null){
+            index = this.getActiveItemIndex();
         }
         if(node!=null){
-            var item = this.getItems()[itemIndex-1];
+            var item = this.getItems()[index-1];
             var div = this.getDomInstance().children('#'+item['name']);
             div.append(node);
         }else{
             console.log('node对象为null 不能插入');
+        }
+    },
+
+    /**
+     * 清空并删除指定index的item
+     * index (序号从1开始)
+     * index为null 全部移除
+     */
+    removeItem: function(index){
+        var items = this.getItems();
+        if(index!=null){
+            this.removeItemByIndex(index);
+        }else{
+            var len = items.length;
+            for(var i=len-1;i>=0;i--){
+                this.removeItemByIndex(i+1);
+            }
+        }
+
+    },
+
+    _onClick: function(){
+        if(this.onClick!=null){
+            this.onClick(this);
         }
     }
 

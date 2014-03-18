@@ -429,7 +429,6 @@ wof.bizWidget.VoucherComponent.prototype = {
             this._tab.setIsInside(true);
             this._tab.setLeft(0);
             this._tab.appendTo(this);
-            this._tab.render();
         }else{
             this._tab = tab;
         }
@@ -1119,7 +1118,7 @@ wof.bizWidget.VoucherComponent.prototype = {
                         break;
                     }
                 }
-                this._tab.setActiveIndex(tabItemIndex);
+                this._tab.setActiveItemIndex(tabItemIndex);
             }else{
                 //如果不存在页签分组 则直接隐藏页签
                 this._tab.setHiden(true);

@@ -76,10 +76,14 @@ wis.widget.Select.prototype = {
      */
     initRender: function () {
         this._select = jQuery('<input type="text">');
+        this._select.attr('id',this.getCid());
+        this._select.attr('name',this.getSelectName());
+
+        //将容器添加到dom上
         $("body").append(this._select);
-        var ligerComboBox= this._select.ligerComboBox({
+        var ligerComboBox = this._select.ligerComboBox({
             textField: "text",
-            valueField:"id",
+            valueField: "id",
             data: [
                 { id: 1, text: "金智科技"},
                 { id: 2, text: "金智教育"},
@@ -87,7 +91,9 @@ wis.widget.Select.prototype = {
                 { id: 4, text: "金智智能"}
             ],
             isMultiSelect: this.getIsMultSelect(),
-            isNotShowClear: true
+            isNotShowClear: true,
+            onBeforeSelect:this._onBeforeSelect,
+            onSelected:this._onSelected
         });
         this.getDomInstance().append(ligerComboBox);
     },
@@ -99,7 +105,8 @@ wis.widget.Select.prototype = {
 
     //渲染方法
     render: function () {
-
+        this.getCid() && this._select.attr('id',this.getCid());
+        this.getSelectName() && this._select.attr('name',this.getSelectName());
     },
 
     //渲染后处理方法
@@ -118,5 +125,11 @@ wis.widget.Select.prototype = {
     //----------必须实现----------
     setData: function (data) {
         this.setCid(data.cid);
+    },
+    onBeforeSelect: function (callBack) {
+        this._onBeforeSelect = callBack;
+    },
+    onSelected:function(callBack){
+        this._onSelected = callBack;
     }
 };
