@@ -327,7 +327,6 @@ wof.bizWidget.VoucherComponent.prototype = {
             this._tab.setIsInside(true);
             this._tab.setLeft(0);
             this._tab.appendTo(this);
-            this._tab.render();
         }else{
             this._tab = tab;
         }
@@ -463,18 +462,18 @@ wof.bizWidget.VoucherComponent.prototype = {
                 this.setActiveVoucherItemRank(null);
             }
 
-            //this._voucherItemGroups.splice(voucherItemGroupIndex-1,1);
-            //this._voucherItemGroups.splice(voucherItemGroupIndex-2,0,voucherItemGroup);
+            this._voucherItemGroups.splice(voucherItemGroupIndex-1,1);
+            this._voucherItemGroups.splice(voucherItemGroupIndex-2,0,voucherItemGroup);
             //重设index
-            //for(var i=0;i<this._voucherItemGroups.length;i++){
-                //var group = this._voucherItemGroups[i];
-                //group.setIndex(i+1);
-            //}
-            //voucherItemGroup.remove();
-            //voucherItemGroup.beforeTo(prevVoucherItemGroup);
-            voucherItemGroup.setIndex(voucherItemGroup.getIndex()-1);
-            prevVoucherItemGroup.setIndex(prevVoucherItemGroup.getIndex()+1);
-            this._setInternalVariables();
+            for(var i=0;i<this._voucherItemGroups.length;i++){
+                var group = this._voucherItemGroups[i];
+                group.setIndex(i+1);
+            }
+            voucherItemGroup.remove();
+            voucherItemGroup.beforeTo(prevVoucherItemGroup);
+            //voucherItemGroup.setIndex(voucherItemGroup.getIndex()-1);
+            //prevVoucherItemGroup.setIndex(prevVoucherItemGroup.getIndex()+1);
+            //this._setInternalVariables();
             this.calcLayout()
         }
     },
@@ -494,19 +493,19 @@ wof.bizWidget.VoucherComponent.prototype = {
                 this.setActiveVoucherItemRank(null);
             }
 
-            /*this._voucherItemGroups.splice(voucherItemGroupIndex-1,1);
+            this._voucherItemGroups.splice(voucherItemGroupIndex-1,1);
             this._voucherItemGroups.splice(voucherItemGroupIndex,0,voucherItemGroup);
             //重设index
             for(var i=0;i<this._voucherItemGroups.length;i++){
                 var group = this._voucherItemGroups[i];
                 group.setIndex(i+1);
                 group.calcLayout();
-            }*/
-            //voucherItemGroup.remove();
-            //voucherItemGroup.afterTo(nextVoucherItemGroup);
-            voucherItemGroup.setIndex(voucherItemGroup.getIndex()+1);
-            nextVoucherItemGroup.setIndex(nextVoucherItemGroup.getIndex()-1);
-            this._setInternalVariables();
+            }
+            voucherItemGroup.remove();
+            voucherItemGroup.afterTo(nextVoucherItemGroup);
+            //voucherItemGroup.setIndex(voucherItemGroup.getIndex()+1);
+            //nextVoucherItemGroup.setIndex(nextVoucherItemGroup.getIndex()-1);
+            //this._setInternalVariables();
             this.calcLayout();
         }
     },
@@ -1097,7 +1096,7 @@ wof.bizWidget.VoucherComponent.prototype = {
                         break;
                     }
                 }
-                this._tab.setActiveIndex(tabItemIndex);
+                this._tab.setActiveItemIndex(tabItemIndex);
             }else{
                 //如果不存在页签分组 则直接隐藏页签
                 this._tab.setHiden(true);
@@ -1223,7 +1222,7 @@ wof.bizWidget.VoucherComponent.prototype = {
                         break;
                     }
                 }
-                this._tab.setActiveIndex(tabItemIndex);
+                this._tab.setActiveItemIndex(tabItemIndex);
             }else{
                 this._tab.setHiden(true);
             }

@@ -8,7 +8,7 @@
 wof.widget.Tab = function () {
     this._version = '1.0';
 
-    this.getDomInstance().css('overflow','hidden');
+   // this.getDomInstance().css('overflow','hidden');
 
 };
 
@@ -17,47 +17,62 @@ wof.widget.Tab.prototype = {
      * 属性声明 （private ，用"_"标识）
      */
 
-    _activeIndex:null,
+    _activeItemIndex:null,
 
-    _initDOMFlag:null,
 
-    _updateFlag:null,
+
+    _tab: null,
 
     /**
      * get/set 属性方法定义
      */
-    setActiveIndex: function(activeIndex){
-        if(this._initDOMFlag==true){
-            this.getDomInstance().tabs({'active':(activeIndex-1)});
-            this._updateFlag = false;
-        }
-        this._activeIndex = activeIndex;
+    getActiveItemIndex: function () {
+        return this._activeItemIndex || 1;
     },
 
-    getActiveIndex:function(){
-        return this._activeIndex;
+    setActiveItemIndex: function (activeItemIndex) {
+        this._activeItemIndex = activeItemIndex;
     },
 
     /**
      * Render 方法定义
      */
 
-    //选择实现
-    beforeRender: function () {
-        this.getDomInstance().children('ul').remove();
+    initRender: function(){
+        var _this = this;
+        var tab = wis$.create('Tab');
+        tab.onClick = function(_tab){
+            var itemIndex=_tab.getActiveItemIndex();
+            _this.setActiveItemIndex(itemIndex);
+            _this.sendMessage('wof.widget.Tab_active');
+        }
+        tab.appendTo(this.getDomInstance());
+        this._tab = tab;
+    },
 
-        var ul = jQuery('<ul>');
-        this.getDomInstance().prepend(ul);
+    //选择实现
+    beforeRender: function (){
+        var childs = [];
+        //首先移除item 并且将内部对象暂存到childs
         for(var i=0; i<this.childNodes().length; i++){
             var child = this.childNodes()[i];
-            var li = jQuery('<li>');
-            var a = jQuery('<a href="#'+child.getId()+'">'+child.getTitle()+'</a>');
-            li.append(a);
-            ul.append(li);
-
+            child.getDomInstance().detach();
+            childs.push(child);
+        }
+        this._tab.removeItem();
+        //重新插入item
+        for(var i=0; i<childs.length; i++){
+            var child = childs[i];
+            this._tab.insertItem({name:child.getId(),width:100,label:child.getTitle(),closeable:true,icon:'add',iconPosition:'left'});
             child.childNodes()[0].setWidth(this.getWidth()-4);
             child.childNodes()[0].setHeight(this.getHeight()-52);
+            child.childNodes()[0].getDomInstance().css('width',(this.getWidth()-8)+'px');
+            child.childNodes()[0].getDomInstance().css('height',(this.getWidth()-52)+'px');
+            this._tab.insertNode(child.getDomInstance(),i+1);
         }
+        this._tab.setWidth(this.getWidth()-8);
+        this._tab.setHeight(this.getHeight()-52);
+        this._tab.setActiveItemIndex(this.getActiveItemIndex());
     },
 
     //----------必须实现----------
@@ -67,35 +82,7 @@ wof.widget.Tab.prototype = {
 
     //选择实现
     afterRender: function(){
-        var _this = this;
-        this._updateFlag = true;
-        this.getDomInstance().tabs({
-            heightStyle:'fill',
-            activate: function(event,ui){
-                event.stopPropagation();
-                if(_this._updateFlag == false){
-                    var activeIndex = 0;
-                    var oid = ui.newPanel.attr('oid');
-                    var items = _this.childNodes();
-                    for(var i=0;i<items.length;i++){
-                        if(items[i].getId()==oid){
-                            activeIndex = i;
-                            break;
-                        }
-                    }
-                    _this.setActiveIndex(activeIndex+1);
-                    _this.sendMessage('wof.widget.Tab_active');
-                }else{
-                    _this._updateFlag = false;
-                }
-            }
-        });
-        this.getDomInstance().tabs("refresh");
-        if(this.getActiveIndex()!=null){
-            this.getDomInstance().tabs({active:(this.getActiveIndex()-1)});
-            this.sendMessage('wof.widget.Tab_active');
-        }
-        this._initDOMFlag = true;
+        this._tab.render();
         this.sendMessage('wof.widget.Tab_render');
     },
 
@@ -106,12 +93,12 @@ wof.widget.Tab.prototype = {
     //----------必须实现----------
     getData: function() {
         return {
-            activeIndex: this.getActiveIndex()
+            activeItemIndex: this.getActiveItemIndex()
         };
     },
     //----------必须实现----------
     setData: function(data) {
-        this.setActiveIndex(data.activeIndex);
+        this.setActiveItemIndex(data.activeItemIndex);
     },
 
     _insideOnReceiveMessage:{
@@ -240,7 +227,7 @@ wof.widget.Tab.prototype = {
         var gridLayout = wof$.create('GridLayout');
         gridLayout.setIsInside(true);
         gridLayout.setOverflow('auto');
-        gridLayout.setWidth(this.getWidth()-4);
+        gridLayout.setWidth(this.getWidth()-8);
         gridLayout.setHeight(this.getHeight()-52);
         gridLayout.setTop(50);
         gridLayout.setLeft(4);
@@ -296,13 +283,13 @@ wof.widget.Tab.prototype = {
 
     //创建初始化的Tab
     createSelf: function(width, height){
-        var node = new wof.widget.Tab();
+        var node = wof$.create('Tab');
         node.setLeft(0);
         node.setTop(0);
         node.setWidth(width-12);
         node.setHeight(height-25);
         node.insertItem({title:'未命名'});
-        node.setActiveIndex(1);
+        node.setActiveItemIndex(1);
 
         return node;
     }

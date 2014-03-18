@@ -111,6 +111,23 @@
 <script src="src/wof/functionWidget/spanner/AddRecordComponentSpanner.js"></script>
 
 <script src="src/wof/kernel/initAOP.js"></script>
+
+<script src="lib/wis/src/wis/kernel/initNamespace.js"></script>
+
+<script src="lib/wis/src/wis/util/Hashtable.js"></script>
+<script src="lib/wis/src/wis/util/ObjectManager.js"></script>
+<script src="lib/wis/src/wis/util/Observer.js"></script>
+<script src="lib/wis/src/wis/util/ArrayList.js"></script>
+<script src="lib/wis/src/wis/util/Selector.js"></script>
+<script src="lib/wis/src/wis/util/SelectorList.js"></script>
+<script src="lib/wis/src/wis/util/GlobalObject.js"></script>
+<script src="lib/wis/src/wis/util/Tool.js"></script>
+
+<script src="lib/wis/src/wis/widget/Tab.js"></script>
+
+<script src="lib/wis/src/wis/kernel/initSystem.js"></script>
+
+
 <script>
 
 jQuery(function(){
@@ -317,7 +334,7 @@ jQuery(function(){
                 tab.setHeight(windowHeight-headerHeight-12);
                 tab.setTop(0);
                 tab.setLeft(0);
-                tab.setActiveIndex(1);
+                tab.setActiveItemIndex(1);
                 sidebar2.append(tab.getDomInstance());
                 wof.util.ObjectManager.add(tab.getId(), tab);
 

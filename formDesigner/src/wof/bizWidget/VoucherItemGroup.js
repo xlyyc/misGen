@@ -677,7 +677,7 @@ wof.bizWidget.VoucherItemGroup.prototype = {
             item.appendTo(this);
         }
         if(this.getIsExpand()==true){
-            this.setHeight(itemHeight*this.getRows()+labelHeight);
+            this.setHeight(itemHeight*this.getRows()+labelHeight+80);
         }else{
             this.setHeight(labelHeight);
         }
@@ -904,7 +904,7 @@ wof.bizWidget.VoucherItemGroup.prototype = {
                 var left = (c-1) * voucherItemWidth;
                 var obj = placeVoucherItemTable.items(top+','+left);
                 if(obj==null){
-                    var newVoucherItem = new wof.bizWidget.VoucherItem();
+                    var newVoucherItem = wof$.create('VoucherItem');
                     newVoucherItem.setWidth(voucherItemWidth);
                     newVoucherItem.setHeight(itemHeight);
                     newVoucherItem.setTop(top);
