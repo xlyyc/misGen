@@ -476,7 +476,7 @@ jQuery(function(){
             voucherComponent.insertVoucherItemGroup({groupCaption:'表头分组2',width:500,titleHeight:25,colsNum:2,itemHeight:45});
 
             var voucherItemData1 = {
-                colspan:'1',
+                colspan:'2',
                 rowspan:'1',
                 isFixItem:'true',
                 itemName:'itemName1',
@@ -500,7 +500,7 @@ jQuery(function(){
                 linkageItem:'',
                 tipValue:''
             };
-            voucherComponent.insertVoucherItem(voucherItemData1, 1);
+            voucherComponent.insertVoucherItem(voucherItemData1, {rowNum:1,colNum:1}, 1);
 
             flowLayout.insertNode(voucherComponent,{row:1,col:1},1);
 

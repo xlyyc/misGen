@@ -648,12 +648,12 @@ wof.bizWidget.VoucherItemGroup.prototype = {
             label.setIsInside(true);
             label.setTop(0);
             label.setLeft(0);
-            label.setIsUnderline(true);
-            label.setScale(this.getScale());
-            label.setHeight(this.getTitleHeight());
-            label.setText(this.getGroupCaption());
             this._label = label;
         }
+        this._label.setIsUnderline(true);
+        this._label.setScale(this.getScale());
+        this._label.setHeight(this.getTitleHeight());
+        this._label.setText(this.getGroupCaption());
         this._label.setIsBold(false);
         this._label.setIsHighlight(false);
         this._label.setWidth(this.getWidth());

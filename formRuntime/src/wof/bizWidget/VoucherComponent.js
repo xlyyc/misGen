@@ -560,10 +560,17 @@ wof.bizWidget.VoucherComponent.prototype = {
                 this.setActiveVoucherItemGroupIndex(voucherItemGroupIndex-1);
                 this.setActiveVoucherItemRank(null);
             }
-            voucherItemGroup.setIndex(voucherItemGroup.getIndex()-1);
-            prevVoucherItemGroup.setIndex(prevVoucherItemGroup.getIndex()+1);
-            this._setInternalVariables();
-            this.calcLayout()
+
+            this._voucherItemGroups.splice(voucherItemGroupIndex-1,1);
+            this._voucherItemGroups.splice(voucherItemGroupIndex-2,0,voucherItemGroup);
+            //重设index
+            for(var i=0;i<this._voucherItemGroups.length;i++){
+                var group = this._voucherItemGroups[i];
+                group.setIndex(i+1);
+            }
+            voucherItemGroup.remove();
+            voucherItemGroup.beforeTo(prevVoucherItemGroup);
+            this.calcLayout();
         }
     },
 
@@ -581,9 +588,16 @@ wof.bizWidget.VoucherComponent.prototype = {
                 this.setActiveVoucherItemGroupIndex(voucherItemGroupIndex+1);
                 this.setActiveVoucherItemRank(null);
             }
-            voucherItemGroup.setIndex(voucherItemGroup.getIndex()+1);
-            nextVoucherItemGroup.setIndex(nextVoucherItemGroup.getIndex()-1);
-            this._setInternalVariables();
+            this._voucherItemGroups.splice(voucherItemGroupIndex-1,1);
+            this._voucherItemGroups.splice(voucherItemGroupIndex,0,voucherItemGroup);
+            //重设index
+            for(var i=0;i<this._voucherItemGroups.length;i++){
+                var group = this._voucherItemGroups[i];
+                group.setIndex(i+1);
+                group.calcLayout();
+            }
+            voucherItemGroup.remove();
+            voucherItemGroup.afterTo(nextVoucherItemGroup);
             this.calcLayout();
         }
     },
@@ -664,6 +678,12 @@ wof.bizWidget.VoucherComponent.prototype = {
             if(voucherComponentData.paramMaps!=null){
                 this.setParamMaps(voucherComponentData.paramMaps);
             }
+
+            for(var i=0;i<this._voucherItemGroups.length;i++){
+                var group = this._voucherItemGroups[i];
+                group.calcLayout();
+            }
+            this.calcLayout();
         }
     },
 
@@ -710,6 +730,9 @@ wof.bizWidget.VoucherComponent.prototype = {
                 if(voucherItemGroupData.isHead!=null){
                     voucherItemGroup.setIsHead((voucherItemGroupData.isHead=='true'||voucherItemGroupData.isHead==true)?true:false);
                 }
+
+                voucherItemGroup.calcLayout();
+                this.calcLayout();
             }
         }
     },
@@ -806,6 +829,9 @@ wof.bizWidget.VoucherComponent.prototype = {
                         if(voucherItemData.tipValue!=null){
                             voucherItem.setTipValue(voucherItemData.tipValue);
                         }
+
+                        voucherItemGroup.calcLayout();
+                        this.calcLayout();
                     }else{
                         console.log('不存在的voucherItem');
                     }
@@ -918,6 +944,9 @@ wof.bizWidget.VoucherComponent.prototype = {
                         if(voucherItemData.tipValue!=null){
                             newVoucherItem.setTipValue(voucherItemData.tipValue);
                         }
+
+                        voucherItemGroup.calcLayout();
+                        this.calcLayout();
                     }else{
                         console.log('不存在的voucherItem');
                     }
