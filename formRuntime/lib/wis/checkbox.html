@@ -44,6 +44,24 @@
             checkbox.appendTo(container);
 
             checkbox.render();
+            
+            
+            checkbox2 = wis$.create('Checkbox');
+            checkbox2.setWidth(120);
+            checkbox2.setHeight(30);
+            checkbox2.setTop(0);
+            checkbox2.setLeft(0);
+            checkbox2.setValue('文本框测试值');
+            checkbox2.setLabel('文本框测试值');
+            checkbox2.setName('name1');
+            //checkbox.setDisabled("disabled");
+            //checkbox.setChecked("checked");
+            checkbox2.onSelect(function(){alert(11);});
+            //checkbox.onSelect(function(){alert("onSelect");});
+            var container2 = jQuery('#container2');
+            checkbox2.appendTo(container2);
+
+            checkbox2.render();
         }
 
         function clone() {
@@ -98,5 +116,6 @@
 
 
 <div id="container" style="position:absolute;width:400px;height:300px;top:50px;left:0px;"></div>
+<div id="container2" style="position:absolute;width:400px;height:300px;top:350px;left:0px;"></div>
 </body>
 </html>

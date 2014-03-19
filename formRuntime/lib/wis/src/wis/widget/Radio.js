@@ -12,6 +12,7 @@ wis.widget.Radio.prototype = {
     _cid: null,  //单选按钮的id
     _name: null,  //单选按钮的名称
     _value: null, //单选按钮的值
+    _themes:null,
     _label: null, //单选按钮的文字
     _customValidate: null,//自定义验证器
     _disabled: null, //禁用
@@ -21,6 +22,7 @@ wis.widget.Radio.prototype = {
     _root:null, // 组件节点
     
     _onClick: null, //点击事件
+    _onChange: null, //修改事件
     _onSelect: null,// 选中事件
 
     getCid: function () {
@@ -28,6 +30,12 @@ wis.widget.Radio.prototype = {
     },
     setCid: function (cid) {
         this._cid = cid;
+    },
+    getThemes: function () {
+        return this._themes;
+    },
+    setThemes: function (themes) {
+        this._themes = themes;
     },
     getName: function () {
         return this._name;
@@ -75,6 +83,9 @@ wis.widget.Radio.prototype = {
     onClick: function (callBack) {
         this._onClick = callBack;
     },
+    onChange: function (callBack) {
+        this._onChange = callBack;
+    },
     onSelect: function (callBack) {
         this._onSelect = callBack;
     },
@@ -82,36 +93,7 @@ wis.widget.Radio.prototype = {
      * 初始化方法
      */
     _init: function (data) {
-    	if (!data) {
-    		return;
-    	}
-        if(data.cid){
-    		this._cid = data.cid;
-    	}
-	    if(data.name){
-			this._name = data.name;
-		}
-        if(data.value){
-    		this.setValue(data.value);
-    	}
-        if(data.label){
-    		this._label = data.label;
-    	}
-        if(data.customValidate){
-    		this._customValidate = data.customValidate;
-    	}
-        if(data.disabled){
-    		this._disabled = data.disabled;
-    	}
-        if(data.checked){
-    		this._checked = data.checked;
-    	}
-        if(data.onclick){
-    		this._onClick = data.onclick;
-    	}
-        if(data.onselect){
-    		this._onSelect = data.onselect;
-    	}
+    	this.setOptions(data);
     },
 
     /**
@@ -168,6 +150,7 @@ wis.widget.Radio.prototype = {
             cid: this.getCid(),
             name: this.getName(),
             customValidate: this.getCustomValidate(),
+            themes:this.getThemes(),
             label: this.getLabel(),
             value: this.getValue(),
             disabled: this.getDisabled(),
@@ -180,6 +163,7 @@ wis.widget.Radio.prototype = {
         this.setCid(data.cid);
         this.setName(data.name);
         this.setLabel(data.label);
+        this.setThemes(data.themes);
         this.setCustomValidate(data.customValidate);
         this.setValue(data.value);
         this.setDisabled(data.disabled);
@@ -188,13 +172,14 @@ wis.widget.Radio.prototype = {
     // 解除事件绑定
     _unbindEvents: function(){
 		this._radio.off('click');
+		this._radio.off('change');
 	},
     // 绑定事件
     _bindEvents: function(){
 		var that = this;
 		this._radio.on('click',function(e) {
 			var checked = that._radio.attr('checked');//是否选中
-			if (checked && that.getChecked()&&that._onSelect()) {
+			if (checked && that.getChecked()&&that._onSelect) {
 				that._onSelect();//选中事件
 			}
 			if (that._onClick) {
@@ -202,5 +187,68 @@ wis.widget.Radio.prototype = {
 			}
 			that.setChecked(checked);
 		});
-	}
+		this._radio.on('change',function(e) {
+			var value = that._radio.val();
+			var handler = that._onChange;
+			if (handler) {
+				handler(value);
+			}
+		});
+	},
+	//----------自定义实现----------
+	getOptions: function () {
+		return {
+            cid: this.getCid(),
+            name: this.getName(),
+            customValidate: this.getCustomValidate(),
+            themes:this.getThemes(),
+            label: this.getLabel(),
+            value: this.getValue(),
+            disabled: this.getDisabled(),
+            checked: this.getChecked(),
+            onclick:this._onClick,
+            onchange:this._onChange,
+            onselect:this._onSelect
+        }
+    },
+
+    //----------自定义实现(进行必要的校验和默认值设置)----------
+    setOptions: function (data) {
+    	if (!data) {
+    		return;
+    	}
+        if(data.cid){
+    		this.setCid(data.cid);
+    	}
+	    if(data.name){
+			this.setName(data.name);
+		}
+	    if(data.themes){
+	    	this.setThemes(data.themes);
+	    }
+        if(data.value){
+    		this.setValue(data.value);
+    	}
+        if(data.label){
+    		this.setLabel(data.label);
+    	}
+        if(data.customValidate){
+    		this.setCustomValidate(data.customValidate);
+    	}
+        if(data.disabled){
+    		this.setDisabled(data.disabled);
+    	}
+        if(data.checked){
+    		this.setChecked(data.checked);
+    	}
+        if(data.onclick){
+    		this.onClick(data.onclick);
+    	}
+        if(data.onchange){
+    		this.onChange(data.onchange);
+    	}
+        if(data.onselect){
+    		this.onSelect(data.onselect);
+    	}
+    }
 };

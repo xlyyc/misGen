@@ -11,14 +11,13 @@ wis.widget.Textarea.prototype = {
 
     _cid: null,                     //id
     _name: null,                    //名称
-    _errorMsg: null,                //验证失败信息
-    _displayType: null,            //文本的显示类型，列如：金额，美元，百分比
+    _themes:null,					//文本域的样式，对应主题里面的样式名
     _value: null,                    //本框的值
     _maxLength: null,               //文本框的可输入长度，不区分中英文
     _placeholder: null,             //支持Internet Explorer9 和更早的版本。输入内容提醒
-    _rows: null,                      //规定文本区内可见的行数
-    _cols: null,                     //规定文本区内可见的列数
-    _wrap: null,                     //自动换行
+    _rows: 2,                      //规定文本区内可见的行数
+    _cols: 20,                     //规定文本区内可见的列数
+    _wrap: 'off',                     //自动换行
 
     _customValidate: null,          //自定义验证器
     _disabled: null,                 //规定该文本框只做展示用，提交时无法获取值
@@ -29,13 +28,14 @@ wis.widget.Textarea.prototype = {
     _onFocus: null,                 //当元素获得焦点时执行脚本
     _onChange: null,                //当元素改变时执行脚本
 
+    _root:null,//底层组件对象
+    
     getCid: function () {
         return this._cid;
     },
     setCid: function (cid) {
         this._cid = cid;
     },
-
     getName: function () {
         return this._name;
     },
@@ -56,21 +56,6 @@ wis.widget.Textarea.prototype = {
     setValue: function (value) {
         this._value = value;
     },
-
-    getErrorMsg: function () {
-        return this._errorMsg || '';
-    },
-    setErrorMsg: function (errorMsg) {
-        this._errorMsg = errorMsg;
-    },
-
-    getDisplayType: function () {
-        return this._displayType;
-    },
-    setDisplayType: function (displayType) {
-        this._displayType = displayType;
-    },
-
     getMaxLength: function () {
         return this._maxLength;
     },
@@ -137,7 +122,7 @@ wis.widget.Textarea.prototype = {
      * 初始化方法
      */
     _init: function (data) {
-
+    	this.setOptions(data);
     },
 
     /**
@@ -145,58 +130,33 @@ wis.widget.Textarea.prototype = {
      * 仅在第一次调用render时执行
      */
     initRender: function () {
-        var that = this;
-        var textarea = $.loveyInput.create({
-            cid: this.getCid(),
-            name: this.getName(),
-            customValidate: this.getCustomValidate(),
-            value: this.getValue(),
-            errorMsg: this.getErrorMsg(),
-            displayType: this.getDisplayType(),
-            //  maxLength: this.getMaxlength(),
-            placeholder: this.getPlaceholder(),
-            disabled: this.getDisabled(),
-            readonly: this.getReadonly(),
-            rows: this.getRows(),
-            cols: this.getCols(),
-            warp: this.getWrap(),
-
-            onchange: function (e) {
-                typeof that._onChange == "function" ? that._onChange() : null
-            },
-            onclick: function (e) {
-                typeof that._onClick == "function" ? that._onClick() : null
-            },
-            onblur: function (e) {
-                typeof that._onBlur == "function" ? that._onBlur() : null
-            },
-            onfocus: function (e) {
-                typeof that._onFocus == "function" ? that._onFocus() : null
-            }
-        });
-        $('#container').append(textarea.root);
+    	this._root = $('<textarea />');
+		this._root.val(this.getPlaceholder());
+		this.getDomInstance().append(this._root);
     },
-
-    _bindEvents: function () {
-
-    },
-
     //渲染前处理方法
-    beforeRender: function () {
-
-    },
+    beforeRender: function (){},
 
     //渲染方法
     render: function () {
-
-
+    	if (this.getCid()) this._root.attr('id', this.getCid());
+		if (this.getName()) this._root.attr('name',this.getName());
+		if (this.getDisabled()) this._root.attr('disabled',this.getDisabled());
+		if (this.getValue()) this._root.attr('value',this.getValue());
+		if (this.getReadonly()) this._root.attr('readonly',this.getReadonly());
+		if (this.getRows()) this._root.attr('rows',this.getRows());
+		if (this.getCols()) this._root.attr('cols',this.getCols());
+		if (this.getWrap()) this._root.attr('wrap',this.getWrap());
+		
+		//themes
+		//wrap
+		//maxlength
+		this._unbindEvents();
+		this._bindEvents();
     },
 
     //渲染后处理方法
-    afterRender: function () {
-
-
-    },
+    afterRender: function (){},
 
     /**
      * getData/setData 方法定义
@@ -204,32 +164,176 @@ wis.widget.Textarea.prototype = {
 
     //----------必须实现----------
     getData: function () {
-        return {
+    	return {
             cid: this.getCid(),
             name: this.getName(),
+            row:this.getRow(),
+            cols: this.getCols(),
+            wrap: this.getWrap(),
+            themes:this.getThemes(),
             customValidate: this.getCustomValidate(),
             value: this.getValue(),
-            errorMsg: this.getErrorMsg(),
-            displayType: this.getDisplayType(),
-            maxLength: this.getMaxlength(),
+			maxLength: this.getMaxLength(),
             placeholder: this.getPlaceholder(),
             disabled: this.getDisabled(),
-            readonly: this.getReadonly()
+            readonly: this.getReadonly(),
+            //方法
+            onclick:this._onClick,
+            onblur:this._onBlur,
+            onfocus:this._onFocus,
+            onchange:this._onChange
         }
     },
 
     //----------必须实现----------
     setData: function (data) {
+    	if (!data) {
+    		return;
+    	}
         this.setCid(data.cid);
         this.setName(data.name);
-        this.setCustomValidate(data.customValidate);
-        this.setValue(data.value);
-        this.setErrorMsg(data.errorMsg);
-        this.setDisplayType(data.displayType);
-        this.setMaxlength(data.maxLength);
-        this.setPlaceholder(data.placeholder);
-        this.setDisabled(data.disabled);
-        this.setReadonly(data.readonly);
-    }
+		this.setThemes(data.themes);
+		this.setValue(data.value);
+    	this.setPlaceholder(data.placeholder);
+    	this.setRow(data.row);
+    	this.setCols(data.cols);
+    	this.setCustomValidate(data.customValidate);
+    	this.setMaxLength(data.maxlength);
+    	this.setWrap(data.wrap);
+    	this.setDisabled(data.disabled);
+    	this.setReadonly(data.readonly);
+        // 方法
+    	this.onClick(this.onClick);
+    	this.onBlur(his.onBlur);
+    	this.onFocus(this.onFocus);
+    	this.onChange(this.onChange);
+    },
+    //解除事件绑定
+    _unbindEvents: function() {
+		this._root.off('focus');
+		this._root.off('blur');
+		this._root.off('change');
+		this._root.off('click');
+	},
+	//绑定事件
+    _bindEvents: function() {
+		var that = this;
+		this._root.on('focus', function(e) {
+			if (that._onFocus) {
+				that._onFocus(e);
+			}
+			var value = that._root.val();
+			//提示信息清空
+			if (value == that.getPlaceholder()) {
+				that._root.val('');
+			}
+		});
 
+		this._root.on('blur', function(e) {
+			if (that._onBlur) {
+				that._onBlur(e);
+			}
+
+			var value = that._root.val();
+			if (!value) that._root.val(that._option.placeholder);
+		});
+
+		this._root.on('change',function(e) {
+			var value = that._root.val();
+
+			var handler = that._onChange;
+			if (handler) {
+				handler(value);
+			}
+			that.text = value;
+		});
+
+		this._root.on('click', function(e) {
+			if (that._onClick) {
+				that._onClick(e);
+			}
+		});
+	},
+	//----------自定义实现----------
+	getOptions: function () {
+		return {
+            cid: this.getCid(),
+            name: this.getName(),
+            row:this.getRow(),
+            wrap: this.getWrap(),
+            themes:this.getThemes(),
+            customValidate: this.getCustomValidate(),
+            value: this.getValue(),
+            cols: this.getCols(),
+			maxLength: this.getMaxLength(),
+            placeholder: this.getPlaceholder(),
+            disabled: this.getDisabled(),
+            readonly: this.getReadonly(),
+            onclick:this._onClick,
+            onblur:this._onBlur,
+            onfocus:this._onFocus,
+            onchange:this._onChange
+        }
+    },
+
+    //----------自定义实现(进行必要的校验和默认值设置)----------
+    setOptions: function (data) {
+    	if (!data) {
+    		return;
+    	}
+        if(data.cid){
+    		this.setCid(data.cid);
+    	}
+        if(data.name){
+        	this.setName(data.name);
+		}
+        if(data.themes){
+        	this.setThemes(data.themes);
+		}
+        if(data.value){
+    		this.setValue(data.value);
+    	}
+        if(data.placeholder){
+        	this.setPlaceholder(data.placeholder);
+    	}
+        if(data.row){
+        	this.setRow(data.row);
+    	}else{
+    		this.setRow(2);
+    	}
+        if(data.wrap){
+        	 this.setWrap(data.wrap);
+    	}else{
+    		 this.setWrap('off');
+    	}
+        if(data.cols){
+        	this.setCols(data.cols);
+    	}else{
+    		this.setCols(20);
+    	}
+        if(data.customValidate){
+        	this.setCustomValidate(data.customValidate);
+    	}
+        if(data.maxlength){
+        	this.setMaxLength(data.maxlength);
+    	}
+        if(data.disabled){
+        	this.setDisabled(data.disabled);
+    	}
+        if(data.readonly){
+        	this.setReadonly(data.readonly);
+    	}
+        if(data.onClick&&(typeof this.onClick == "function")){
+    		this.onClick(this.onClick);
+    	}
+        if(data.onBlur&&(typeof this.onBlur == "function")){
+    		this.onBlur(his.onBlur);
+    	}
+        if(data.onFocus&&(typeof this.onFocus == "function")){
+    		this.onFocus(this.onFocus);
+    	}
+        if(data.onChange&&(typeof this.onChange == "function")){
+    		this.onChange(this.onChange);
+    	}
+    }
 };

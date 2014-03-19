@@ -1,32 +1,34 @@
 /**
- *
- *
- *
+ * 输入框统一API
  */
 wis.widget.Input = function () {
     this._version = '1.0';
-
 };
 wis.widget.Input.prototype = {
 
-    _cid: null,                     //id
+    _cid: null,                     //文本框唯一标识,页面唯一
     _name: null,                    //名称
+    _themes:null,					//文本框的样式，对应主题里面的样式名
+    _validate:null,					//语义层面的验证，如数据类型，生日，长度，中英文，邮件…
+    _customValidate: null,          //自定义验证器 
     _errorMsg: null,                //验证失败信息
+   
     _displayType: null,            //文本的显示类型，列如：金额，美元，百分比
-    _value: null,                    //本框的值
-    _maxLength: null,               //文本框的可输入长度，不区分中英文
-    _placeholder: null,             //支持Internet Explorer9 和更早的版本。输入内容提醒
-
-    _customValidate: null,          //自定义验证器
+    _format:null,					//格式化
+    _value: null,                   //本框的值
+    _type: 'text',					//类型，如“text”，和html类型一致
+    
     _disabled: null,                 //规定该文本框只做展示用，提交时无法获取值
     _readonly: null,                //	规定该文本区只读。文本框不允许修改，提交时可以获取值
-
+    _maxLength: null,               //文本框的可输入长度，不区分中英文
+    _placeholder: null,             //支持Internet Explorer9 和更早的版本。输入内容提醒			
+    
     _onClick: null,                 //当鼠标被单击时执行脚本
     _onBlur: null,                  //当元素失去焦点时执行脚本
     _onFocus: null,                 //当元素获得焦点时执行脚本
     _onChange: null,                //当元素改变时执行脚本
 
-    _rootObj: null,
+    _rootObj: null,					//底层组件节点（内部使用,不参与序列化）					
 
     getCid: function () {
         return this._cid;
@@ -34,21 +36,42 @@ wis.widget.Input.prototype = {
     setCid: function (cid) {
         this._cid = cid;
     },
-
     getName: function () {
         return this._name;
     },
     setName: function (name) {
         this._name = name;
     },
-
+    getThemes: function () {
+        return this._themes;
+    },
+    setThemes: function (themes) {
+        this._themes = themes;
+    },
+    getValidate: function () {
+        return this._validate;
+    },
+    setValidate: function (validate) {
+        this._validate = validate;
+    },
+    getFormat: function () {
+        return this._format;
+    },
+    setFormat: function (format) {
+        this._format = format;
+    },
+    getType: function () {
+        return this._type;
+    },
+    setType: function (type) {
+        this._type = type;
+    },	
     getCustomValidate: function () {
         return this._customValidate;
     },
     setCustomValidate: function (customValidate) {
         this._customValidate = customValidate;
     },
-
     getValue: function () {
         return this._value || '';
     },
@@ -115,7 +138,7 @@ wis.widget.Input.prototype = {
      * 初始化方法
      */
     _init: function (data) {
-
+    	this.setOptions(data);
     },
 
     /**
@@ -123,34 +146,9 @@ wis.widget.Input.prototype = {
      * 仅在第一次调用render时执行
      */
     initRender: function () {
-        var that = this;
-        var input = $.loveyInput.create({
-            cid: this.getCid(),
-            name: this.getName(),
-            customValidate: this.getCustomValidate(),
-            value: this.getValue(),
-            errorMsg: this.getErrorMsg(),
-            displayType: this.getDisplayType(),
-            //  maxLength: this.getMaxlength(),
-            placeholder: this.getPlaceholder(),
-            disabled: this.getDisabled(),
-            readonly: this.getReadonly(),
-            onchange: function (e) {
-                typeof that._onChange == "function" ? that._onChange() : null
-            },
-            onclick: function (e) {
-                typeof that._onClick == "function" ? that._onClick() : null
-            },
-            onblur: function (e) {
-                typeof that._onBlur == "function" ? that._onBlur() : null
-            },
-            onfocus: function (e) {
-                typeof that._onFocus == "function" ? that._onFocus() : null
-            }
-        });
-
-        this.getDomInstance().append(input.root);
-
+    	this._rootObj = $('<input type="'+this.getType()+'"/>');
+		this._rootObj.val(this.getPlaceholder());
+		this.getDomInstance().append(this._rootObj);
     },
 
     _bindEvents: function () {
@@ -163,21 +161,26 @@ wis.widget.Input.prototype = {
 
     //渲染方法
     render: function () {
-        /* if (this.getCid()) this._rootObj.attr('id', this.getCid());
+         if (this.getCid()) this._rootObj.attr('id', this.getCid());
          if (this.getName()) this._rootObj.attr('name', this.getName());
          if (this.getValue()) this._rootObj.attr('value', this.getValue());
-         //if (this.getDisplayType()) this.rootObj.attr('value', this.getDisplayType());
-         if (this.getMaxlength()) this._rootObj.attr('maxlength', this.getMaxlength());
+         //if (this.getType()) this._rootObj.attr('type', this.getType());//type属性不允许更改
+         if (this.getMaxLength()) this._rootObj.attr('maxlength', this.getMaxLength());
          if (this.getPlaceholder) this._rootObj.attr('placeholder', this.getPlaceholder());
          if (this.getDisabled) this._rootObj.attr('disabled', this.getDisabled());
-         if (this.getReadonly) this._rootObj.attr('readonly', this.getReadonly());*/
+         if (this.getReadonly) this._rootObj.attr('readonly', this.getReadonly());
+         //themes
+         //validate
+         //customValidate
+         //displayType
+         //format
+         
+         this._unbindEvents();
+		 this._bindEvents();
     },
 
     //渲染后处理方法
-    afterRender: function () {
-
-
-    },
+    afterRender: function () {},
 
     /**
      * getData/setData 方法定义
@@ -185,32 +188,182 @@ wis.widget.Input.prototype = {
 
     //----------必须实现----------
     getData: function () {
-        return {
+    	return {
             cid: this.getCid(),
             name: this.getName(),
+            validate:this.getValidate(),
+            themes:this.getThemes(),
             customValidate: this.getCustomValidate(),
             value: this.getValue(),
             errorMsg: this.getErrorMsg(),
             displayType: this.getDisplayType(),
-            maxLength: this.getMaxlength(),
+            format:this.getFormat(),
+			type:this.getType(),
+			maxLength: this.getMaxLength(),
             placeholder: this.getPlaceholder(),
             disabled: this.getDisabled(),
-            readonly: this.getReadonly()
+            readonly: this.getReadonly(),
+            //方法是否返回，待确定 TODO
+            onclick:this._onClick,
+            onblur:this._onBlur,
+            onfocus:this._onFocus,
+            onchange:this._onChange
         }
     },
 
     //----------必须实现----------
     setData: function (data) {
+    	if (!data) {
+    		return;
+    	}
         this.setCid(data.cid);
-        this.setName(data.name);
-        this.setCustomValidate(data.customValidate);
-        this.setValue(data.value);
-        this.setErrorMsg(data.errorMsg);
-        this.setDisplayType(data.displayType);
-        this.setMaxlength(data.maxLength);
-        this.setPlaceholder(data.placeholder);
-        this.setDisabled(data.disabled);
-        this.setReadonly(data.readonly);
-    }
+    	this.setName(data.name);
+		this.setThemes(data.themes);
+		this.setValue(data.value);
+    	this.setValidate(data.validate);
+    	this.setFormat(data.format);
+    	this.setType(data.type);
+    	this.setPlaceholder(data.placeholder);
+    	this.setCustomValidate(data.customValidate);
+    	this.setErrorMsg(data.errorMsg);
+    	this.setDisplayType(data.displayType);
+    	this.setMaxlength(data.maxlength);
+    	this.setDisabled(data.disabled);
+    	this.setReadonly(data.readonly);
+    	//方法是否设置，待确定 TODO
+    	this.onClick(this.onClick);
+    	this.onBlur(his.onBlur);
+    	this.onFocus(this.onFocus);
+    	this.onChange(this.onChange);
+    },
+    //解除事件绑定
+    _unbindEvents: function() {
+		this._rootObj.off('focus');
+		this._rootObj.off('blur');
+		this._rootObj.off('change');
+		this._rootObj.off('click');
+	},
+	//绑定事件
+    _bindEvents: function() {	
+    	var that = this;
+		this._rootObj.on('focus', function(e) {
+			if (that._onFocus) {
+				that._onFocus(e);//参数为此事件
+			}
+			var value = that._rootObj.val();
+			//当获取焦点且内容与提示信息相同时，清除内容
+			if (value == that.getPlaceholder()) {
+				that._rootObj.val('');
+			}
+		});
 
+		this._rootObj.on('blur', function(e) {
+			if (that._onBlur) {
+				that._onBlur(e);//参数为此事件
+			}
+			var value = that._rootObj.val();
+			if (!value) that._rootObj.val(that.getPlaceholder());
+		});
+
+		this._rootObj.on('change', function(e) {
+			var value = that._rootObj.val();
+			var handler = that._onChange;
+			if (handler) {
+				handler(value);//参数为文本框的值
+			}
+			that.text = value;
+		});
+
+		this._rootObj.on('click',function (e) {
+			if (that._onClick) {
+				that._onClick(e);//参数为此事件
+			}
+		});
+	},
+	//----------自定义实现----------
+	getOptions: function () {
+		return {
+            cid: this.getCid(),
+            name: this.getName(),
+            validate:this.getValidate(),
+            themes:this.getThemes(),
+            customValidate: this.getCustomValidate(),
+            value: this.getValue(),
+            errorMsg: this.getErrorMsg(),
+            displayType: this.getDisplayType(),
+            format:this.getFormat(),
+			type:this.getType(),
+			maxLength: this.getMaxLength(),
+            placeholder: this.getPlaceholder(),
+            disabled: this.getDisabled(),
+            readonly: this.getReadonly(),
+            onclick:this._onClick,
+            onblur:this._onBlur,
+            onfocus:this._onFocus,
+            onchange:this._onChange
+        }
+    },
+
+    //----------自定义实现(进行必要的校验和默认值设置)----------
+    setOptions: function (data) {
+    	if (!data) {
+    		return;
+    	}
+        if(data.cid){
+    		this.setCid(data.cid);
+    	}
+        if(data.name){
+        	this.setName(data.name);
+		}
+        if(data.themes){
+        	this.setThemes(data.themes);
+		}
+        if(data.value){
+    		this.setValue(data.value);
+    	}
+        if(data.validate){
+        	this.setValidate(data.validate);
+    	}
+        if(data.format){
+        	this.setFormat(data.format);
+    	}
+        if(data.type){
+        	this.setType(data.type);
+    	}else{
+    		this.setType("text");
+    	}
+        if(data.placeholder){
+        	this.setPlaceholder(data.placeholder);
+    	}
+        if(data.customValidate){
+        	this.setCustomValidate(data.customValidate);
+    	}
+        if(data.errorMsg){
+        	this.setErrorMsg(data.errorMsg);
+    	}
+        if(data.displayType){
+        	this.setDisplayType(data.displayType);
+    	} 
+        if(data.maxlength){
+        	this.setMaxlength(data.maxlength);
+    	}
+        if(data.disabled){
+        	this.setDisabled(data.disabled);
+    	}
+        if(data.readonly){
+        	this.setReadonly(data.readonly);
+    	}
+        if(data.onClick&&(typeof this.onClick == "function")){
+    		this.onClick(this.onClick);
+    	}
+        if(data.onBlur&&(typeof this.onBlur == "function")){
+    		this.onBlur(his.onBlur);
+    	}
+        if(data.onFocus&&(typeof this.onFocus == "function")){
+    		this.onFocus(this.onFocus);
+    	}
+        if(data.onChange&&(typeof this.onChange == "function")){
+    		this.onChange(this.onChange);
+    	}
+    }
 };
