@@ -270,7 +270,7 @@ wof.bizWidget.VoucherItemGroup.prototype = {
             insertVoucherItem.beforeTo(voucherItem);
 
             this.calcLayout();
-            var  voucherCOmponent = this.getOriginNode();
+            var voucherCOmponent = this.getOriginNode();
             voucherCOmponent.calcLayout();
             voucherCOmponent.render();
 
@@ -718,7 +718,6 @@ wof.bizWidget.VoucherItemGroup.prototype = {
         }else{
             this._label.appendTo(this);
         }
-
     },
 
     //进行流式布局
