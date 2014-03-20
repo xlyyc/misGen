@@ -476,80 +476,73 @@ wof.bizWidget.VoucherItem.prototype = {
 
     //根据当前的显示类型设置对应的元件
     _setComponent: function(){
-        var state = 'View';
-        var rootNode = this.getOriginNode();
-        if(rootNode!=null){
-            state = rootNode.getState();
-        }
-        console.log(state);
+        if(this.getDataField()!=''){
+            var component = null;
+            var clzName = '';
+            var setValMethod = '';
+            var readonlyMethod = '';
+            var visbleType = this.getVisbleType();
+            if(visbleType=='text'){
+                clzName = 'wof.widget.Text';
+                setValMethod = 'setValue';
+            }else if(visbleType=='textArea'){
+                clzName = 'wof.widget.TextArea';
+            }else if(visbleType=='richTextArea'){
+                clzName = 'wof.widget.HTMLEditor';
+            }else if(visbleType=='select'){
+                clzName = 'wof.widget.ComboBox';
+            }else if(visbleType=='checkBox'){
+                clzName = 'wof.widget.CheckBox';
+            }else if(visbleType=='date'){
+                clzName = 'wof.widget.DateBox';
+            }else if(visbleType=='radio'){
+                clzName = 'wof.widget.RadioGroup';
+            }else if(visbleType=='file'){
+                clzName = 'wof.widget.FileBox';
+            }else if(visbleType=='number'){
+                clzName = 'wof.widget.Text';
+            }
 
-
-        var component = null;
-        var clzName = '';
-        var setValMethod = '';
-        var readonlyMethod = '';
-        var visbleType = this.getVisbleType();
-        if(visbleType=='text'){
+            /**
+             * todo 暂时使用
+             */
             clzName = 'wof.widget.Text';
             setValMethod = 'setValue';
-        }else if(visbleType=='textArea'){
-            clzName = 'wof.widget.TextArea';
-        }else if(visbleType=='richTextArea'){
-            clzName = 'wof.widget.HTMLEditor';
-        }else if(visbleType=='select'){
-            clzName = 'wof.widget.ComboBox';
-        }else if(visbleType=='checkBox'){
-            clzName = 'wof.widget.CheckBox';
-        }else if(visbleType=='date'){
-            clzName = 'wof.widget.DateBox';
-        }else if(visbleType=='radio'){
-            clzName = 'wof.widget.RadioGroup';
-        }else if(visbleType=='file'){
-            clzName = 'wof.widget.FileBox';
-        }else if(visbleType=='number'){
-            clzName = 'wof.widget.Text';
-        }
+            readonlyMethod = 'setReadonly';
 
-        /**
-         * todo 暂时使用
-         */
-        clzName = 'wof.widget.Text';
-        setValMethod = 'setValue';
-        readonlyMethod = 'setReadonly';
+            if(this._component!=null&&this._component.getClassName()==clzName){
+                component = this._component;
+            }else{
+                if(this._component!=null){
+                    this._component.removeChildren(true);
+                    this._component.remove(true);
+                    this._component = null;
+                }
+                component = wof$.create(clzName);
+                component.setIsInside(true);
+                component.appendTo(this);
+                this._component = component;
+            }
+            component.setLeft(this.getLabelWidth());
+            component.setWidth(this.getInputWidth());
+            component.setHeight(this.getInputHeight());
 
-        if(this._component!=null&&this._component.getClassName()==clzName){
-            component = this._component;
-        }else{
-            if(this._component!=null){
-                this._component.removeChildren(true);
-                this._component.remove(true);
-                this._component = null;
-            }
-            component = wof$.create(clzName);
-            component.setIsInside(true);
-            component.appendTo(this);
-            this._component = component;
-        }
-        component.setLeft(this.getLabelWidth());
-        component.setWidth(this.getInputWidth());
-        component.setHeight(this.getInputHeight());
-        if(this.getDataField()!=''){
-            var displayVal = '';
-            var value = this.getValue();
-            if(value!=''){
-                displayVal = value;
-            }
+
+            var displayVal = this.getValue();
             component[setValMethod](displayVal); //todo 需要结合当前的格式化配置来进行显示
-        }else{
-            component[setValMethod]('');
-        }
-        if(state=='View'){
-            component[readonlyMethod](true);
-        }else{
-            if(this.getReadOnly() == true){
+
+            //根据编辑状态和只读属性设置控件只读
+            var voucherComponent = this.getOriginNode();
+            var state = voucherComponent.getState();
+            console.log(state);
+            if(state=='View'){
                 component[readonlyMethod](true);
             }else{
-                component[readonlyMethod](false);
+                if(this.getReadOnly() == true){
+                    component[readonlyMethod](true);
+                }else{
+                    component[readonlyMethod](false);
+                }
             }
         }
     },

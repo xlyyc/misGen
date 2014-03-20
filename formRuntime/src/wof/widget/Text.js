@@ -64,6 +64,7 @@ wof.widget.Text.prototype = {
         this._input.attr('name', this.getName());
         this._input.attr('value', this.getValue());
         this._input.attr('readonly', this.getReadonly());
+        this._input.css('width', this.getWidth()+'px');
 
     },
 
