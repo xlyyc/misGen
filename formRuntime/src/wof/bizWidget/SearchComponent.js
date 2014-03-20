@@ -8,6 +8,11 @@ wof.bizWidget.SearchComponent = function () {
     this._backgroundImg = jQuery('<img src="src/img/backgroud.gif" style="position:absolute;cursor:pointer;opacity:0;filter:alpha(opacity=0);width:100%;height:100%;">');
 
 
+    var onSendMessage = [];
+    onSendMessage.push({'id':'wof.bizWidget.SearchComponent_mousedown','method':'this.setActiveSearchItemRank(null);this.render();'});
+    onSendMessage.push({'id':'wof.bizWidget.SearchComponent_dblclick','method':'if(this.getIsExpand()==true){this.setIsExpand(false);}else{this.setIsExpand(true);}this.calcLayout();this.render();'});
+    this.setOnSendMessage(onSendMessage);
+
 };
 wof.bizWidget.SearchComponent.prototype = {
 
@@ -224,52 +229,11 @@ wof.bizWidget.SearchComponent.prototype = {
      */
 
     initRender: function(){
-        //如果是clone过来的 会直接创建一个label对象 需要先移除
-        var nodes = this.childNodes();
-        for(var i=0;i<nodes.length;i++){
-            if(nodes[i].getClassName()=='wof.widget.Label'){
-                nodes[i].remove(true);
-                break;
-            }
-        }
-        var label = new wof.widget.Label();
-        label.setIsInside(true);
-        label.setTop(0);
-        label.setLeft(0);
-        label.setIsUnderline(true);
-        label.setScale(this.getScale());
 
-        this._label = label;
     },
 
     //选择实现
     beforeRender: function () {
-           /* var _this = this;
-            var timeFn = null;
-            this.getDomInstance().mousedown(function(event){
-                event.stopPropagation();
-                clearTimeout(timeFn);
-                timeFn = setTimeout(function(){
-                    _this.sendMessage('wof.bizWidget.SearchComponent_mousedown');
-                    _this.setActiveSearchItemRank(null);
-                    _this.render();
-                    _this.sendMessage('wof.bizWidget.SearchComponent_active');
-                },250);
-            });
-            this.getDomInstance().dblclick(function(event){
-                event.stopPropagation();
-                clearTimeout(timeFn);
-                if(_this.getIsExpand()==true){
-                    _this.setIsExpand(false);
-                }else{
-                    _this.setIsExpand(true);
-                }
-                _this.setActiveSearchItemRank(null);
-                _this.render();
-                _this.sendMessage('wof_object_resize');
-                _this.sendMessage('wof.bizWidget.SearchComponent_active');
-            });*/
-        this._appendLabel();
         this._flowLayout();
     },
 
@@ -280,7 +244,7 @@ wof.bizWidget.SearchComponent.prototype = {
 
     //选择实现
     afterRender: function () {
-        this._resetStyle();
+
         this.sendMessage('wof.bizWidget.SearchComponent_render');
     },
 
@@ -327,6 +291,16 @@ wof.bizWidget.SearchComponent.prototype = {
         this.setRows(data.rows);
         this.setIsExpand(data.isExpand);
         this.setActiveSearchItemRank(data.activeSearchItemRank);
+
+        //如果是clone过来的 会直接创建一个label对象 需要先移除
+        var nodes = this.childNodes();
+        for(var i=0;i<nodes.length;i++){
+            if(nodes[i].getClassName()=='wof.widget.Label'){
+                nodes[i].remove(true);
+                break;
+            }
+        }
+        this.calcLayout();
     },
 
     _insideOnReceiveMessage:{
@@ -336,9 +310,9 @@ wof.bizWidget.SearchComponent.prototype = {
             var searchItem = wof.util.ObjectManager.get(message.sender.id);
             insertSearchItem.remove();
             insertSearchItem.beforeTo(searchItem);
-            this.render();
 
-            this.sendMessage('wof_object_resize');
+            this.calcLayout();
+
             this.sendMessage('wof.bizWidget.SearchComponent_active');
             return false;
         },
@@ -382,6 +356,7 @@ wof.bizWidget.SearchComponent.prototype = {
             if(searchComponentDataData.onSendMessage!=null){
                 this.setOnSendMessage(searchComponentDataData.onSendMessage);
             }
+            this.calcLayout();
         }
     },
 
@@ -442,6 +417,7 @@ wof.bizWidget.SearchComponent.prototype = {
                 if(searchItemData.linkageItem!=null){
                     searchItem.setLinkageItem(searchItemData.linkageItem);
                 }
+                this.calcLayout();
             }
 
         }
@@ -459,25 +435,6 @@ wof.bizWidget.SearchComponent.prototype = {
             }
         }
         return searchItem;
-    },
-
-    //重置样式
-    _resetStyle: function(){
-        this._label.setIsBold(false);
-        this._label.setIsHighlight(false);
-        this._label.render();
-        var searchItems = this._getSearchItems();
-        for(var i=0;i<searchItems.length;i++){
-            searchItems[i].getDomInstance().css('border','1px solid #bcbcbc').css('backgroundColor','#fff');
-        }
-
-        //根据activeSearchItemGroupIndex设置当前激活的SearchItemGroup
-        var activeSearchItem = this.findSearchItemByRank(this.getActiveSearchItemRank());
-        if(activeSearchItem!=null){
-            this.activeSearchItemStyle(activeSearchItem);
-        }else{
-            this.activeSearchComponentStyle();
-        }
     },
 
     //判断是否可以删除searchItem
@@ -503,6 +460,7 @@ wof.bizWidget.SearchComponent.prototype = {
                 searchItem.removeChildren(true);
                 searchItem.remove(true);
             }
+            this.calcLayout();
         }else{
             flag = false;
         }
@@ -515,6 +473,7 @@ wof.bizWidget.SearchComponent.prototype = {
         if(searchItem!=null){
             searchItem.setColspan(searchItem.getColspan()-1);
         }
+        this.calcLayout();
     },
 
     //判断是否可以减少列数
@@ -549,6 +508,7 @@ wof.bizWidget.SearchComponent.prototype = {
         if(searchItem!=null){
             searchItem.setColspan(searchItem.getColspan()+1);
         }
+        this.calcLayout();
     },
 
     //判断是否可以增加行数
@@ -566,6 +526,7 @@ wof.bizWidget.SearchComponent.prototype = {
         if(searchItem!=null){
             searchItem.setRowspan(searchItem.getRowspan()+1);
         }
+        this.calcLayout();
     },
 
     //判断是否可以减少行数
@@ -621,6 +582,7 @@ wof.bizWidget.SearchComponent.prototype = {
         if(searchItem!=null){
             searchItem.setRowspan(searchItem.getRowspan()-1);
         }
+        this.calcLayout();
     },
 
     //设置当前激活的SearchComponent样式
@@ -636,21 +598,6 @@ wof.bizWidget.SearchComponent.prototype = {
         activeSearchItem.getDomInstance().css('backgroundColor','#efefef');
     },
 
-    //设置并插入label标题到第一个位置
-    _appendLabel: function(){
-        var label = this._label;
-        label.setIsInside(true);
-        label.remove();
-        label.setWidth(this.getWidth());
-        label.setHeight(this.getTitleHeight());
-        label.setText(this.getCaption());
-        if(this.childNodes().length>0){
-            label.beforeTo(this.childNodes()[0]);
-        }else{
-            label.appendTo(this);
-        }
-    },
-
     //找到所有searchItem
     findSearchItems: function(){
         var searchItems = [];
@@ -664,28 +611,8 @@ wof.bizWidget.SearchComponent.prototype = {
         return searchItems;
     },
 
-    //获得所有searchItem 并且重设searchItem行列号
-    _getSearchItems: function(){
-        var searchItems = this.findSearchItems();
-        if(searchItems.length>0){
-            var searchItemHeight = this.getItemHeight();
-            var searchItemWidth = searchItems[0].getWidth()/searchItems[0].getColspan();
-            var labelHeight = this._label.getHeight();
-            for(var i=0;i<searchItems.length;i++){
-                var searchItem = searchItems[i];
-                var top = searchItem.getTop()-labelHeight;
-                var left = searchItem.getLeft();
-                var rowNum = Math.ceil(top/searchItemHeight)+1;
-                var colNum = Math.ceil(left/searchItemWidth)+1;
-                searchItem.setRowNum(rowNum);
-                searchItem.setColNum(colNum);
-            }
-        }
-        return searchItems;
-    },
-
     //进行流式布局
-    _flowLayout: function(){
+    calcLayout: function(){
         var placeSearchItemTable = new wof.util.Hashtable(); //位置对应searchItem table
         var notFixedSearchItems = []; //尚未布局的非fix类型的searchItem列表
         var layoutSearchItems = []; //所有需要布局的searchItem
@@ -696,8 +623,8 @@ wof.bizWidget.SearchComponent.prototype = {
         var searchComponentWidth = null;
         var rows = null;
         var searchItems = [];
-        var label = this._label;
         var _this = this;
+        var labelHeight = this.getTitleHeight();
         //为指定的searchItem查找到可以进行布局的位置
         function findCanLayoutSpace(searchItem){
             var space = null;
@@ -707,12 +634,12 @@ wof.bizWidget.SearchComponent.prototype = {
             var startC = 1;
             if(_this.getMustInOrder()==true){
                 if(currSpace!=null){
-                    startR = (currSpace.top - label.getHeight())/itemHeight+1;
+                    startR = (currSpace.top - labelHeight)/itemHeight+1;
                     startC = currSpace.left/searchItemWidth+1;
                 }
             }
             for(var r=1;space==null;r++){
-                var top = (r-1) * itemHeight + label.getHeight();
+                var top = (r-1) * itemHeight + labelHeight;
                 for(var c=1;c<=_this.getColsNum();c++){
                     if((startR==r&&startC<=c)||startR<r){
                         var flag = true;
@@ -748,7 +675,7 @@ wof.bizWidget.SearchComponent.prototype = {
             var b = false;
             var count = 0;
             if(r>1){
-                var top = (r-1) * itemHeight + label.getHeight();
+                var top = (r-1) * itemHeight + labelHeight;
                 for(var c=_this.getColsNum(); c>=1; c--){
                     var left = (c-1) * searchItemWidth;
                     var obj = placeSearchItemTable.items(top+','+left);
@@ -770,7 +697,7 @@ wof.bizWidget.SearchComponent.prototype = {
         }
         //计算行数
         function calcRows(){
-            var rows = 0;
+            var rs = 0;
             if(searchItems.length>0){
                 var maxH = searchItems[0].getTop()+searchItems[0].getHeight();
                 for(var i=1;i<searchItems.length;i++){
@@ -780,9 +707,9 @@ wof.bizWidget.SearchComponent.prototype = {
                         maxH = tempH;
                     }
                 }
-                rows = Math.ceil((maxH-label.getHeight())/_this.getItemHeight());
+                rs = Math.ceil((maxH-labelHeight)/_this.getItemHeight());
             }
-            return rows;
+            return rs;
         }
         searchItems = this.findSearchItems();
         if(searchItems.length>0){
@@ -808,7 +735,7 @@ wof.bizWidget.SearchComponent.prototype = {
             var colNum = fixSearchItem.getColNum();
             var colspan = fixSearchItem.getColspan();
             var rowspan = fixSearchItem.getRowspan();
-            var top = (rowNum-1) * itemHeight + label.getHeight();
+            var top = (rowNum-1) * itemHeight + labelHeight;
             var left = (colNum-1) * searchItemWidth;
             fixSearchItem.setTop(top);
             fixSearchItem.setLeft(left);
@@ -839,12 +766,12 @@ wof.bizWidget.SearchComponent.prototype = {
         //补全每行空缺的searchItem
         rows = calcRows();
         for(var r=1; r<=rows; r++){
-            var top = (r-1) * itemHeight + label.getHeight();
+            var top = (r-1) * itemHeight + labelHeight;
             for(var c=1; c<=this.getColsNum(); c++){
                 var left = (c-1) * searchItemWidth;
                 var obj = placeSearchItemTable.items(top+','+left);
                 if(obj==null){
-                    var newSearchItem = new wof.bizWidget.SearchItem();
+                    var newSearchItem = wof$.create('SearchItem');
                     newSearchItem.setWidth(searchItemWidth);
                     newSearchItem.setHeight(itemHeight);
                     newSearchItem.setTop(top);
@@ -858,7 +785,7 @@ wof.bizWidget.SearchComponent.prototype = {
         var canRemoveRow = true;
         var removeRowCount = 0;
         for(var r=rows; r>=1; r--){
-            var top = (r-1) * itemHeight + label.getHeight();
+            var top = (r-1) * itemHeight + labelHeight;
             if(canRemoveRow==true){
                 if(isEmptyRow(r)==false){
                     for(var c=this.getColsNum(); c>=1; c--){
@@ -889,26 +816,81 @@ wof.bizWidget.SearchComponent.prototype = {
                 }
             }
         }
-        //添加到dom节点
-        for(var i=0; i<layoutSearchItems.length; i++){
-            var searchItem = layoutSearchItems[i];
-            searchItem.afterTo(label);
-        }
         this.setRows(rows-removeRowCount);
+        //添加到dom节点
+        for(var i=layoutSearchItems.length-1; i>=0; i--){
+            var searchItem = layoutSearchItems[i];
+            searchItem.appendTo(this);
+        }
         //设置searchComponent div容器高度和宽度
         if(this.getIsExpand()==true){
-            this.setHeight(itemHeight*this.getRows()+this.getTitleHeight());
-            this.getDomInstance().css('height', (this.getHeight()*this.getScale())+'px');
+            this.setHeight(itemHeight*this.getRows()+labelHeight);
         }else{
-            this.setHeight(this.getTitleHeight());
-            this.getDomInstance().css('height', (this.getHeight()*this.getScale())+'px');
+            this.setHeight(labelHeight);
         }
-        this.getDomInstance().css('width', (this.getWidth()*this.getScale())+'px');
+        //重设行列号
+        searchItems = this.findSearchItems();
+        if(searchItems.length>0){
+            var searchItemHeight = this.getItemHeight();
+            var searchItemWidth = searchItems[0].getWidth()/searchItems[0].getColspan();
+            for(var i=0;i<searchItems.length;i++){
+                var searchItem = searchItems[i];
+                var top = searchItem.getTop()-labelHeight;
+                var left = searchItem.getLeft();
+                var rowNum = Math.ceil(top/searchItemHeight)+1;
+                var colNum = Math.ceil(left/searchItemWidth)+1;
+                searchItem.setRowNum(rowNum);
+                searchItem.setColNum(colNum);
+            }
+        }
+        //添加label
+        if(this._label==null){
+            var label = wof$.create('Label');
+            label.setIsInside(true);
+            label.setTop(0);
+            label.setLeft(0);
+            this._label = label;
+        }
+        this._label.setIsUnderline(true);
+        this._label.setScale(this.getScale());
+        this._label.setHeight(this.getTitleHeight());
+        this._label.setText(this.getCaption());
+        this._label.setIsBold(false);
+        this._label.setIsHighlight(false);
+        this._label.setWidth(this.getWidth());
+        this._label.remove();
+        if(this.childNodes().length>0){
+            this._label.beforeTo(this.childNodes()[0]);
+        }else{
+            this._label.appendTo(this);
+        }
+    },
+
+    //进行流式布局
+    _flowLayout: function(){
+        //设置label
         this._label.getDomInstance().css('width',(this.getWidth()*this.getScale()-4)+'px');
         this._label.getDomInstance().css('height',(this.getTitleHeight()*this.getScale())+'px');
 
         //屏蔽label对象的事件
-        label.getDomInstance().after(this._backgroundImg);
+        this._label.getDomInstance().after(this._backgroundImg);
+
+        //设置section div容器高度和宽度
+        this.getDomInstance().css('height', (this.getHeight()*this.getScale())+'px');
+        this.getDomInstance().css('width', (this.getWidth()*this.getScale())+'px');
+
+        var searchItems = this.findSearchItems();
+        for(var i=0;i<searchItems.length;i++){
+            searchItems[i].getDomInstance().css('backgroundColor','#fff');
+        }
+
+        //根据activeSearchItemGroupIndex设置当前激活的SearchItemGroup
+        var activeSearchItem = this.findSearchItemByRank(this.getActiveSearchItemRank());
+        if(activeSearchItem!=null){
+            this.activeSearchItemStyle(activeSearchItem);
+        }else{
+            this.activeSearchComponentStyle();
+        }
     },
 
     //创建初始化的SearchComponent
@@ -920,15 +902,15 @@ wof.bizWidget.SearchComponent.prototype = {
         var colsNum = searchComponentData.colsNum!=null?searchComponentData.colsNum:null;
         var itemHeight = searchComponentData.itemHeight!=null?searchComponentData.itemHeight:this.getItemHeight();
 
-        var newSearchComponent = new wof.bizWidget.SearchComponent();
+        var newSearchComponent = wof$.create('SearchComponent');
         newSearchComponent.setWidth(width);
         newSearchComponent.setTitleHeight(titleHeight);
         newSearchComponent.setCaption(searchComponentData.caption);
         newSearchComponent.setColsNum(colsNum);
         newSearchComponent.setItemHeight(itemHeight);
-        var newSearchItem = new wof.bizWidget.SearchItem();
+        var newSearchItem = wof$.create('SearchItem');
         newSearchItem.appendTo(newSearchComponent);
-
+        newSearchComponent.calcLayout();
         return newSearchComponent;
     }
 

@@ -236,6 +236,20 @@ jQuery(function(){
         voucherComponent2.render();
 
 
+        var newSearchComponent = wof$.create('SearchComponent');
+        newSearchComponent.setWidth(250);
+        newSearchComponent.setTitleHeight(35);
+        newSearchComponent.setCaption('未命名搜索');
+        newSearchComponent.setColsNum(3);
+        newSearchComponent.setItemHeight(50);
+        var newSearchItem = wof$.create('SearchItem');
+        newSearchItem.appendTo(newSearchComponent);
+        newSearchComponent.calcLayout();
+
+        flowLayout.insertNode(newSearchComponent,{row:1,col:1},1);
+
+        newSearchComponent.render();
+
       /*  var tab = wis$.create('Tab');
         tab.setHeight(200);
         tab.insertItem({name:'name1',width:100,label:'label1',closeable:true,icon:'add',iconPosition:'left'});

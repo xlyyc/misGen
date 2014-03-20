@@ -94,18 +94,7 @@ wof.bizWidget.FlowLayoutItem.prototype = {
 
     //选择实现
     afterRender: function () {
-        if(this.getLeft()!=null){
-            this.getDomInstance().css('left', (this.getLeft()*this.getScale())+'px');
-        }
-        if(this.getTop()!=null){
-            this.getDomInstance().css('top', (this.getTop()*this.getScale())+'px');
-        }
-        if(this.getWidth()!=null){
-            this.getDomInstance().css('width', (this.getWidth()*this.getScale())+'px');
-        }
-        if(this.getHeight()!=null){
-            this.getDomInstance().css('height', (this.getHeight()*this.getScale())+'px');
-        }
+
     },
 
     /**
