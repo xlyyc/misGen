@@ -506,7 +506,7 @@ wof.bizWidget.VoucherItem.prototype = {
             /**
              * todo 暂时使用
              */
-            clzName = 'wof.widget.Input';
+            clzName = 'wof.widget.Text';
             setValMethod = 'setValue';
             readonlyMethod = 'setReadonly';
 

@@ -298,6 +298,8 @@ wof.bizWidget.VoucherComponent.prototype = {
         if(this._queryFlag==true){
             //todo 查询条件需要实现
             this._dataObject.queryData('main',null,null,0,1);
+            var refData = this._dataObject.getRefData();
+            console.log(JSON.stringify(refData));
             this._queryFlag = false;
         }
 

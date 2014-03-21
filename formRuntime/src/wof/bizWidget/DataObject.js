@@ -832,8 +832,8 @@ wof.bizWidget.DataObject.prototype = {
         var pageId = this._pageId;
         var rsp = jQuery.ajax(
             {
-                url:_this.getDataServicesUrl()+'/refListByPage?pageId=' + pageId,
-                //url:'refData.json',
+                //url:_this.getDataServicesUrl()+'/refListByPage?pageId=' + pageId,
+                url:'refData.json',
                 async:_this.getAsyncQuery()
             }
         );
