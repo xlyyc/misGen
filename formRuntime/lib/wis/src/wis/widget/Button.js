@@ -5,25 +5,29 @@
  */
 wis.widget.Button = function () {
     this._version = '1.0';
-
 };
 wis.widget.Button.prototype = {
 
-    _cid: null,  //id
-    _name: null,  //名称
-    _label: null, //文字
-    _icon: null,    //语义层面的ICON标识，对应图标的类型(add/edit)、颜色(white/black)、位置属性(position:left/right/top/bottom)
+    _cid: null,                     //id
+    _name: null,                    //名称
+    _errorMsg: null,                //验证失败信息
+    _displayType: null,            //文本的显示类型，列如：金额，美元，百分比
+    _value: null,                    //本框的值
+    _maxLength: null,               //文本框的可输入长度，不区分中英文
+    _placeholder: null,             //支持Internet Explorer9 和更早的版本。输入内容提醒
 
-    _disabled: null, //禁用
+    _customValidate: null,          //自定义验证器
+    _disabled: null,                 //规定该文本框只做展示用，提交时无法获取值
+    _readonly: null,                //	规定该文本区只读。文本框不允许修改，提交时可以获取值
 
-    _rootObj: null,
-
-    _onClick: null,
+    _onClick: null,                 //当鼠标被单击时执行脚本
+    _onBlur: null,                  //当元素失去焦点时执行脚本
+    _onFocus: null,                 //当元素获得焦点时执行脚本
+    _onChange: null,                //当元素改变时执行脚本
 
     getCid: function () {
         return this._cid;
     },
-
     setCid: function (cid) {
         this._cid = cid;
     },
@@ -31,45 +35,90 @@ wis.widget.Button.prototype = {
     getName: function () {
         return this._name;
     },
-
     setName: function (name) {
         this._name = name;
     },
 
-    getLabel: function () {
-        return this._label || '';
+    getCustomValidate: function () {
+        return this._customValidate;
+    },
+    setCustomValidate: function (customValidate) {
+        this._customValidate = customValidate;
     },
 
-    setLabel: function (label) {
-        this._label = label;
+    getValue: function () {
+        return this._value || '';
+    },
+    setValue: function (value) {
+        this._value = value;
     },
 
-    getIcon: function () {
-        return this._icon;
+    getErrorMsg: function () {
+        return this._errorMsg || '';
+    },
+    setErrorMsg: function (errorMsg) {
+        this._errorMsg = errorMsg;
     },
 
-    setIcon: function (icon) {
-        this._icon = icon;
+    getDisplayType: function () {
+        return this._displayType;
+    },
+    setDisplayType: function (displayType) {
+        this._displayType = displayType;
+    },
+
+    getMaxLength: function () {
+        return this._maxLength;
+    },
+    setMaxLength: function (maxLength) {
+        this._maxLength = maxLength;
+    },
+
+    getPlaceholder: function () {
+        return this._placeholder;
+    },
+    setPlaceholder: function (placeholder) {
+        this._placeholder = placeholder;
     },
 
     getDisabled: function () {
         return this._disabled;
     },
-
     setDisabled: function (disabled) {
         this._disabled = disabled;
+    },
+
+    getReadonly: function () {
+        return this._readonly;
+    },
+    setReadonly: function (readonly) {
+        this._readonly = readonly;
     },
 
     onClick: function (callBack) {
         this._onClick = callBack;
     },
-
+    onBlur: function (callBack) {
+        this._onBlur = callBack;
+    },
+    onChange: function (callBack) {
+        this._change = callBack;
+    },
+    onFocus: function (callBack) {
+        this._focus = callBack;
+    },
 
     /**
      * 初始化方法
      */
     _init: function (data) {
-
+    	if(data.value){
+    		this.setValue(data.value);
+    	}
+    	if(data.click){
+    		this._onClick = data.click;
+    	}
+        
     },
 
     /**
@@ -77,31 +126,15 @@ wis.widget.Button.prototype = {
      * 仅在第一次调用render时执行
      */
     initRender: function () {
-        this._rootObj = $('<div class="ui_toolbar"></div>');
-        this._spanObj = $('<span class="pull_left"></span>');
-        this._linkObj = $('<a class="ui_btn ui_btn_small" onclick=""></a>');
-        this._iObj = $('<i></i>');
-        this._rootObj.append(this._spanObj);
-        this._spanObj.append(this._linkObj);
-        this._linkObj.append(this._iObj);
-        this.getDomInstance().append(this._rootObj);
-
-        this._bindEvents();
+    	var that = this;
+        this._input = jQuery('<button>'+this.getValue()+'</button>').click(function (e){
+             that._onClick();
+        });
+        this.getDomInstance().append(this._input);
     },
 
     _bindEvents: function () {
-        //单击事件
-        var that = this;
-        this._linkObj.on("click", function (e) {
-            //disabled状态不处理
-           /* if (that._labelObj.hasClass("ui_checkbox_disabled")) {
-                return;
-            }*/
-            //自定义onClick事件
-            if ((typeof that._onClick == "function") && that._onClick() == false) {
-                return;
-            }
-        });
+
     },
 
     //渲染前处理方法
@@ -111,18 +144,7 @@ wis.widget.Button.prototype = {
 
     //渲染方法
     render: function () {
-        if (this.getCid()) this._rootObj.attr('id', this.getCid());
-        if (this.getName()) this._rootObj.attr('name', this.getName());
-        if (this.getIcon()) this._iObj.addClass(this.getIcon());
-        if (this.getLabel()) this._linkObj.append(this.getLabel());
-        //disabled状态
-        /* if (this.getDisabled()) {
-         this._inputObj.attr("disabled", "disabled");
-         this._labelObj.addClass("ui_checkbox_disabled");
-         } else {
-         this._inputObj.removeAttr("disabled");
-         this._labelObj.removeClass("ui_checkbox_disabled");
-         }*/
+
 
     },
 
@@ -141,19 +163,29 @@ wis.widget.Button.prototype = {
         return {
             cid: this.getCid(),
             name: this.getName(),
-            label: this.getLabel(),
-            icon: this.getIcon(),
-            disabled: this.getDisabled()
-        };
+            customValidate: this.getCustomValidate(),
+            value: this.getValue(),
+            errorMsg: this.getErrorMsg(),
+            displayType: this.getDisplayType(),
+            maxLength: this.getMaxlength(),
+            placeholder: this.getPlaceholder(),
+            disabled: this.getDisabled(),
+            readonly: this.getReadonly()
+        }
     },
 
     //----------必须实现----------
     setData: function (data) {
         this.setCid(data.cid);
         this.setName(data.name);
-        this.setLabel(data.label);
-        this.setIcon(data.icon)
+        this.setCustomValidate(data.customValidate);
+        this.setValue(data.value);
+        this.setErrorMsg(data.errorMsg);
+        this.setDisplayType(data.displayType);
+        this.setMaxlength(data.maxLength);
+        this.setPlaceholder(data.placeholder);
         this.setDisabled(data.disabled);
+        this.setReadonly(data.readonly);
     }
 
 };

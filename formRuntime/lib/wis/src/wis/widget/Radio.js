@@ -29,7 +29,7 @@ wis.widget.Radio.prototype = {
         return this._cid;
     },
     setCid: function (cid) {
-        this._cid = cid;
+        this._cid = cid|| this.getId();
     },
     getThemes: function () {
         return this._themes;
@@ -104,6 +104,10 @@ wis.widget.Radio.prototype = {
     	this._radio = $('<input type="radio"/>');
 		this._root = $('<label></label>').append(this._radio);
         this.getDomInstance().append(this._root);
+        if(this.getCid()){
+    		this._radio.attr('id', getCid()); //也可不配置
+        }
+		this._bindEvents();
     },
 
     //渲染前处理方法
@@ -134,8 +138,7 @@ wis.widget.Radio.prototype = {
          * if(this.getCustomValidate()){
     		options.cid = this.getCustomValidate();
         },*/
-        this._unbindEvents();
-		this._bindEvents();	
+       	
     },
 
     //渲染后处理方法
@@ -180,18 +183,18 @@ wis.widget.Radio.prototype = {
 		this._radio.on('click',function(e) {
 			var checked = that._radio.attr('checked');//是否选中
 			if (checked && that.getChecked()&&that._onSelect) {
-				that._onSelect();//选中事件
+				that._onSelect(this);//选中事件
 			}
 			if (that._onClick) {
-				that._onClick();//点击事件
+				that._onClick(this);//点击事件
 			}
 			that.setChecked(checked);
 		});
 		this._radio.on('change',function(e) {
 			var value = that._radio.val();
-			var handler = that._onChange;
-			if (handler) {
-				handler(value);
+			that.setValue(value);
+			if (that._onChange) {
+				that._onChange(this);
 			}
 		});
 	},

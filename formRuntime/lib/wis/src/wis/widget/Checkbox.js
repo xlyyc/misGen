@@ -29,7 +29,7 @@ wis.widget.Checkbox.prototype = {
     _onSelect: null,
 
     getCid: function () {
-        return this._cid;
+        return this._cid|| this.getId();
     },
 
     setCid: function (cid) {
@@ -119,13 +119,15 @@ wis.widget.Checkbox.prototype = {
         this._labelObj.append(this._inputObj).append(this._linkObj);
         this._rootObj.append(this._labelObj).append(this._spanObj);
         this.getDomInstance().append(this._rootObj.children());
+        
+        this._bindEvents();
+        if (this.getCid()) this._labelObj.attr('id', this.getCid());//也可不配置
     }, 
     //渲染前处理方法
     beforeRender: function (){},
 
     //渲染方法
     render: function () {
-        if (this.getCid()) this._labelObj.attr('id', this.getCid());
         if (this.getName()) this._inputObj.attr('name', this.getName());
         if (this.getValue()) this._inputObj.val(this.getValue());
         if (this.getLabel()) this._spanObj.html(this.getLabel());
@@ -145,8 +147,6 @@ wis.widget.Checkbox.prototype = {
             this._inputObj.removeAttr("checked");
             this._labelObj.removeClass("ui_checkbox_checked");
         }
-        this._unbindEvents();
-        this._bindEvents();
     },
 
     //渲染后处理方法
@@ -202,21 +202,21 @@ wis.widget.Checkbox.prototype = {
             }
             //自定义onClick事件
             if ((typeof that._onClick == "function") && that._onClick!=null) {
-                that._onClick();
+                that._onClick(this);
             }
             //自定义onSelect事件
             if ((typeof that._onSelect == "function") && that._labelObj.hasClass("ui_checkbox_checked") && that._onSelect() == false) {
             	if(checked&&that.getChecked()){//选中时才执行
-            		that._onSelect();
+            		that._onSelect(this);
             	}
             }
             that.setChecked(checked);
         });
         this._linkObj.on('change',function(e) {
 			var value = that._inputObj.val();
-			var handler = that._onChange;
-			if (handler) {
-				handler(value);
+			that.setValue(value);
+			if (that._onChange) {
+				that._onChange(this);
 			}
 		});
     },

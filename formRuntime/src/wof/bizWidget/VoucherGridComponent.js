@@ -66,6 +66,12 @@ wof.bizWidget.VoucherGridComponent.prototype = {
     getName: function () {
         return this._name;
     },
+    getData:function (){
+    	return {};
+    },
+    setData:function (){
+    	
+    },
     setBindEntityId: function (bindEntityId) {
         this._bindEntityId = bindEntityId;
     },
@@ -313,10 +319,24 @@ wof.bizWidget.VoucherGridComponent.prototype = {
     _gridId: null,
     _cachePageNo: null,
     _gridData: null,
-    _bindComponent:null,
+    _currentRow:null,
     _grid:null,
 
-
+    getCurrentRow: function () {
+    	//TODO 临时实现，等lovey提供 onselected  事件
+    	try{
+    		return this.getGridData()[0];
+    	}catch(e){
+    		
+    	}
+    	return null;
+    	
+        //return this._currentRow;
+    },
+    setCurrentRow: function (currentRow) {
+        this._currentRow = currentRow;
+    },
+    
     getPageId: function () {
         return this._pageId;
     },
@@ -354,9 +374,7 @@ wof.bizWidget.VoucherGridComponent.prototype = {
         this._gridData = gridData;
     },
     getSelectedRows: function () {
-        return [
-            {zgid: '1'}
-        ];
+        return [{zgid : '1'}];
     },
     /**
      * 初始化
@@ -366,74 +384,77 @@ wof.bizWidget.VoucherGridComponent.prototype = {
             "pageNo": 1,
             "pageSize": 10
         });
-        var objs = wof$.find('*');
-         for (var i = 0; i < objs.size(); i++) {
-            var obj = objs.get(i);
-            if (obj != null && obj.getComponentId() != null && obj.getComponentId() == this.getVoucherHeadComponent()) {
-                this._bindComponent = obj;
-                break;
-            }
-        }
-
         this.setRowsCount(10);
         this.setColumns([]);
         this.setMode('view');
         this.setNumberDisplay(true);
         this.setGridSchema(data);
         this.setRefData(this.getDataSource().getRefData());
-        this.gotoPage(this.getPageNo());
     },
     beforeRender: function () {
+    	
 
     },
     initRender:function (){
-    	this.grid = wis$.create('Grid');
+//    	var objs = wof$.find('*');
+// 	    for(var i=0;i<objs.size();i++){
+// 	        var obj = objs.get(i);
+// 	        if(obj!=null&&obj.getComponentId()!=null&&obj.getComponentId()== this.getVoucherHeadComponent()){
+// 	        	this._bindComponent = obj;
+// 	        	break;
+// 	        }
+// 	    }
+//	    this.gotoPage(this.getPageNo());
+//    	this.grid = wis$.create('Grid',{
+//    		  width: this.getWidth(),
+//              height: this.getHeight()
+//    	});
     },
     render: function () {
-        var vo = {
-            grid: {
-                width: this.getWidth(),
-                height: this.getHeight(),
-                top: this.getTop(),
-                left: this.getLeft(),
-                isHide: this.getHiden(),
-                name: this.getName(),
-                bindEntityId: this.getBindEntityId(),
-                headerHeight: this.getHeaderHeight(),
-                rowHeight: this.getRowHeight(),
-                numberDisplay: this.getNumberDisplay(),
-                useMutiplePage: this.getUseMutiplePage(),
-                columns: this.getGridColumnsData(),
-                pageBar: this.getPageBar(),
-                data: this.getGridData(),
-                refData: this.setRefData()
-            }
-        };
-        console.log(this.getGridData());
-        var grid = this.grid;
-        grid.setTitle("表格示范");
-        grid.setWidth(800);
-        grid.setHeight(600);
-        grid.setCheckbox(true);
-        grid.onCheckRow(function(){
-            alert("AA");
-        });
-        grid.render();
-        grid.appendTo(this.getDomInstance());
-        if (this._grid == null) {
-            this._grid = new wof.widget.Grid();
-            if (this.getMode() == 'view') {
-                // grid.setData(vo);
-                // grid.render();
-                console.log(vo);
-            } else {
-                // todo edit 没实现
-            }
-        } else {
-            // grid.setData(vo);
-            // grid.render();
-            console.log(vo);
-        }
+//        var vo = {
+//            grid: {
+//                width: this.getWidth(),
+//                height: this.getHeight(),
+//                top: this.getTop(),
+//                left: this.getLeft(),
+//                isHide: this.getHiden(),
+//                name: this.getName(),
+//                bindEntityId: this.getBindEntityId(),
+//                headerHeight: this.getHeaderHeight(),
+//                rowHeight: this.getRowHeight(),
+//                numberDisplay: this.getNumberDisplay(),
+//                useMutiplePage: this.getUseMutiplePage(),
+//                columns: this.getGridColumnsData(),
+//                pageBar: this.getPageBar(),
+//                data: this.getGridData(),
+//                refData: this.setRefData()
+//            }
+//        };
+//        var grid = this.grid;
+//        grid.setTitle("表格示范");
+//        grid.setWidth(800);
+//        grid.setHeight(600);
+//        grid.setCheckbox(true);
+//        grid.onCheckRow(function(){
+//            alert("AA");
+//        });
+//        grid.render();
+//        grid.appendTo(this.getDomInstance());
+//
+//        if (this._grid == null) {
+//            this._grid = new wof.widget.Grid();
+//            if (this.getMode() == 'view') {
+//                // grid.setData(vo);
+//                // grid.render();
+//                console.log(vo);
+//            } else {
+//                // todo edit 没实现
+//            }
+//        } else {
+//            // grid.setData(vo);
+//            // grid.render();
+//            console.log(vo);
+//        }
     },
     nextPage: function () {
         var pageNo = this.getPageNo();
@@ -463,14 +484,19 @@ wof.bizWidget.VoucherGridComponent.prototype = {
             alert(pageNo + '页号不存在'); // todo 调用widget下的对话框
             return;
         }
+        var currentRow = this._bindComponent.getCurrentRow();
+        if(!currentRow){
+        	console.log("currentRow is null.");
+        	return;
+        }
         this.setPageNo(pageNo);
         var data = this._getPageDataInCache(pageNo);
         if (data == null || true === forceFlush) { // 表明pageNo不在缓存中需要发起新的查询或者强制加载数据
             var offset = (pageNo - 1) * this.getPageSize();
             var rowsCount = this.getPageSize() * 2;
             var dataSource = this.getDataSource();
-            dataSource.queryData('child', {'childEntityAlias': this.getName(), 'mainRowId': this._bindComponent.getCurrentRow()}, null, offset, rowsCount);
-        } else {
+            dataSource.queryData('child', {'childEntityAlias': this.getName(), 'mainRowId': currentRow}, null, offset, rowsCount);} 
+        else {
             this.setGridData(this._getPageDataInCache(this.getPageNo()));
         }
     },
@@ -544,7 +570,7 @@ wof.bizWidget.VoucherGridComponent.prototype = {
     },
     _onSaveDataCompleted: function (message) {
         if (this._isDataChange(message)) {
-            this.gotoPage(1);
+            this.gotoPage(1,true);
         }
     },
     _isDataChange: function (message) {
@@ -844,9 +870,12 @@ wof.bizWidget.VoucherGridComponent.prototype = {
         if (options.componentId) {
             this.setComponentId(options.componentId)
         }
+        if (options.currentRow) {
+            this.setCurrentRow(options.currentRow)
+        }
         if (options.voucherHeadComponent) {
             this.setVoucherHeadComponent(options.voucherHeadComponent)
         }
-
+      
     }
 }

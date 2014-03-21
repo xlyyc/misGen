@@ -15,9 +15,9 @@ wis.widget.Textarea.prototype = {
     _value: null,                    //本框的值
     _maxLength: null,               //文本框的可输入长度，不区分中英文
     _placeholder: null,             //支持Internet Explorer9 和更早的版本。输入内容提醒
-    _rows: 2,                      //规定文本区内可见的行数
-    _cols: 20,                     //规定文本区内可见的列数
-    _wrap: 'off',                     //自动换行
+    _rows: null,                      //规定文本区内可见的行数
+    _cols: null,                     //规定文本区内可见的列数
+    _wrap: null,                     //自动换行
 
     _customValidate: null,          //自定义验证器
     _disabled: null,                 //规定该文本框只做展示用，提交时无法获取值
@@ -31,7 +31,7 @@ wis.widget.Textarea.prototype = {
     _root:null,//底层组件对象
     
     getCid: function () {
-        return this._cid;
+        return this._cid || this.getId();
     },
     setCid: function (cid) {
         this._cid = cid;
@@ -71,21 +71,21 @@ wis.widget.Textarea.prototype = {
     },
 
     getRows: function () {
-        return this._rows;
+        return this._rows||2;
     },
     setRows: function (rows) {
         this._rows = rows;
     },
 
     getCols: function () {
-        return this._cols;
+        return this._cols||20;
     },
     setCols: function (cols) {
         this._cols = cols;
     },
 
     getWrap: function () {
-        return this._wrap;
+        return this._wrap||'off';
     },
     setWrap: function (wrap) {
         this._wrap = wrap;
@@ -133,13 +133,15 @@ wis.widget.Textarea.prototype = {
     	this._root = $('<textarea />');
 		this._root.val(this.getPlaceholder());
 		this.getDomInstance().append(this._root);
+		//this._unbindEvents();
+		this._bindEvents();
     },
     //渲染前处理方法
     beforeRender: function (){},
 
     //渲染方法
     render: function () {
-    	if (this.getCid()) this._root.attr('id', this.getCid());
+    	//if (this.getCid()) this._root.attr('id', this.getCid());//cid 不允许设置
 		if (this.getName()) this._root.attr('name',this.getName());
 		if (this.getDisabled()) this._root.attr('disabled',this.getDisabled());
 		if (this.getValue()) this._root.attr('value',this.getValue());
@@ -147,12 +149,11 @@ wis.widget.Textarea.prototype = {
 		if (this.getRows()) this._root.attr('rows',this.getRows());
 		if (this.getCols()) this._root.attr('cols',this.getCols());
 		if (this.getWrap()) this._root.attr('wrap',this.getWrap());
-		
+		if(this.getWidth()!=null) this._rootObj.css('width',this.getWidth()+'px');
+        if(this.getHeight()!=null) this._rootObj.css('height',this.getHeight()+'px');
 		//themes
 		//wrap
 		//maxlength
-		this._unbindEvents();
-		this._bindEvents();
     },
 
     //渲染后处理方法
@@ -176,12 +177,7 @@ wis.widget.Textarea.prototype = {
 			maxLength: this.getMaxLength(),
             placeholder: this.getPlaceholder(),
             disabled: this.getDisabled(),
-            readonly: this.getReadonly(),
-            //方法
-            onclick:this._onClick,
-            onblur:this._onBlur,
-            onfocus:this._onFocus,
-            onchange:this._onChange
+            readonly: this.getReadonly()
         }
     },
 
@@ -202,11 +198,6 @@ wis.widget.Textarea.prototype = {
     	this.setWrap(data.wrap);
     	this.setDisabled(data.disabled);
     	this.setReadonly(data.readonly);
-        // 方法
-    	this.onClick(this.onClick);
-    	this.onBlur(his.onBlur);
-    	this.onFocus(this.onFocus);
-    	this.onChange(this.onChange);
     },
     //解除事件绑定
     _unbindEvents: function() {
@@ -220,7 +211,7 @@ wis.widget.Textarea.prototype = {
 		var that = this;
 		this._root.on('focus', function(e) {
 			if (that._onFocus) {
-				that._onFocus(e);
+				that._onFocus(this);
 			}
 			var value = that._root.val();
 			//提示信息清空
@@ -231,7 +222,7 @@ wis.widget.Textarea.prototype = {
 
 		this._root.on('blur', function(e) {
 			if (that._onBlur) {
-				that._onBlur(e);
+				that._onBlur(this);
 			}
 
 			var value = that._root.val();
@@ -240,17 +231,15 @@ wis.widget.Textarea.prototype = {
 
 		this._root.on('change',function(e) {
 			var value = that._root.val();
-
-			var handler = that._onChange;
-			if (handler) {
-				handler(value);
+			that.setValue(value);
+			if (that._onChange) {
+				that._onChange(this);
 			}
-			that.text = value;
 		});
 
 		this._root.on('click', function(e) {
 			if (that._onClick) {
-				that._onClick(e);
+				that._onClick(this);
 			}
 		});
 	},
@@ -281,9 +270,9 @@ wis.widget.Textarea.prototype = {
     	if (!data) {
     		return;
     	}
-        if(data.cid){
+        /*if(data.cid){
     		this.setCid(data.cid);
-    	}
+    	}*/
         if(data.name){
         	this.setName(data.name);
 		}

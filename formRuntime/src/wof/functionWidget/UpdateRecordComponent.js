@@ -145,21 +145,27 @@ wof.functionWidget.UpdateRecordComponent.prototype = {
      */
 
     initRender: function(){
-        var button = new wof.widget.Button();
-        button.setIsInside(true);
-        button.setType('submit');
-        button.setLeft(0);
-        button.setTop(0);
-        button.setWidth(this.getWidth());
-        button.setHeight(this.getHeight());
-        button.appendTo(this);
-        this._btn = button;
+    	var that = this;
+        var button = wis$.create('Button',{value : '修改',click:function (){
+        	 //that.sendMessage('wof.functionWidget.DeleteRecordComponent_active');
+        }});
+        button.render();
+        button.appendTo(this.getDomInstance());
+//        var button = new wof.widget.Button();
+//        button.setIsInside(true);
+//        button.setType('submit');
+//        button.setLeft(0);
+//        button.setTop(0);
+//        button.setWidth(this.getWidth());
+//        button.setHeight(this.getHeight());
+//        button.appendTo(this);
+//        this._btn = button;
     },
 
     //选择实现
     beforeRender: function () {
 
-        this._btn.setText(this.getCallItemCaption());
+        //this._btn.setText(this.getCallItemCaption());
     },
 
     //----------必须实现----------

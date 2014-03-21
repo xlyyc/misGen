@@ -14,6 +14,7 @@ wis.widget.Tab.prototype = {
     _name:null,   //构件名称
     _items:null,  //标签项数据 [{name:'name1',width:100,label:'label1',closeable:true,icon:'add',iconPosition:'left'}]
     _activeItemIndex:null, //当前激活的标签项index
+    _onClick:null,
 
     _tab:null,
 
@@ -54,6 +55,10 @@ wis.widget.Tab.prototype = {
         this._activeItemIndex = activeItemIndex;
     },
 
+    onClick: function (callBack) {
+        this._onClick = callBack;
+    },
+
     /**
      * 初始化方法
      */
@@ -77,7 +82,9 @@ wis.widget.Tab.prototype = {
                     var name = ui.newPanel.attr('id');
                     var index = _this.getIndexByName(name);
                     _this.setActiveItemIndex(index);
-                    _this._onClick();
+                    if (_this._onClick) {
+                        _this._onClick(_this);
+                    }
                 }
             }
         });
@@ -241,12 +248,6 @@ wis.widget.Tab.prototype = {
             }
         }
 
-    },
-
-    _onClick: function(){
-        if(this.onClick!=null){
-            this.onClick(this);
-        }
     }
 
 };

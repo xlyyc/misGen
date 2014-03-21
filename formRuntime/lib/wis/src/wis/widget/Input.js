@@ -16,12 +16,12 @@ wis.widget.Input.prototype = {
     _displayType: null,            //文本的显示类型，列如：金额，美元，百分比
     _format:null,					//格式化
     _value: null,                   //本框的值
-    _type: 'text',					//类型，如“text”，和html类型一致
+    _type: null,					//类型，如“text”，和html类型一致
     
-    _disabled: null,                 //规定该文本框只做展示用，提交时无法获取值
+    _disabled: null,                //规定该文本框只做展示用，提交时无法获取值
     _readonly: null,                //	规定该文本区只读。文本框不允许修改，提交时可以获取值
     _maxLength: null,               //文本框的可输入长度，不区分中英文
-    _placeholder: null,             //支持Internet Explorer9 和更早的版本。输入内容提醒			
+    _placeholder: null,             //支持Internet Explorer9 和更早的版本。输入内容提醒		
     
     _onClick: null,                 //当鼠标被单击时执行脚本
     _onBlur: null,                  //当元素失去焦点时执行脚本
@@ -31,50 +31,68 @@ wis.widget.Input.prototype = {
     _rootObj: null,					//底层组件节点（内部使用,不参与序列化）					
 
     getCid: function () {
-        return this._cid;
+        return this._cid || this.getId();
     },
+    
     setCid: function (cid) {
         this._cid = cid;
     },
+    
     getName: function () {
         return this._name;
     },
+    
     setName: function (name) {
         this._name = name;
     },
+    
     getThemes: function () {
         return this._themes;
     },
+    
     setThemes: function (themes) {
         this._themes = themes;
     },
+    
     getValidate: function () {
         return this._validate;
     },
+    
     setValidate: function (validate) {
         this._validate = validate;
     },
+    
     getFormat: function () {
         return this._format;
     },
+    
     setFormat: function (format) {
         this._format = format;
     },
+    
     getType: function () {
-        return this._type;
+        return this._type?this._type:'text';
     },
+    
     setType: function (type) {
         this._type = type;
-    },	
+    },
+    
     getCustomValidate: function () {
         return this._customValidate;
     },
+    
     setCustomValidate: function (customValidate) {
         this._customValidate = customValidate;
     },
+    
     getValue: function () {
-        return this._value || '';
+        if(this.getDisabled()){// TODO 规定该文本框只做展示用，提交时无法获取值??
+        	return null; 
+        }
+    	return this._value || '';
     },
+    
     setValue: function (value) {
         this._value = value;
     },
@@ -82,6 +100,7 @@ wis.widget.Input.prototype = {
     getErrorMsg: function () {
         return this._errorMsg || '';
     },
+    
     setErrorMsg: function (errorMsg) {
         this._errorMsg = errorMsg;
     },
@@ -89,6 +108,7 @@ wis.widget.Input.prototype = {
     getDisplayType: function () {
         return this._displayType;
     },
+    
     setDisplayType: function (displayType) {
         this._displayType = displayType;
     },
@@ -96,6 +116,7 @@ wis.widget.Input.prototype = {
     getMaxLength: function () {
         return this._maxLength;
     },
+    
     setMaxLength: function (maxLength) {
         this._maxLength = maxLength;
     },
@@ -103,20 +124,23 @@ wis.widget.Input.prototype = {
     getPlaceholder: function () {
         return this._placeholder;
     },
+    
     setPlaceholder: function (placeholder) {
         this._placeholder = placeholder;
     },
 
     getDisabled: function () {
-        return this._disabled;
+        return this._disabled||false;
     },
+    
     setDisabled: function (disabled) {
         this._disabled = disabled;
     },
 
     getReadonly: function () {
-        return this._readonly;
+        return this._readonly||false;
     },
+    
     setReadonly: function (readonly) {
         this._readonly = readonly;
     },
@@ -124,14 +148,16 @@ wis.widget.Input.prototype = {
     onClick: function (callBack) {
         this._onClick = callBack;
     },
+    
     onBlur: function (callBack) {
         this._onBlur = callBack;
     },
     onChange: function (callBack) {
-        this._change = callBack;
+        this._onChange = callBack;
     },
+    
     onFocus: function (callBack) {
-        this._focus = callBack;
+        this._onFocus = callBack;
     },
 
     /**
@@ -146,37 +172,33 @@ wis.widget.Input.prototype = {
      * 仅在第一次调用render时执行
      */
     initRender: function () {
-    	this._rootObj = $('<input type="'+this.getType()+'"/>');
+    	this._rootObj = jQuery('<input type="'+this.getType()+'"/>');
 		this._rootObj.val(this.getPlaceholder());
 		this.getDomInstance().append(this._rootObj);
-    },
-
-    _bindEvents: function () {
+		//this._unbindEvents();
+		this._bindEvents();
     },
 
     //渲染前处理方法
-    beforeRender: function () {
-
-    },
+    beforeRender: function () {},
 
     //渲染方法
     render: function () {
-         if (this.getCid()) this._rootObj.attr('id', this.getCid());
-         if (this.getName()) this._rootObj.attr('name', this.getName());
-         if (this.getValue()) this._rootObj.attr('value', this.getValue());
-         //if (this.getType()) this._rootObj.attr('type', this.getType());//type属性不允许更改
-         if (this.getMaxLength()) this._rootObj.attr('maxlength', this.getMaxLength());
-         if (this.getPlaceholder) this._rootObj.attr('placeholder', this.getPlaceholder());
-         if (this.getDisabled) this._rootObj.attr('disabled', this.getDisabled());
-         if (this.getReadonly) this._rootObj.attr('readonly', this.getReadonly());
-         //themes
+        //if (this.getCid()) this._rootObj.attr('id', this.getCid());//cid不允许修改
+    	//if (this.getType()) this._rootObj.attr('type', this.getType());//type属性不允许更改
+        if (this.getName()) this._rootObj.attr('name', this.getName());
+        if (this.getValue()) this._rootObj.attr('value', this.getValue());
+        if (this.getMaxLength()) this._rootObj.attr('maxlength', this.getMaxLength());
+        if (this.getPlaceholder()) this._rootObj.attr('placeholder', this.getPlaceholder());
+        if (this.getReadonly()!=null) this._rootObj.attr('readonly', this.getReadonly());
+        if(this.getWidth()!=null) this._rootObj.css('width',this.getWidth()+'px');
+        if(this.getHeight()!=null) this._rootObj.css('height',this.getHeight()+'px');
+        
+        //themes
          //validate
          //customValidate
          //displayType
          //format
-         
-         this._unbindEvents();
-		 this._bindEvents();
     },
 
     //渲染后处理方法
@@ -202,20 +224,12 @@ wis.widget.Input.prototype = {
 			maxLength: this.getMaxLength(),
             placeholder: this.getPlaceholder(),
             disabled: this.getDisabled(),
-            readonly: this.getReadonly(),
-            //方法是否返回，待确定 TODO
-            onclick:this._onClick,
-            onblur:this._onBlur,
-            onfocus:this._onFocus,
-            onchange:this._onChange
+            readonly: this.getReadonly()
         }
     },
 
     //----------必须实现----------
     setData: function (data) {
-    	if (!data) {
-    		return;
-    	}
         this.setCid(data.cid);
     	this.setName(data.name);
 		this.setThemes(data.themes);
@@ -227,16 +241,11 @@ wis.widget.Input.prototype = {
     	this.setCustomValidate(data.customValidate);
     	this.setErrorMsg(data.errorMsg);
     	this.setDisplayType(data.displayType);
-    	this.setMaxlength(data.maxlength);
+    	this.setMaxLength(data.maxlength);
     	this.setDisabled(data.disabled);
     	this.setReadonly(data.readonly);
-    	//方法是否设置，待确定 TODO
-    	this.onClick(this.onClick);
-    	this.onBlur(his.onBlur);
-    	this.onFocus(this.onFocus);
-    	this.onChange(this.onChange);
     },
-    //解除事件绑定
+    //解除事件绑定,暂不需要
     _unbindEvents: function() {
 		this._rootObj.off('focus');
 		this._rootObj.off('blur');
@@ -248,7 +257,7 @@ wis.widget.Input.prototype = {
     	var that = this;
 		this._rootObj.on('focus', function(e) {
 			if (that._onFocus) {
-				that._onFocus(e);//参数为此事件
+				that._onFocus(that);//参数为此事件
 			}
 			var value = that._rootObj.val();
 			//当获取焦点且内容与提示信息相同时，清除内容
@@ -258,25 +267,26 @@ wis.widget.Input.prototype = {
 		});
 
 		this._rootObj.on('blur', function(e) {
-			if (that._onBlur) {
-				that._onBlur(e);//参数为此事件
-			}
 			var value = that._rootObj.val();
 			if (!value) that._rootObj.val(that.getPlaceholder());
+			if (that._onBlur) {
+				that._onBlur(that);//参数为此事件
+			}
 		});
 
 		this._rootObj.on('change', function(e) {
-			var value = that._rootObj.val();
-			var handler = that._onChange;
-			if (handler) {
-				handler(value);//参数为文本框的值
+			//参数1为文本框的当前值，参数2为未修改前的值
+			//var value2 = that.getValue();
+			var value1 = that._rootObj.val();
+			that.setValue(value1);//修改值
+			if (that._onChange) {
+				that._onChange(that);
 			}
-			that.text = value;
 		});
 
 		this._rootObj.on('click',function (e) {
 			if (that._onClick) {
-				that._onClick(e);//参数为此事件
+				that._onClick(that);//参数为此事件
 			}
 		});
 	},
@@ -308,9 +318,6 @@ wis.widget.Input.prototype = {
     setOptions: function (data) {
     	if (!data) {
     		return;
-    	}
-        if(data.cid){
-    		this.setCid(data.cid);
     	}
         if(data.name){
         	this.setName(data.name);
@@ -345,7 +352,7 @@ wis.widget.Input.prototype = {
         	this.setDisplayType(data.displayType);
     	} 
         if(data.maxlength){
-        	this.setMaxlength(data.maxlength);
+        	this.setMaxLength(data.maxlength);
     	}
         if(data.disabled){
         	this.setDisabled(data.disabled);

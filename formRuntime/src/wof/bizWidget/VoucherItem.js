@@ -483,7 +483,7 @@ wof.bizWidget.VoucherItem.prototype = {
             var readonlyMethod = '';
             var visbleType = this.getVisbleType();
             if(visbleType=='text'){
-                clzName = 'wof.widget.Text';
+                clzName = 'wof.widget.Input';
                 setValMethod = 'setValue';
             }else if(visbleType=='textArea'){
                 clzName = 'wof.widget.TextArea';
@@ -500,13 +500,13 @@ wof.bizWidget.VoucherItem.prototype = {
             }else if(visbleType=='file'){
                 clzName = 'wof.widget.FileBox';
             }else if(visbleType=='number'){
-                clzName = 'wof.widget.Text';
+                clzName = 'wof.widget.Input';
             }
 
             /**
              * todo 暂时使用
              */
-            clzName = 'wof.widget.Text';
+            clzName = 'wof.widget.Input';
             setValMethod = 'setValue';
             readonlyMethod = 'setReadonly';
 

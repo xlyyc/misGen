@@ -17,6 +17,19 @@
 <script src="src/wis/util/GlobalObject.js"></script>
 <script src="src/wis/util/Tool.js"></script>
 
+<!-- lovey -->
+<link href="../lovey/style/css/lovey.css" rel="stylesheet" type="text/css">
+<script src="../lovey/js/easyloader.js" type="text/javascript"></script>
+<script type="text/javascript" src="../lovey/js/plugins/util/util.js"></script>
+<script type="text/javascript" src="../lovey/js/plugins/grid/json2.js"></script>
+<script type="text/javascript" src="../lovey/js/plugins/dialog/drag.js"></script>
+<script type="text/javascript" src="../lovey/js/plugins/imagepreview/jquery.imagepreview.1.0.js"></script>
+<link rel="stylesheet" type="text/css" media="screen" href="../lovey/js/plugins/validationengine/default/validationengine.css" />
+<script type="text/javascript" src="../lovey/js/plugins/validationengine/validationengine.js"></script>
+<script type="text/javascript" src="../lovey/js/plugins/form/jquery.form.js"></script>
+<link rel="stylesheet" type="text/css" media="screen" href="../lovey/js/plugins/dialog/default/dialog.css">
+<script type="text/javascript" src="../lovey/js/plugins/dialog/dialog.js"></script>
+
 <script src="src/wis/widget/Dialog.js"></script>
 
 <script src="src/wis/kernel/initSystem.js"></script>
@@ -25,6 +38,10 @@
     var text = null;
     function create(){
         text = wis$.create('Dialog');
+
+        text.setModal(true);
+        text.setCanDrag(true);
+        //text.setType("question");
         var container = jQuery('#container');
         text.appendTo(container);
 
