@@ -160,7 +160,7 @@ jQuery(function(){
         flowLayout3.render();
 
         var voucherComponent = wof$.create('VoucherComponent',{'state':'Edit'});
-        voucherComponent.setDataObject(dataObjectInstance);
+        voucherComponent.setDataSource(dataObjectInstance);
         voucherComponent.setBindEntityID('JZGJBXXB');
         voucherComponent.setLeft(0);
         voucherComponent.setTop(0);
@@ -233,7 +233,7 @@ jQuery(function(){
         voucherComponent.render();
 
         var voucherComponent2 = voucherComponent.clone();
-        voucherComponent2.setDataObject(dataObjectInstance);
+        voucherComponent2.setDataSource(dataObjectInstance);
         flowLayout.insertNode(voucherComponent2,{row:1,col:2},2);
         voucherComponent2.render();
 

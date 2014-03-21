@@ -54,17 +54,20 @@ wof.bizWidget.VoucherComponent.prototype = {
 
     _componentId:null,
 
-    _dataObject:null,
+    _dataSource: null,
+
+    _pageId:null,
+
+    _refData:null,  //参照数据
+
+    _rowData:null, //主记录数据
+
 
     _queryFlag: null, //是否需要发起查询标识 true需要 false不需要  搜索条件发生变化或者数据发生变化的情况下会修改此标识状态
 
     /**
      * get/set 属性方法定义
      */
-
-    setDataObject: function(dataObject){
-        this._dataObject = dataObject;
-    },
 
     getComponentId: function(){
         if(this._componentId==null){
@@ -181,6 +184,31 @@ wof.bizWidget.VoucherComponent.prototype = {
     setActiveVoucherItemRank: function(activeVoucherItemRank){
         this._activeVoucherItemRank = activeVoucherItemRank;
     },
+    getDataSource: function () {
+        return this._dataSource;
+    },
+    setDataSource: function (dataSource) {
+        this._dataSource = dataSource;
+    },
+    getPageId: function () {
+        return this._pageId;
+    },
+    setPageId: function (pageId) {
+        this._pageId = pageId;
+    },
+    setRefData: function (refData) {
+        this._refData = refData;
+    },
+    getRefData: function () {
+        return this._refData;
+    },
+    setRowData: function (rowData) {
+        this._rowData = rowData;
+    },
+    getRowData: function () {
+        return this._rowData;
+    },
+
 
     _init: function(data){
         this._queryFlag = true;
@@ -240,8 +268,9 @@ wof.bizWidget.VoucherComponent.prototype = {
      */
     _onQueryDataCompleted: function(message){
         if(this._isDataChange(message)){
-            var data = this._dataObject.getLocalData(this.getBindEntityID());
+            var data = this.getDataSource().getLocalData(this.getBindEntityID());
             if(data!=null&&data.length>0){
+                this.setRowData(data[0]);
                 var voucherItemGroups = this._voucherItemGroups;
                 for(var i=0;i<voucherItemGroups.length;i++){
                     var voucherItemGroup = voucherItemGroups[i];
@@ -249,7 +278,7 @@ wof.bizWidget.VoucherComponent.prototype = {
                     for(var t=0;t<voucherItems.length;t++){
                         var voucherItem = voucherItems[t];
                         if(voucherItem.getDataField().length>0){
-                            var value = data[0]['data'][voucherItem.getDataField()]['value'];
+                            var value = this.getRowData()['data'][voucherItem.getDataField()]['value'];
                             voucherItem.setValue(value);
                             voucherItem.render();
                         }
@@ -297,9 +326,9 @@ wof.bizWidget.VoucherComponent.prototype = {
         //如果缓存数据为空 则执行查询
         if(this._queryFlag==true){
             //todo 查询条件需要实现
-            this._dataObject.queryData('main',null,null,0,1);
-            var refData = this._dataObject.getRefData();
-            console.log(JSON.stringify(refData));
+            this.getDataSource().queryData('main',null,null,0,1);
+            this.setRefData(this.getDataSource().getRefData());
+            console.log(JSON.stringify(this.getRefData()));
             this._queryFlag = false;
         }
 
@@ -1202,6 +1231,15 @@ wof.bizWidget.VoucherComponent.prototype = {
                 activeVoucherItemGroup.setVoucherItemGroupStyle(true);
             }
         }
+    },
+
+    //获得当前行号
+    getCurrentRow: function(){
+        var rowId = null;
+        if(this.getRowData()!=null){
+            rowId = this.getRowData()['rowId'];
+        }
+        return rowId;
     }
 
 };
