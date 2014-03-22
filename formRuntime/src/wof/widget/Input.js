@@ -103,8 +103,48 @@ wof.widget.Input.prototype = {
         this._readonly = readonly;
     },
 
+    onClick: function (callBack) {
+        this._onClick = callBack;
+    },
+
+    onBlur: function (callBack) {
+        this._onBlur = callBack;
+    },
+    onChange: function (callBack) {
+        this._onChange = callBack;
+    },
+
+    onFocus: function (callBack) {
+        this._onFocus = callBack;
+    },
+
     initRender: function () {
+        var _this = this;
         this._input = wis$.create('Input');
+        this._input.onClick(
+            function(obj){
+                _this.setValue(obj.getValue());
+                _this.sendMessage('wof.widget.Input_click');
+            }
+        );
+        this._input.onFocus(
+            function(obj){
+                _this.setValue(obj.getValue());
+                _this.sendMessage('wof.widget.Input_focus');
+            }
+        );
+        this._input.onBlur(
+            function(obj){
+                _this.setValue(obj.getValue());
+                _this.sendMessage('wof.widget.Input_blur');
+            }
+        );
+        this._input.onChange(
+            function(obj){
+                _this.setValue(obj.getValue());
+                _this.sendMessage('wof.widget.Input_change');
+            }
+        );
         this.getDomInstance().append(this._input.getDomInstance());
     },
     //选择实现

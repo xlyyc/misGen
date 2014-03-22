@@ -449,6 +449,17 @@ wof.bizWidget.VoucherItem.prototype = {
         this.setValue(data.value);
     },
 
+    _insideOnReceiveMessage:{
+        'wof.widget.Input_blur':function(message){
+            console.log(message.id+'   '+this.getClassName());
+            var input = wof.util.ObjectManager.get(message.sender.id);
+            this.setValue(input.getValue());
+            this.render();
+            this.sendMessage('wof.bizWidget.VoucherItem_blur');
+            return false;
+        },
+    },
+
     //创建元件
     createComponent: function(){
         var component = null;
@@ -506,7 +517,7 @@ wof.bizWidget.VoucherItem.prototype = {
             /**
              * todo 暂时使用
              */
-            clzName = 'wof.widget.Text';
+            clzName = 'wof.widget.Input';
             setValMethod = 'setValue';
             readonlyMethod = 'setReadonly';
 

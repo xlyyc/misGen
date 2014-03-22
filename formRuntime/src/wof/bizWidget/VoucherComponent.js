@@ -376,6 +376,15 @@ wof.bizWidget.VoucherComponent.prototype = {
     },
 
     _insideOnReceiveMessage:{
+        'wof.bizWidget.VoucherItem_blur':function(message){
+            console.log(message.id+'   '+this.getClassName());
+            var voucherItem = wof.util.ObjectManager.get(message.sender.id);
+            console.log(JSON.stringify(voucherItem.getData()));
+            //var row = {};
+            //console.log(JSON.stringify(this.getRowData()));
+            //this.getDataSource().updateData(row);
+            return false;
+        },
         'wof.bizWidget.VoucherItemGroup_mousedown':function(message){
             console.log(message.id+'   '+this.getClassName());
             var voucherItemGroup = wof.util.ObjectManager.get(message.sender.id);
