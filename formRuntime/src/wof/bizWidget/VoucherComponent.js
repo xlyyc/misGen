@@ -288,6 +288,16 @@ wof.bizWidget.VoucherComponent.prototype = {
         }
     },
 
+    _onUpdateDataCompleted: function (message) {
+        if (this._isDataChange(message)) {
+            var data = this.getDataSource().getLocalData(this.getBindEntityID());
+            if(data!=null&&data.length>0){
+                this.setRowData(data[0]);
+                console.log('修改后的数据:'+JSON.stringify(this.getRowData()));
+            }
+        }
+    },
+
     _isDataChange: function(message) {
         var flag = false;
         for(var i=0; i<message.data.length; i++){
@@ -379,10 +389,18 @@ wof.bizWidget.VoucherComponent.prototype = {
         'wof.bizWidget.VoucherItem_blur':function(message){
             console.log(message.id+'   '+this.getClassName());
             var voucherItem = wof.util.ObjectManager.get(message.sender.id);
-            console.log(JSON.stringify(voucherItem.getData()));
-            //var row = {};
-            //console.log(JSON.stringify(this.getRowData()));
-            //this.getDataSource().updateData(row);
+            //console.log(JSON.stringify(voucherItem.getData()));
+            var row = {};
+            var rowData = this.getRowData()['data'];
+            for(var n in rowData){
+                if(n==voucherItem.getDataField()){
+                    row[n] = voucherItem.getValue();
+                }else{
+                    row[n] = rowData[n]['value'];
+                }
+            }
+            console.log(JSON.stringify(row));
+            this.getDataSource().updateData([row]);
             return false;
         },
         'wof.bizWidget.VoucherItemGroup_mousedown':function(message){

@@ -454,10 +454,9 @@ wof.bizWidget.VoucherItem.prototype = {
             console.log(message.id+'   '+this.getClassName());
             var input = wof.util.ObjectManager.get(message.sender.id);
             this.setValue(input.getValue());
-            this.render();
             this.sendMessage('wof.bizWidget.VoucherItem_blur');
             return false;
-        },
+        }
     },
 
     //创建元件
