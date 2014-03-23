@@ -265,6 +265,7 @@ wof.bizWidget.VoucherComponent.prototype = {
     /**
      *
      * 当查询返回结果后触发
+     *
      */
     _onQueryDataCompleted: function(message){
         if(this._isDataChange(message)){
@@ -336,9 +337,7 @@ wof.bizWidget.VoucherComponent.prototype = {
         //如果缓存数据为空 则执行查询
         if(this._queryFlag==true){
             //todo 查询条件需要实现
-            this.getDataSource().queryData('main',null,null,0,1);
-            this.setRefData(this.getDataSource().getRefData());
-            console.log(JSON.stringify(this.getRefData()));
+            this.queryData();
             this._queryFlag = false;
         }
 
@@ -1267,6 +1266,13 @@ wof.bizWidget.VoucherComponent.prototype = {
             rowId = this.getRowData()['rowId'];
         }
         return rowId;
+    },
+
+    //查询数据
+    queryData: function(){
+        this.getDataSource().queryData('main',null,null,0,1);
+        this.setRefData(this.getDataSource().getRefData());
+        console.log(JSON.stringify(this.getRefData()));
     }
 
 };

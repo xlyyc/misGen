@@ -159,7 +159,7 @@ jQuery(function(){
 
         flowLayout3.render();
 
-        var voucherComponent = wof$.create('VoucherComponent',{'state':'Edit'});
+         voucherComponent = wof$.create('VoucherComponent',{'state':'Edit'});
         voucherComponent.setDataSource(dataObjectInstance);
         voucherComponent.setBindEntityID('JZGJBXXB');
         voucherComponent.setLeft(0);
@@ -306,9 +306,13 @@ window.getContentLayout = function(){
     }
     return wof$.find('#'+oid).get(0);
 }
+function queryData(){
+    voucherComponent.queryData();
+}
 </script>
 </head>
 <body>
+<input type="button" value="adddddsaf sdfsdgg   fdg f fdg " onclick="queryData();" style=" position:absolute;z-index: 90000"/>
 <div id="container" style="position:absolute;"></div>
 </body>
 </html>
