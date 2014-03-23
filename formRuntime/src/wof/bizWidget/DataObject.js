@@ -295,8 +295,8 @@ wof.bizWidget.DataObject.prototype = {
                     if(r>-1){
                         for(var n in record){
                             var f = primary[r]['data'][n];
-                            f['value'] = record[n];
-                            if(idPro!=n){
+                            if(idPro!=n && f['value']!=record[n]){
+                                f['value'] = record[n];
                                 f['status'] = 'DataModified';
                             }
                         }
