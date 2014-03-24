@@ -41,9 +41,7 @@ wof.bizWidget.GridComponent = function() {
 		priority : 50,
 		method : 'this._onCommitRecordComponent_active(message)'
 	} ]);
-	
-	
-	
+
 };
 
 wof.bizWidget.GridComponent.prototype = {
@@ -226,7 +224,7 @@ wof.bizWidget.GridComponent.prototype = {
 	getGridColumnDataByIndex : function(index) {
 		var column = this.getColumns()[index];
 		return {
-			"bindDataField":column.bindDataField,
+			"bindDataField" : column.bindDataField,
 			"width" : column.columnWidth,
 			"colNo" : index, // 列号 从1开始
 			"name" : column.name,
@@ -316,7 +314,6 @@ wof.bizWidget.GridComponent.prototype = {
 	_currentRow : null,
 	_grid : null,
 
-	
 	setCurrentRow : function(currentRow) {
 		this._currentRow = currentRow;
 	},
@@ -361,7 +358,7 @@ wof.bizWidget.GridComponent.prototype = {
 		var rows = this.grid.getSelectedRows();
 		var gridData = this.getGridData();
 		var selectedRows = [];
-		for(var i =0; i < rows.length;i++){
+		for (var i = 0; i < rows.length; i++) {
 			var row = rows[i];
 			var data = gridData[row].data;
 			selectedRows.push(data);
@@ -392,7 +389,7 @@ wof.bizWidget.GridComponent.prototype = {
 		this.gotoPage(this.getPageNo());
 	},
 	render : function() {
-		if(!this.grid){
+		if (!this.grid) {
 			var that = this;
 			this.grid = wis$.create('Grid', {
 				width : this.getWidth(),
@@ -408,26 +405,25 @@ wof.bizWidget.GridComponent.prototype = {
 				useMutiplePage : this.getUseMutiplePage(),
 				columns : this.getGridColumnsData(),
 				total : this.getPageBar().total,
-				pageNo:this.getPageBar().pageNo,
+				pageNo : this.getPageBar().pageNo,
 				pageSize : this.getPageBar().pageSize,
 				data : this.getGridData(),
 				refData : this.getRefData(),
-				onToNext:function (e){
+				onToNext : function(e) {
 					that.nextPage();
 				},
-				onToPrev:function (e){
+				onToPrev : function(e) {
 					that.prevPage();
 				},
-				onToLast : function (){
+				onToLast : function() {
 					that.gotoPage(that.getTotalPage());
 				},
-				onToFirst: function (){
+				onToFirst : function() {
 					that.gotoPage(1);
 				}
 			});
 		}
-		
-	
+
 		var grid = this.grid;
 		grid.setTitle("表格示范");
 		grid.setWidth(800);
@@ -437,7 +433,7 @@ wof.bizWidget.GridComponent.prototype = {
 		grid.setPageSize(this.getPageSize());
 		grid.setGridData(this.getGridData());
 		grid.render();
-		
+
 	},
 	nextPage : function() {
 		var pageNo = this.getPageNo();
@@ -520,7 +516,7 @@ wof.bizWidget.GridComponent.prototype = {
 		var bindComponentId = message.sender.bindComponents;
 		if (bindComponentId == this.getComponentId()) {
 			var selectedRows = this.getSelectedRows();
-			if(!selectedRows || selectedRows.length == 0){
+			if (!selectedRows || selectedRows.length == 0) {
 				alert('请选择!');
 				return;
 			}
@@ -531,15 +527,15 @@ wof.bizWidget.GridComponent.prototype = {
 		var bindComponentId = message.sender.bindComponents;
 		// if (bindComponentId == this.getComponentId()) {
 		var selectedRows = this.getSelectedRows();
-		if(!selectedRows || selectedRows.length == 0){
+		if (!selectedRows || selectedRows.length == 0) {
 			alert('请选择!');
 			return;
 		}
-		if(selectedRows.length > 1){
+		if (selectedRows.length > 1) {
 			alert('请选择一条记录修改!')
-			return ;
+			return;
 		}
-        this.grid.updateRow();
+		this.grid.updateRow();
 		// }
 	},
 	_onCommitRecordComponent_active : function(message) {
@@ -561,18 +557,18 @@ wof.bizWidget.GridComponent.prototype = {
 			pageBar.total = parseInt(total);
 			this.setPageBar(pageBar);
 			this.setGridData(this._getPageDataInCache(this.getPageNo()));
-			
+
 		}
 	},
 	_onAddDataCompleted : function(message) {
-//		if (this._isDataChange(message)) {
-//			// todo 在grid上面用特殊颜色标识
-//			console.log(message);
-//		}
+		// if (this._isDataChange(message)) {
+		// // todo 在grid上面用特殊颜色标识
+		// console.log(message);
+		// }
 	},
 	_onUpdateDataCompleted : function(message) {
 		if (this._isDataChange(message)) {
-			//this.gotoPage(this.getPageNo(),true);
+			// this.gotoPage(this.getPageNo(),true);
 		}
 	},
 	_onDeleteDataCompleted : function(message) {
@@ -589,6 +585,18 @@ wof.bizWidget.GridComponent.prototype = {
 		if (this._isDataChange(message)) {
 			this.gotoPage(1, true);
 		}
+	},
+	getCurrentRowIds : function() {
+		var currentRowIds = [];
+		var rows = this.grid.getSelectedRows();
+		var gridData = this.getGridData();
+		var selectedRows = [];
+		for (var i = 0; i < rows.length; i++) {
+			var row = rows[i];
+			var data = gridData[row].rowId;
+			currentRowIds.push(data);
+		}
+		return currentRowIds;
 	},
 	_isDataChange : function(message) {
 		var flag = false;
@@ -768,20 +776,22 @@ wof.bizWidget.GridComponent.prototype = {
 	updateRow : function(data) {
 		this.getDataSource().updateData(data);
 	},
-	commitRow:function (){
+	commitRow : function() {
+		this.getCurrentRowIds();
 		var currentData = this.grid.getCurrentData();
 		var gridData = this.getGridData();
 		var updateData = [];
-		for(var i = 0; i < currentData.length;i++){
-			 var data = currentData[i];
-			 if(i < gridData.length){
-				 var originalData = gridData[i].data;
-				 for(var d in data){
-					 originalData[d] = data[d];
-				 }
-				 updateData.push(originalData);
-			 }
+		for (var i = 0; i < currentData.length; i++) {
+			var data = currentData[i];
+			if (i < gridData.length) {
+				var originalData = gridData[i].data;
+				for ( var d in data) {
+					originalData[d] = data[d];
+				}
+				updateData.push(originalData);
+			}
 		}
+		var currentAddData = this.grid.getCurrentAddData();
 
 		this.getDataSource().addData(this.grid.getCurrentAddData());
 		this.getDataSource().updateData(updateData);

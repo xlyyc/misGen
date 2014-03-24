@@ -178,11 +178,14 @@ wof.bizWidget.DataObject.prototype = {
 
     //选择实现
     afterRender: function () {
-        /*this.queryData('main', null, null, 0, 100);
+        this.queryData('main', null, null, 0, 100);
 
-        this.queryData('child', {'childEntityAlias':'hjxxchild', 'mainRowId':'372873910208696320'}, null, 0, 100);
+        this.queryData('child', {'childEntityAlias':'hjxxchild', 'mainRowId':'1'}, null, 0, 100);
 
-        this.updateData([{"zglbref.lbbz":"外聘员工111","zgid":"362646149296820224"}]);
+
+        /*
+
+         this.updateData([{"zglbref.lbbz":"外聘员工111","zgid":"362646149296820224"}]);
 
         this.deleteData([{"zgid":"362646149296820224"}]);
 
@@ -234,19 +237,15 @@ wof.bizWidget.DataObject.prototype = {
             if(primary!=null){
                 for(var i=0;i<data.length;i++){
                     var record = data[i];
-                    if(record[idPro]!=null){
-                        var newData = {
+                    record[idPro] = wof.util.Tool.uuid();
+                    var newData = {
                             'data':{},
-                            'status':'New',
-                            'rowId':wof.util.Tool.uuid()
+                            'status':'New'
                         };
-                        for(var n in record){
-                            newData['data'][n] = {'value':record[n],'status':'DataModified'};
-                        }
-                        primary.push(newData);
-                    }else{
-                        console.log('新增数据'+JSON.stringify(record)+'没有主键');
+                    for(var n in record){
+                        newData['data'][n] = {'value':record[n],'status':'DataModified'};
                     }
+                    primary.push(newData);
                 }
                 this.sendMessage('wof.bizWidget.DataObject_add',[alias]);
             }else{
@@ -342,7 +341,7 @@ wof.bizWidget.DataObject.prototype = {
                 //在主缓冲区查找列号(返回-1表示没有找到)
                 function _findRowFromPrimaryById(record){
                     var row = -1;
-                    var id = record[idPro];
+                    var id = record[idPro].value;
                     for(var i=0;i<primary.length;i++){
                         if(id==primary[i]['data'][idPro]["value"]){
                             row = i;
@@ -429,22 +428,7 @@ wof.bizWidget.DataObject.prototype = {
         }else if(queryType=='child'){
             queryData['queryType'] = 'child';
             queryData['childEntityAlias'] = entityParameter['childEntityAlias'];
-            queryData['mainRowIdVal'] = _getMainRowIdVal(entityParameter['mainRowId']);
-        }
-        function _getMainRowIdVal(mainRowId){
-            var mainRowIdVal = null;
-            var idPro = _this._originalBuffer[_this._mainEntityAlias]['idPro'];
-            var primary = _this._primaryBuffer[_this._mainEntityAlias];
-            if(primary!=null){
-                for(var i=0;i<primary.length;i++){
-                    var row = primary[i];
-                    if(row['rowId']==mainRowId){
-                        mainRowIdVal = row['data'][idPro]['value'];
-                        break;
-                    }
-                }
-            }
-            return mainRowIdVal;
+            queryData['mainRowId'] = entityParameter['mainRowId'];
         }
         function _setChildEnt(childEnt, mainRowId){
             var pathId = _this._mainEntityAlias+'.'+mainRowId+'.'+childEnt['entityAlias'];
@@ -478,7 +462,8 @@ wof.bizWidget.DataObject.prototype = {
                 {
                     //url:_this.getDataServicesUrl()+'/query?pageId=' + this._pageId ,
                     url:_this.getDataServicesUrl(),
-                    async:_this.getAsyncQuery()
+                    async:_this.getAsyncQuery(),
+                    data : {rowsCount : rowsCount,offset : offset}
                 }
             );
             var ents = JSON.parse(rsp.responseText);
@@ -508,7 +493,7 @@ wof.bizWidget.DataObject.prototype = {
                             var mainRow = mainEnt['rows'][t];
                             for(var k in mainRow['childData']){
                                 var childEnt = mainRow['childData'][k];
-                                _setChildEnt(childEnt, mainRow['rowId']);
+                                _setChildEnt(childEnt, mainEnt['idPro']);
                             }
                         }
                     }
@@ -528,11 +513,11 @@ wof.bizWidget.DataObject.prototype = {
                     aliasArr.push(pathId);
                 }else if(queryType=='child'){
                     var childEnt = ents[n];
-
+                    var idPro = this._originalBuffer[this._mainEntityAlias]['idPro'];
                     var originalBufferRows = this._originalBuffer[this._mainEntityAlias]['rows'];
                     for(var y=0;y<originalBufferRows.length;y++){
                         var row = originalBufferRows[y];
-                        if(row['rowId']==entityParameter['mainRowId']){
+                        if(row['data'][idPro]==entityParameter['mainRowId']){
                             if(row['childData']==null){
                                 row['childData'] = {};
                             }
@@ -543,7 +528,7 @@ wof.bizWidget.DataObject.prototype = {
                     var primaryBufferRows = this._primaryBuffer[this._mainEntityAlias];
                     for(var y=0;y<primaryBufferRows.length;y++){
                         var row = primaryBufferRows[y];
-                        if(row['rowId']==entityParameter['mainRowId']){
+                        if(row['data'][idPro]==entityParameter['mainRowId']){
                             if(row['childData']==null){
                                 row['childData'] = {};
                             }
@@ -552,6 +537,7 @@ wof.bizWidget.DataObject.prototype = {
                         }
                     }
                     _setChildEnt(childEnt, entityParameter['mainRowId']);
+                    console.log(JSON.stringify(this._primaryBuffer));
                 }
             }
 
@@ -591,12 +577,13 @@ wof.bizWidget.DataObject.prototype = {
             var childEnt = _getEnt(childId);
             if(childEnt['primaryBuffer'].length>0 || childEnt['deleteBuffer'].length>0){
                 var idPro = _this._originalBuffer[_this._mainEntityAlias]['idPro'];
+
                 var mainPrimId = null;
                 var mainPrim = _this._primaryBuffer[_this._mainEntityAlias];
                 if(mainPrim!=null){
                     for(var i=0;i<mainPrim.length;i++){
                         var row = mainPrim[i];
-                        if(row['rowId']==mainRowId){
+                        if(row['data'][idPro]!=null&&row['data'][idPro]['value']==mainRowId){
                             mainPrimId = row['data'][idPro]['value'];
                             break;
                         }
@@ -607,7 +594,7 @@ wof.bizWidget.DataObject.prototype = {
                 if(mainDele!=null){
                     for(var i=0;i<mainDele.length;i++){
                         var row = mainDele[i];
-                        if(row['rowId']==mainRowId){
+                        if(row['data'][idPro]!=null&&row['data'][idPro]['value']==mainRowId){
                             mainDeleId = row['data'][idPro]['value'];
                             break;
                         }
@@ -617,7 +604,7 @@ wof.bizWidget.DataObject.prototype = {
                     var tempFlag = false;
                     for(var i=0;i<mainEntData['primaryBuffer'].length;i++){
                         var row = mainEntData['primaryBuffer'][i];
-                        if(row['data'][idPro]!=null&&row['data'][idPro]['value']==mainPrimId){
+                        if(row['data'][idPro]!=null&&row['data'][idPro]['value']==mainRowId){
                             row['child'][childEntityAlias] = childEnt;
                             tempFlag = true;
                             break;
@@ -629,7 +616,7 @@ wof.bizWidget.DataObject.prototype = {
                             "status":"NotModified",
                             "child":{}
                         };
-                        childData['data'][idPro] = {'value':mainPrimId,'status':'NotModified'};
+                        childData['data'][idPro] = {'value':mainRowId,'status':'NotModified'};
                         childData['child'][childEntityAlias] = childEnt;
                         mainEntData['primaryBuffer'].push(childData);
                     }
@@ -637,7 +624,7 @@ wof.bizWidget.DataObject.prototype = {
                     var tempFlag = false;
                     for(var i=0;i<mainEntData['deleteBuffer'].length;i++){
                         var row = mainEntData['deleteBuffer'][i];
-                        if(row['data'][idPro]!=null&&row['data'][idPro]['value']==mainDeleId){
+                        if(row['data'][idPro]!=null&&row['data'][idPro]['value']==mainRowId){
                             row['child'][childEntityAlias] = childEnt;
                             tempFlag = true;
                             break;
@@ -649,13 +636,12 @@ wof.bizWidget.DataObject.prototype = {
                             "status":"NotModified",
                             "child":{}
                         };
-                        childData['data'][idPro] = {'value':mainDeleId,'status':'NotModified'};
+                        childData['data'][idPro] = {'value':mainRowId,'status':'NotModified'};
                         childData['child'][childEntityAlias] = childEnt;
                         mainEntData['deleteBuffer'].push(childData);
                     }
-                }else{
-                    console.log('数据错误 找不到rowId为'+mainRowId+'的数据');
                 }
+
             }
         }
         //根据id组织数据
@@ -709,8 +695,9 @@ wof.bizWidget.DataObject.prototype = {
             data[this._mainEntityAlias] = _getEnt(this._mainEntityAlias);
             var primMainEnt = this._primaryBuffer[this._mainEntityAlias];
             if(primMainEnt!=null){
+                var idPro = this._originalBuffer[this._mainEntityAlias]['idPro'];
                 for(var i=0;i<primMainEnt.length;i++){
-                    var mainRowId = primMainEnt[i]['rowId'];
+                    var mainRowId = primMainEnt[i]['data'][idPro]['value'];
                     for(var n in primMainEnt[i]['childData']){
                         var childAlias = n.substring(n.lastIndexOf('.')+1);
                         _findMainRowAndSetData(data[this._mainEntityAlias], mainRowId, childAlias);
@@ -720,8 +707,9 @@ wof.bizWidget.DataObject.prototype = {
             }
             var deleMainEnt = this._deleteBuffer[this._mainEntityAlias];
             if(deleMainEnt!=null){
+                var idPro = this._originalBuffer[this._mainEntityAlias]['idPro'];
                 for(var i=0;i<deleMainEnt.length;i++){
-                    var mainRowId = deleMainEnt[i]['rowId'];
+                    var mainRowId = deleMainEnt[i]['data'][idPro]['value'];
                     for(var n in deleMainEnt[i]['childData']){
                         var childAlias = n.substring(n.lastIndexOf('.')+1);
                         _findMainRowAndSetData(data[this._mainEntityAlias], mainRowId, childAlias);

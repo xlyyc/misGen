@@ -385,7 +385,7 @@ wof.bizWidget.VoucherComponent.prototype = {
     },
 
     _insideOnReceiveMessage:{
-        'wof.bizWidget.VoucherItem_blur':function(message){
+        'wof.bizWidget.VoucherItem_change':function(message){
             console.log(message.id+'   '+this.getClassName());
             var voucherItem = wof.util.ObjectManager.get(message.sender.id);
             //console.log(JSON.stringify(voucherItem.getData()));
@@ -1260,12 +1260,13 @@ wof.bizWidget.VoucherComponent.prototype = {
     },
 
     //获得当前行号
-    getCurrentRow: function(){
-        var rowId = null;
+    getCurrentRowIds: function(){
+        var rowIds = [];
         if(this.getRowData()!=null){
-            rowId = this.getRowData()['rowId'];
+            var rowId = this.getRowData()['rowId'];
+            rowIds.push(rowId);
         }
-        return rowId;
+        return rowIds;
     },
 
     //查询数据
