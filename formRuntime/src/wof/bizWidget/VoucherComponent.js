@@ -294,7 +294,19 @@ wof.bizWidget.VoucherComponent.prototype = {
             var data = this.getDataSource().getLocalData(this.getBindEntityID());
             if(data!=null&&data.length>0){
                 this.setRowData(data[0]);
-                console.log('修改后的数据:'+JSON.stringify(this.getRowData()));
+                var voucherItemGroups = this._voucherItemGroups;
+                for(var i=0;i<voucherItemGroups.length;i++){
+                    var voucherItemGroup = voucherItemGroups[i];
+                    var voucherItems = voucherItemGroup.findVoucherItems();
+                    for(var t=0;t<voucherItems.length;t++){
+                        var voucherItem = voucherItems[t];
+                        if(voucherItem.getDataField().length>0){
+                            var value = this.getRowData()['data'][voucherItem.getDataField()]['value'];
+                            voucherItem.setValue(value);
+                            voucherItem.render();
+                        }
+                    }
+                }
             }
         }
     },
