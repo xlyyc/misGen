@@ -114,8 +114,6 @@ jQuery(function(){
 
         //创建数据对象
         var dataObjectInstance = wof$.create('DataObject', {'pageId':'pageId1'});
-        dataObjectInstance.render();
-        //return ;
         //查询数据
         //dataObjectInstance.queryData('main', null, null, 0, 100);
         //修改数据
@@ -240,20 +238,6 @@ jQuery(function(){
         voucherComponent2.render();
 
 
-        var newSearchComponent = wof$.create('SearchComponent');
-        newSearchComponent.setWidth(250);
-        newSearchComponent.setTitleHeight(35);
-        newSearchComponent.setCaption('未命名搜索');
-        newSearchComponent.setColsNum(3);
-        newSearchComponent.setItemHeight(50);
-        var newSearchItem = wof$.create('SearchItem');
-        newSearchItem.appendTo(newSearchComponent);
-        newSearchComponent.calcLayout();
-
-        flowLayout.insertNode(newSearchComponent,{row:1,col:1},1);
-
-        newSearchComponent.render();
-
       /*  var tab = wis$.create('Tab');
         tab.setHeight(200);
         tab.insertItem({name:'name1',width:100,label:'label1',closeable:true,icon:'add',iconPosition:'left'});
@@ -277,6 +261,41 @@ jQuery(function(){
         newTab.insertNode(jQuery('<div>wwwwwww</div>'),1);
         newTab.appendTo(container);
         newTab.render();*/
+
+        var searchComponentData = {
+            left:0,
+            top:0,
+            width:500,
+            colsNum:2,
+            itemHeight:300
+        };
+        var searchComponent = wof$.create('SearchComponent',searchComponentData);
+
+        var searchItemData = {
+            colspan:'1',
+            rowspan:'1',
+            isFixItem:'true',
+            name:'XBref.xbmc',
+            caption:'性别',
+            dataField:'XBref.xbmc',
+            dateTimeBoxFormat:'',
+            selectPattern:'',
+            useMultiSelect:'',
+            visbleType:'select',
+            fromTo:'false',
+            labelWidth:'50',
+            inputWidth:'70',
+            inputHeight:'20',
+            tipValue:'',
+            linkageItem:''
+        };
+
+        searchComponent.insertSearchItem(searchItemData,{rowNum:1,colNum:1});
+
+        flowLayout.insertNode(searchComponent,{row:1,col:1},1);
+
+        searchComponent.render();
+
     }
 	//重设工作区
 	function resizeContent(){

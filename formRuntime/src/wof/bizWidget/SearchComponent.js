@@ -13,6 +13,8 @@ wof.bizWidget.SearchComponent = function () {
     onSendMessage.push({'id':'wof.bizWidget.SearchComponent_dblclick','method':'if(this.getIsExpand()==true){this.setIsExpand(false);}else{this.setIsExpand(true);}this.calcLayout();this.render();'});
     this.setOnSendMessage(onSendMessage);
 
+
+
 };
 wof.bizWidget.SearchComponent.prototype = {
 
@@ -224,6 +226,24 @@ wof.bizWidget.SearchComponent.prototype = {
         this._activeSearchItemRank = activeSearchItemRank;
     },
 
+    _init: function(data){
+        if(data.width!=null){
+            this.setWidth(Number(data.width));
+        }
+        if(data.itemHeight!=null){
+            this.setItemHeight(Number(data.itemHeight));
+        }
+        if(data.left!=null){
+            this.setLeft(Number(data.left));
+        }
+        if(data.top!=null){
+            this.setTop(Number(data.top));
+        }
+        var newSearchItem = wof$.create('SearchItem');
+        newSearchItem.appendTo(this);
+        this.calcLayout();
+    },
+
     /**
      * Render 方法定义
      */
@@ -234,12 +254,12 @@ wof.bizWidget.SearchComponent.prototype = {
 
     //选择实现
     beforeRender: function () {
-        this._flowLayout();
+
     },
 
     //----------必须实现----------
     render: function () {
-
+        this._flowLayout();
     },
 
     //选择实现
@@ -357,6 +377,84 @@ wof.bizWidget.SearchComponent.prototype = {
                 this.setOnSendMessage(searchComponentDataData.onSendMessage);
             }
             this.calcLayout();
+        }
+    },
+
+    /**
+     * 在指定行列插入searchItem
+     * 如果指定的行列位置下已经有数据 则在其后插入新的item
+     * searchItemData searchItem数据
+     * searchItemRank 指定行列
+     *
+     */
+    insertSearchItem: function(searchItemData, searchItemRank){
+        if(!jQuery.isEmptyObject(searchItemData)){
+            if(jQuery.isEmptyObject(searchItemRank)){
+                searchItemRank = this.getActiveSearchItemRank();
+            }
+            var searchItem = this.findSearchItemByRank(searchItemRank);
+            if(searchItem!=null){
+                var newSearchItem = null;
+                if(searchItem.isChange()==false){
+                    newSearchItem = searchItem;
+                }else{  //指定位置的item已经被修改过属性
+                    newSearchItem = wof$.create('SearchItem');
+                    newSearchItem.afterTo(searchItem);
+                }
+                if(searchItemData.colspan!=null){
+                    newSearchItem.setColspan(Number(searchItemData.colspan));
+                }
+                if(searchItemData.name!=null){
+                    newSearchItem.setName(searchItemData.name);
+                }
+                if(searchItemData.isFixItem!=null){
+                    newSearchItem.setIsFixItem((searchItemData.isFixItem=='true'||searchItemData.isFixItem==true)?true:false);
+                }
+                if(searchItemData.rowspan!=null){
+                    newSearchItem.setRowspan(Number(searchItemData.rowspan));
+                }
+                if(searchItemData.caption!=null){
+                    newSearchItem.setCaption(searchItemData.caption);
+                }
+                if(searchItemData.dataField!=null){
+                    newSearchItem.setDataField(searchItemData.dataField);
+                }
+                if(searchItemData.dateTimeBoxFormat!=null){
+                    newSearchItem.setDateTimeBoxFormat(searchItemData.dateTimeBoxFormat);
+                }
+                if(searchItemData.selectPattern!=null){
+                    newSearchItem.setSelectPattern(searchItemData.selectPattern);
+                }
+                if(searchItemData.useMultiSelect!=null){
+                    newSearchItem.setUseMultiSelect((searchItemData.useMultiSelect=='true'||searchItemData.useMultiSelect==true)?true:false);
+                }
+                if(searchItemData.visbleType!=null){
+                    newSearchItem.setVisbleType(searchItemData.visbleType);
+                }
+                if(searchItemData.fromTo!=null){
+                    newSearchItem.setFromTo((searchItemData.fromTo=='true'||searchItemData.fromTo==true)?true:false);
+                }
+                if(searchItemData.labelWidth!=null){
+                    newSearchItem.setLabelWidth(searchItemData.labelWidth==''?'':Number(searchItemData.labelWidth));
+                }
+                if(searchItemData.inputWidth!=null){
+                    newSearchItem.setInputWidth(searchItemData.inputWidth==''?'':Number(searchItemData.inputWidth));
+                }
+                if(searchItemData.inputHeight!=null){
+                    newSearchItem.setInputHeight(searchItemData.inputHeight==''?'':Number(searchItemData.inputHeight));
+                }
+                if(searchItemData.tipValue!=null){
+                    newSearchItem.setTipValue(searchItemData.tipValue);
+                }
+                if(searchItemData.linkageItem!=null){
+                    newSearchItem.setLinkageItem(searchItemData.linkageItem);
+                }
+                this.calcLayout();
+            }else{
+                console.log('不存在的searchItem');
+            }
+        }else{
+            console.log('没有数据 不能插入');
         }
     },
 
@@ -680,7 +778,7 @@ wof.bizWidget.SearchComponent.prototype = {
                     var left = (c-1) * searchItemWidth;
                     var obj = placeSearchItemTable.items(top+','+left);
                     if(obj.getTop()==top){
-                        if(obj.canDelete()==true){
+                        if(obj.isChange()==false){
                             count++;
                         }else{
                             break;
