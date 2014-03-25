@@ -30,7 +30,7 @@ wof.bizWidget.VoucherComponent.prototype = {
 
     _initActionName: null,
 
-    _state: null,  //状态  View Edit
+    _state: null,  //状态  View Edit Add
 
     _caption: null,
 
@@ -206,12 +206,11 @@ wof.bizWidget.VoucherComponent.prototype = {
         this._rowData = rowData;
     },
     getRowData: function () {
-        return this._rowData;
+        return this._rowData || {};
     },
 
 
     _init: function(data){
-        this._queryFlag = true;
         if(data.state!=null){
             this.setState(data.state);
         }
@@ -270,17 +269,22 @@ wof.bizWidget.VoucherComponent.prototype = {
     _onQueryDataCompleted: function(message){
         if(this._isDataChange(message)){
             var data = this.getDataSource().getLocalData(this.getBindEntityID());
-            if(data!=null&&data.length>0){
-                this.setRowData(data[0]);
+            if(data!=null&&data['rows']!=null){
+                this.setRowData(data['rows'][0]);
                 var voucherItemGroups = this._voucherItemGroups;
                 for(var i=0;i<voucherItemGroups.length;i++){
                     var voucherItemGroup = voucherItemGroups[i];
                     var voucherItems = voucherItemGroup.findVoucherItems();
                     for(var t=0;t<voucherItems.length;t++){
                         var voucherItem = voucherItems[t];
-                        if(voucherItem.getDataField().length>0){
-                            var value = this.getRowData()['data'][voucherItem.getDataField()]['value'];
-                            voucherItem.setValue(value);
+                        var alias = voucherItem.getDataField();
+                        if(alias.length>0){
+                            if(this.getRowData()['data']!=null&&this.getRowData()['data'][alias]!=null){
+                                var value = this.getRowData()['data'][alias]['value'];
+                                voucherItem.setValue(value);
+                            }else{
+                                voucherItem.setValue('');
+                            }
                             voucherItem.render();
                         }
                     }
@@ -290,19 +294,51 @@ wof.bizWidget.VoucherComponent.prototype = {
     },
 
     _onUpdateDataCompleted: function (message) {
-        if (this._isDataChange(message)) {
+        if(this._isDataChange(message)){
             var data = this.getDataSource().getLocalData(this.getBindEntityID());
-            if(data!=null&&data.length>0){
-                this.setRowData(data[0]);
+            if(data!=null&&data['rows']!=null){
+                this.setRowData(data['rows'][0]);
                 var voucherItemGroups = this._voucherItemGroups;
                 for(var i=0;i<voucherItemGroups.length;i++){
                     var voucherItemGroup = voucherItemGroups[i];
                     var voucherItems = voucherItemGroup.findVoucherItems();
                     for(var t=0;t<voucherItems.length;t++){
                         var voucherItem = voucherItems[t];
-                        if(voucherItem.getDataField().length>0){
-                            var value = this.getRowData()['data'][voucherItem.getDataField()]['value'];
-                            voucherItem.setValue(value);
+                        var alias = voucherItem.getDataField();
+                        if(alias.length>0){
+                            if(this.getRowData()['data']!=null&&this.getRowData()['data'][alias]!=null){
+                                var value = this.getRowData()['data'][alias]['value'];
+                                voucherItem.setValue(value);
+                            }else{
+                                voucherItem.setValue('');
+                            }
+                            voucherItem.render();
+                        }
+                    }
+                }
+            }
+        }
+    },
+
+    _onAddDataCompleted: function(message){
+        if(this._isDataChange(message)){
+            var data = this.getDataSource().getLocalData(this.getBindEntityID());
+            if(data!=null&&data['rows']!=null){
+                this.setRowData(data['rows'][0]);
+                var voucherItemGroups = this._voucherItemGroups;
+                for(var i=0;i<voucherItemGroups.length;i++){
+                    var voucherItemGroup = voucherItemGroups[i];
+                    var voucherItems = voucherItemGroup.findVoucherItems();
+                    for(var t=0;t<voucherItems.length;t++){
+                        var voucherItem = voucherItems[t];
+                        var alias = voucherItem.getDataField();
+                        if(alias.length>0){
+                            if(this.getRowData()['data']!=null&&this.getRowData()['data'][alias]!=null){
+                                var value = this.getRowData()['data'][alias]['value'];
+                                voucherItem.setValue(value);
+                            }else{
+                                voucherItem.setValue('');
+                            }
                             voucherItem.render();
                         }
                     }
@@ -327,7 +363,7 @@ wof.bizWidget.VoucherComponent.prototype = {
      */
 
     initRender: function(){
-
+        this._queryFlag = true;
     },
 
     //选择实现
@@ -348,9 +384,9 @@ wof.bizWidget.VoucherComponent.prototype = {
 
         //如果缓存数据为空 则执行查询
         if(this._queryFlag==true){
+            this._queryFlag = false;
             //todo 查询条件需要实现
             this.queryData();
-            this._queryFlag = false;
         }
 
         this.sendMessage('wof.bizWidget.VoucherComponent_render');
@@ -400,18 +436,24 @@ wof.bizWidget.VoucherComponent.prototype = {
         'wof.bizWidget.VoucherItem_change':function(message){
             console.log(message.id+'   '+this.getClassName());
             var voucherItem = wof.util.ObjectManager.get(message.sender.id);
-            //console.log(JSON.stringify(voucherItem.getData()));
-            var row = {};
-            var rowData = this.getRowData()['data'];
-            for(var n in rowData){
-                if(n==voucherItem.getDataField()){
-                    row[n] = voucherItem.getValue();
-                }else{
-                    row[n] = rowData[n]['value'];
+            var row = this.getDataSource().getLocalData(this.getBindEntityID())['rows'][0]['data'];
+            var rowData = {};
+            for(var n in row){
+                rowData[n] = row[n]['value'];
+            }
+            var voucherItemGroups = this._voucherItemGroups;
+            for(var i=0;i<voucherItemGroups.length;i++){
+                var voucherItemGroup = voucherItemGroups[i];
+                var voucherItems = voucherItemGroup.findVoucherItems();
+                for(var t=0;t<voucherItems.length;t++){
+                    var voucherItem = voucherItems[t];
+                    var alias = voucherItem.getDataField();
+                    if(alias.length>0){
+                        rowData[alias] = voucherItem.getValue();
+                    }
                 }
             }
-            console.log(JSON.stringify(row));
-            this.getDataSource().updateData([row]);
+            this.getDataSource().updateData([rowData]);
             return false;
         },
         'wof.bizWidget.VoucherItemGroup_mousedown':function(message){
@@ -919,112 +961,158 @@ wof.bizWidget.VoucherComponent.prototype = {
      * voucherItemGroupIndex 指定的voucherItemGroup序号(序号从1开始)
      */
     insertVoucherItem: function(voucherItemData, voucherItemRank, voucherItemGroupIndex){
-        if(!jQuery.isEmptyObject(voucherItemData)){
-            if(voucherItemGroupIndex==null){
-                voucherItemGroupIndex = this.getActiveVoucherItemGroupIndex();
-            }
-            if(jQuery.isEmptyObject(voucherItemRank)){
-                voucherItemRank = this.getActiveVoucherItemRank();
-            }
-            if(!jQuery.isEmptyObject(voucherItemRank) && voucherItemGroupIndex!=null){
-                var voucherItemGroup = this.findVoucherItemGroupByIndex(voucherItemGroupIndex);
-                if(voucherItemGroup!=null){
-                    var voucherItem = voucherItemGroup.findVoucherItemByRank(voucherItemRank);
-                    if(voucherItem!=null){
-                        var newVoucherItem = null;
-                        if(voucherItem.isChange()==false){
-                            newVoucherItem = voucherItem;
-                        }else{  //指定位置的item已经被修改过属性
-                            newVoucherItem = wof$.create('VoucherItem');
-                            newVoucherItem.afterTo(voucherItem);
-                        }
-                        newVoucherItem.setHeight(voucherItemGroup.getItemHeight());
-                        voucherItem.setScale(voucherItemGroup.getScale());
-                        if(voucherItemData.colspan!=null){
-                            if(voucherItemGroup.getColsNum()>=Number(voucherItemData.colspan)){
-                                newVoucherItem.setColspan(Number(voucherItemData.colspan));
-                            }else{
-                                console.log('设置colspan值错误:大于该分组colsNum值');
-                            }
-                        }
-                        if(voucherItemData.isFixItem!=null){
-                            newVoucherItem.setIsFixItem((voucherItemData.isFixItem=='true'||voucherItemData.isFixItem==true)?true:false);
-                        }
-                        if(voucherItemData.rowspan!=null){
-                            newVoucherItem.setRowspan(Number(voucherItemData.rowspan));
-                        }
-                        if(voucherItemData.itemName!=null){
-                            newVoucherItem.setItemName(voucherItemData.itemName);
-                        }
-                        if(voucherItemData.visiable!=null){
-                            newVoucherItem.setVisiable((voucherItemData.visiable=='true'||voucherItemData.visiable==true)?true:false);
-                        }
-                        if(voucherItemData.itemLabel!=null){
-                            newVoucherItem.setItemLabel(voucherItemData.itemLabel);
-                        }
-                        if(voucherItemData.dataField!=null){
-                            newVoucherItem.setDataField(voucherItemData.dataField);
-                        }
-                        if(voucherItemData.dateTimeBoxFormat!=null){
-                            newVoucherItem.setDateTimeBoxFormat(voucherItemData.dateTimeBoxFormat);
-                        }
-                        if(voucherItemData.readOnly!=null){
-                            newVoucherItem.setReadOnly((voucherItemData.readOnly=='true'||voucherItemData.readOnly==true)?true:false);
-                        }
-                        if(voucherItemData.required!=null){
-                            newVoucherItem.setRequired((voucherItemData.required=='true'||voucherItemData.required==true)?true:false);
-                        }
-                        if(voucherItemData.length!=null){
-                            newVoucherItem.setLength(voucherItemData.length==''?'':Number(voucherItemData.length));
-                        }
-                        if(voucherItemData.min!=null){
-                            newVoucherItem.setMin(voucherItemData.min==''?'':Number(voucherItemData.min));
-                        }
-                        if(voucherItemData.max!=null){
-                            newVoucherItem.setMax(voucherItemData.max==''?'':Number(voucherItemData.max));
-                        }
-                        if(voucherItemData.regExp!=null){
-                            newVoucherItem.setRegExp(voucherItemData.regExp);
-                        }
-                        if(voucherItemData.checkErrorInfo!=null){
-                            newVoucherItem.setCheckErrorInfo(voucherItemData.checkErrorInfo);
-                        }
-                        if(voucherItemData.selectPattern!=null){
-                            newVoucherItem.setSelectPattern(voucherItemData.selectPattern);
-                        }
-                        if(voucherItemData.useMultiSelect!=null){
-                            newVoucherItem.setUseMultiSelect((voucherItemData.useMultiSelect=='true'||voucherItemData.useMultiSelect==true)?true:false);
-                        }
-                        if(voucherItemData.visbleType!=null){
-                            newVoucherItem.setVisbleType(voucherItemData.visbleType);
-                        }
-                        if(voucherItemData.labelWidth!=null){
-                            newVoucherItem.setLabelWidth(voucherItemData.labelWidth==''?'':Number(voucherItemData.labelWidth));
-                        }
-                        if(voucherItemData.inputWidth!=null){
-                            newVoucherItem.setInputWidth(voucherItemData.inputWidth==''?'':Number(voucherItemData.inputWidth));
-                        }
-                        if(voucherItemData.inputHeight!=null){
-                            newVoucherItem.setInputHeight(voucherItemData.inputHeight==''?'':Number(voucherItemData.inputHeight));
-                        }
-                        if(voucherItemData.linkageItem!=null){
-                            newVoucherItem.setLinkageItem(voucherItemData.linkageItem);
-                        }
-                        if(voucherItemData.tipValue!=null){
-                            newVoucherItem.setTipValue(voucherItemData.tipValue);
-                        }
-
-                        voucherItemGroup.calcLayout();
-                        this.calcLayout();
-                    }else{
-                        console.log('不存在的voucherItem');
+        if(voucherItemGroupIndex==null){
+            voucherItemGroupIndex = this.getActiveVoucherItemGroupIndex();
+        }
+        if(jQuery.isEmptyObject(voucherItemRank)){
+            voucherItemRank = this.getActiveVoucherItemRank();
+        }
+        if(!jQuery.isEmptyObject(voucherItemRank) && voucherItemGroupIndex!=null){
+            var voucherItemGroup = this.findVoucherItemGroupByIndex(voucherItemGroupIndex);
+            if(voucherItemGroup!=null){
+                var voucherItem = voucherItemGroup.findVoucherItemByRank(voucherItemRank);
+                if(voucherItem!=null){
+                    var newVoucherItem = null;
+                    if(voucherItem.isChange()==false){
+                        newVoucherItem = voucherItem;
+                    }else{  //指定位置的item已经被修改过属性
+                        newVoucherItem = wof$.create('VoucherItem');
+                        newVoucherItem.afterTo(voucherItem);
                     }
-                }else{
-                    console.log('不存在voucherItemGroup 请先插入新的voucherItemGroup');
+                    this._insertVoucherItem(voucherItemData, newVoucherItem, voucherItemGroup);
+                    voucherItemGroup.calcLayout();
+                    this.calcLayout();
                 }
+            }else{
+                console.log('不存在voucherItemGroup 请先插入新的voucherItemGroup');
             }
-        }else{
-            console.log('没有数据 不能插入');
+        }
+    },
+
+    /**
+     * 在指定的分组下的指定行列插入voucherItem
+     * 如果指定的行列位置下已经有数据 则在其后插入新的item
+     * voucherItemData voucherItem数据
+     * voucherItemRank 指定行列
+     * voucherItemGroupIndex 指定的voucherItemGroup序号(序号从1开始)
+     */
+    _insertVoucherItem: function(voucherItemData, voucherItem, voucherItemGroup){
+        voucherItem.setHeight(voucherItemGroup.getItemHeight());
+        voucherItem.setScale(voucherItemGroup.getScale());
+        if(voucherItemData.colspan!=null){
+            if(voucherItemGroup.getColsNum()>=Number(voucherItemData.colspan)){
+                voucherItem.setColspan(Number(voucherItemData.colspan));
+            }else{
+                console.log('设置colspan值错误:大于该分组colsNum值');
+            }
+        }
+        if(voucherItemData.isFixItem!=null){
+            voucherItem.setIsFixItem((voucherItemData.isFixItem=='true'||voucherItemData.isFixItem==true)?true:false);
+        }
+        if(voucherItemData.rowspan!=null){
+            voucherItem.setRowspan(Number(voucherItemData.rowspan));
+        }
+        if(voucherItemData.itemName!=null){
+            voucherItem.setItemName(voucherItemData.itemName);
+        }
+        if(voucherItemData.visiable!=null){
+            voucherItem.setVisiable((voucherItemData.visiable=='true'||voucherItemData.visiable==true)?true:false);
+        }
+        if(voucherItemData.itemLabel!=null){
+            voucherItem.setItemLabel(voucherItemData.itemLabel);
+        }
+        if(voucherItemData.dataField!=null){
+            voucherItem.setDataField(voucherItemData.dataField);
+        }
+        if(voucherItemData.dateTimeBoxFormat!=null){
+            voucherItem.setDateTimeBoxFormat(voucherItemData.dateTimeBoxFormat);
+        }
+        if(voucherItemData.readOnly!=null){
+            voucherItem.setReadOnly((voucherItemData.readOnly=='true'||voucherItemData.readOnly==true)?true:false);
+        }
+        if(voucherItemData.required!=null){
+            voucherItem.setRequired((voucherItemData.required=='true'||voucherItemData.required==true)?true:false);
+        }
+        if(voucherItemData.length!=null){
+            voucherItem.setLength(voucherItemData.length==''?'':Number(voucherItemData.length));
+        }
+        if(voucherItemData.min!=null){
+            voucherItem.setMin(voucherItemData.min==''?'':Number(voucherItemData.min));
+        }
+        if(voucherItemData.max!=null){
+            voucherItem.setMax(voucherItemData.max==''?'':Number(voucherItemData.max));
+        }
+        if(voucherItemData.regExp!=null){
+            voucherItem.setRegExp(voucherItemData.regExp);
+        }
+        if(voucherItemData.checkErrorInfo!=null){
+            voucherItem.setCheckErrorInfo(voucherItemData.checkErrorInfo);
+        }
+        if(voucherItemData.selectPattern!=null){
+            voucherItem.setSelectPattern(voucherItemData.selectPattern);
+        }
+        if(voucherItemData.useMultiSelect!=null){
+            voucherItem.setUseMultiSelect((voucherItemData.useMultiSelect=='true'||voucherItemData.useMultiSelect==true)?true:false);
+        }
+        if(voucherItemData.visbleType!=null){
+            voucherItem.setVisbleType(voucherItemData.visbleType);
+        }
+        if(voucherItemData.labelWidth!=null){
+            voucherItem.setLabelWidth(voucherItemData.labelWidth==''?'':Number(voucherItemData.labelWidth));
+        }
+        if(voucherItemData.inputWidth!=null){
+            voucherItem.setInputWidth(voucherItemData.inputWidth==''?'':Number(voucherItemData.inputWidth));
+        }
+        if(voucherItemData.inputHeight!=null){
+            voucherItem.setInputHeight(voucherItemData.inputHeight==''?'':Number(voucherItemData.inputHeight));
+        }
+        if(voucherItemData.linkageItem!=null){
+            voucherItem.setLinkageItem(voucherItemData.linkageItem);
+        }
+        if(voucherItemData.tipValue!=null){
+            voucherItem.setTipValue(voucherItemData.tipValue);
+        }
+    },
+
+    /**
+     * 在指定的分组下的指定行列批量插入voucherItem
+     * 如果指定的行列位置下已经有数据 则在其后插入新的item
+     * voucherItemsData voucherItem数据
+     * voucherItemRank 指定行列
+     * voucherItemGroupIndex 指定的voucherItemGroup序号(序号从1开始)
+     */
+    insertVoucherItems: function(voucherItemsData, voucherItemRank, voucherItemGroupIndex){
+        if(voucherItemGroupIndex==null){
+            voucherItemGroupIndex = this.getActiveVoucherItemGroupIndex();
+        }
+        if(jQuery.isEmptyObject(voucherItemRank)){
+            voucherItemRank = this.getActiveVoucherItemRank();
+        }
+        if(!jQuery.isEmptyObject(voucherItemRank) && voucherItemGroupIndex!=null){
+            var voucherItemGroup = this.findVoucherItemGroupByIndex(voucherItemGroupIndex);
+            if(voucherItemGroup!=null){
+                var voucherItem = voucherItemGroup.findVoucherItemByRank(voucherItemRank);
+                if(voucherItem!=null){
+                    var newVoucherItem = null;
+                    if(voucherItem.isChange()==false){
+                        newVoucherItem = voucherItem;
+                    }else{  //指定位置的item已经被修改过属性
+                        newVoucherItem = wof$.create('VoucherItem');
+                        newVoucherItem.afterTo(voucherItem);
+                    }
+                    this._insertVoucherItem(voucherItemsData[0], newVoucherItem, voucherItemGroup);
+                    for(var i=1;i<voucherItemsData.length;i++){
+                        var voucherItemData = voucherItemsData[i];
+                        var item = wof$.create('VoucherItem');
+                        item.afterTo(newVoucherItem);
+                        this._insertVoucherItem(voucherItemsData[i], item, voucherItemGroup)
+                    }
+                    voucherItemGroup.calcLayout();
+                    this.calcLayout();
+                }
+            }else{
+                console.log('不存在voucherItemGroup 请先插入新的voucherItemGroup');
+            }
         }
     },
 
@@ -1285,7 +1373,10 @@ wof.bizWidget.VoucherComponent.prototype = {
     queryData: function(){
         this.getDataSource().queryData('main',null,null,0,1);
         this.setRefData(this.getDataSource().getRefData());
-        console.log(JSON.stringify(this.getRefData()));
+        //如果是Add状态 需要插入一条空白数据
+        if(this.getState()=='Add'){
+            this.getDataSource().addData([{}]);
+        }
     }
 
 };

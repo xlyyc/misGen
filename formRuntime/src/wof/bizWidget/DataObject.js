@@ -178,9 +178,9 @@ wof.bizWidget.DataObject.prototype = {
 
     //选择实现
     afterRender: function () {
-        this.queryData('main', null, null, 0, 100);
+        //this.queryData('main', null, null, 0, 100);
 
-        this.queryData('child', {'childEntityAlias':'hjxxchild', 'mainRowId':'1'}, null, 0, 100);
+       // this.queryData('child', {'childEntityAlias':'hjxxchild', 'mainRowId':'1'}, null, 0, 100);
 
 
         /*
@@ -294,9 +294,13 @@ wof.bizWidget.DataObject.prototype = {
                     if(r>-1){
                         for(var n in record){
                             var f = primary[r]['data'][n];
-                            if(idPro!=n && f['value']!=record[n]){
-                                f['value'] = record[n];
-                                f['status'] = 'DataModified';
+                            if(idPro!=n){
+                                if(f==null){
+                                    primary[r]['data'][n] = {'value':record[n],'status':'DataModified'};
+                                }else if(f['value']!=record[n]){
+                                    f['value'] = record[n];
+                                    f['status'] = 'DataModified';
+                                }
                             }
                         }
                         if(primary[r]['status'] == 'New'){
@@ -750,7 +754,10 @@ wof.bizWidget.DataObject.prototype = {
      */
     getLocalData: function(entityParameter){
         var id = this._getBufferId(entityParameter);
-        var primaryBuffer = this._primaryBuffer[id];
+        var primaryBuffer = {
+            'rows':this._primaryBuffer[id],
+            'idPro':this._originalBuffer[id]['idPro']
+        };
         return primaryBuffer;
     },
 
@@ -762,7 +769,10 @@ wof.bizWidget.DataObject.prototype = {
      */
     getLocalDeleteData: function(entityParameter){
         var id = this._getBufferId(entityParameter);
-        var deleteBuffer = this._deleteBuffer[id];
+        var deleteBuffer = {
+            'rows':this._deleteBuffer[id],
+            'idPro':this._originalBuffer[id]['idPro']
+        };
         return deleteBuffer;
     },
 
@@ -850,6 +860,5 @@ wof.bizWidget.DataObject.prototype = {
         }
         return id;
     }
-
 
 };

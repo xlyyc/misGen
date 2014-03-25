@@ -486,7 +486,7 @@ wof.bizWidget.VoucherItem.prototype = {
 
     //根据当前的显示类型设置对应的元件
     _setComponent: function(){
-        if(this.getDataField()!=''){
+        if(this.getDataField().length>0){
             var component = null;
             var clzName = '';
             var setValMethod = '';
@@ -545,7 +545,9 @@ wof.bizWidget.VoucherItem.prototype = {
             var voucherComponent = this.getOriginNode();
             var state = voucherComponent.getState();
             console.log(state);
-            if(state=='View'){
+            if(state=='Add'){
+                component[readonlyMethod](false);
+            }else if(state=='View'){
                 component[readonlyMethod](true);
             }else{
                 if(this.getReadOnly() == true){

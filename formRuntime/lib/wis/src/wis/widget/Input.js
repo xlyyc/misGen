@@ -187,7 +187,7 @@ wis.widget.Input.prototype = {
         //if (this.getCid()) this._rootObj.attr('id', this.getCid());//cid不允许修改
     	//if (this.getType()) this._rootObj.attr('type', this.getType());//type属性不允许更改
         if (this.getName()) this._rootObj.attr('name', this.getName());
-        if (this.getValue()) this._rootObj.attr('value', this.getValue());
+        this._rootObj.attr('value', this.getValue());
         if (this.getMaxLength()) this._rootObj.attr('maxlength', this.getMaxLength());
         if (this.getPlaceholder()) this._rootObj.attr('placeholder', this.getPlaceholder());
         if (this.getReadonly()!=null) this._rootObj.attr('readonly', this.getReadonly());

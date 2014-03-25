@@ -271,12 +271,12 @@ wis.widget.Grid.prototype = {
 	getCurrentData : function() {
 		return this.grid.currentData.Rows;
 	},
-	getCurrentAddData:function (){
+	getCurrentAddData : function() {
 		var rows = this.grid.currentData.Rows;
 		var added = [];
-		for(var i =0; i < rows.length;i++){
+		for (var i = 0; i < rows.length; i++) {
 			var row = rows[i];
-			if(row.__status == "add"){
+			if (row.__status == "add") {
 				delete row.__status;
 				added.push(row);
 			}
@@ -285,13 +285,11 @@ wis.widget.Grid.prototype = {
 	},
 	getSelectedRows : function() {
 		var rows = this._grid.ligerGetGridManager().getSelectedRowsIndex();
-		// this._grid.ligerGetGridManager().deleteSelectedRow();
 		return rows;
 	},
 	updateRow : function() {
 		var rows = jQuery(this._grid.ligerGetGridManager().getCheckedRowObjs());
 		this.grid.applyEditor(rows.children(":first").next());
-		//this.grid.applyEditor(jQuery(childNodes[1]).children(":first"));
 	},
 	/**
 	 * 初始化渲染方法 仅在第一次调用render时执行
@@ -348,7 +346,7 @@ wis.widget.Grid.prototype = {
 				var d = data[i].data[names[j]];
 				if (d) {
 					obj[names[j]] = d.value
-				} 
+				}
 			}
 			formateData.push(obj);
 		}
@@ -356,7 +354,7 @@ wis.widget.Grid.prototype = {
 		this._grid = $('<div></div>');
 		var that = this;
 		$("body").append(this._grid);
-
+		//this.getDomInstance().append(this._grid);
 		this.grid = this._grid.ligerGrid({
 			title : this.getTitle(),
 			checkbox : this.getCheckbox(),
@@ -381,10 +379,10 @@ wis.widget.Grid.prototype = {
 			onToPrev : function(e) {
 				that.onToPrev(e);
 			},
-			onToFirst : function (e){
+			onToFirst : function(e) {
 				that.onToFirst(e);
 			},
-			onToLast : function (e){
+			onToLast : function(e) {
 				that.onToLast(e);
 			}
 		});
@@ -393,7 +391,7 @@ wis.widget.Grid.prototype = {
 
 	// 渲染后处理方法
 	afterRender : function() {
-
+		
 	},
 
 	// ----------必须实现----------

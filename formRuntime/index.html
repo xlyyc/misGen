@@ -159,7 +159,7 @@ jQuery(function(){
 
         flowLayout3.render();
 
-         voucherComponent = wof$.create('VoucherComponent',{'state':'Edit'});
+         voucherComponent = wof$.create('VoucherComponent',{'state':'Add'});       //Edit View
         voucherComponent.setDataSource(dataObjectInstance);
         voucherComponent.setBindEntityID('JZGJBXXB');
         voucherComponent.setLeft(0);
@@ -173,7 +173,63 @@ jQuery(function(){
         var voucherItemGroupData2 = {groupCaption:'表头分组2',width:500,titleHeight:25,colsNum:2,itemHeight:45};
         voucherComponent.insertVoucherItemGroup(voucherItemGroupData2);
 
+        var voucherItemsData = [];
         var voucherItemData1 = {
+            colspan:'1',
+            rowspan:'1',
+            isFixItem:'true',
+            itemName:'xm',
+            visiable:'true',
+            itemLabel:'姓名',
+            dataField:'xm',
+            dateTimeBoxFormat:'',
+            readOnly:'false',
+            required:'false',
+            length:'',
+            min:'',
+            max:'',
+            regExp:'',
+            checkErrorInfo:'',
+            visbleType:'select',
+            selectPattern:'',
+            useMultiSelect:'',
+            labelWidth:'50',
+            inputWidth:'70',
+            inputHeight:'20',
+            linkageItem:'',
+            tipValue:''
+        };
+        voucherItemsData.push(voucherItemData1);
+        var voucherItemData2 = {
+            colspan:'1',
+            rowspan:'1',
+            isFixItem:'true',
+            itemName:'XBref.xbmc',
+            visiable:'true',
+            itemLabel:'性别',
+            dataField:'XBref.xbmc',
+            dateTimeBoxFormat:'',
+            readOnly:'false',
+            required:'false',
+            length:'',
+            min:'',
+            max:'',
+            regExp:'',
+            checkErrorInfo:'',
+            visbleType:'select',
+            selectPattern:'',
+            useMultiSelect:'',
+            labelWidth:'50',
+            inputWidth:'70',
+            inputHeight:'20',
+            linkageItem:'',
+            tipValue:''
+        };
+        voucherItemsData.push(voucherItemData2);
+        voucherComponent.insertVoucherItems(voucherItemsData,{rowNum:1,colNum:1}, 2);
+
+
+        /*var voucherItemData1 = {
             colspan:'1',
             rowspan:'1',
             isFixItem:'true',
@@ -224,7 +280,7 @@ jQuery(function(){
             linkageItem:'',
             tipValue:''
         };
-        voucherComponent.insertVoucherItem(voucherItemData2,{rowNum:1,colNum:2}, 1);
+        voucherComponent.insertVoucherItem(voucherItemData2,{rowNum:1,colNum:2}, 1);*/
 
         //voucherComponent.updateVoucherItem(voucherItemData1,{rowNum:1,colNum:2}, 1);
 

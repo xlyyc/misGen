@@ -1,5 +1,5 @@
 wof.bizWidget.GridComponent = function() {
-	// 初始化监听消息
+	// 初始化监听消息 
 	this.setOnReceiveMessage([ {
 		id : 'wof.bizWidget.DataObject_query',
 		priority : 50,
@@ -586,17 +586,17 @@ wof.bizWidget.GridComponent.prototype = {
 			this.gotoPage(1, true);
 		}
 	},
-	getCurrentRowIds : function() {
-		var currentRowIds = [];
+	currentMainRowData : function() {
+		var currentRowData = [];
 		var rows = this.grid.getSelectedRows();
 		var gridData = this.getGridData();
 		var selectedRows = [];
 		for (var i = 0; i < rows.length; i++) {
 			var row = rows[i];
-			var data = gridData[row].rowId;
-			currentRowIds.push(data);
+			var data = gridData[row].data;
+			currentRowData.push(data);
 		}
-		return currentRowIds;
+		return currentRowData;
 	},
 	_isDataChange : function(message) {
 		var flag = false;
@@ -777,7 +777,16 @@ wof.bizWidget.GridComponent.prototype = {
 		this.getDataSource().updateData(data);
 	},
 	commitRow : function() {
-		this.getCurrentRowIds();
+		
+		var map = new wof.util.Hashtable();
+        var columns = this.getColumns();
+        for(var i = 0; i < columns.length;i++){
+        	var column = columns[i];
+        	if(column.bindDataField){
+        		map.add(column.bindDataField,column);
+        	}
+        }
+        
 		var currentData = this.grid.getCurrentData();
 		var gridData = this.getGridData();
 		var updateData = [];
@@ -786,16 +795,56 @@ wof.bizWidget.GridComponent.prototype = {
 			if (i < gridData.length) {
 				var originalData = gridData[i].data;
 				for ( var d in data) {
-					originalData[d] = data[d];
+					var value = data[d];
+					var column = map.items(d);
+	        		var message = this.validate(value,column);
+	        		if(true != message){
+	        			alert(message);
+	        			return;
+	        		}
+					originalData[d] = value;
 				}
 				updateData.push(originalData);
 			}
 		}
-		var currentAddData = this.grid.getCurrentAddData();
-
-		this.getDataSource().addData(this.grid.getCurrentAddData());
+		
+		var addData = this.grid.getCurrentAddData();
+        for(var i = 0; i < addData.length;i++){
+        	var row = addData[i]
+        	for(var prop in row){
+        		var column = map.items(prop);
+        		var message = this.validate(row[prop],column);
+        		if(true != message){
+        			alert(message);
+        			return;
+        		}
+        	}
+        }
+		this.getDataSource().addData(addData);
 		this.getDataSource().updateData(updateData);
 		this.getDataSource().saveData();
+	},
+	validate:function (value,columnDef){
+		var result = true;
+		var rule = '[';
+		if(columnDef.required){
+			rule+='required,';
+		}
+		if(columnDef.max){
+			rule+='maxValue,';
+		}
+		if(columnDef.min){
+			rule+='minValue,';
+		}
+		if(columnDef.length){
+			rule+='length,'
+		}
+		if(rule.length > 1){
+			rule = rule.substring(0,rule.length-1);
+			rule +=']';
+		}
+		result = emap_validate.doValidate(value,''+rule+'');
+		return result;
 	},
 	undeleteData : function() {
 		this.getDataSource().undeleteData();
