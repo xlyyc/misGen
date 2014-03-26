@@ -156,44 +156,41 @@ wis.widget.Validation.prototype = {
             msgPosition: this.getMsgPosition()
         }
     },
-    /**
-     *  绑定校验规则的方法，对外提供（设置事件，自动绑定）
-     *  @param rules 校验规则，数组，如[required,length[2,10]]
-     *  @param alertTextFlag 是否启用默认处理，若是，则自动弹出错误提示，否则仅返回结果
-     *  @param obj 构件实例，仅当alertTextFlag为true时用作弹出错误提示的定位
-     *  @param returnDealFunc 校验返回信息处理函数，alertTextFlag为false时生效
-     *  @param liveEvent 即时触发，为true时绑定_validationEventTriggers指定的事件
-     *  @param validationEventTriggers  触发校验的事件
-     *  @param returnIsValid 通过校验是否也返回提示，如对号标识
-     *  @returns 无返回
-     */   
-    bindValidateRule: function (rules,obj,alertTextFlag,returnDealFunc,liveEvent,validationEventTriggers,returnIsValid) {
-    	
-    },
+   
     /**
      *  校验方法，对外提供（构件触发执行）
      *  @param rules 校验规则，数组，如[required,length[2,10]]
      *  @param value 待校验的值，object
-     *  @param alertTextFlag 是否启用默认处理，若是，则自动弹出错误提示，否则仅返回结果
-     *  @param caller 构件实例，仅当alertTextFlag为true时用作弹出错误提示的定位
      *  @returns 校验结果 true|false
      */    
-    doValidate: function (rules,value,caller,alertTextFlag) {
+    doValidate: function (value,rules) {
     	var validationPass = this._validateCall(value,rules);
-        return (validationPass) ? true : false;
+        return validationPass;
     },
     _validateCall: function (value, rulesStr) {
+    	_that = this;
     	var rulesRegExp = /\[(.*)\]/;
         var getRules = rulesRegExp.exec(rulesStr);
+        if(getRules == null||getRules==''){
+        	return true;
+        }
         var str = getRules[1];
+        if(str == null||str==''){
+        	return true;
+        }
         var pattern = /\[|,|\]|\|/;
         var rules = str.split(pattern);
-    	for (i = 0; i < rules.length; i++) {
-    		var errorMsg = "";
+        if(rules == null||rules==''){
+        	return true;
+        }
+        var errorMsg = "";
+        for (i = 0; i < rules.length; i++) {
     		var _result = true;
     		/**
     		 * 目前只对值进行校验，对于分组校验个数需求的通过定制处理
-         	 * 如: "maxCheckbox"、 "minCheckbox"等
+         	 * 如: "maxCheckbox"、 "minCheckbox"等\
+         	 * case "equalsFiled":	//值等于字段
+         	 * case "notEqualsFiled":	//值不等于字段
     		 */
     		switch (rules[i]) {
                 case "optional": //选填
@@ -205,8 +202,8 @@ wis.widget.Validation.prototype = {
                 case "length": // 长度区间
                 case "minLength":	//最小长度
                 case "maxLength":	//最大长度
-                case "equals":	//值等于
-                case "notEquals":	//值不等于
+                case "equalsValue":	//值等于
+                case "notEqualsValue":	//值不等于
                 case "limit":  //值大小区间
                 case "minValue": //最小值
                 case "maxValue": //最大值
@@ -216,7 +213,7 @@ wis.widget.Validation.prototype = {
                 case "funcCall": // 自定义处理函数
                 	_result = this._prefabricateRule[rules[i]].validateFunc(value, rules, i);
                 	if(_result!=true){
-                		errorMsg += _result+"<br/>";
+                		errorMsg += _result+"<br/>";//
                     }
                     break;
                 case "exemptString": // 不校验字符串，出现某特定字符串则清空错误信息
@@ -226,7 +223,10 @@ wis.widget.Validation.prototype = {
                     }
                     break;
                 case "custom": // 可扩展
-                    _customRegex(value,rules, i);
+                	_result = this._customRegex(value,rules, i);
+                	if(_result!=true){
+                		errorMsg += _result;//+"<br/>"
+                    }
                     break;
                 default :
                     break;
@@ -241,7 +241,7 @@ wis.widget.Validation.prototype = {
     	if(errorMsg==""){
     		return true;
     	}else{
-    		return false;
+    		return errorMsg;
     	}
     },
     //----------自定义实现(进行必要的校验和默认值设置)----------
@@ -255,28 +255,58 @@ wis.widget.Validation.prototype = {
                 "alertTextCheckboxe": "* 请选择一个复选框."},
             "length": {
                 "regex": "none",
+                "validateFunc":this._length,
                 "alertText": "* 长度必须在 ",
                 "alertText2": " 至 ",
                 "alertText3": " 之间."},
+	        "minLength": {
+	            "regex": "none",
+	            "validateFunc":this._minLength,
+	            "alertText": "* 长度必须大于 "},
+            "maxLength": {
+	            "regex": "none",
+	            "validateFunc":this._maxLength,
+	            "alertText": "* 长度必须小于 "},
             "limit": {
                 "regex": "none",
+                "validateFunc":this._limit,
                 "alertText": "* 大小必须在 ",
                 "alertText2": " 至 ",
                 "alertText3": " 之间."},
             "minValue": {
                 "regex": "none",
+                "validateFunc":this._minValue,
                 "alertText": "* 值不小于 "},
+            "maxValue": {
+                "regex": "none",
+                "validateFunc":this._maxValue,
+                "alertText": "* 值不大于 "},
             "maxCheckbox": {
                 "regex": "none",
+                "validateFunc":this._maxCheckbox,
                 "alertText": "* 最多选择 ",
                 "alertText2": " 项."},
             "minCheckbox": {
                 "regex": "none",
+                "validateFunc":this._minCheckbox,
                 "alertText": "* 至少选择 ",
                 "alertText2": " 项."},
-            "equals": {
+            "equalsField": {
                 "regex": "none",
-                "alertText": "* 两次输入不一致,请重新输入."}
+                "validateFunc":this._equalsValue,
+                "alertText": "* 两次输入不一致,请重新输入."},
+            "notEqualsField": {
+                "regex": "none",
+                "validateFunc":this._notEqualsValue,
+                "alertText": "* 不能出现重复,请重新输入."},
+            "equalsValue": {
+                "regex": "none",
+                "validateFunc":this._equalsValue,
+                "alertText": "* 输入错误,请重新输入."},
+            "notEqualsValue": {
+                "regex": "none",
+                "validateFunc":this._notEqualsValue,
+                "alertText": "* 输入内容被排除,请重新输入."}
             
         };
     	this.setPrefabricateRule(preRule);
@@ -368,7 +398,7 @@ wis.widget.Validation.prototype = {
                 "regex": "/^[0-9]\\d{2}$/",
                 "alertText": "必须为3位数字"
             },
-            "noSpecialCaractersNew": {
+            "noSpecialCaractersWithChinese": {
                 "regex": "/^[0-9a-zA-Z\u4e00-\u9fa5]*$/",
                 "alertText": "* 只允许英文字母、数字和中文"
             }
@@ -402,12 +432,97 @@ wis.widget.Validation.prototype = {
     /** 执行校验函数 */
     _required: function (value,rules,position) {   //校验必填
         if (!value) {
-        	return this._getPreAlertText(rules[position],"alertText");
+        	return _that._getPreAlertText(rules[position],"alertText");
         }else{
         	return true;
         }
     },  
-    _doFilter: function(str, rules, position) { // doFilter['filter'],参数即为文件类型
+    
+    _length: function(value, rules, position) {         // 校验长度
+        startLength = eval(rules[position + 1]);
+        endLength = eval(rules[position + 2]);
+        feildLength = value?value.length:0;
+
+        if (feildLength < startLength || feildLength > endLength) {
+            return _that._getPreAlertText(rules[position],"alertText") 
+            + startLength + _that._getPreAlertText(rules[position],"alertText2") 
+            + endLength + _that._getPreAlertText(rules[position],"alertText3");
+        }else{
+        	return true;
+        }
+    },
+    _minLength: function(value, rules, position) {         // 校验长度
+        startLength = eval(rules[position + 1]);
+        feildLength = value?0:value.length;
+
+        if (feildLength < startLength) {
+            return _that._getPreAlertText(rules[position],"alertText")+ startLength ;
+        }else{
+        	return true;
+        }
+    },
+    _maxLength: function(value, rules, position) {         // 校验长度
+        endLength = eval(rules[position + 1]);
+        feildLength = value?0:value.length;
+        if (feildLength > endLength) {
+            return _that._getPreAlertText(rules[position],"alertText")+ endLength ;
+        }else{
+        	return true;
+        }
+    },
+    _equalsValue: function(value, rules, position) {         // VALIDATE FIELD MATCH
+        equalValue = rules[position + 1];
+        if (value != equalValue) {
+           return _that._getPreAlertText(rules[position],"alertText");
+        }else{
+        	return true;
+        }
+    },
+    _notEqualsValue: function(value, rules, position) {         // VALIDATE FIELD MATCH
+        equalValue = rules[position + 1];
+        if (value == equalValue) {
+           return _that._getPreAlertText(rules[position],"alertText");
+        }else{
+        	return true;
+        }
+    },
+    _limit: function(value,rules,position)  {          // VALIDATE LIMIT
+        min = eval(rules[position + 1]);
+        max = eval(rules[position + 2]);
+        if (value < min || value > max) {
+           return _that._getPreAlertText(rules[position],"alertText")+ min 
+           + _that._getPreAlertText(rules[position],"alertText2") + max 
+           + _that._getPreAlertText(rules[position],"alertText3");
+        }else{
+        	return true;
+        }
+    },
+
+    _minValue: function(value, rules, position) {
+        min = eval(rules[position + 1]);
+        if (value < min) {
+            return _that._getPreAlertText(rules[position],"alertText") + min;
+        }
+    },
+
+    _maxValue: function(value, rules, position) {
+        max = eval(rules[position + 1]);
+        if (value > max) {
+            return _that._getPreAlertText(rules[position],"alertText") + max;
+        }
+    },
+    _acceptfile: function(value, rules, position) {
+        fileName = value;
+        fileExt = (/[.]/.exec(fileName)) ? /[^.]+$/.exec(fileName.toLowerCase()) : '';
+        acceptRule = rules[position + 1];
+
+        if (fileExt == '' || acceptRule.indexOf(fileExt) < 0) {
+            $.validationEngine.isError = true;
+            return _that._getPreAlertText(rules[position],"alertText")
+            + ",如：" + acceptRule.split(":").join(",");
+        }
+    },
+    _doFilter: function(value, rules, position)  { // doFilter['filter'],参数即为文件类型
         var filter = rules[position + 1];
         var regexp = new RegExp("^.+\.(?=EXT)(EXT)$".replace(/EXT/g, filter.split(/\s*,\s*/).join("|")), "gi").test(str);
         if (!regexp) {
@@ -415,14 +530,14 @@ wis.widget.Validation.prototype = {
         }else{
         	return true;
         }
-    }
+    },
 
     _exemptString: function(value, rules, position) {    
         customString = rules[position + 1];
         if (customString == value) {
             return true;
         }
-    }
+    },
 
     /**
      * 执行一个自定义函数，函数的规则由用户指定
@@ -431,22 +546,16 @@ wis.widget.Validation.prototype = {
      * @param position
      * @private
      */
-    _funcCall: function(value, rules, position) {          // VALIDATE CUSTOM FUNCTIONS OUTSIDE OF THE ENGINE SCOPE
+    _funcCall: function(value, rules, position) {      
         customRule = rules[position + 1];
         var fn = window[customRule]; //window中已经定义该函数
-        var fieldId = $(caller).attr("id");
-        /*if (typeof(fn) === 'function') {
-         var fn_result = fn();
-         $.validationEngine.isError = fn_result;
-         promptText += $.validationEngine.settings.allrules[customRule].alertText + "<br />";
-         }*/
         if (typeof(fn) == 'function') {
             //函数返回true则不允许提交，返回false则允许提交
-            var fn_result = fn(fieldId, rules, position);
-            $.validationEngine.isError = fn_result.isError;
-            promptText += fn_result.alertText + "<br />";
+            var fn_result = fn(value, rules, position);
+            return fn_result;
         }
-    }
+        return true;
+    },
     /**
      * 表单客户端ajax验证
      * 验证格式为class="validate[ajax['${contextPath}/doc/checkDirtyWord.do','right','loading','wrong']]"
@@ -454,205 +563,53 @@ wis.widget.Validation.prototype = {
      * @param rules
      * @param position
      */
-    _ajax: function(value, rules, position) {                 // VALIDATE AJAX RULES
+    _ajax: function(fieldValue, rules, position) {                 // VALIDATE AJAX RULES
         //定位找到指定的正则表达式规则
         customAjaxRule = rules[position + 1];
-
         var extraData = '';
-        /**
-         * by yzhao 2013-3-7 15:02
-         * 原有CMS的方法不合理，在这里废弃
-         * @type {*}
-         */
-        /*
-         if (rules.length > 2) {
-         //往checkUrl后拼接参数
-         extraData = rules[position + 2].indexOf('=') > -1 ? '&' + rules[position + 2] : '';
-         }
-
-         //取得页面的参数
-         postfile = eval(rules[position + 1]);
-         alertOk = eval(rules[position + 2]);
-         alertNo = eval(rules[position + 3]);*/
-
+        
         //如果从页面上没有拿到参数，则使用默认的参数
-        var ajaxCheckSetting = $.validationEngine.settings.allrules[customAjaxRule];
-        postfile = ajaxCheckSetting.file;
-        alertOk = $.validationEngineLanguage.getAlertText(caller,customAjaxRule,"alertTextOk");
-        alertNo = $.validationEngineLanguage.getAlertText(caller,customAjaxRule,"alertText");
+        var ajaxCheckSetting = this._customRule[customAjaxRule];
+        postfile = ajaxCheckSetting.url;
+        alertNo = ajaxCheckSetting.alertText;
 
-        /**
-         * 取得验证的input的id和值
-         * @type {*}
-         */
-        fieldValue = $(caller).val();
-        ajaxCaller = caller;
-        fieldId = $(caller).attr("id");
-        ajaxValidate = true;
-        ajaxisError = $.validationEngine.isError;
-
-        //todo 扩展的参数，需要考虑？
-        if ($.validationEngine.settings.allrules[customAjaxRule].extraData) {
-            extraData += '&' + $.validationEngine.settings.allrules[customAjaxRule].extraData;
+        if (ajaxCheckSetting.extraData) {
+            extraData += '&' + ajaxCheckSetting.extraData;
         }
-        /* AJAX VALIDATION HAS ITS OWN UPDATE AND BUILD UNLIKE OTHER RULES */
         if (!ajaxisError) {
             $.ajax({
                 type: "POST",
-                url: easyloader.URI + postfile,
+                url: postfile,
                 //将客户端的验证表单值，验证inputID，验证规则，数据一起传至服务端,这种拼装方式还是url提交参数
                 //data: "validateValue=" + fieldValue + "&validateId=" + fieldId + "&validateRule=" + customAjaxRule + extraData,
-                data: {"validateValue": fieldValue, "validateId": fieldId, "validateRule": customAjaxRule + extraData},
+                data: {"validateValue": fieldValue,"validateRule": customAjaxRule + extraData},
                 dataType: "json",
-                beforeSend: function () {        // BUILD A LOADING PROMPT IF LOAD TEXT EXIST
-                    if ($.validationEngine.settings.allrules[customAjaxRule].alertTextLoad) {
-
-                        if (!$("div." + fieldId + "formError")[0]) {
-                            return $.validationEngine.buildPrompt(ajaxCaller,
-                                $.validationEngine.settings.allrules[customAjaxRule].alertTextLoad, "load");
-                        } else {
-                            $.validationEngine.updatePromptText(ajaxCaller,
-                                $.validationEngine.settings.allrules[customAjaxRule].alertTextLoad, "load");
-                        }
-                    }
-                },
                 error: function (data, transport) {
-                    $.validationEngine.debug("error in the ajax: " + data.status + " " + transport)
+                	_that.error("error in the ajax: " + data.status + " " + transport)
                 },
                 success: function (data) {
                     // 如果回传的是字符串将其转换成对象
                     data = (typeof data == 'string') ? eval("(" + data + ")") : data;
                     //取得验证的结果，验证规则，验证的input的ID
-                    ajaxisError = data.jsonValidateReturn[2];
-                    customAjaxRule = data.jsonValidateReturn[1];
-                    ajaxCaller = $("#" + data.jsonValidateReturn[0])[0];
-                    fieldId = ajaxCaller;
-                    ajaxErrorLength = $.validationEngine.ajaxValidArray.length;
-                    existInarray = false;
-
-                    if (ajaxisError == "false") {            // DATA FALSE UPDATE PROMPT WITH ERROR;
-
-                        _checkInArray(false);				// Check if ajax validation alreay used on this field
-
-                        if (!existInarray) {                     // Add ajax error to stop submit
-                            $.validationEngine.ajaxValidArray[ajaxErrorLength] = new Array(2);
-                            $.validationEngine.ajaxValidArray[ajaxErrorLength][0] = fieldId;
-                            $.validationEngine.ajaxValidArray[ajaxErrorLength][1] = false;
-                            existInarray = false;
-                        }
-
-                        $.validationEngine.ajaxValid = false;
-                        promptText += alertNo + "<br />";
-                        $.validationEngine.updatePromptText(ajaxCaller, promptText, "", true);
-                    } else {
-                        _checkInArray(true);
-                        $.validationEngine.ajaxValid = true;
-                        if (!customAjaxRule) {
-                            $.validationEngine.debug("wrong ajax response, are you on a server or in xampp? if not delete de ajax[ajaxUser] validating rule from your form ")
-                        }
-                        if ($.validationEngine.settings.allrules[customAjaxRule].alertTextOk) {    // NO OK TEXT MEAN CLOSE PROMPT
-                            $.validationEngine.updatePromptText(ajaxCaller, alertOk, "pass", true);
-                        } else {
-                            ajaxValidate = false;
-                            $.validationEngine.closePrompt(ajaxCaller);
-                        }
-                    }
-                    function _checkInArray(validate) {
-                        for (x = 0; x < ajaxErrorLength; x++) {
-                            if ($.validationEngine.ajaxValidArray[x][0] == fieldId) {
-                                $.validationEngine.ajaxValidArray[x][1] = validate;
-                                existInarray = true;
-
-                            }
-                        }
+                    if(data.success==true){
+                    	return true;
+                    }else{
+                    	return data.errorMsg||alertNo;
                     }
                 }
             });
         }
-    }
-
-    _equals: function(value, rules, position) {         // VALIDATE FIELD MATCH
-        equalsField = rules[position + 1];
-
-        if ($(caller).attr('value') != $("#" + equalsField).attr('value')) {
-            $.validationEngine.isError = true;
-            promptText += $.validationEngineLanguage.getAlertText(caller,"equals","alertText") + "<br />";
-
-        }
-    }
-
-    _length: function(value, rules, position) {          // VALIDATE LENGTH
-
-        startLength = eval(rules[position + 1]);
-        endLength = eval(rules[position + 2]);
-        feildLength = $(caller).attr('value').length;
-
-        if (feildLength < startLength || feildLength > endLength) {
-            $.validationEngine.isError = true;
-            promptText += $.validationEngineLanguage.getAlertText(caller,"length","alertText") + startLength + $.validationEngineLanguage.getAlertText(caller,"length","alertText2") + endLength + $.validationEngineLanguage.getAlertText(caller,"length","alertText3") + "<br />"
-        }
-    }
-
-    _limit: function(value,rules,position)  {          // VALIDATE LIMIT
-        min = eval(rules[position + 1]);
-        max = eval(rules[position + 2]);
-        feildValue = $(caller).attr('value');
-        if (feildValue < min || feildValue > max) {
-            $.validationEngine.isError = true;
-            promptText += $.validationEngineLanguage.getAlertText(caller,"limit","alertText") + min +  $.validationEngineLanguage.getAlertText(caller,"limit","alertText2") + max +  $.validationEngineLanguage.getAlertText(caller,"limit","alertText3") + "<br />"
-        }
-    }
-
-    _minValue: function(caller, rules, position) {
-        min = eval(rules[position + 1]);
-        feildValue = $(caller).attr('value');
-        if (feildValue < min) {
-            $.validationEngine.isError = true;
-            promptText +=  $.validationEngineLanguage.getAlertText(caller,"minValue","alertText") + min + "<br/>";
-        }
-    }
-
-    _maxCheckbox: function(caller, rules, position) {        // VALIDATE CHECKBOX NUMBER
-        nbCheck = eval(rules[position + 1]);
-        groupname = $(caller).attr("name");
-        groupSize = $("input[name='" + groupname + "']:checked").size();
-        if (groupSize > nbCheck) {
-            $.validationEngine.showTriangle = false;
-            $.validationEngine.isError = true;
-            //promptText += $.validationEngine.settings.allrules["maxCheckbox"].alertText + "<br />";
-            promptText += promptText +=  $.validationEngineLanguage.getAlertText(caller,"maxCheckbox","alertText") + min + "<br/>"; + " " + nbCheck + " " +  $.validationEngineLanguage.getAlertText(caller,"maxCheckbox","alertText2") + "<br />";
-        }
-    }
-    _minCheckbox: function(caller, rules, position) {        // VALIDATE CHECKBOX NUMBER
-        nbCheck = eval(rules[position + 1]);
-        groupname = $(caller).attr("name");
-        groupSize = $("input[name='" + groupname + "']:checked").size();
-        if (groupSize < nbCheck) {
-
-            $.validationEngine.isError = true;
-            $.validationEngine.showTriangle = false;
-            promptText += $.validationEngineLanguage.getAlertText(caller,"minCheckbox","alertText") + " " + nbCheck + " " + $.validationEngineLanguage.getAlertText(caller,"minCheckbox","alertText2") + "<br />";
-        }
-    }
-    _acceptfile: function(caller, rules, position) {
-        fileName = $(caller).attr('value');
-        fileExt = (/[.]/.exec(fileName)) ? /[^.]+$/.exec(fileName.toLowerCase()) : '';
-        acceptRule = rules[position + 1];
-
-        if (fileExt == '' || acceptRule.indexOf(fileExt) < 0) {
-            $.validationEngine.isError = true;
-            promptText += $.validationEngineLanguage.getAlertText(caller,"accept","alertText") + "<br />" + "* 如：" + acceptRule.split(":").join(",") + "<br />";
-        }
     },
-    
+
     _customRegex:function(value,rules,position) {         // VALIDATE REGEX RULES
         var customRule = rules[position + 1];
         var pattern = eval(this._customRule[customRule].regex);
-
-        if (!pattern.test(value) {
-            return this._getCustomAlertText(customRule,"alertText");
+        if (!pattern.test(value)) {
+            return _that._getCustomAlertText(customRule,"alertText");
+        }else{
+        	return true;
         }
-    }
+    },
     // 校验程序错误提示
     error: function (error) {
         if (!$("#debugMode")[0]) {
@@ -665,7 +622,6 @@ wis.widget.Validation.prototype = {
         if (!$.validationEngine.settings) {
             $.validationEngine.defaultSetting()
         }
-
         if (outside) {
             $(caller).fadeTo("fast", 0, function () {
                 $(caller).remove();

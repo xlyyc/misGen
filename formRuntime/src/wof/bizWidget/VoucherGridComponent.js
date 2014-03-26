@@ -1,45 +1,62 @@
 wof.bizWidget.VoucherGridComponent = function () {
-    // 初始化监听消息
-    this.setOnReceiveMessage([
-        {
-            id: 'wof.bizWidget.DataObject_query',
-            priority: 50,
-            method: 'this._onQueryDataCompleted(message);'
-        },
-        {
-            id: 'wof.bizWidget.DataObject_add',
-            priority: 50,
-            method: 'this._onAddDataCompleted(message);'
-        },
-        {
-            id: 'wof.bizWidget.DataObject_update',
-            priority: 50,
-            method: 'this._onUpdateDataCompleted(message);'
-        },
-        {
-            id: 'wof.bizWidget.DataObject_delete',
-            priority: 50,
-            method: 'this._onDeleteDataCompleted(message);'
-        },
-        {
-            id: 'wof.bizWidget.DataObject_undelete',
-            priority: 50,
-            method: 'this._onUndeleteDataCompleted(message);'
-        },
-        {
-            id: 'wof.bizWidget.DataObject_save',
-            priority: 50,
-            method: 'this._onSaveDataCompleted(message);'
-        },
-        {
-            id: 'wof.functionWidget.DeleteRecordComponent_active',
-            priority: 50,
-            method: 'this._onDeleteRecordComponent_active(message)'
-        }
-    ]);
+	// 初始化监听消息 
+	this.setOnReceiveMessage([ {
+		id : 'wof.bizWidget.DataObject_query',
+		priority : 50,
+		method : 'this._onQueryDataCompleted(message);'
+	}, {
+		id : 'wof.bizWidget.DataObject_add',
+		priority : 50,
+		method : 'this._onAddDataCompleted(message);'
+	}, {
+		id : 'wof.bizWidget.DataObject_update',
+		priority : 50,
+		method : 'this._onUpdateDataCompleted(message);'
+	}, {
+		id : 'wof.bizWidget.DataObject_delete',
+		priority : 50,
+		method : 'this._onDeleteDataCompleted(message);'
+	}, {
+		id : 'wof.bizWidget.DataObject_undelete',
+		priority : 50,
+		method : 'this._onUndeleteDataCompleted(message);'
+	}, {
+		id : 'wof.bizWidget.DataObject_save',
+		priority : 50,
+		method : 'this._onSaveDataCompleted(message);'
+	}, {
+		id : 'wof.functionWidget.DeleteRecordComponent_active',
+		priority : 50,
+		method : 'this._onDeleteRecordComponent_active(message)'
+	}, {
+		id : 'wof.functionWidget.AddRecordComponent_active',
+		priority : 50,
+		method : 'this._onAddRecordComponent_active(message)'
+	}, {
+		id : 'wof.functionWidget.UpdateRecordComponent_active',
+		priority : 50,
+		method : 'this._onUpdateRecordComponent_active(message)'
+	}, {
+		id : 'wof.functionWidget.CommitComponent_active',
+		priority : 50,
+		method : 'this._onCommitRecordComponent_active(message)'
+	},
+	{
+		id : 'wof.bizWidget.GridComponent_rowSelect',
+		priority : 50,
+		method : 'this._onGridComponent_rowSelect(message)'
+	}
+	]);
 };
 
 wof.bizWidget.VoucherGridComponent.prototype = {
+		
+	_onGridComponent_rowSelect : function (message){
+	   if(message && message.data.componentId == this.getVoucherHeadComponent()){
+		   this._currentMainRowId = message.data.id;
+		   this.gotoPage(1,true);
+	   }
+	},
     /**
      * 设计时属性
      */
@@ -231,49 +248,50 @@ wof.bizWidget.VoucherGridComponent.prototype = {
         return index;
     },
     getGridColumnDataByIndex: function (index) {
-        var column = this.getColumns()[index];
-        return {
-            "width": column.columnWidth,
-            "colNo": index, // 列号 从1开始
-            "name": column.name,
-            "caption": column.caption,
-            "sortable": column.orderByType != 'none',
-            "sortType": column.orderByType,
-            "sortFun": column.sortFun,
-            "align": "center", // TODO 设计时需要实现
-            "bold": "true",// TODO 设计时需要实现
-            "underline": "true",// TODO 设计时需要实现
-            "bgColor": "#efefef",// TODO 设计时需要实现
-            "font": "宋体",// TODO 设计时需要实现
-            "fontSize": "max",// TODO 设计时需要实现
-            "fontColor": "black",// TODO 设计时需要实现
-            "style": "", // 自定义样式
-            "adjustContent": "true",
-            "format": {
-                "name": column.dataTimeFormat, // year年 yearMonth年月
-                // yearMonthDay年月日
-                // monthDay月日 url链接 percentage百分比
-                // currency货币 number数字
-                "param": "short", // TODO 设计时需要实现 // 针对name定义的参数
-                // 比如short表示为短日期格式
-                // 再比如name为currency货币 param为US 表明是美元
-                "functionName": null
-                // 自定义格式化函数名称(当没有对应预设格式的时候
-                // 设置该自定义格式化函数)
-            },
-            "isPin": column.isPin, // 是否锁定
-            "display": column.display,
-            "type": column.columnType, // string字符 number数字 time时间 date日期
-            "visbleType": column.visbleType, // number数字 text文本框 date日期
-            // select下拉框
-            "selectPattern": column.selectPattern, // 下拉框类型 normal普通 tree树形
-            // grid列表
-            "required": column.required, // 是否必填
-            "readonly": column.readOnly, // 是否只读
-            "verifyFunctionName": null, // TODO 设计时需要实现 //自定义校验回调函数名称
-            "verifyErrorInfo": column.checkErrorInfo
-            // 验证错误信息提示
-        }
+    	var column = this.getColumns()[index];
+		return {
+			"bindDataField" : column.bindDataField,
+			"width" : column.columnWidth,
+			"colNo" : index, // 列号 从1开始
+			"name" : column.name,
+			"caption" : column.caption,
+			"sortable" : column.orderByType != 'none',
+			"sortType" : column.orderByType,
+			"sortFun" : column.sortFun,
+			"align" : "center", // TODO 设计时需要实现
+			"bold" : "true",// TODO 设计时需要实现
+			"underline" : "true",// TODO 设计时需要实现
+			"bgColor" : "#efefef",// TODO 设计时需要实现
+			"font" : "宋体",// TODO 设计时需要实现
+			"fontSize" : "max",// TODO 设计时需要实现
+			"fontColor" : "black",// TODO 设计时需要实现
+			"style" : "", // 自定义样式
+			"adjustContent" : "true",
+			"format" : {
+				"name" : column.dataTimeFormat, // year年 yearMonth年月
+				// yearMonthDay年月日
+				// monthDay月日 url链接 percentage百分比
+				// currency货币 number数字
+				"param" : "short", // TODO 设计时需要实现 // 针对name定义的参数
+				// 比如short表示为短日期格式
+				// 再比如name为currency货币 param为US 表明是美元
+				"functionName" : null
+			// 自定义格式化函数名称(当没有对应预设格式的时候
+			// 设置该自定义格式化函数)
+			},
+			"isPin" : column.isPin, // 是否锁定
+			"display" : column.display, // 是否显示该列
+			"type" : column.columnType, // string字符 number数字 time时间 date日期
+			"visbleType" : column.visbleType, // number数字 text文本框 date日期
+			// select下拉框
+			"selectPattern" : column.selectPattern, // 下拉框类型 normal普通 tree树形
+			// grid列表
+			"required" : column.required, // 是否必填
+			"readonly" : column.readOnly, // 是否只读
+			"verifyFunctionName" : null, // TODO 设计时需要实现 //自定义校验回调函数名称
+			"verifyErrorInfo" : column.checkErrorInfo
+		// 验证错误信息提示
+		}
     },
     getGridColumnsData: function () {
         var columns = this.getColumns();
@@ -396,14 +414,20 @@ wof.bizWidget.VoucherGridComponent.prototype = {
 
     },
     initRender:function (){
-//    	var objs = wof$.find('*');
-// 	    for(var i=0;i<objs.size();i++){
-// 	        var obj = objs.get(i);
-// 	        if(obj!=null&&obj.getComponentId()!=null&&obj.getComponentId()== this.getVoucherHeadComponent()){
-// 	        	this._bindComponent = obj;
-// 	        	break;
-// 	        }
-// 	    }
+    	var that = this;
+	
+    	var objs = wof$.find('*');
+ 	    for(var i=0;i<objs.size();i++){
+ 	        var obj = objs.get(i);
+ 	        if(obj!=null&&obj.getComponentId()!=null&&obj.getComponentId()== this.getVoucherHeadComponent()){
+ 	        	this._bindComponent = obj;
+ 	        	break;
+ 	        }
+ 	    }
+ 	    
+ 		this.setRefData(this.getRefData());
+		this.gotoPage(this.getPageNo());
+		
 //	    this.gotoPage(this.getPageNo());
 //    	this.grid = wis$.create('Grid',{
 //    		  width: this.getWidth(),
@@ -411,6 +435,52 @@ wof.bizWidget.VoucherGridComponent.prototype = {
 //    	});
     },
     render: function () {
+    	
+    	if (!this.grid) {
+			var that = this;
+			this.grid = wis$.create('Grid', {
+				width : this.getWidth(),
+				height : this.getHeight(),
+				top : this.getTop(),
+				left : this.getLeft(),
+				isHide : this.getHiden(),
+				name : this.getName(),
+				bindEntityId : this.getBindEntityId(),
+				headerHeight : this.getHeaderHeight(),
+				rowHeight : this.getRowHeight(),
+				numberDisplay : this.getNumberDisplay(),
+				useMutiplePage : this.getUseMutiplePage(),
+				columns : this.getGridColumnsData(),
+				total : this.getPageBar().total,
+				pageNo : this.getPageBar().pageNo,
+				pageSize : this.getPageBar().pageSize,
+				data : this.getGridData(),
+				refData : this.getRefData(),
+				onToNext : function(e) {
+					that.nextPage();
+				},
+				onToPrev : function(e) {
+					that.prevPage();
+				},
+				onToLast : function() {
+					that.gotoPage(that.getTotalPage());
+				},
+				onToFirst : function() {
+					that.gotoPage(1);
+				}
+			});
+		}
+
+		var grid = this.grid;
+		grid.setTitle("表格示范");
+		grid.setWidth(800);
+		grid.setHeight(600);
+		grid.setCheckbox(true);
+		grid.setPage(this.getPageNo());
+		grid.setPageSize(this.getPageSize());
+		grid.setGridData(this.getGridData());
+		grid.render();
+		this.getDomInstance().append(grid.getDomInstance());
 //        var vo = {
 //            grid: {
 //                width: this.getWidth(),
@@ -480,43 +550,56 @@ wof.bizWidget.VoucherGridComponent.prototype = {
      *
      */
     gotoPage: function (pageNo, forceFlush) {
-        if (pageNo <= 0 || pageNo > this.getTotalPage()) {
-            alert(pageNo + '页号不存在'); // todo 调用widget下的对话框
-            return;
-        }
-        var currentRow = this._bindComponent.getCurrentRow();
+    	if (pageNo <= 0 || pageNo > this.getTotalPage()) {
+			alert(pageNo + '页号不存在'); // todo 调用widget下的对话框
+			return;
+		}
+    	var currentRow = this._currentMainRowId || this._bindComponent.getCurrentMainRowData();
         if(!currentRow){
         	console.log("currentRow is null.");
         	return;
         }
         this.setPageNo(pageNo);
-        var data = this._getPageDataInCache(pageNo);
-        if (data == null || true === forceFlush) { // 表明pageNo不在缓存中需要发起新的查询或者强制加载数据
+        // 表明pageNo不在缓存中需要发起新的查询或者强制加载数据
+        if(true == forceFlush || null == this._getPageDataInCache(pageNo)) {
             var offset = (pageNo - 1) * this.getPageSize();
             var rowsCount = this.getPageSize() * 2;
             var dataSource = this.getDataSource();
-            dataSource.queryData('child', {'childEntityAlias': this.getName(), 'mainRowId': currentRow}, null, offset, rowsCount);} 
+            dataSource.queryData('child', {'childEntityAlias': this.getBindEntityId(), 'mainRowId': currentRow}, null, offset, rowsCount);} 
         else {
             this.setGridData(this._getPageDataInCache(this.getPageNo()));
         }
+		this.render();
+    },
+    _getCurrentRowId : function (){
+    	var currentRow = this._currentMainRowId || this._bindComponent.getCurrentMainRowData();
+        if(!currentRow){
+        	console.log("currentRow is null.");
+        	return;
+        }
+        return currentRow;
     },
     // 从缓存中获得指定页的数据
     _getPageDataInCache: function (pageNo) {
         if (this._isPageDataInCache(pageNo) == -1) {
             return null;
         }
-        var cachePageNo = this.getCachePageNo();
-        var offset = (cachePageNo[0] == pageNo) ? 0 : this.getPageSize();
-        var cacheData = this.getDataSource().getLocalData();
+     	var currentRow = this._getCurrentRowId();
         var data = [];
-        // end为指定页数据的结束下标位置(下标从0开始)
-        var end = ((offset + this.getPageSize()) < cacheData.length ? (offset + this
-            .getPageSize())
-            : cacheData.length) - 1;
-        for (var i = offset; i <= end; i++) {
-            data.push(cacheData[i]);
-        }
-        return data;
+		var cachePageNo = this.getCachePageNo();
+		var offset = (cachePageNo[0] == pageNo) ? 0 : this.getPageSize();
+		var cacheData = this.getDataSource().getLocalData({'childEntityAlias': this.getBindEntityId(), 'mainRowId': currentRow});
+		if(cacheData){
+			var rows = cacheData.rows;
+			// end为指定页数据的结束下标位置(下标从0开始)
+			var end = ((offset + this.getPageSize()) < rows.length ? (offset + this
+					.getPageSize())
+					: rows.length) - 1;
+			for (var i = offset; i <= end; i++) {
+				data.push(rows[i]);
+			}
+		}
+		return data;
     },
     getDataSource: function () {
         if (this.getDataSourceType() == 'do') {
@@ -533,7 +616,7 @@ wof.bizWidget.VoucherGridComponent.prototype = {
         }
     },
     /**
-     *
+     *"JZGJBXXB.361974512142520320.jtcychild"
      * 查询完成后 将触发此函数
      */
     _onQueryDataCompleted: function (message) {
@@ -573,10 +656,62 @@ wof.bizWidget.VoucherGridComponent.prototype = {
             this.gotoPage(1,true);
         }
     },
+    
+
+	commitRow : function() {
+		
+		var map = new wof.util.Hashtable();
+        var columns = this.getColumns();
+        for(var i = 0; i < columns.length;i++){
+        	var column = columns[i];
+        	if(column.bindDataField){
+        		map.add(column.bindDataField,column);
+        	}
+        }
+        
+		var currentData = this.grid.getCurrentData();
+		var gridData = this.getGridData();
+		var updateData = [];
+		for (var i = 0; i < currentData.length; i++) {
+			var data = currentData[i];
+			if (i < gridData.length) {
+				var originalData = gridData[i].data;
+				for ( var d in data) {
+					var value = data[d];
+					var column = map.items(d);
+	        		var message = this.validate(value,column);
+	        		if(true != message){
+	        			alert(message);
+	        			return;
+	        		}
+					originalData[d] = value;
+				}
+				updateData.push(originalData);
+			}
+		}
+		
+		var addData = this.grid.getCurrentAddData();
+        for(var i = 0; i < addData.length;i++){
+        	var row = addData[i]
+        	for(var prop in row){
+        		var column = map.items(prop);
+        		var message = this.validate(row[prop],column);
+        		if(true != message){
+        			alert(message);
+        			return;
+        		}
+        	}
+        }
+		this.getDataSource().addData(addData);
+		this.getDataSource().updateData(updateData);
+		//this.getDataSource().saveData();
+	},
+	
     _isDataChange: function (message) {
         var flag = false;
         for (var i = 0; i < message.data.length; i++) {
-            if (this.getBindEntityId() == message.data[i]) {
+        	//"JZGJBXXB.361974512142520320.jtcychild"
+            if (message.data[i].indexOf(this.getBindEntityId()) != -1) {
                 flag = true;
                 break;
             }

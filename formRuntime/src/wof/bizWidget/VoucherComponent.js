@@ -62,6 +62,8 @@ wof.bizWidget.VoucherComponent.prototype = {
 
     _rowData:null, //主记录数据
 
+    _currentRowId: null,
+
 
     _queryFlag: null, //是否需要发起查询标识 true需要 false不需要  搜索条件发生变化或者数据发生变化的情况下会修改此标识状态
 
@@ -209,6 +211,15 @@ wof.bizWidget.VoucherComponent.prototype = {
         return this._rowData || {};
     },
 
+    //获得当前行号
+    getCurrentRowId: function(){
+        //return this.getRowData()['rowId'];
+        return this._currentRowId || '';
+    },
+
+    setCurrentRowId: function(rowId){
+        this._currentRowId = rowId;
+    },
 
     _init: function(data){
         if(data.state!=null){
@@ -385,8 +396,14 @@ wof.bizWidget.VoucherComponent.prototype = {
         //如果缓存数据为空 则执行查询
         if(this._queryFlag==true){
             this._queryFlag = false;
-            //todo 查询条件需要实现
-            this.queryData();
+            this.setRefData(this.getDataSource().getRefData());
+            if(this.getState()=='Add'){ //如果是Add状态 需要插入一条空白数据
+                this.getDataSource().addData([{}]);
+            }else{ //如果是View\Edit 则先发起查询
+                var idPro = this.getDataSource().getLocalData()['idPro'];
+                var queryParam = {'type':'fieldQuery','field':idPro,'operation':'equals','value1':this.getCurrentRowId()};
+                this.getDataSource().queryData('main',null,queryParam,0,1);
+            }
         }
 
         this.sendMessage('wof.bizWidget.VoucherComponent_render');
@@ -1356,26 +1373,6 @@ wof.bizWidget.VoucherComponent.prototype = {
             }else{
                 activeVoucherItemGroup.setVoucherItemGroupStyle(true);
             }
-        }
-    },
-
-    //获得当前行号
-    getCurrentRowIds: function(){
-        var rowIds = [];
-        if(this.getRowData()!=null){
-            var rowId = this.getRowData()['rowId'];
-            rowIds.push(rowId);
-        }
-        return rowIds;
-    },
-
-    //查询数据
-    queryData: function(){
-        this.getDataSource().queryData('main',null,null,0,1);
-        this.setRefData(this.getDataSource().getRefData());
-        //如果是Add状态 需要插入一条空白数据
-        if(this.getState()=='Add'){
-            this.getDataSource().addData([{}]);
         }
     }
 

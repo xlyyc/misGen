@@ -256,6 +256,9 @@ wis.widget.Grid.prototype = {
 			this.setRefData(data.refData);
 
 		}
+		if(data.onSelectRow){
+			this.onSelectRow = data.onSelectRow;
+		}
 	},
 	addRow : function() {
 		var obj = {};
@@ -338,23 +341,25 @@ wis.widget.Grid.prototype = {
 			})
 			names.push(column.bindDataField)
 		}
-		var data = this.getGridData();
 		var formateData = [];
-		for (var i = 0; i < data.length; i++) {
-			var obj = {};
-			for (var j = 0; j < names.length; j++) {
-				var d = data[i].data[names[j]];
-				if (d) {
-					obj[names[j]] = d.value
+		var data = this.getGridData();
+		if(data){
+			for (var i = 0; i < data.length; i++) {
+				var obj = {};
+				for (var j = 0; j < names.length; j++) {
+					var d = data[i].data[names[j]];
+					if (d) {
+						obj[names[j]] = d.value
+					}
 				}
+				formateData.push(obj);
 			}
-			formateData.push(obj);
 		}
 
 		this._grid = $('<div></div>');
 		var that = this;
-		$("body").append(this._grid);
-		//this.getDomInstance().append(this._grid);
+		//$("body").append(this._grid);
+		this.getDomInstance().append(this._grid);
 		this.grid = this._grid.ligerGrid({
 			title : this.getTitle(),
 			checkbox : this.getCheckbox(),
@@ -384,6 +389,9 @@ wis.widget.Grid.prototype = {
 			},
 			onToLast : function(e) {
 				that.onToLast(e);
+			},
+			onSelectRow : function (data,index){
+				that.onSelectRow(data,index)
 			}
 		});
 
@@ -404,13 +412,6 @@ wis.widget.Grid.prototype = {
 	// ----------必须实现----------
 	setData : function(data) {
 		this.setCid(data.cid);
-	},
-
-	onSelectRow : function(callBack) {
-		this._onSelectRow = callBack;
-	},
-	onCheckRow : function(callBack) {
-		this._onCheckRoww = callBack;
-	}
+	} 
 
 };

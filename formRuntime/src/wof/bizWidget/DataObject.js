@@ -35,6 +35,11 @@ wof.bizWidget.DataObject.prototype = {
 
     _pageId: null,  // 页面ID
 
+    _entityScheme: null,
+
+    _refData: null,
+
+
     /**
      * New 指定行是新行，但此行的列并未赋值 只适用到行
      * NewModified 指定行是新行且行中的列已经赋值 只适用到行
@@ -67,6 +72,30 @@ wof.bizWidget.DataObject.prototype = {
     _init: function(data){
         this.setPageId(data.pageId);
 		this.setDataServicesUrl('component/doCmd');
+
+        /**
+         * 根据实体定义scheme 初始化数据结构
+         * 这里只初始化主实体的数据结构
+         */
+        var data = {};
+        var entityScheme = this.getEntityScheme();
+        for(var n in entityScheme){ //由于主实体只有一个 所以此循环只有一次
+            data[n] = {
+                "rows":[
+
+                ],
+                "entityAlias":entityScheme[n]['entityAlias'],
+                "totalCount":"0",
+                "offset":"0",
+                "idPro":entityScheme[n]['idPro'],
+                "entityType":entityScheme[n]['entityType'],
+                "entityName":entityScheme[n]['entityName']
+            };
+            this._originalBuffer[n] = data[n];
+            this._primaryBuffer[n] = JSON.parse(JSON.stringify(data[n]['rows'])); //值copy
+            this._mainEntityAlias = n;
+        }
+
     },
 
     /**
@@ -243,7 +272,7 @@ wof.bizWidget.DataObject.prototype = {
                             'status':'New'
                         };
                     for(var n in record){
-                        newData['data'][n] = {'value':record[n],'status':'DataModified'};
+                        newData['data'][n] = {'value':record[n],'status':'NotModified'};
                     }
                     primary.push(newData);
                 }
@@ -431,9 +460,12 @@ wof.bizWidget.DataObject.prototype = {
             queryData['queryType'] = 'main';
         }else if(queryType=='child'){
             queryData['queryType'] = 'child';
-            queryData['childEntityAlias'] = entityParameter['childEntityAlias'];
-            queryData['mainRowId'] = entityParameter['mainRowId'];
+            queryData['entityParameter'] = JSON.stringify({childEntityAlias : entityParameter['childEntityAlias'],mainRowId:entityParameter['mainRowId']});
+//            queryData['childEntityAlias'] = entityParameter['childEntityAlias'];
+//            queryData['mainRowId'] = entityParameter['mainRowId'];
+            
         }
+        console.log(queryData);
         function _setChildEnt(childEnt, mainRowId){
             var pathId = _this._mainEntityAlias+'.'+mainRowId+'.'+childEnt['entityAlias'];
             aliasArr.push(pathId);
@@ -467,7 +499,7 @@ wof.bizWidget.DataObject.prototype = {
                     //url:_this.getDataServicesUrl()+'/query?pageId=' + this._pageId ,
                     url:_this.getDataServicesUrl(),
                     async:_this.getAsyncQuery(),
-                    data : {rowsCount : rowsCount,offset : offset}
+                    data :queryData
                 }
             );
             var ents = JSON.parse(rsp.responseText);
@@ -823,21 +855,38 @@ wof.bizWidget.DataObject.prototype = {
      *
      */
     getRefData: function(){
-        if(this.refData != null){
-            return this.refData;
+        if(this._refData == null){
+            var _this = this;
+            var pageId = this._pageId;
+            var rsp = jQuery.ajax(
+                {
+                    //url:_this.getDataServicesUrl()+'/refListByPage?pageId=' + pageId,
+                    url:'refData.json',
+                    async:_this.getAsyncQuery()
+                }
+            );
+            this._refData = JSON.parse(rsp.responseText);
         }
-        var _this = this;
-        var pageId = this._pageId;
-        var rsp = jQuery.ajax(
-            {
-                //url:_this.getDataServicesUrl()+'/refListByPage?pageId=' + pageId,
-                url:'refData.json',
-                async:_this.getAsyncQuery()
-            }
-        );
-        
-        this.refData = JSON.parse(rsp.responseText);
-        return this.refData;
+        return this._refData;
+    },
+
+    /**
+     * 获得实体定义
+     *
+     */
+    getEntityScheme: function(){
+        if(this._entityScheme == null){
+            var _this = this;
+            var pageId = this._pageId;
+            var rsp = jQuery.ajax(
+                {
+                    url:'entityScheme.json',
+                    async:_this.getAsyncQuery()
+                }
+            );
+            this._entityScheme = JSON.parse(rsp.responseText);
+        }
+        return this._entityScheme;
     },
 
     /**

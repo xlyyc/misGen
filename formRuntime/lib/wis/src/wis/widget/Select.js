@@ -96,8 +96,7 @@ wis.widget.Select.prototype = {
         this._select.attr('id',this.getCid());
         this._select.attr('name',this.getSelectName());
 
-        // 将容器添加到dom上
-        $("body").append(this._select);
+        this.getDomInstance().append(this._select);
         var ligerComboBox = this._select.ligerComboBox({
             textField: "text",
             valueField: "id",
@@ -107,7 +106,6 @@ wis.widget.Select.prototype = {
             onBeforeSelect:this._onBeforeSelect,
             onSelected:this._onSelected
         });
-        this.getDomInstance().append(ligerComboBox);
     },
 
     // 渲染前处理方法

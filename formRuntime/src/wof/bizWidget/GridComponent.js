@@ -36,10 +36,6 @@ wof.bizWidget.GridComponent = function() {
 		id : 'wof.functionWidget.UpdateRecordComponent_active',
 		priority : 50,
 		method : 'this._onUpdateRecordComponent_active(message)'
-	}, {
-		id : 'wof.functionWidget.CommitComponent_active',
-		priority : 50,
-		method : 'this._onCommitRecordComponent_active(message)'
 	} ]);
 
 };
@@ -312,8 +308,12 @@ wof.bizWidget.GridComponent.prototype = {
 	_cachePageNo : null,
 	_gridData : null,
 	_currentRow : null,
+	_currentRowId:null,
 	_grid : null,
 
+	getCurrentRowId:function (){
+		return this._currentRowId;
+	},
 	setCurrentRow : function(currentRow) {
 		this._currentRow = currentRow;
 	},
@@ -420,6 +420,12 @@ wof.bizWidget.GridComponent.prototype = {
 				},
 				onToFirst : function() {
 					that.gotoPage(1);
+				},
+				onSelectRow : function (data,index){
+					var gridData = that._getDataByIndex(index);
+					var idPro = that._getIdPro();
+					that._currentRowId = gridData[idPro];
+					that.sendMessage('wof.bizWidget.GridComponent_rowSelect',{componentId : that.getComponentId(),data:gridData,index:index,id : gridData[that._getIdPro()].value});
 				}
 			});
 		}
@@ -433,6 +439,10 @@ wof.bizWidget.GridComponent.prototype = {
 		grid.setPageSize(this.getPageSize());
 		grid.setGridData(this.getGridData());
 		grid.render();
+		//this.appendChild(grid)
+		//grid.appendTo(this);
+		
+		this.getDomInstance().append(grid.getDomInstance());
 
 	},
 	nextPage : function() {
@@ -464,8 +474,8 @@ wof.bizWidget.GridComponent.prototype = {
 			return;
 		}
 		this.setPageNo(pageNo);
-		var data = this._getPageDataInCache(pageNo);
-		if (data == null || true === forceFlush) { // 表明pageNo不在缓存中需要发起新的查询或者强制加载数据
+		 // 表明pageNo不在缓存中需要发起新的查询或者强制加载数据
+        if(true == forceFlush || null == this._getPageDataInCache(pageNo)) {
 			var offset = (pageNo - 1) * this.getPageSize();
 			var rowsCount = this.getPageSize() * 2;
 			var dataSource = this.getDataSource();
@@ -481,16 +491,19 @@ wof.bizWidget.GridComponent.prototype = {
 		if (this._isPageDataInCache(pageNo) == -1) {
 			return null;
 		}
+		var data = [];
 		var cachePageNo = this.getCachePageNo();
 		var offset = (cachePageNo[0] == pageNo) ? 0 : this.getPageSize();
 		var cacheData = this.getDataSource().getLocalData();
-		var data = [];
-		// end为指定页数据的结束下标位置(下标从0开始)
-		var end = ((offset + this.getPageSize()) < cacheData.length ? (offset + this
-				.getPageSize())
-				: cacheData.length) - 1;
-		for (var i = offset; i <= end; i++) {
-			data.push(cacheData[i]);
+		if(cacheData){
+			var rows = cacheData.rows;
+			// end为指定页数据的结束下标位置(下标从0开始)
+			var end = ((offset + this.getPageSize()) < rows.length ? (offset + this
+					.getPageSize())
+					: rows.length) - 1;
+			for (var i = offset; i <= end; i++) {
+				data.push(rows[i]);
+			}
 		}
 		return data;
 	},
@@ -586,17 +599,25 @@ wof.bizWidget.GridComponent.prototype = {
 			this.gotoPage(1, true);
 		}
 	},
-	currentMainRowData : function() {
+	_getIdPro : function (){
+		return this.getDataSource().getLocalData().idPro;
+	},
+	_getDataByIndex:function (index){
+		var gridData = this.getGridData();
+		return gridData[index].data;
+	},
+	getCurrentMainRowData : function() {
 		var currentRowData = [];
 		var rows = this.grid.getSelectedRows();
 		var gridData = this.getGridData();
 		var selectedRows = [];
+		var idPro = this._getIdPro();
 		for (var i = 0; i < rows.length; i++) {
 			var row = rows[i];
-			var data = gridData[row].data;
+			var data = gridData[row].data[idPro].value;
 			currentRowData.push(data);
 		}
-		return currentRowData;
+		return currentRowData.length  == 0 ? null  : currentRowData;
 	},
 	_isDataChange : function(message) {
 		var flag = false;
@@ -822,7 +843,7 @@ wof.bizWidget.GridComponent.prototype = {
         }
 		this.getDataSource().addData(addData);
 		this.getDataSource().updateData(updateData);
-		this.getDataSource().saveData();
+		//this.getDataSource().saveData();
 	},
 	validate:function (value,columnDef){
 		var result = true;

@@ -23,6 +23,8 @@ wis.widget.Dialog.prototype = {
     _modal:null,              //是否使用模态
     _refreshFlag: null,       //刷新内容标示
 
+    _buttons: null,
+
     _onMax:null,              
     _onClose:null,
     _onRestore:null,
@@ -126,6 +128,14 @@ wis.widget.Dialog.prototype = {
         this._url = url;
     },
 
+    setButtons: function (buttons) {
+        this._buttons = buttons || [];
+    },
+
+    getButtons: function () {
+        return this._buttons;
+    },
+
     getTarget: function () {
         return this._target;
     }, 
@@ -217,6 +227,7 @@ wis.widget.Dialog.prototype = {
                 top: this.getTop(),
                 left: this.getLeft(),
                 title: this.getTitle(),
+                buttons: this.getButtons(),
                 allowToMax: true,
                 isDrag: true,
                 content: "",
@@ -229,7 +240,7 @@ wis.widget.Dialog.prototype = {
                 that.setLeft(param.left);
                 that.setWidth(param.width);
                 that.setHeight(param.height);
-                this._onMax && this._onMax(that);
+                that._onMax && that._onMax(that);
             });
 
             this._dialog.bind("dialogRestore",function(param){
@@ -237,15 +248,12 @@ wis.widget.Dialog.prototype = {
                 that.setLeft(param.left);
                 that.setWidth(param.width);
                 that.setHeight(param.height);
-                this._onRestore && this._onRestore(that);
+                that._onRestore && that._onRestore(that);
             });
-
             this._dialog.bind("dialogClose",function(){
-                this._onClose && this._onClose(that);
+                that._onClose && that._onClose(that);
             });
-        }    
-
-       
+        }
     },
 
     //渲染前处理方法
@@ -255,7 +263,7 @@ wis.widget.Dialog.prototype = {
 
     //渲染方法
     render: function () {
-        if( !this.getType() )
+        if( this._dialog && !this.getType() )
         {
             //position
             this._dialog.css({
@@ -273,16 +281,15 @@ wis.widget.Dialog.prototype = {
             this._dialog._setMaxSupport( this.getCanMax() ) ;
         }
         
+        if (this._dialog) {
+            this._dialog._setOption({
+                url: this.getUrl(),
+                target: this.getTarget(),
+                content: this.getTextContent()
+            });
+        };
 
-       
-
-        this._dialog._setOption({
-            url: this.getUrl(),
-            target: this.getTarget(),
-            content: this.getTextContent()
-        });
-
-        if(this.getRefreshFlag())
+        if(this._dialog && this.getRefreshFlag())
         {
             this._dialog.setContent();
             this.setRefreshFlag(false);
@@ -308,6 +315,7 @@ wis.widget.Dialog.prototype = {
             canDrag: this.getCanDrag(),
             defaultFullScreen: this.getDefaultFullScreen(),
             url: this.getUrl(),
+            buttons: this.getButtons(),
             textContent: this.getTextContent(),
             modal: this.getModal()
         };
@@ -324,6 +332,7 @@ wis.widget.Dialog.prototype = {
         this.setDefaultFullScreen(data.defaultFullScreen);
         this.setModal(data.modal);
         this.setUrl(data.url);
+        this.setButtons(data.buttons);
         this.setTextContent(data.textContent);
     }
 };

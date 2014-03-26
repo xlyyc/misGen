@@ -149,24 +149,41 @@ wof.functionWidget.AddRecordComponent.prototype = {
     setBindComponents : function (bindComponents){
         this._bindComponents = bindComponents;
     },
-
+    _init: function(data){
+    	if(!data){
+    		return false;
+    	}
+    	if(data.CallItemCaption){
+    		this.setCallItemCaption(data.CallItemCaption);
+    	}
+    	if(data.formFunctionId){
+    		this.setFormFunctionId(data.formFunctionId);
+    	}
+    	if(data.bindComponents){
+    		this.setBindComponents(data.bindComponents);
+    	}
+    },
     /**
      * Render 方法定义
      */
 
     initRender: function(){
-//        var button = new wof.widget.Button();
-//        button.setIsInside(true);
-//        button.setType('submit');
-//        button.setLeft(0);
-//        button.setTop(0);
-//        button.setWidth(this.getWidth());
-//        button.setHeight(this.getHeight());
-//        button.appendTo(this);
-//        this._btn = button;
     	var that = this;
         var button = wis$.create('Button',{value : '新增',click:function (){
         	 //that.sendMessage('wof.functionWidget.DeleteRecordComponent_active');
+        	if(that.getBindComponents()!=null&&that.getBindComponents()!=""&&that.getBindComponents()!="null"){
+        		that.sendMessage('wof.functionWidget.AddRecordComponent_active');
+        	}else if(that.getFormFunctionId()!=null&&that.getFormFunctionId()!=""&&that.getFormFunctionId()!="null"){
+        		var dialog = wof$.create('Dialog');
+        		dialog.setUrl('http://172.16.40.79:8889/emap.form?functionId='+that.getFormFunctionId());
+        		var refreshDo = function(){
+        			that.sendMessage('wof.bizWidget.DataObject_query');// TODO 参数？
+        		}
+        		dialog.onClose(refreshDo);
+        		dialog.render();
+        	}else{
+        		alert("未配置操作！");
+        	}
         }});
         button.render();
         button.appendTo(this.getDomInstance());
@@ -225,7 +242,7 @@ wof.functionWidget.AddRecordComponent.prototype = {
         this.setCallType(data.callType);
     },
 
-    _insideOnReceiveMessage:{
+   /* _insideOnReceiveMessage:{
         'wof.widget.Button_mousedown':function(message){
             console.log(message.id+'   '+this.getClassName());
             this.sendMessage('wof.functionWidget.AddRecordComponent_active');
@@ -237,7 +254,7 @@ wof.functionWidget.AddRecordComponent.prototype = {
             return false;
         }
 
-    },
+    },*/
 
     updateAddRecordComponent: function(data){
         if(!jQuery.isEmptyObject(data)){
