@@ -398,7 +398,10 @@ wof.bizWidget.VoucherComponent.prototype = {
             this._queryFlag = false;
             this.setRefData(this.getDataSource().getRefData());
             if(this.getState()=='Add'){ //如果是Add状态 需要插入一条空白数据
-                this.getDataSource().addData([{}]);
+                var data = this.getDataSource().getLocalData();
+                if(data['rows'].length==0){ //如果当前do中没有缓存数据 则增加一条数据
+                    this.getDataSource().addData([{}]);
+                }
             }else{ //如果是View\Edit 则先发起查询
                 var idPro = this.getDataSource().getLocalData()['idPro'];
                 var queryParam = {'type':'fieldQuery','field':idPro,'operation':'equals','value1':this.getCurrentRowId()};
