@@ -9,13 +9,13 @@ wis.widget.SelectFiles = function () {
 };
 
 wis.widget.SelectFiles.prototype = {
-    _cid: null,
-    _selectFileName: null,
-    _isMultUpload: true,
-    _fileTypes: "*.*",
-    _fileSizeLimit: 100 * 1024 * 1024,
-    _uploadUrl: null,
-    _fileSaveName: null,
+    _cid: null,                     //唯一索引
+    _name: null,                    //上传控件的名称
+    _isMultUpload: null,            //是否批量上传
+    _fileTypes: null,               //文件类型限制，多个用半角分号隔开，如*.doc;*.jpg
+    _fileSizeLimit: null,           //单个文件大小上限，默认100M
+    _uploadUrl: null,               //上传接收地址
+    _fileSaveName: null,            //文件保存名
 
     getCid: function () {
         return this._cid;
@@ -25,16 +25,16 @@ wis.widget.SelectFiles.prototype = {
         this._cid = cid;
     },
 
-    getSelectFileName: function () {
-        return this._selectFileName;
+    getName: function () {
+        return this._name;
     },
 
-    setSelectFileName: function (selectFileName) {
-        this._selectFileName = selectFileName;
+    setName: function (name) {
+        this._name = name;
     },
 
     getIsMultUpload: function () {
-        return this._isMultUpload;
+        return this._isMultUpload || true;
     },
 
     setIsMultUpload: function (isMultUpload) {
@@ -42,12 +42,17 @@ wis.widget.SelectFiles.prototype = {
     },
 
     getFileTypes: function () {
-        return this._fileTypes;
+        return this._fileTypes || "*.*";
     },
 
     setFileTypes: function (fileTypes) {
         this._fileTypes = fileTypes;
     },
+
+    getFileSizeLimit: function () {
+        return this._fileSizeLimit || ( 100 * 1024 * 1024 );
+    },
+
 
     getUploadUrl: function () {
         return this._uploadUrl;
