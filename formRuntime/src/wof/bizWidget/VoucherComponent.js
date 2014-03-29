@@ -401,9 +401,15 @@ wof.bizWidget.VoucherComponent.prototype = {
                 var data = this.getDataSource().getLocalData();
                 if(data['rows'].length==0){ //如果当前do中没有缓存数据 则增加一条数据
                     this.getDataSource().addData([{}]);
+                    var idPro = this.getDataSource().getLocalData()['idPro'];
+                    this.setCurrentRowId(this.getRowData()['data'][idPro]['value']);
+                }else{
+                    //如果已经有了一条数据 则直接设置currentRowId 在克隆时会执行此分支
+                    var localData = this.getDataSource().getLocalData();
+                    var idPro = localData['idPro'];
+                    this.setRowData(localData['rows'][0]);
+                    this.setCurrentRowId(this.getRowData()['data'][idPro]['value']);
                 }
-                var idPro = this.getDataSource().getLocalData()['idPro'];
-                this.setCurrentRowId(this.getRowData()['data'][idPro]['value']);
             }else{ //如果是View\Edit 则先发起查询
                 var idPro = this.getDataSource().getLocalData()['idPro'];
                 var queryParam = {'type':'fieldQuery','field':idPro,'operation':'equals','value1':this.getCurrentRowId()};

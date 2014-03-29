@@ -1,0 +1,81 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>javascript-grid</title>
+    <!--lovey ui-->
+    <link href="../../../../lovey/style/css/lovey.css" rel="stylesheet" type="text/css"/>
+    <!--文档自定义样式-->
+    <link href="../../../../docs/assets/css/docs.css" rel="stylesheet" type="text/css"/>
+
+    <!-- 加载测试用的数据-->
+    <script type="text/javascript" src="grid_demo_data.js"></script>
+</head>
+
+<body>
+<div class="ui_container w1000 m10 example_grid">
+
+
+    <div id="maingrid8"></div>
+
+    <h3>示例十：多表头表格模式</h3>
+
+    <br/>
+</div>
+<!--jquery核心文件-->
+<script src="../../../../lovey/js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+<!--懒加载核心js文件-->
+<script src="../../../../lovey/js/easyloader.js" type="text/javascript"></script>
+<!--CustomersData 表格内数据-->
+<script src="../../../../docs/LigerUI/demos/grid/CustomersData.js" type="text/javascript"></script>
+<script type="text/javascript">
+var gridManage;
+$(document).ready(function () {
+
+    using("grid", function () {
+
+        $("#maingrid8").ligerGrid({
+            columns: [
+                { display: '主键', name: 'CustomerID', align: 'left'},
+                { display: '公司名', name: 'CompanyName'},
+                { display: '联系名', name: 'ContactName'}
+            ],
+            data: {"Rows": [
+                {"CustomerID": "ALFKI", "CompanyName": "Alfreds Futterkiste", "ContactName": "Maria Anders", "ContactTitle": "Sales Representative", "Address": "Obere Str. 57", "City": "Berlin", "Region": null, "PostalCode": "12209", "Country": "Germany", "Phone": "030-0074321", "Fax": "030-0076545", "users": {"firestName": "赵云"}},
+                {"CustomerID": "ANATR", "CompanyName": "Ana Trujillo Emparedados y helados", "ContactName": "Ana Trujillo", "ContactTitle": "Owner", "Address": "Avda. de la Constitución 2222", "City": "México D.F.", "Region": null, "PostalCode": "05021", "Country": "Mexico", "Phone": "(5) 555-4729", "Fax": "(5) 555-3745"},
+                {"CustomerID": "ANTON", "CompanyName": "Antonio Moreno Taquería", "ContactName": "Antonio Moreno", "ContactTitle": "Owner", "Address": "Mataderos  2312", "City": "México D.F.", "Region": null, "PostalCode": "05023", "Country": "Mexico", "Phone": "(5) 555-3932", "Fax": null}
+            ], Total: 91},
+            width: 680,
+            detail: {
+                onShowDetail: function (row, detailPanel) {
+                    var grid = $("<div style='margin:10px'></div>");
+                    $(detailPanel).append(grid);
+                    $(grid).ligerGrid({
+                        columns: [
+                            { display: '订单序号', name: 'OrderID', type: 'float' },
+                            { display: '运费', name: 'Freight', width: 50, type: 'float' }
+                        ],
+                        isScroll: false,
+                        height:100,
+                        data: {
+                            "Rows": [
+                                {"OrderID": "20130909142601", "Freight": "10$"},
+                                {"OrderID": "20130909142602", "Freight": "10$"},
+                                {"OrderID": "20130909142603", "Freight": "10$"},
+                                {"OrderID": "20130909142604", "Freight": "10$"}
+                            ]
+                        },
+                        showTitle: false,
+                        columnWidth: 100
+                    });
+                }
+            }
+        });
+
+
+    })
+});
+</script>
+</body>
+</html>

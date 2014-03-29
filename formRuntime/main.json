@@ -1,55 +1,146 @@
 {
-    "JZGJBXXB":{
-        "rows":[
+    "JZGJBXXB": {
+        "rows": [
             {
-                "data":{
-                    "xm":{"value":"张三丰","status":"NotModified"},
-                    "XBref.xbmc":{"value":"男","status":"NotModified"},
-                    "XMPYDX":{"value":"ZHANGSANFENG","status":"NotModified"},
-                    "zzjg":{"value":"1001","status":"NotModified"},
-                    "zzmmref.zzmmbm":{"value":"1","status":"NotModified"},
-                    "xb":{"value":"1","status":"NotModified"},
-                    "zzmmref.zzmmbz":{"value":"32岁以下","status":"NotModified"},
-                    "xmpy":{"value":"zhangsanfeng","status":"NotModified"},
-                    "zglbref.lbbz":{"value":"全职员工","status":"NotModified"},
-                    "zzjgref.sjzzbm":{"value":"1","status":"NotModified"},
-                    "zglbref.lbmc":{"value":"全职员工","status":"NotModified"},
-                    "XBref.xbbh":{"value":"1","status":"NotModified"},
-                    "zgbz":{"value":"信管1201、1204 辅导员","status":"NotModified"},
-                    "zzmmbm":{"value":"1","status":"NotModified"},
-                    "zzmmref.zzmmmc":{"value":"团员","status":"NotModified"},
-                    "zzjgref.bz":{"value":"院部","status":"NotModified"},
-                    "zglbref.lbbm":{"value":"1","status":"NotModified"},
-                    "zzid":{"value":"1001002","status":"NotModified"},
-                    "zzjgref.zzid":{"value":"10","status":"NotModified"},
-                    "lbbm":{"value":"1","status":"NotModified"},
-                    "gh":{"value":"20153021422","status":"NotModified"},
-                    "csrq":{"value":"1990-08-20","status":"NotModified"},
-                    "zzjgref.zzmc":{"value":"计算机学院","status":"NotModified"},
-                    "zzjgref.zzbm":{"value":"1001","status":"NotModified"},
-                    "zgid":{"value":"1","status":"NotModified"}
+                "data": {
+                    "xm": {
+                        "value": "张三丰",
+                        "status": "NotModified"
+                    },
+                    "XBref.xbmc": {
+                        "value": "男",
+                        "status": "NotModified"
+                    },
+                    "XMPYDX": {
+                        "value": "ZHANGSANFENG",
+                        "status": "NotModified"
+                    },
+                    "zzjg": {
+                        "value": "1001",
+                        "status": "NotModified"
+                    },
+                    "zzmmref.zzmmbm": {
+                        "value": "1",
+                        "status": "NotModified"
+                    },
+                    "xb": {
+                        "value": "1",
+                        "status": "NotModified"
+                    },
+                    "zzmmref.zzmmbz": {
+                        "value": "32岁以下",
+                        "status": "NotModified"
+                    },
+                    "xmpy": {
+                        "value": "zhangsanfeng",
+                        "status": "NotModified"
+                    },
+                    "zglbref.lbbz": {
+                        "value": "全职员工",
+                        "status": "NotModified"
+                    },
+                    "zzjgref.sjzzbm": {
+                        "value": "1",
+                        "status": "NotModified"
+                    },
+                    "zglbref.lbmc": {
+                        "value": "全职员工",
+                        "status": "NotModified"
+                    },
+                    "XBref.xbbh": {
+                        "value": "1",
+                        "status": "NotModified"
+                    },
+                    "zgbz": {
+                        "value": "信管1201、1204 辅导员",
+                        "status": "NotModified"
+                    },
+                    "zzmmbm": {
+                        "value": "1",
+                        "status": "NotModified"
+                    },
+                    "zzmmref.zzmmmc": {
+                        "value": "团员",
+                        "status": "NotModified"
+                    },
+                    "zzjgref.bz": {
+                        "value": "院部",
+                        "status": "NotModified"
+                    },
+                    "zglbref.lbbm": {
+                        "value": "1",
+                        "status": "NotModified"
+                    },
+                    "zzid": {
+                        "value": "1001002",
+                        "status": "NotModified"
+                    },
+                    "zzjgref.zzid": {
+                        "value": "10",
+                        "status": "NotModified"
+                    },
+                    "lbbm": {
+                        "value": "1",
+                        "status": "NotModified"
+                    },
+                    "gh": {
+                        "value": "20153021422",
+                        "status": "NotModified"
+                    },
+                    "csrq": {
+                        "value": "1990-08-20",
+                        "status": "NotModified"
+                    },
+                    "zzjgref.zzmc": {
+                        "value": "计算机学院",
+                        "status": "NotModified"
+                    },
+                    "zzjgref.zzbm": {
+                        "value": "1001",
+                        "status": "NotModified"
+                    },
+                    "zgid": {
+                        "value": "1",
+                        "status": "NotModified"
+                    }
                 },
-                "rowId":"377495338384101376",
-                "status":"NotModified",
-                "childData":{
-                    "hjxxchild":{
-                        "rows":[
+                "status": "NotModified",
+                "childData": {
+                    "hjxxchild": {
+                        "rows": [
                             {
-                                "data":{
-                                    "jxbh":{"value":"001","status":"NotModified"},
-                                    "hjmc":{"value":"优秀团队","status":"NotModified"},
-                                    "jxjlid":{"value":"1","status":"NotModified"}
+                                "data": {
+                                    "jxbh": {
+                                        "value": "001",
+                                        "status": "NotModified"
+                                    },
+                                    "hjmc": {
+                                        "value": "优秀团队",
+                                        "status": "NotModified"
+                                    },
+                                    "jxjlid": {
+                                        "value": "1",
+                                        "status": "NotModified"
+                                    }
                                 },
-                                "rowId":"377495338384101377","status":"NotModified"}
+                                "status": "NotModified"
+                            }
                         ],
-                        "entityAlias":"hjxxchild",
-                        "totalCount":"1",
-                        "offset":"0",
-                        "idPro":"jxjlid",
-                        "entityType":"child",
-                        "entityName":"HJXX"
+                        "entityAlias": "hjxxchild",
+                        "totalCount": "1",
+                        "offset": "0",
+                        "idPro": "jxjlid",
+                        "entityType": "child",
+                        "entityName": "HJXX"
                     }
                 }
             }
         ],
-        "entityAlias":"JZGJBXXB","totalCount":"18","offset":"0","idPro":"zgid","entityType":"main","entityName":"JZGJBXXB"}}
+        "entityAlias": "JZGJBXXB",
+        "totalCount": "18",
+        "offset": "0",
+        "idPro": "zgid",
+        "entityType": "main",
+        "entityName": "JZGJBXXB"
+    }
+}

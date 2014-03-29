@@ -1,0 +1,48 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+ * Developed By: zwzhao
+ * Mail: zwzhao@wiscom.com.cn
+ * Version:1.0
+ * History:
+
+  表单验证API
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta http-equiv="Content-Language" content="zh-CN"/>
+    <meta content="all" name="robots"/>
+    <meta name="author" content="zwzhao@wisedu.com,赵政伟"/>
+    <meta name="copyright" content="www.wiscom.com.cn,自由版权,任意转载"/>
+    <meta name="description" content="css框架"/>
+    <meta name="keywords" content="css框架,web2.0"/>
+    <title>心跳</title>
+    <!--API全局样式-->
+    <link rel="stylesheet" href="../../../../docs/assets/css/api.css" type="text/css" media="screen, projection"/>
+    <!--jquery1.7.1核心js文件-->
+    <script src="../../jquery.min.js" type="text/javascript" charset="utf-8"></script>
+
+    <!--懒加载核心js文件-->
+    <script type="text/javascript" src="../../easyloader.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            using("heartbeat", function () {
+                $.jheartbeat.set({
+                            url: "data.html",
+                            delay: 5000,
+                            div_id: "content"}
+                );
+            })
+        })
+    </script>
+
+</head>
+<body>
+<!--content-->
+<div id="content">
+</div>
+
+</body>
+</html>

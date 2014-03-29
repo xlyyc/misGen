@@ -1,0 +1,237 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+ * Developed By: ywwei
+ * Mail: ywwei@wisedu.com
+ * Version:1.0
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta http-equiv="Content-Language" content="zh-CN"/>
+    <meta content="all" name="robots"/>
+    <meta name="author" content="ywwei@wisedu.com,魏言文"/>
+    <meta name="copyright" content="www.wiscom.com.cn,自由版权,任意转载"/>
+    <meta name="description" content="css框架"/>
+    <meta name="keywords" content="css框架,web2.0"/>
+    <title>多功能编辑器</title>
+    <!--lovey核心css-->
+    <link href="../../../../lovey/style/css/lovey.css" rel="stylesheet" type="text/css"/>
+    <!--API全局样式-->
+    <link rel="stylesheet" href="../../../../docs/assets/css/api.css" type="text/css" media="screen, projection"/>
+    <!--自定义样式-->
+    <link rel="stylesheet" href="../../../../docs/assets/css/docs.css" type="text/css"/>
+</head>
+<body>
+<div id="nav" class="ui_container_fluid">
+    <div class="page_header">
+        <h1>多功能编辑器
+            <small>ckeditor.js</small>
+        </h1>
+    </div>
+    <ul class="ui_list_h">
+        <li><a href="http://docs.cksource.com/ckeditor_api" target="_blank" class="ui_btn ui_btn_primary">API</a></li>
+    </ul>
+    <h3>组件效果展示</h3>
+
+    <div class="bs-docs-example pb30">
+        <textarea cols="" rows="3" name="editor2"></textarea>
+    </div>
+
+
+    <div class="bs-docs-example pb30">
+        <a href="javascript:void(0)" onclick="getData()">获取数据</a>
+
+        <div id="selectFileT4"></div>
+        <div id="selectFileTeditor1"></div>
+        <div id="selectFileTEditor3"></div>
+        <textarea cols="" rows="3" name="editor4"></textarea>
+        <textarea cols="" rows="3" name="editor1"></textarea>
+        <textarea cols="" rows="3" name="Editor3"></textarea>
+    </div>
+
+    <p>html部分</p>
+<pre class="brush:javascript;">
+//示例1
+<textarea cols="" rows="3" name="editor2"></textarea>
+
+//示例2
+<a href="javascript:void(0)" onclick="getData()">获取数据</a>
+<div id="selectFileT"></div>
+<textarea cols="" rows="3" name="editor1"></textarea>
+</pre>
+
+
+    <p>javascript部分</p>
+<pre class="brush:javascript;">
+$(document).ready(function () {
+using(["ckeditor", "iframe","selectfiles"], function () {
+CKEDITOR.replace("editor1");
+CKEDITOR.replace("editor2",{
+toolbar:"Basic"
+});
+
+$("#selectFileT").loveySelectFile({
+title: "请选择上传文件",
+fileTypes: "*.jpg;*.gif;*.png",
+fileTypeDescription: "图片选择(*.jpg;*.gif;*.png)",
+checkbox: true,
+serverTimeUrl: "server.json",
+getTempFilesUrl: "/lovey/js/plugins/selectfiles/getTempFiles.json",
+displayModel: true,
+items: [
+{
+title: "上传",
+ctxUrl: "selectfiles/addPhoto.json",
+flashUpload: true
+}
+],
+params: {
+resourceId: 1,
+resourceType: 2,
+iPlanetDirectoryPro: "AQIC5wM2LY4SfczVYcnbQyM78cOkhSveqf2pQXsm+4ox8L0=@AAJTSQACMDE=#"
+},
+ckEditorName:"editor1"
+/*completeFunction:"updateEditor"*/
+});
+$.loveyIframe.auto();
+});
+});
+
+function getData() {
+var editData = CKEDITOR.instances.editor1.getData();
+alert(editData);
+}
+
+function openUpload(){
+$("#selectFileT").next().click();
+}
+
+function updateEditor(args){
+CKEDITOR.instances.editor1.insertHtml("AA");
+}
+</pre>
+</div>
+
+<!--jquery1.7.1核心js文件-->
+<script src="../../jquery.min.js" type="text/javascript" charset="utf-8"></script>
+<!--懒加载核心js文件-->
+<script type="text/javascript" src="../../easyloader.js"></script>
+<!--加载语法高亮css和js文件-->
+<link type="text/css" rel="stylesheet" href="../syntaxhighlighter/styles/easy.css"/>
+<script type="text/javascript" src="../syntaxhighlighter/scripts/shCore.js"></script>
+<script type="text/javascript" src="../syntaxhighlighter/scripts/shBrushJScript.js"></script>
+<script type="text/javascript" src="../syntaxhighlighter/scripts/shBrushPhp.js"></script>
+<script type="text/javascript" src="../syntaxhighlighter/helper.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        using(["ckeditor", "iframe", "selectfiles"], function () {
+            //CKEDITOR.replace("editor4");
+
+            //CKEDITOR.replace("editor1");
+
+            CKEDITOR.replace("Editor3");
+
+            CKEDITOR.replace("editor2", {
+                toolbar: "Basic"
+            });
+
+            $("#selectFileT4").loveySelectFile({
+                title: "请选择上传文件editor4",
+                fileTypes: "*.jpg;*.gif;*.png",
+                fileTypeDescription: "图片选择(*.jpg;*.gif;*.png)",
+                checkbox: true,
+                serverTimeUrl: "server.json",
+                getTempFilesUrl: "/lovey/js/plugins/selectfiles/getTempFiles.json",
+                displayModel: true,
+                items: [
+                    {
+                        title: "上传",
+                        ctxUrl: "selectfiles/addPhoto.json",
+                        flashUpload: true
+                    }
+                ],
+                params: {
+                    resourceId: 1,
+                    resourceType: 2,
+                    iPlanetDirectoryPro: "AQIC5wM2LY4SfczVYcnbQyM78cOkhSveqf2pQXsm+4ox8L0=@AAJTSQACMDE=#"
+                },
+                ckEditor: CKEDITOR,
+                ckEditorName: "editor4"
+                /*completeFunction:"updateEditor"*/
+            });
+
+
+            $("#selectFileTeditor1").loveySelectFile({
+                title: "请选择上传文件editor1",
+                fileTypes: "*.jpg;*.gif;*.png",
+                fileTypeDescription: "图片选择(*.jpg;*.gif;*.png)",
+                checkbox: true,
+                serverTimeUrl: "server.json",
+                getTempFilesUrl: "/lovey/js/plugins/selectfiles/getTempFiles.json",
+                displayModel: true,
+                items: [
+                    {
+                        title: "上传",
+                        ctxUrl: "selectfiles/addPhoto.json",
+                        flashUpload: true
+                    }
+                ],
+                params: {
+                    resourceId: 1,
+                    resourceType: 2,
+                    iPlanetDirectoryPro: "AQIC5wM2LY4SfczVYcnbQyM78cOkhSveqf2pQXsm+4ox8L0=@AAJTSQACMDE=#"
+                },
+                ckEditor: CKEDITOR,
+                ckEditorName: "editor1"
+                /*completeFunction:"updateEditor"*/
+            });
+
+            $("#selectFileTEditor3").loveySelectFile({
+                title: "请选择上传文件Editor3",
+                fileTypes: "*.jpg;*.gif;*.png",
+                fileTypeDescription: "图片选择(*.jpg;*.gif;*.png)",
+                checkbox: true,
+                serverTimeUrl: "server.json",
+                getTempFilesUrl: "/lovey/js/plugins/selectfiles/getTempFiles.json",
+                displayModel: true,
+                items: [
+                    {
+                        title: "上传",
+                        ctxUrl: "selectfiles/addPhoto.json",
+                        flashUpload: true
+                    }
+                ],
+                params: {
+                    resourceId: 1,
+                    resourceType: 2,
+                    iPlanetDirectoryPro: "AQIC5wM2LY4SfczVYcnbQyM78cOkhSveqf2pQXsm+4ox8L0=@AAJTSQACMDE=#"
+                },
+                ckEditor: CKEDITOR,
+                ckEditorName: "Editor3"
+                /*completeFunction:"updateEditor"*/
+            });
+            $.loveyIframe.auto();
+        });
+    });
+
+    function getData() {
+        var editData = CKEDITOR.instances.editor1.getData();
+        alert(editData);
+    }
+
+    function openUpload(uploadObj) {
+        //window.console && console.log(uploadObj.ckEditorName);
+        if (uploadObj) {
+            $("#selectFileT"+uploadObj.ckEditorName).next().click();
+        } else {
+            $("#selectFileT4").next().click();
+        }
+    }
+
+    function updateEditor(args) {
+        CKEDITOR.instances.editor1.insertHtml("AA");
+    }
+</script>
+</body>
+</html>

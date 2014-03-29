@@ -1,0 +1,143 @@
+﻿{"Rows": [
+    {
+        "pkId": 100,
+        "treeNodeName": "节点1",
+        "leaf": false,
+        "children": [
+            {
+                "pkId": 110,
+                "treeNodeName": "节点1.1",
+                "leaf": false,
+                "children": [
+                    {
+                        "pkId": 111,
+                        "treeNodeName": "节点1.1.1",
+                        "leaf": true,
+                        "depth": 3
+                    },
+                    {
+                        "pkId": 112,
+                        "treeNodeName": "节点1.1.2",
+                        "leaf": true,
+                        "depth": 3
+                    }
+                ],
+                "depth": 2
+            },
+            {
+                "pkId": 120,
+                "treeNodeName": "节点1.2",
+                "leaf": true,
+                "depth": 3
+            }
+        ],
+        "depth": 1
+    },
+    {
+        "pkId": 200,
+        "treeNodeName": "节点2",
+        "leaf": true,
+        "depth": 1
+    },
+    {
+        "pkId": 100,
+        "treeNodeName": "节点1",
+        "leaf": false,
+        "children": [
+            {
+                "pkId": 110,
+                "treeNodeName": "节点1.1",
+                "leaf": false,
+                "children": [
+                    {
+                        "pkId": 111,
+                        "treeNodeName": "节点1.1.1",
+                        "leaf": true,
+                        "depth": 3
+                    },
+                    {
+                        "pkId": 112,
+                        "treeNodeName": "节点1.1.2",
+                        "leaf": true,
+                        "depth": 3
+                    }
+                ],
+                "depth": 2
+            },
+            {
+                "pkId": 120,
+                "treeNodeName": "节点1.2",
+                "leaf": true,
+                "depth": 3
+            }
+        ],
+        "depth": 1
+    },
+    {
+        "pkId": 200,
+        "treeNodeName": "节点2",
+        "leaf": true,
+        "depth": 1
+    },
+    {
+        "pkId": 100,
+        "treeNodeName": "节点1",
+        "leaf": false,
+        "children": [
+            {
+                "pkId": 110,
+                "treeNodeName": "节点1.1",
+                "leaf": false,
+                "children": [
+                    {
+                        "pkId": 111,
+                        "treeNodeName": "节点1.1.1",
+                        "leaf": true,
+                        "depth": 3
+                    },
+                    {
+                        "pkId": 112,
+                        "treeNodeName": "节点1.1.2",
+                        "leaf": true,
+                        "depth": 3
+                    }
+                ],
+                "depth": 2
+            },
+            {
+                "pkId": 120,
+                "treeNodeName": "节点1.2",
+                "leaf": true,
+                "depth": 3
+            }
+        ],
+        "depth": 1
+    },
+    {
+        "pkId": 200,
+        "treeNodeName": "节点2",
+        "leaf": true,
+        "depth": 1
+    },
+    {
+        "pkId": 300,
+        "treeNodeName": "节点3",
+        "isexpand":false,
+        "leaf": false,
+        "children": [
+            {
+                "pkId": 310,
+                "treeNodeName": "节点3.1",
+                "leaf": true,
+                "depth": 2
+            },
+            {
+                "pkId": 320,
+                "treeNodeName": "节点3.2",
+                "leaf": true,
+                "depth": 2
+            }
+        ],
+        "depth": 1
+    }
+]}

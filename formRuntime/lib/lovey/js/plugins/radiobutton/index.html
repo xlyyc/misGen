@@ -1,0 +1,52 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>RadioButton</title>
+    <link href="../../../style/css/lovey.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+    <div  style="position:absolute;left:20em;width:80%;top:10em;">
+        <div id="container"></div>
+        <div style="margin:30px 0 10px 0; font-size:16px;">event log:</div>
+        <div id="log" style="margin:0 0 0 10px;"></div>
+    </div>
+    <script src="../../jquery.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="radiobutton.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      $(document).ready(function () {
+            var radio = $.loveyRadio.create({
+                cid:"test_radio",
+                name:"test_radio",
+                text:"男",
+                value:"1",
+                onchecked:function (e) {
+                    $('#log').append('radio 1 checked </br>');
+                    $('#log').append('radio 1 value : '+radio.val()+' </br>');
+                },
+                onclick:function  (e) {
+                    $('#log').append('radio 1 click </br>');
+                }});
+
+            var radio1 = $.loveyRadio.create({
+                cid:"test_radio1",
+                name:"test_radio",
+                text:"女",
+                value:"2",
+                onchecked:function  (e) {
+                    $('#log').append('radio 2 checked </br>');
+                    $('#log').append('radio 2 value : '+radio1.val()+' </br>');
+                },
+                onclick:function  (e) {
+                    $('#log').append('radio 2 click </br>');
+                }});
+            $('#container').append(radio.root); 
+            $('#container').append(radio1.root); 
+
+        });</script>
+
+</body>
+
+</html>
