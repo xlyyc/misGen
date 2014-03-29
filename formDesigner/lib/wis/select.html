@@ -52,23 +52,12 @@
     var text = null;
     function create() {
         text = wis$.create('Select');
-
-        text.setCid("company");
-        text.setSelectName("company");
-        text.setIsMultSelect(true);
-        text.setInitValue({"initValue":[]});
-
-        text.onBeforeSelect(function (value, text) {
-            console.log(value);
-            console.log(text);
-            return true;
-        });
-        text.onSelected(function (value, text, object) {
-            console.log(value);
-            console.log(text);
-            console.log(object);
-        });
-
+        text.setSelectData([
+                      { id: 1, text: "金智科技"},
+                      { id: 2, text: "金智教育"},
+                      { id: 3, text: "金智投资"},
+                      { id: 4, text: "金智智能"}
+                  ]);
         var container = jQuery('#container');
         text.appendTo(container);
 
@@ -78,18 +67,18 @@
 
     /*var select = $('<input type="text" id="select">');
 
-     $("body").append(select);
-     select.ligerComboBox({
-     textField: "text",
-     data: [
-     { id: 1, text: "金智科技"},
-     { id: 2, text: "金智教育"},
-     { id: 3, text: "金智投资"},
-     { id: 4, text: "金智智能"}
-     ],
-     isMultiSelect: false,
-     isNotShowClear: true
-     });*/
+    $("body").append(select);
+    select.ligerComboBox({
+        textField: "text",
+        data: [
+            { id: 1, text: "金智科技"},
+            { id: 2, text: "金智教育"},
+            { id: 3, text: "金智投资"},
+            { id: 4, text: "金智智能"}
+        ],
+        isMultiSelect: false,
+        isNotShowClear: true
+    });*/
 
     function clone() {
         var newText = text.clone();

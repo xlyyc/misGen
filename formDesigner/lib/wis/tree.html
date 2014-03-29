@@ -5,6 +5,9 @@
     <title>wis</title>
     <link href="../lovey/style/css/lovey.css" rel="stylesheet" type="text/css"/>
     <link href="../lovey/js/plugins/tree/default/tree.css" rel="stylesheet" type="text/css"/>
+    <link href="../jquery.ztree/css/zTreeStyle/zTreeStyle.css" rel="stylesheet" type="text/css"/>
+
+	
 
     <script type="text/javascript" src="lib/jquery/jquery.min.js"></script>
     <script type="text/javascript" src="lib/json2.js"></script>
@@ -20,6 +23,12 @@
     <script type="text/javascript" src="src/wis/util/GlobalObject.js"></script>
     <script type="text/javascript" src="src/wis/util/Tool.js"></script>
 
+	
+  	<script type="text/javascript" src="../jquery.ztree/js/jquery.ztree.core-3.5.js"></script>
+  	<script type="text/javascript" src="../jquery.ztree/js/jquery.ztree.excheck-3.5.js"></script>
+  	<script type="text/javascript" src="../jquery.ztree/js/jquery.ztree.exedit-3.5.js"></script>
+  	<script type="text/javascript" src="../jquery.ztree/js/jquery.ztree.exhide-3.5.js"></script>
+
     <script src="../lovey/js/lovey_common.js" type="text/javascript"></script>
     <script type="text/javascript" src="../lovey/js/plugins/tree/tree.js"></script>
     <script type="text/javascript" src="src/wis/widget/Tree.js"></script>
@@ -29,17 +38,89 @@
 
         var tree = null;
         function create(){
-            tree = wis$.create('Tree');
-            tree.onExpand(function(nodeObject){
-                alert("AA");
-                console.log(nodeObject);
-            });
+        	//===========测试数据 start================
+        	var nodes = [ {
+    			name : "惊天1",
+    			open : true,
+    			children : [ {
+    				name : "子节点1"
+    			}, {
+    				name : "子节点2"
+    			} ]
+    		}, {
+    			name : "父节点2",
+    			leaf : true
+    		}, {
+    			name : "父节点3",
+    			open : true
+    		} ];
+    		data = {};
+          	data.items = nodes;
+    		//data.url = "tree.json";
+    		data.checkFlag = true;
+    		data.chkstyle = "checkbox";
+    		data.radiotype = 'all';
+    		//=============测试数据 end=================
+        	
+    		tree = wis$.create('Tree',data);	
             var container = jQuery('#container');
             tree.appendTo(container);
-
             tree.render();
         }
+        function change(){
+        	tree.setDblClickExpand(false);
+        	tree.setUrl("tree1.json");
+        	tree.render();
+        	/* tree.setCid(data.cid);
+    		
+    		ree.setName(data.name);
+    		
+    		tree.setThemes(data.themes );
 
+    		tree.setChkStyle(data.chkStyle);
+
+    		tree.setRadioType(data.radioType);
+
+    		tree.setUrl(data.url);
+
+    		tree.setAsynctype(data.asynctype);
+
+    		tree.setDataType(data.dataType);
+    		
+    		tree.setDatachecked(data.dataChecked);
+
+    		tree.setCheckFlag(data.checkFlag);
+    		
+    		tree.setDatachildren(data.datachildren);
+
+    		tree.setDataname(data.dataname);
+
+    		tree.setDatatitle(data.datatitle);
+    		
+    		tree.setDataurl(data.dataurl);
+
+    		tree.setDatasimpledata(data.datasimpledata);
+
+    		tree.setDataidKey(data.dataidKey);
+    		
+    		tree.setDatapIdKey(data.datapIdKey);
+    		
+    		tree.setDatarootPId(data.datarootPId);
+
+    		tree.setIsSelLeafOnly(data.isSelLeafOnly);
+
+    		tree.setIsMultSelect(data.isMultSelect);
+    		
+    		tree.setDblClickExpand(data.dblClickExpand);
+    		
+    		tree.setItems(data.items);
+
+    		tree.beforeExpand(data.beforeExpand);
+    		
+    		tree.onExpand(data.onExpand); 
+    		
+    		tree.onClick(data.onClick);*/
+        }
     </script>
 </head>
 <body>
@@ -51,7 +132,8 @@
 <input type="button" value="移除对象" onclick="removeText();">
 <input type="button" value="隐藏\显示对象" onclick="hidenText();">
 <input type="button" value="根据id获得对象" onclick="getObjectById();">
-
+<br/>
+<input type="button" value="更改" onclick="change();">
 
 <div id="container" style="position:absolute;width:400px;height:300px;top:50px;left:0px;"></div>
 <!--<div id="tree"></div>

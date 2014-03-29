@@ -28,10 +28,38 @@
 
     <script>
         var radio = null;
-        function create() {
+        function create1() {
+            radio = wis$.create('Radio',{value:'文本框测试值',label:'文本框测试值',name:'name1'});
+            //radio.setValue('文本框测试值');
+            //radio.setLabel('文本框测试值');
+            //radio.setName('name1');
+            //checkbox.setDisabled("disabled");
+            //checkbox.setChecked("checked");
+            //radio.onClick(function(){alert(11);});
+            //checkbox.onSelect(function(){alert("onSelect");});
+            var container = jQuery('#container');
+            radio.appendTo(container);
+
+            radio.render();
+            
+            
+            radio1 = wis$.create('Radio');
+            radio1.setValue('文本框测试值2');
+            radio1.setLabel('文本框测试值2');
+            radio1.setName('name1');
+            radio1.setDisabled("disabled");
+            //checkbox.setChecked("checked");
+            radio1.onClick(function(){alert(12);});
+            //checkbox.onSelect(function(){alert("onSelect");});
+            var container2 = jQuery('#container2');
+            radio1.appendTo(container2);
+
+            radio1.render();
+        }
+        function create2() {
             radio = wis$.create('Radio');
-            radio.setValue('文本框测试值');
-            radio.setLabel('文本框测试值');
+            radio.setValue('文本框测试值2');
+            radio.setLabel('文本框测试值2');
             radio.setName('name1');
             //checkbox.setDisabled("disabled");
             //checkbox.setChecked("checked");
@@ -47,7 +75,8 @@
     </script>
 </head>
 <body>
-<input type="button" value="创建对象" onclick="create();">
+<input type="button" value="创建对象1" onclick="create1();">
+<input type="button" value="创建对象2" onclick="create2();">
 <input type="button" value="克隆对象" onclick="clone();">
 <input type="button" value="查看对象类名" onclick="getClassName();">
 <input type="button" value="查看对象数据" onclick="getData();">
@@ -58,5 +87,6 @@
 
 
 <div id="container" style="position:absolute;width:400px;height:300px;top:50px;left:0px;"></div>
+<div id="container2" style="position:absolute;width:400px;height:300px;top:350px;left:0px;"></div>
 </body>
 </html>
