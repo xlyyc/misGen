@@ -11,123 +11,109 @@ wof.widget.Button = function () {
 };
 
 wof.widget.Button.prototype = {
+
+    _btn: null, 
+
     /**
      * 属性声明 （private ，用"_"标识）
      */
-    //按钮启用属性
-    _disabled:null,
-    //按钮图标
-    _icons:null,
-    //按钮文本
-    _text:null,
-    //是否显示按钮文本
-    _textShowed: null,
-    //按钮类型：button 普通，submit 提交
-    _type: null ,
-
-    _value: null,
-
-    _btn: null,
+    _name: null,            //名称
+    _label: null,           //文字
+    _icon: null,            //语义层面的ICON标识，对应图标的类型(add/edit)、颜色(white/black)、位置属性(position:left/right/top/bottom)
+    _themes: null,          //对应主题里面的样式名
+    _disabled: null,        //禁用
+    _onClick: null,         //单击回调
 
     /**
      * get/set 属性方法定义
      */
 
-    getValue : function (){
-        return this._value || '';
+    getName: function () {
+        return this._name;
     },
 
-    setValue : function (value){
-        this._value = value;
+    setName: function (name) {
+        this._name = name;
     },
 
-    getDisabled: function(){
-        if(this._disabled == null)
-            this._disabled = '';
-        return this._disabled;
+    getLabel: function () {
+        return this._label || '';
     },
 
-    setDisabled: function(disabled){
-        this._disabled = disabled;
+    setLabel: function (label) {
+        this._label = label;
     },
 
-    getIcons: function(){
-        if(this._icons ==null)
-            this._icons = false;
-        return this._icons ;
+    getIcon: function () {
+        return this._icon;
     },
 
-    setIcons: function(icons){
-        this._icons = icons ;
+    setIcon: function (icon) {
+        this._icon = icon;
     },
 
-    getText: function(){
-        if(this._text == null)
-            this._text = '';
-        return this._text;
+    getDisabled: function () {
+        return this._disabled == null ? false : this._disabled ;
     },
 
-    setText: function(text){
-        this._text = text;
+    setDisabled: function (disabled) {
+        this._disabled = ( typeof disabled ) === "boolean" ? disabled  : false ;
     },
 
-    getTextShowed: function(){
-        if(this._textShowed == null)
-            this._textShowed = true;
-        return this._textShowed;
+    onClick: function (callBack) {
+        this._onClick = callBack;
     },
+    
 
-    setTextShowed: function(textShowed){
-        this._textShowed = textShowed;
-    },
-
-    getType: function(){
-        if(this._type == null)
-            this._type = '';
-        return this._type ;
-    },
-
-    setType: function(type){
-        this._btnType = type;
-    },
     /**
      * Render 方法定义
      */
 
     initRender: function(){
-        this._btn = jQuery('<button type="'+this.getType()+'" '+this.getDisabled()+' />');
-        this.getDomInstance().append(this._btn);
+        this._btn = wis$.create('Button');
+        
+        //setDate
+        this._btn.setData({
+            name:  this.getName(),
+            label: this.getLabel(),
+            icon: this.getIcon(),
+            disabled: this.getDisabled()
+        });
+
+        var that = this;
+        this._btn.onClick(function(buttonObj){
+            that._onClick && that._onClick(that);
+            that.sendMessage('wof.widget.Button_onclick');
+        });
+
+        //initrender
+        this._btn.render();
+        //append  to page
+        this.getDomInstance().append(this._btn.getDomInstance());
     },
 
     //选择实现
     beforeRender: function () {
-
+        
     },
 
     //----------必须实现----------
     render: function () {
-        this._btn.attr('value',this.getValue());
-        this._btn.button(
-            {
-                label: this.getText() ,
-                icons : {
-                    primary: "ui-icon-gear" ,
-                    secondary: "ui-icon-triangle-1-s"
-                },
-                text : this.getTextShowed()
-            }
-        );
-        if(this.getHeight()!=null){
-            this._btn.css('height',this.getHeight())
-        }
-        if(this.getWidth()!=null){
-            this._btn.css('width',this.getWidth())
-        }
+
+        this._btn.setData({
+            name:  this.getName(),
+            label: this.getLabel(),
+            icon: this.getIcon(),
+            disabled: this.getDisabled()
+        });
+
+        this._btn.render();
     },
 
     //选择实现
     afterRender: function () {
-        this._btn.button('refresh');
+
+        this.sendMessage('wof.widget.Button_render');
     },
 
     /**
@@ -137,33 +123,28 @@ wof.widget.Button.prototype = {
     //----------必须实现----------
     getData: function () {
         return {
-            value : this.getValue(),
-            disabled: this.getDisabled() ,
-            icons: this.getIcons(),
-            text: this.getText(),
-            textShowed: this.getTextShowed() ,
-            type: this.getType()
+            name: this.getName(),
+            label: this.getLabel(),
+            icon: this.getIcon(),
+            disabled: this.getDisabled()
         };
     },
     //----------必须实现----------
     setData: function (data) {
-        this.setValue(data.value);
+        this.setName(data.name);
+        this.setLabel(data.label);
+        this.setIcon(data.icon);
         this.setDisabled(data.disabled);
-        this.setIcons(data.icons);
-        this.setText(data.text);
-        this.setTextShowed(data.textShowed);
-        this.setType(data.type);
     },
 
     //创建初始化的button
     createSelf: function(width, height){
-        var node = new wof.widget.Button();
-        node.setType('submit');
+        var node = wof$.create('Button');
         node.setLeft(0);
         node.setTop(0);
         node.setWidth(width/2);
         node.setHeight(height/2);
-        node.setText('未命名');
+        node.setLabel('未命名');
         return node;
     }
 

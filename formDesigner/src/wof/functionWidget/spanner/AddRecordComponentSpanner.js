@@ -204,54 +204,55 @@ wof.functionWidget.spanner.AddRecordComponentSpanner.prototype = {
          </CommandItem>
          */
 
-//        if(node.getClassName()=='wof.functionWidget.AddRecordComponent'){
-//            var tool = wof.util.Tool;
-//            var root = tool.stringToXml("<CommandItem></CommandItem>");
-//            var rootElement = root.documentElement;
-//
-//            tool.setAttribute(rootElement,"CallType",node.getCallType());
-//            tool.setAttribute(rootElement,"FunctionID",node.getFunctionID());
-//            tool.setAttribute(rootElement,"CallItemCaption",node.getCallItemCaption());
-//            tool.setAttribute(rootElement,"CallItemName",node.getCallItemName());
-//            tool.setAttribute(rootElement,"CallStr",node.getCallStr());
-//            tool.setAttribute(rootElement,"CommandItemID",node.getComponentId());
-//            tool.setAttribute(rootElement,"ISPermissionControl",node.getISPermissionControl());
-//
-//            var paramMapsElement = tool.createElement(root,'ParamMaps');
-//            var paramMapElement = tool.createElement(root,'ParamMap');
-//            tool.setAttribute(paramMapElement,"MapType",'value');
-//            tool.setAttribute(paramMapElement,"CompParamName",'bindComponents');
-//            tool.setAttribute(paramMapElement,"CompParamValue",node.getBindComponents());
-//            tool.setAttribute(paramMapElement,"PageParamName",'');
-//            tool.setAttribute(paramMapElement,"ChangeExpt",'');
-//            tool.appendChild(paramMapsElement,paramMapElement);
-//
-//            var paramMapElement1 = tool.createElement(root,'ParamMap');
-//            tool.setAttribute(paramMapElement1,"MapType",'value');
-//            tool.setAttribute(paramMapElement1,"CompParamName",'formFunctionId');
-//            tool.setAttribute(paramMapElement1,"CompParamValue",node.getFormFunctionId()==null?'':node.getFormFunctionId());
-//            tool.setAttribute(paramMapElement1,"PageParamName",'');
-//            tool.setAttribute(paramMapElement1,"ChangeExpt",'');
-//            tool.appendChild(paramMapsElement,paramMapElement1);
-//
-//            tool.appendChild(rootElement,paramMapsElement);
-//            var Before = tool.createElement(root,'Before');
-//            tool.setAttribute(Before,"CanStop",true);
-//            var Call = tool.createElement(root,'Call');
-//            tool.setAttribute(Call,'Type','JS');
-//            tool.appendChild(Before,Call);
-//            var After = tool.createElement(root,'After');
-//            var Call = tool.createElement(root,'Call');
-//            tool.setAttribute(Call,'Type','JS');
-//            tool.appendChild(After,Call);
-//            var Return = tool.createElement(root,'Return');
-//            tool.appendChild(rootElement,Before);
-//            tool.appendChild(rootElement,After);
-//            tool.appendChild(rootElement,Return);
-//            //console.log(tool.xmlToString(root));
-//            //return tool.xmlToString(root);
-//        }
-        var json = {};
+        if(node.getClassName()=='wof.functionWidget.AddRecordComponent'){
+            var tool = wof.util.Tool;
+            var root = tool.stringToXml("<CommandItem></CommandItem>");
+            var rootElement = root.documentElement;
+
+            tool.setAttribute(rootElement,"CallType",node.getCallType());
+            tool.setAttribute(rootElement,"FunctionID",node.getFunctionID());
+            tool.setAttribute(rootElement,"CallItemCaption",node.getCallItemCaption());
+            tool.setAttribute(rootElement,"CallItemName",node.getCallItemName());
+            tool.setAttribute(rootElement,"CallStr",node.getCallStr());
+            tool.setAttribute(rootElement,"CommandItemID",node.getComponentId());
+            tool.setAttribute(rootElement,"ISPermissionControl",node.getISPermissionControl());
+
+            var paramMapsElement = tool.createElement(root,'ParamMaps');
+            var paramMapElement = tool.createElement(root,'ParamMap');
+            tool.setAttribute(paramMapElement,"MapType",'value');
+            tool.setAttribute(paramMapElement,"CompParamName",'bindComponents');
+            tool.setAttribute(paramMapElement,"CompParamValue",node.getBindComponents());
+            tool.setAttribute(paramMapElement,"PageParamName",'');
+            tool.setAttribute(paramMapElement,"ChangeExpt",'');
+            tool.appendChild(paramMapsElement,paramMapElement);
+
+            var paramMapElement1 = tool.createElement(root,'ParamMap');
+            tool.setAttribute(paramMapElement1,"MapType",'value');
+            tool.setAttribute(paramMapElement1,"CompParamName",'formFunctionId');
+            tool.setAttribute(paramMapElement1,"CompParamValue",node.getFormFunctionId()==null?'':node.getFormFunctionId());
+            tool.setAttribute(paramMapElement1,"PageParamName",'');
+            tool.setAttribute(paramMapElement1,"ChangeExpt",'');
+            tool.appendChild(paramMapsElement,paramMapElement1);
+
+            tool.appendChild(rootElement,paramMapsElement);
+            var Before = tool.createElement(root,'Before');
+            tool.setAttribute(Before,"CanStop",true);
+            var Call = tool.createElement(root,'Call');
+            tool.setAttribute(Call,'Type','JS');
+            tool.appendChild(Before,Call);
+            var After = tool.createElement(root,'After');
+            var Call = tool.createElement(root,'Call');
+            tool.setAttribute(Call,'Type','JS');
+            tool.appendChild(After,Call);
+            var Return = tool.createElement(root,'Return');
+            tool.appendChild(rootElement,Before);
+            tool.appendChild(rootElement,After);
+            tool.appendChild(rootElement,Return);
+            console.log(tool.xmlToString(root));
+            return tool.xmlToString(root);
+        }
+
+        /*var json = {};
         if(node.getClassName()=='wof.functionWidget.AddRecordComponent'){
             json.commandItemID = node.getComponentId();
             json.className = node.getClassName();
@@ -282,7 +283,7 @@ wof.functionWidget.spanner.AddRecordComponentSpanner.prototype = {
             json.paramMaps = paramMaps;
         }
         console.log(JSON.stringify(json));
-        return json;
+        return json;*/
     },
 
 

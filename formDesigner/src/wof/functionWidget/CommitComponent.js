@@ -148,7 +148,6 @@ wof.functionWidget.CommitComponent.prototype = {
     initRender: function(){
         var button = wof$.create('Button');
         button.setIsInside(true);
-        button.setType('submit');
         button.setLeft(0);
         button.setTop(0);
         button.setWidth(this.getWidth());
@@ -160,7 +159,7 @@ wof.functionWidget.CommitComponent.prototype = {
     //选择实现
     beforeRender: function () {
 
-        this._btn.setText(this.getCallItemCaption());
+        this._btn.setLabel(this.getCallItemCaption());
     },
 
     //----------必须实现----------
@@ -253,7 +252,7 @@ wof.functionWidget.CommitComponent.prototype = {
 
     //创建初始化的button
     createSelf: function(width, height){
-        var node = new wof.functionWidget.CommitComponent();
+        var node = wof$.create('CommitComponent');
         node.setLeft(0);
         node.setTop(0);
         node.setWidth(110);
