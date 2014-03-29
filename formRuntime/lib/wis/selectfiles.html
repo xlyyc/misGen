@@ -1,0 +1,103 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>wis</title>
+<script src="lib/jquery/jquery.min.js"></script>
+<script src="lib/json2.js"></script>
+<script src="lib/fixConsole.js"></script>
+<script src="src/wis/kernel/initNamespace.js"></script>
+
+<script src="src/wis/util/Hashtable.js"></script>
+<script src="src/wis/util/ObjectManager.js"></script>
+<script src="src/wis/util/Observer.js"></script>
+<script src="src/wis/util/ArrayList.js"></script>
+<script src="src/wis/util/Selector.js"></script>
+<script src="src/wis/util/SelectorList.js"></script>
+<script src="src/wis/util/GlobalObject.js"></script>
+<script src="src/wis/util/Tool.js"></script>
+
+<!-- lovey -->
+<link href="../lovey/style/css/lovey.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="../lovey/js/easyloader.js"></script>
+<script type="text/javascript" src="../lovey/js/plugins/util/util.js"></script>
+<script type="text/javascript" src="../lovey/js/plugins/grid/json2.js"></script>
+<script type="text/javascript" src="../lovey/js/plugins/dialog/drag.js"></script>
+<script type="text/javascript" src="../lovey/js/plugins/imagepreview/jquery.imagepreview.1.0.js"></script>
+<link rel="stylesheet" type="text/css" media="screen" href="../lovey/js/plugins/validationengine/default/validationengine.css" />
+<script type="text/javascript" src="../lovey/js/plugins/validationengine/validationengine.js"></script>
+<script type="text/javascript" src="../lovey/js/plugins/form/jquery.form.js"></script>
+<link rel="stylesheet" type="text/css" media="screen" href="../lovey/js/plugins/dialog/default/dialog.css">
+<script type="text/javascript" src="../lovey/js/plugins/dialog/dialog.js"></script>
+<script type="text/javascript" src="../lovey/js/plugins/moment/moment.js"></script>
+<link rel="stylesheet" type="text/css" media="screen" href="../lovey/js/plugins/selectfiles/default/files.css">
+<script type="text/javascript" src="../lovey/js/plugins/selectfiles/selectfiles.js"></script>
+
+<!-- 基类 -->
+<script src="src/wis/widget/SelectFiles.js"></script>
+
+<script src="src/wis/kernel/initSystem.js"></script>
+<script>
+
+    var text = null;
+    function create(){
+        text = wis$.create('SelectFiles');
+        var container = jQuery('#container');
+        text.appendTo(container);
+        text.render();
+    }
+
+    function clone(){
+        var newText = text.clone();
+        var container = jQuery('#container');
+        newText.appendTo(container);
+        newText.setTop(400);
+        newText.render();
+    }
+
+    function getClassName(){
+        alert(text.getClassName());
+    }
+
+    function getData(){
+        alert(text.toJSON());
+    }
+
+    function getId(){
+        alert(text.getId());
+    }
+
+    function removeText(){
+        text.remove(true); //true表示删除 默认 false表示弱引用删除
+    }
+
+    function hidenText(){
+        if(text.getHiden()==false){
+            text.setHiden(true);
+        }else{
+            text.setHiden(false);
+        }
+    }
+
+    function getObjectById(){
+        var id = text.getId();
+        var t = wis$.find('#'+id).get(0);
+        alert('查找到对象:'+ JSON.stringify(t.getData()));
+    }
+
+</script>
+</head>
+<body>
+<input type="button" value="创建对象" onclick="create();">
+<input type="button" value="克隆对象" onclick="clone();">
+<input type="button" value="查看对象类名" onclick="getClassName();">
+<input type="button" value="查看对象数据" onclick="getData();">
+<input type="button" value="查看对象id" onclick="getId();">
+<input type="button" value="移除对象" onclick="removeText();">
+<input type="button" value="隐藏\显示对象" onclick="hidenText();">
+<input type="button" value="根据id获得对象" onclick="getObjectById();">
+
+
+<div id="container" style="position:absolute;width:400px;height:300px;top:50px;left:0px;"></div>
+</body>
+</html>

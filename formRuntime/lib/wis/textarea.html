@@ -1,0 +1,90 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>wis</title>
+    <link href="../lovey/style/css/lovey.css" rel="stylesheet" type="text/css"/>
+    <link href="../lovey/js/plugins/tree/default/tree.css" rel="stylesheet" type="text/css"/>
+
+    <script type="text/javascript" src="lib/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="lib/json2.js"></script>
+    <script type="text/javascript" src="lib/fixConsole.js"></script>
+    <script type="text/javascript" src="src/wis/kernel/initNamespace.js"></script>
+
+    <script type="text/javascript" src="src/wis/util/Hashtable.js"></script>
+    <script type="text/javascript" src="src/wis/util/ObjectManager.js"></script>
+    <script type="text/javascript" src="src/wis/util/Observer.js"></script>
+    <script type="text/javascript" src="src/wis/util/ArrayList.js"></script>
+    <script type="text/javascript" src="src/wis/util/Selector.js"></script>
+    <script type="text/javascript" src="src/wis/util/SelectorList.js"></script>
+    <script type="text/javascript" src="src/wis/util/GlobalObject.js"></script>
+    <script type="text/javascript" src="src/wis/util/Tool.js"></script>
+
+    <script src="../lovey/js/lovey_common.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../lovey/js/plugins/input/input.js"></script>
+    <script type="text/javascript" src="../lovey/js/plugins/textarea/textarea.js"></script>
+   
+    <script type="text/javascript" src="src/wis/widget/Textarea.js"></script>
+
+    <script type="text/javascript" src="src/wis/kernel/initSystem.js"></script>
+    <script type="text/javascript">
+
+        var textarea = null;
+        function create(){
+            textarea = wis$.create('Textarea');
+            textarea.setName("test");
+            textarea.setValue("test");
+            //textarea.setWrap("off");
+            //textarea.setRows(5);
+            textarea.onClick(function(){alert(12);});
+
+            var container = jQuery('#container');
+            textarea.appendTo(container);
+
+            textarea.render();
+        }
+        function clone(){
+        	inputc = textarea.clone();
+        	var container_clone = jQuery('#container_clone');
+        	inputc.appendTo(container_clone);
+        	inputc.render();
+        }
+		function getClassName(){
+		     alert(textarea.getClassName());   
+		}
+		function getData(){
+			alert(textarea.getValue());   
+		}
+		function getId(){
+			alert(textarea.getId());   
+		}
+		function hiddenok(){
+			if(textarea.getDisabled()==true){
+				textarea.setDisabled(false);
+			}else{
+				textarea.setDisabled(true);
+			}
+			textarea.render();
+		}
+		function removeText(){
+			textarea.remove();
+		}
+
+    </script>
+</head>
+<body>
+<input type="button" value="创建对象" onclick="create();">
+<input type="button" value="克隆对象" onclick="clone();">
+<input type="button" value="查看对象类名" onclick="getClassName();">
+<input type="button" value="查看对象数据" onclick="getData();">
+<input type="button" value="查看对象id" onclick="getId();">
+<input type="button" value="移除对象" onclick="removeText();">
+<input type="button" value="隐藏\显示对象" onclick="hiddenok();">
+<input type="button" value="根据id获得对象" onclick="getObjectById();">
+
+
+<div id="container" style="position:absolute;width:400px;height:300px;top:50px;left:0px;">主操作区：</div>
+<div id="container_clone" style="position:absolute;width:400px;height:300px;top:250px;left:0px;">克隆显示区：</div>
+
+</body>
+</html>
