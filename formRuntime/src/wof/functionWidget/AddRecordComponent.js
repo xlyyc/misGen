@@ -7,7 +7,7 @@
 
 wof.functionWidget.AddRecordComponent = function () {
     this._version = '1.0';
-
+    
 };
 
 wof.functionWidget.AddRecordComponent.prototype = {
@@ -31,16 +31,24 @@ wof.functionWidget.AddRecordComponent.prototype = {
 
     //按钮文本
     _text:null,
+    
+    _do:null,
 
-    _bindComponents: null, //绑定构件ID
+    _bindComponents: null, //绑定构件ID 
+    
+    _bindComp:null, // 绑定构件对象
 
     _isAutoCommit: null,      //是否自动提交
 
     _btn: null,
+    
+    _dialog:null, // 对话框对象
 
     _paramMaps:null,
 
     _formFunctionId:null,
+    
+    _openUrl:null,
 
     _componentId:null,
 
@@ -65,6 +73,14 @@ wof.functionWidget.AddRecordComponent.prototype = {
 
     setFormFunctionId : function (formFunctionId){
         this._formFunctionId = formFunctionId;
+    },
+    
+    getOpenUrl : function (){
+        return this._openUrl;
+    },
+
+    setOpenUrl : function (openUrl){
+        this._openUrl = openUrl;
     },
 
     getParamMaps: function(){
@@ -141,20 +157,53 @@ wof.functionWidget.AddRecordComponent.prototype = {
     setIsAutoCommit : function (isAutoCommit){
         this._isAutoCommit = isAutoCommit;
     },
+    getBindComp : function (){
+        return this._bindComp;
+    },
 
+    setBindComp : function (bindComp){
+        this._bindComp = bindComp;
+    },
     getBindComponents : function (){
-        return this._bindComponents || '';
+        return this._bindComponents;
     },
 
     setBindComponents : function (bindComponents){
         this._bindComponents = bindComponents;
     },
+    /**
+     * 运行时参数
+     */
+    _dataSourceType: null,
+    _dataSource: null,// 没用到
+    _dataObject: null,
+    setDataSourceType: function (dataSourceType) {
+        this._dataSourceType = dataSourceType;
+    },
+    setDataSource: function (dataSource) {
+        this._dataSource = dataSource;
+    },
+    setDo: function (dataObject) {
+        this._dataObject = dataObject;
+    },
+    getDataSourceType: function () {
+        return this._dataSourceType;
+    },
+    getDataSource: function () {
+        if (this.getDataSourceType() == 'do') {
+            return this.getDo();
+        }
+        return null;
+    },
+    getDo: function () {
+    	return this._dataObject;
+    },
     _init: function(data){
     	if(!data){
     		return false;
     	}
-    	if(data.CallItemCaption){
-    		this.setCallItemCaption(data.CallItemCaption);
+    	if(data.callItemCaption){
+    		this.setCallItemCaption(data.callItemCaption);
     	}
     	if(data.formFunctionId){
     		this.setFormFunctionId(data.formFunctionId);
@@ -162,6 +211,12 @@ wof.functionWidget.AddRecordComponent.prototype = {
     	if(data.bindComponents){
     		this.setBindComponents(data.bindComponents);
     	}
+    	if (data.dataSourceType) {
+            this.setDataSourceType(data.dataSourceType);
+        }
+        if (data.dataObject) {
+            this.setDo(data.dataObject);
+        }
     },
     /**
      * Render 方法定义
@@ -169,35 +224,26 @@ wof.functionWidget.AddRecordComponent.prototype = {
 
     initRender: function(){
     	var that = this;
-        var button = wis$.create('Button',{value : '新增',click:function (){
-        	 //that.sendMessage('wof.functionWidget.DeleteRecordComponent_active');
-        	if(that.getBindComponents()!=null&&that.getBindComponents()!=""&&that.getBindComponents()!="null"){
-        		that.sendMessage('wof.functionWidget.AddRecordComponent_active');
-        	}else if(that.getFormFunctionId()!=null&&that.getFormFunctionId()!=""&&that.getFormFunctionId()!="null"){
-        		var dialog = wof$.create('Dialog');
-        		dialog.setUrl('http://172.16.40.79:8889/emap.form?functionId='+that.getFormFunctionId());
-        		var refreshDo = function(){
-        			that.sendMessage('wof.bizWidget.DataObject_query');// TODO 参数？
-        		}
-        		dialog.onClose(refreshDo);
-        		dialog.render();
-        	}else{
-        		alert("未配置操作！");
-        	}
-        }});
-        button.render();
-        button.appendTo(this.getDomInstance());
+        var button = wof$.create('Button');
+        button.setLabel(this.getCallItemCaption());
+        button.setIsInside(true);
+        //var clickFunc = function (){
+        	
+        // };
+        //button.onClick(clickFunc);
+        button.appendTo(this);
+        that._btn = button;
     },
 
     //选择实现
     beforeRender: function () {
-
-        //this._btn.setText(this.getCallItemCaption());
     },
 
     //----------必须实现----------
     render: function () {
-
+    	if(this.getCallItemCaption()){
+    		this._btn.setLabel(this.getCallItemCaption());
+    	}
     },
 
     //选择实现
@@ -241,20 +287,71 @@ wof.functionWidget.AddRecordComponent.prototype = {
         this.setCallItemCaption(data.callItemCaption);
         this.setCallType(data.callType);
     },
-
-   /* _insideOnReceiveMessage:{
-        'wof.widget.Button_mousedown':function(message){
-            console.log(message.id+'   '+this.getClassName());
-            this.sendMessage('wof.functionWidget.AddRecordComponent_active');
-            return false;
+    // 初始化监听消息 
+    _insideOnReceiveMessage:{
+        'wof.widget.Dialog_close':function(message){
+        	//var that = this;
+        	if (this._dialog!=null&&message.sender!=null&&
+				this._dialog.getId() == message.sender.id) {
+				if(this.getBindComponents()){
+					if(!this.getBindComp()){
+						var bindComp = this._getObjByComponentId(this.getBindComponents());
+						if(bindComp){
+							this.setBindComp(bindComp);
+						}
+					}
+					if(this.getBindComp()!=null){
+						this.getBindComp().reload('firstPage');  // 更新DO,参数指定主实体/子实体，以及子实体mainRowId
+					}
+				}
+				this._dialog.remove(true);
+				this._dialog = null; // 还原为null，下次弹出时重新赋值,
+									 //TODO 因Dialog组件执行remove之后，再次render无法渲染,否则可重用，无须执行这句话
+        	}
         },
-        'wof.widget.Button_dblclick':function(message){
-            console.log(message.id+'   '+this.getClassName());
-            this.sendMessage('wof.functionWidget.AddRecordComponent_active');
-            return false;
+        'wof.widget.Button_onclick':function(message){
+        	//var that = this;
+        	if (this._btn!=null&&message.sender!=null&&
+    				this._btn.getId() == message.sender.id) {
+        		if(this.getBindComponents()!=null&&this.getBindComponents()!=""&&this.getBindComponents()!="null"){
+            		if(this.getFormFunctionId()!=null&&this.getFormFunctionId()!=""
+            			&&this.getFormFunctionId()!="null"&&this.getOpenUrl()!=null){
+            			if(this._dialog==null){ // 目前每次都重新渲染
+            				var dialog = wof$.create('Dialog');
+            				dialog.setIsInside(true);
+            				//按钮[ { text: '确定', onclick: function (item, dialog) { alert(item.text); } ]
+            				var buttons = [];
+            				var btn_ok = { text: '全部提交', onclick: function (item, dialog) {
+            					//TODO dialog.frame.EmapDataObject.commitRecord();	
+            					dialog.close();
+            					} 
+            				};
+            				var btn_cancel = { text: '取消', onclick: function (item, dialog) {
+        							dialog.close();
+        						} 
+            				};
+            				buttons.push(btn_ok);
+            				buttons.push(btn_cancel);
+            				dialog.setButtons(buttons);
+            				this._dialog = dialog;
+            				this._dialog.appendTo(this);
+            			}
+    	        		if(this.getOpenUrl().indexOf("?")>-1){
+    	        			this._dialog.setUrl(this.getOpenUrl()+"&pagestate=Add");
+    	           		}else{
+    	           			this._dialog.setUrl(this.getOpenUrl()+"?pagestate=Add");
+    	           		}
+    	        		this._dialog.render();
+            		}else{
+            			//行编辑
+            			this.sendMessage('wof.functionWidget.AddRecordComponent_click');
+            		}
+            	}else{
+            		alert("未绑定列表！");
+            	}	
+        	}
         }
-
-    },*/
+    },
 
     updateAddRecordComponent: function(data){
         if(!jQuery.isEmptyObject(data)){
@@ -282,7 +379,25 @@ wof.functionWidget.AddRecordComponent.prototype = {
 
         }
     },
-
+    /**
+	 * 新增对话框关闭的参数
+	 */
+	_onDialogClose : function(message) {
+		
+	},
+	/**
+	 *　根据构件ＩＤ查找构件对象
+	 */
+    _getObjByComponentId: function (compId) {
+    	var objs = wof$.find('*');
+	    for(var i=0;i<objs.size();i++){
+	        var obj = objs.get(i);
+	        if(obj!=null&&obj.getComponentId()!=null&&obj.getComponentId()==compId){
+	        	return obj;
+	        }
+	    }
+	    return null;
+    }, 
     //创建初始化的button
     createSelf: function(width, height){
         var node = new wof.functionWidget.AddRecordComponent();

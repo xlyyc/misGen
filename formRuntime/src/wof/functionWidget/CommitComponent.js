@@ -201,77 +201,21 @@ wof.functionWidget.CommitComponent.prototype = {
      */
     initRender: function(){
     	var that = this;
-    	var button = wis$.create("Button",{value:"提交",
-        	click:function(){
-        			var dataType = "all";
-                	var entityParameter = [];
-                	if(that.getBindComponents()!=null){
-            		    var hasMain = false;
-            		    var comps = that.getBindComponents().split(",");// 拆分为数组
-        				for(var compi=0;compi<comps.length;compi++){
-        					var comp = comps[compi]; // 组件ID
-        					//获取绑定的组件对象
-        					var bindComp = that._getObjByComponentId(comp);
-        					// 类型为表头或列表，则为主实体
-        					if(bindComp!=null&&bindComp.getClassName()!=null && bindComp.getClassName()=="wof.bizWidget.GridComponent"){
-        						bindComp.commitRow();
-        						hasMain = true;
-        					}else if(bindComp!=null&&bindComp.getClassName()!=null&&bindComp.getClassName()=="wof.bizWidget.VoucherComponent"){
-        						hasMain = true;// 判断是否包含主实体，TODO 当前类型中默认都包含主实体？
-        					// 类型为表体，则为子实体
-        					}else if(bindComp!=null&&bindComp.getClassName()!=null&&bindComp.getClassName()=="wof.bizWidget.VoucherGridComponent"){
-        						bindComp.commitRow();
-        						var entityParam = {};
-        						var bindMainCompID = bindComp.getBindComponents(); //TODO getBindComponents()方法名待定
-        						if(bindMainCompID!=null){
-        							var mainComp = that._getObjByComponentId(bindMainCompID);
-        							if(mainComp!=null){
-        								// 读取与表体相关联的列表或者表头的当前行ID,TODO getSelected()方法名待确定
-        								var mainRowId = mainComp.getSelected()!=null?mainComp.getSelected():null;
-        								var bindEntityAlias = bindComp.getBindEntityId();//读取表体对象绑定的实体，
-        																		 	//TODO getBindEntityId()方法名待确定
-        								if(mainRowId!=null&&bindEntityAlias!=null){
-        									entityParam.childEntityAlias = bindEntityAlias;
-        									entityParam.mainRowId = mainRowId;
-        									entityParameter.push(entityParam);
-        								}
-        							}
-        						}
-        					}
-        				}	
-                		if(hasMain){
-                			if(jQuery.isEmptyObject(entityParameter)){
-                				dataType = "main";
-                			}else{  
-                				dataType = "mainAndChild";
-                			}
-                		}else if(jQuery.isEmptyObject(entityParameter)){
-                			// dataType = "child";// 目前不存在只有子实体的情形，因【当前类型中默认都包含主实体？】用以下代替
-                			dataType = "mainAndChild";
-                		}else{
-                			dataType = null;//绑定的组件在本页中不存在或未绑定实体
-                		}
-                	}
-                	if(dataType!=null){
-                		that._saveDataToDO(dataType,entityParameter);
-                	}
-                    return false;
-        		}
-        		});
-       //button.setIsInside(true);
-       //button.getName('submit');
-       // button.setLeft(0);
-       // button.setTop(0);
-       // button.setWidth(this.getWidth());
-       // button.setHeight(this.getHeight());
-        button.render();
-        button.appendTo(this.getDomInstance());
+    	var button = wof$.create("Button");
+    	button.setLabel(this.getCallItemCaption());
+    	button.setIsInside(true);
+    	//var clickFunc = function(){
+			
+		//};
+		//button.onClick(clickFunc);
+        //button.render();
+        button.appendTo(this);
         this._btn = button;
     },
 
     //选择实现
     beforeRender: function () {
-        //this._btn.setText(this.getCallItemCaption());
+        this._btn.setLabel(this.getCallItemCaption());
     },
 
     //----------必须实现----------
@@ -297,7 +241,70 @@ wof.functionWidget.CommitComponent.prototype = {
     _saveDataToDO: function (dataType,entityParameter) {
     	this.getDataSource().saveData(dataType,entityParameter);
     }, 
-    
+    // 初始化监听消息 
+    _insideOnReceiveMessage:{
+        'wof.widget.Button_onclick':function(message){
+        	var that = this;
+        	if (that._btn!=null&&message.sender!=null&&
+    				that._btn.getId() == message.sender.id) {
+        		var dataType = "all";
+            	//var entityParameter = [];
+        		var entityParam = null;// ??不保存多个子实体？
+        		if(that.getBindComponents()!=null){
+        		    var hasMain = false;
+        		    var comps = that.getBindComponents().split(",");// 拆分为数组
+    				for(var compi=0;compi<comps.length;compi++){
+    					var comp = comps[compi]; // 组件ID
+    					//获取绑定的组件对象
+    					var bindComp = that._getObjByComponentId(comp);
+    					// 类型为表头或列表，则为主实体
+    					if(bindComp!=null&&bindComp.getClassName()!=null && bindComp.getClassName()=="wof.bizWidget.GridComponent"){
+    						bindComp.commitRow();
+    						hasMain = true;
+    					}else if(bindComp!=null&&bindComp.getClassName()!=null&&bindComp.getClassName()=="wof.bizWidget.VoucherComponent"){
+    						hasMain = true;// 判断是否包含主实体，TODO 当前类型中默认都包含主实体？
+    					// 类型为表体，则为子实体
+    					}else if(bindComp!=null&&bindComp.getClassName()!=null&&bindComp.getClassName()=="wof.bizWidget.VoucherGridComponent"){
+    						bindComp.commitRow();
+    						
+    						//var bindMainCompID = bindComp.getVoucherHeadComponent(); //TODO getBindComponents()方法名待定
+    						//if(bindMainCompID!=null){
+    							//var mainComp = that._getObjByComponentId(bindMainCompID);
+    							//if(mainComp!=null){
+    								// 读取与表体相关联的列表或者表头的当前行ID,TODO getSelected()方法名待确定
+    								var mainRowId = bindComp.getCurrentMainRowId()!=null?bindComp.getCurrentMainRowId():null;
+    								var bindEntityAlias = bindComp.getBindEntityId();//读取表体对象绑定的实体，
+    																		 	//TODO getBindEntityId()方法名待确定
+    								if(mainRowId!=null&&bindEntityAlias!=null){
+    									entityParam = {};
+    									entityParam.childEntityAlias = bindEntityAlias;
+    									entityParam.mainRowId = mainRowId;
+    									//entityParameter.push(entityParam);
+    								}
+    							//}
+    						//}
+    					}
+    				}	
+            		if(hasMain){
+            			if(jQuery.isEmptyObject(entityParam)){
+            				dataType = "main";
+            			}else{  
+            				dataType = "mainAndChild";
+            			}
+            		}else if(!jQuery.isEmptyObject(entityParam)){
+            			// dataType = "child";// 目前不存在只有子实体的情形，因【当前类型中默认都包含主实体？】用以下代替
+            			dataType = "mainAndChild";
+            		}else{
+            			dataType = null;//绑定的组件在本页中不存在或未绑定实体
+            		}
+            	}
+            	if(dataType!=null){
+            		that._saveDataToDO(dataType,entityParam);
+            	}
+                return false;
+        	}
+        }
+    },
     /**
      * getData/setData 方法定义
      */

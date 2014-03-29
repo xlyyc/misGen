@@ -18,7 +18,7 @@ wis.widget.Button.prototype = {
     _onClick: null,
 
     getCid: function () {
-        return this._cid || this.getId() ;
+        return this._cid ;
     },
 
     setCid: function (cid) {
@@ -66,7 +66,7 @@ wis.widget.Button.prototype = {
      * 初始化方法
      */
     _init: function (data) {
-
+        this.setData(data);
     },
 
     /**
@@ -74,14 +74,14 @@ wis.widget.Button.prototype = {
      * 仅在第一次调用render时执行
      */
     initRender: function () {
-        this._rootObj = $('<div class="ui_toolbar" style="height:100%;"></div>');
-        this._spanObj = $('<span class="pull_left" style="width: 100%;height:100%;"></span>');
-        this._linkObj = $('<a class="ui_btn ui_btn_small" onclick="" style="width: 100%;height:100%"></a>');
-        this._iObj = $('<i></i>');
-        this._rootObj.append(this._spanObj);
-        this._spanObj.append(this._linkObj);
+       // this._rootObj = jQuery('<div class="ui_toolbar" style="height:100%;"></div>');
+       // this._spanObj = jQuery('<span class="pull_left" style="width: 100%;height:100%;"></span>');
+        this._linkObj = jQuery('<a class="ui_btn ui_btn_small" onclick="" style="width: 100%;height:100%"></a>');
+        this._iObj = jQuery('<i></i>');
+        //this._rootObj.append(this._spanObj);
+        //this._spanObj.append(this._linkObj);
         this._linkObj.append(this._iObj);
-        this.getDomInstance().append(this._rootObj);
+        this.getDomInstance().append(this._linkObj);
         this._bindEvents();
     },
 
@@ -114,12 +114,12 @@ wis.widget.Button.prototype = {
     render: function () {
         if( this.getCid() )
         {
-            this._rootObj.attr('id', this.getCid());
+            this._linkObj.attr('id', this.getCid());
         }
         
         if( this.getName() )
         {
-            this._rootObj.attr('name', this.getName());
+            this._linkObj.attr('name', this.getName());
         }
          
         if( this.getIcon() )

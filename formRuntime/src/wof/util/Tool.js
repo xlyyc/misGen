@@ -46,6 +46,10 @@
 
         appendChild : function (element,node){
               element.appendChild(node);
+        },
+
+        replaceAll: function(str, s1, s2) {
+            return str.replace(new RegExp(s1,"gm"),s2);
         }
 
 

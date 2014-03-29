@@ -40,7 +40,8 @@ var wis$_aop = (function(){
                     obj[o].prototype._domInstance = null;
                     obj[o].prototype.getDomInstance = function(){
                         if(this._domInstance==null){
-                            this._domInstance=jQuery('<div oid="'+this.getId()+'" classname="'+this.getClassName()+'">');
+                            var cls = wis.util.Tool.replaceAll(this.getClassName(),'[.]','_');
+                            this._domInstance=jQuery('<div oid="'+this.getId()+'"class="'+cls+'" classname="'+this.getClassName()+'">');
                         }
                         return this._domInstance;
                     };

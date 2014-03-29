@@ -7,7 +7,7 @@
 
 wof.functionWidget.ViewRecordComponent = function () {
     this._version = '1.0';
-
+    
 };
 
 wof.functionWidget.ViewRecordComponent.prototype = {
@@ -30,12 +30,18 @@ wof.functionWidget.ViewRecordComponent.prototype = {
     _callType: null,    //调用类型。类型包括系统内置菜单命令项、自定义菜单命令项。自定义命令项需提前在Action节点中提前定义.
 
     _btn: null,
+    
+    _dialog:null, // 对话框对象
 
     _paramMaps:null,
 
     _formFunctionId: null,
+    
+    _openUrl:null,
 
     _bindComponents: null,
+    
+    _bindComp: null,
 
     _componentId:null,
 
@@ -69,7 +75,14 @@ wof.functionWidget.ViewRecordComponent.prototype = {
     setFormFunctionId : function (formFunctionId){
         this._formFunctionId = formFunctionId;
     },
+   
+    getOpenUrl : function (){
+        return this._openUrl;
+    },
 
+    setOpenUrl : function (openUrl){
+        this._openUrl = openUrl;
+    },
     getParamMaps: function(){
         if(this._paramMaps==null){
             this._paramMaps = {};
@@ -136,26 +149,42 @@ wof.functionWidget.ViewRecordComponent.prototype = {
     setCallType : function (callType){
         this._callType = callType;
     },
+    getBindComp : function (){
+        return this._bindComp;
+    },
 
+    setBindComp : function (bindComp){
+        this._bindComp = bindComp;
+    },
+    _init: function(data){
+    	if(!data){
+    		return false;
+    	}
+    	if(data.callItemCaption){
+    		this.setCallItemCaption(data.callItemCaption);
+    	}
+    	if(data.formFunctionId){
+    		this.setFormFunctionId(data.formFunctionId);
+    	}
+    	if(data.bindComponents){
+    		this.setBindComponents(data.bindComponents);
+    	}
+    },
     /**
      * Render 方法定义
      */
    initRender: function(){
-        var button = new wof.widget.Button();
-        button.setIsInside(true);
-        button.setType('submit');
-        button.setLeft(0);
-        button.setTop(0);
-        button.setWidth(this.getWidth());
-        button.setHeight(this.getHeight());
-        button.appendTo(this);
-        this._btn = button;
+	   var button = wof$.create('Button');
+       button.setLabel(this.getCallItemCaption());
+       button.setIsInside(true);
+       button.appendTo(this);
+       this._btn = button;
     },
 
     //选择实现
     beforeRender: function () {
 
-        this._btn.setText(this.getCallItemCaption());
+        this._btn.setLabel(this.getCallItemCaption());
     },
 
     //----------必须实现----------
@@ -167,7 +196,81 @@ wof.functionWidget.ViewRecordComponent.prototype = {
     afterRender: function () {
 
     },
-
+    
+    // 初始化监听消息 
+    _insideOnReceiveMessage:{
+    	'wof.widget.Dialog_close':function(message){
+        	//var that = this;
+    		if (this._dialog!=null&&message.sender!=null&&
+    				this._dialog.getId() == message.sender.id) {
+    			this._dialog.remove(true);
+    			this._dialog = null; // 还原为null，下次弹出时重新赋值
+    		}
+        },
+    	'wof.widget.Button_onclick':function(message){
+        	//var this = this;
+        	if (this._btn!=null&&message.sender!=null&&
+    				this._btn.getId() == message.sender.id) {
+        		if(this.getBindComponents()!=null&&this.getBindComponents()!=""&&this.getBindComponents()!="null"){
+               		var bindComp = this._getObjByComponentId(this.getBindComponents());
+               		if(bindComp!=null){
+               			var selectMainId = bindComp.getCurrentRowId();// value,status 
+               			if(selectMainId!=null&&selectMainId.value!=""){
+               				if(this.getFormFunctionId()!=null&&this.getFormFunctionId()!=""
+               	        		&&this.getFormFunctionId()!="null"&&this.getOpenUrl()!=null){
+               					if(this._dialog==null){ // 目前每次都重新渲染
+               						var dialog = wof$.create('Dialog');
+                   	        		dialog.setIsInside(true);
+                   	        		dialog.appendTo(this);
+                   	        		//按钮[ { text: '确定', onclick: function (item, dialog) { alert(item.text); } ]
+                    				var buttons = [];
+                    				var btn_ok = { text: '全部提交', onclick: function (item, dialog) {
+                    					//TODO dialog.frame.EmapDataObject.commitRecord();	
+                    					dialog.close();
+                    					} 
+                    				};
+                    				var btn_cancel = { text: '取消', onclick: function (item, dialog) {
+                							dialog.close();
+                						} 
+                    				};
+                    				buttons.push(btn_ok);
+                    				buttons.push(btn_cancel);
+                    				dialog.setButtons(buttons);
+                   	        		this._dialog = dialog;
+               					}
+               	        		if(this.getOpenUrl().indexOf("?")>-1){
+               	        			this._dialog.setUrl(this.getOpenUrl()+"&pagestate=View&dataId="+selectMainId.value);
+               	           		}else{
+               	           			this._dialog.setUrl(this.getOpenUrl()+"?pagestate=View&dataId="+selectMainId.value);
+               	           		}
+               	        		this._dialog.render();
+               	        		
+                       		}else{
+                       			//查看不需要发送消息
+                       			//this.sendMessage('wof.functionWidget.UpdateRecordComponent_active');
+                       		}	
+               			}else{
+               				alert("未选择数据！");
+               			}
+               		}else{
+               			alert("未绑定列表！");
+               		}
+               	}else{
+               		alert("未配置操作！");
+               	}
+        	}
+        }
+    },
+    _getObjByComponentId: function (compId) {
+    	var objs = wof$.find('*');
+	    for(var i=0;i<objs.size();i++){
+	        var obj = objs.get(i);
+	        if(obj!=null&&obj.getComponentId()!=null&&obj.getComponentId()==compId){
+	        	return obj;
+	        }
+	    }
+	    return null;
+    }, 
     /**
      * getData/setData 方法定义
      */
@@ -203,20 +306,6 @@ wof.functionWidget.ViewRecordComponent.prototype = {
         this.setCallType(data.callType);
     },
 
-    _insideOnReceiveMessage:{
-        'wof.widget.Button_mousedown':function(message){
-            console.log(message.id+'   '+this.getClassName());
-            this.sendMessage('wof.functionWidget.ViewRecordComponent_active');
-            return false;
-        },
-        'wof.widget.Button_dblclick':function(message){
-            console.log(message.id+'   '+this.getClassName());
-            this.sendMessage('wof.functionWidget.ViewRecordComponent_active');
-            return false;
-        }
-
-    },
-
     updateViewRecordComponent: function(data){
         if(!jQuery.isEmptyObject(data)){
             if(data.bindComponents!=null){
@@ -243,7 +332,16 @@ wof.functionWidget.ViewRecordComponent.prototype = {
 
         }
     },
-
+    /**
+	 * 查看 对话框关闭的参数
+	 */
+	_onDialogClose : function(message) {
+		var that = this;
+		if (that._dialog!=null&&that._dialog == message.sender) {
+			that.sendMessage('wof.bizWidget.DataObject_query');// TODO 参数
+			that._dialog = null; // 还原为null，下次弹出时重新赋值
+		}
+	},
     //创建初始化的button
     createSelf: function(width, height){
         var node = new wof.functionWidget.ViewRecordComponent();

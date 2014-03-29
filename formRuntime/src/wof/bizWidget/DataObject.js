@@ -209,24 +209,21 @@ wof.bizWidget.DataObject.prototype = {
     afterRender: function () {
         //this.queryData('main', null, null, 0, 100);
 
-       // this.queryData('child', {'childEntityAlias':'hjxxchild', 'mainRowId':'1'}, null, 0, 100);
+        //this.queryData('child', {'childEntityAlias':'hjxxchild', 'mainRowId':'1'}, null, 0, 100);
 
+        //this.updateData([{"zglbref.lbbz":"外聘员工111","zgid":"362646149296820224"}]);
 
-        /*
+        //this.deleteData([{"zgid":"362646149296820224"}]);
 
-         this.updateData([{"zglbref.lbbz":"外聘员工111","zgid":"362646149296820224"}]);
+        //console.log('已经删除的数据====='+JSON.stringify(this.getLocalDeleteData()));
 
-        this.deleteData([{"zgid":"362646149296820224"}]);
+        //this.addData([{"zglbref.lbbz":"好员工222"}]);
+/*
+        this.addData([{"hjmc":"好员工333"}], {'childEntityAlias':'hjxxchild', 'mainRowId':'1'});
 
-        console.log('已经删除的数据====='+JSON.stringify(this.getLocalDeleteData()));
+        //this.undeleteData();
 
-        this.addData([{"zglbref.lbbz":"好员工222","zgid":wof.util.Tool.uuid()}]);
-
-        this.addData([{"hjmc":"好员工333","jxjlid":wof.util.Tool.uuid()}], {'childEntityAlias':'hjxxchild', 'mainRowId':'372873910208696320'});
-
-        this.undeleteData();
-
-        this.saveData();*/
+        this.saveData('mainAndChild',{'childEntityAlias':'hjxxchild', 'mainRowId':'1'} );*/
     },
 
     /**
@@ -272,10 +269,15 @@ wof.bizWidget.DataObject.prototype = {
                             'status':'New'
                         };
                     for(var n in record){
-                        newData['data'][n] = {'value':record[n],'status':'NotModified'};
+                        if(n==idPro){
+                            newData['data'][n] = {'value':record[n],'status':'NotModified'};
+                        }else{
+                            newData['data'][n] = {'value':record[n],'status':'DataModified'};
+                        }
                     }
                     primary.push(newData);
                 }
+                console.log('增加数据后主缓冲区:'+JSON.stringify(primary));
                 this.sendMessage('wof.bizWidget.DataObject_add',[alias]);
             }else{
                 console.log('主缓冲区不存在对应实体:'+id);
@@ -445,7 +447,7 @@ wof.bizWidget.DataObject.prototype = {
         queryData['pageId'] = this._pageId;
         queryData['offset'] = offset;
         queryData['rowsCount'] = rowsCount;
-        queryData['queryParam'] = queryParam;
+        queryData['queryParam'] = queryParam?JSON.stringify(queryParam):'';
         if(queryType==null){
             queryType = 'all';
         }
@@ -490,7 +492,8 @@ wof.bizWidget.DataObject.prototype = {
                 if(queryType=='child'){
                     this.setDataServicesUrl('child.json');
                 }else if(queryType=='main'){
-                    this.setDataServicesUrl('main.json');
+                   // this.setDataServicesUrl('../component/doCmd/query?pageId=350058851451944960');
+                   this.setDataServicesUrl('main.json');
                 }else{
                     this.setDataServicesUrl('data.json');
                 }
@@ -683,6 +686,7 @@ wof.bizWidget.DataObject.prototype = {
         //根据id组织数据
         function _getEnt(id){
             var idPro = _this._originalBuffer[id]['idPro'];
+
             var entity = {"primaryBuffer":[],"deleteBuffer":[]};
             var primary = _this._primaryBuffer[id];
             if(primary!=null){
@@ -757,7 +761,7 @@ wof.bizWidget.DataObject.prototype = {
         }else if(saveType=='mainAndChild'){
             data[this._mainEntityAlias] = _getEnt(this._mainEntityAlias);
             _findMainRowAndSetData(data[this._mainEntityAlias], mainRowId, childEntityAlias);
-            childAlias.push(childEntityAlias);
+            aliasArr.push(childEntityAlias);
             console.log('保存主实体和指定行下对应子实体数据');
         }else if(saveType=='main'){
             data[this._mainEntityAlias] = _getEnt(this._mainEntityAlias);
@@ -769,7 +773,7 @@ wof.bizWidget.DataObject.prototype = {
                 url:_this.getDataServicesUrl()+'/saveOrUpdate',
                 async:_this.getAsyncSave(),
 				data : {data:JSON.stringify(data),pageId : this._pageId},
-				type:'post',
+				type:'post'
 				
             }
         );
@@ -880,6 +884,7 @@ wof.bizWidget.DataObject.prototype = {
             var pageId = this._pageId;
             var rsp = jQuery.ajax(
                 {
+                	//url:'component/doCmd/bizMetaByPageId?pageId='+this._pageId,
                     url:'entityScheme.json',
                     async:_this.getAsyncQuery()
                 }
@@ -896,7 +901,7 @@ wof.bizWidget.DataObject.prototype = {
      * 形如 {'childEntityAlias':'hjxxchild', 'mainRowId':'uuid1'}
      */
     _getBufferId: function(entityParameter){
-        if(jQuery.isEmptyObject(entityParameter)){
+        if(jQuery.isEmptyObject(entityParameter)|| typeof(entityParameter)=='string'){
             entityParameter = {};
         }
         var childEntityAlias = entityParameter['childEntityAlias'];

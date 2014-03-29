@@ -7,6 +7,13 @@
 <link href="lib/jquery.ui.multiselect/css/jquery.multiselect.css" rel="stylesheet">
 <link href="lib/jquery.ui.multiselect/css/jquery.multiselect.filter.css" rel="stylesheet">
 <link href="lib/jquery.ztree/css/zTreeStyle/zTreeStyle.css" rel="stylesheet">
+
+<link href="lib/lovey/style/css/lovey.css" rel="stylesheet" type="text/css"/>
+<link href="lib/lovey/style/css/ui_toolbar.css" rel="stylesheet" type="text/css"/>
+<link href="lib/lovey/style/css/ui_btn.css" rel="stylesheet" type="text/css"/>
+<link href="lib/lovey/style/css/ui_icon.css" rel="stylesheet" type="text/css"/>
+
+
 <style type="text/css">
 <!--
 	* {
@@ -114,6 +121,7 @@ jQuery(function(){
 
         //创建数据对象
         var dataObjectInstance = wof$.create('DataObject', {'pageId':'pageId1'});
+
         //查询数据
         //dataObjectInstance.queryData('main', null, null, 0, 100);
         //修改数据
@@ -134,7 +142,7 @@ jQuery(function(){
         flowLayout.setTop(0);
         flowLayout.setWidth(windowWidth-10);
         flowLayout.setCols(4);
-        flowLayout.setItemHeight(300);
+        flowLayout.setItemHeight(500);
 
         flowLayout.insertSection({title:'默认分组1',titleHeight:30,cols:2});
 
@@ -147,8 +155,8 @@ jQuery(function(){
         flowLayout2.setTop(0);
         flowLayout2.setWidth(400);
         flowLayout2.setCols(2);
-        flowLayout2.setItemHeight(60);
-        flowLayout2.insertSection({title:'嵌套流式',titleHeight:30,cols:2,itemHeight:200});
+        flowLayout2.setItemHeight(400);
+        flowLayout2.insertSection({title:'嵌套流式',titleHeight:30,cols:2,itemHeight:300});
 
         flowLayout.insertNode(flowLayout2,{row:1,col:2},1);
 
@@ -321,9 +329,9 @@ jQuery(function(){
         var searchComponentData = {
             left:0,
             top:0,
-            width:500,
+            width:200,
             colsNum:2,
-            itemHeight:300
+            itemHeight:100
         };
         var searchComponent = wof$.create('SearchComponent',searchComponentData);
 

@@ -113,7 +113,7 @@ wis.widget.Grid.prototype = {
 	},
 
 	getTotal : function() {
-		return this._total;
+		return this._total || 0;
 	},
 
 	setTotal : function(total) {
@@ -220,6 +220,9 @@ wis.widget.Grid.prototype = {
 	 * 初始化方法
 	 */
 	_init : function(data) {
+		if(data.name){
+			this.setTitle(data.name);
+		}
 		if (data.checkbox) {
 			this.setCheckbox(data.checkbox);
 		}
@@ -243,18 +246,18 @@ wis.widget.Grid.prototype = {
 		}
 		if (data.onToPrev) {
 			this.onToPrev = data.onToPrev;
-
 		}
 		if (data.onToFirst) {
 			this.onToFirst = data.onToFirst;
 		}
 		if (data.onToLast) {
 			this.onToLast = data.onToLast;
-
+		}
+		if(data.onReload){
+			this.onReload = data.onReload;
 		}
 		if (data.refData) {
 			this.setRefData(data.refData);
-
 		}
 		if(data.onSelectRow){
 			this.onSelectRow = data.onSelectRow;
@@ -355,10 +358,8 @@ wis.widget.Grid.prototype = {
 				formateData.push(obj);
 			}
 		}
-
-		this._grid = $('<div></div>');
+		this._grid = $('<div>').attr('id',wof.util.Tool.uuid());
 		var that = this;
-		//$("body").append(this._grid);
 		this.getDomInstance().append(this._grid);
 		this.grid = this._grid.ligerGrid({
 			title : this.getTitle(),
@@ -392,6 +393,9 @@ wis.widget.Grid.prototype = {
 			},
 			onSelectRow : function (data,index){
 				that.onSelectRow(data,index)
+			},
+			onReload : function (){
+				that.onReload();
 			}
 		});
 

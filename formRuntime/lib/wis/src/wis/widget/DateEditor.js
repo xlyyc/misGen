@@ -80,8 +80,7 @@ wis.widget.DateEditor.prototype = {
      * 初始化方法
      */
     _init: function (data) {
-        // to do ...
-        
+        this.setData(data);
     },
 
     /**

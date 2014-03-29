@@ -20,13 +20,14 @@ wis.widget.Select.prototype = {
     /**
      * 数据格式
      * [
-                { id: 1, text: "金智科技"},
-                { id: 2, text: "金智教育"},
-                { id: 3, text: "金智投资"},
-                { id: 4, text: "金智智能"}
+                { value: 1, text: "金智科技"},
+                { value: 2, text: "金智教育"},
+                { value: 3, text: "金智投资"},
+                { value: 4, text: "金智智能"}
             ]
      */
-    _selectData : false,
+    _selectData : null,
+    _gridColumn : null,
     
     
     getSelectData:function (){
@@ -75,6 +76,13 @@ wis.widget.Select.prototype = {
         this._initValue = initValue;
     },
 
+    getGridColumn: function () {
+        return this._gridColumn;
+    },
+    setGridColumn: function (gridColumn) {
+        this._gridColumn = gridColumn || [];
+    },
+
     getIsAsync: function () {
         return this._isAsync;
     },
@@ -97,15 +105,26 @@ wis.widget.Select.prototype = {
         this._select.attr('name',this.getSelectName());
 
         this.getDomInstance().append(this._select);
-        var ligerComboBox = this._select.ligerComboBox({
-            textField: "text",
-            valueField: "id",
+
+        var options = {
             data: this.getSelectData(),
             isMultiSelect: this.getIsMultSelect(),
             isNotShowClear: true,
             onBeforeSelect:this._onBeforeSelect,
             onSelected:this._onSelected
-        });
+        };
+
+        if (this.getGridColumn() && this.getGridColumn().length > 0) {
+            // 下拉表格
+            options.textField = 'name';
+            options.columns = this.getGridColumn();
+        } else {
+            // 普通下拉框
+            options.textField = "text";
+            options.valueField = "value";
+        }
+
+        var ligerComboBox = this._select.ligerComboBox(options);
     },
 
     // 渲染前处理方法
@@ -121,8 +140,12 @@ wis.widget.Select.prototype = {
 
     // 渲染后处理方法
     afterRender: function () {
-
-
+        // 替换掉ligerui的表格
+        // if (this.getGridColumn() && this.getGridColumn().length > 0) {
+        //     console.log(this.getGridColumn());
+        //     console.log(this.getSelectData());
+        //     jQuery('table', this.getDomInstance()).remove();
+        // };
     },
 
     // ----------必须实现----------

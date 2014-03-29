@@ -29,6 +29,8 @@ wis.widget.Dialog.prototype = {
     _onClose:null,
     _onRestore:null,
 
+    _scroll:true,
+
     _onClickTypeButton:null,
 
     getCid: function () {
@@ -70,6 +72,13 @@ wis.widget.Dialog.prototype = {
     setCanMax: function (canMax) {
         this._canMax = canMax;
     },
+
+    getScroll: function () {
+        return this._scroll;
+    }, 
+    setScroll: function (s) {
+        this._scroll = s;
+    }, 
 
     getCanDrag: function () {
         return ( this._canDrag == null ) ? false : this._canDrag;
@@ -230,30 +239,48 @@ wis.widget.Dialog.prototype = {
                 buttons: this.getButtons(),
                 allowToMax: true,
                 isDrag: true,
+                scroll: this.getScroll(),
                 content: "",
                 modal: true
             });
-
-            var that = this;
-            this._dialog.bind("dialogMax",function(param){
-                that.setTop(param.top);
-                that.setLeft(param.left);
-                that.setWidth(param.width);
-                that.setHeight(param.height);
-                that._onMax && that._onMax(that);
-            });
-
-            this._dialog.bind("dialogRestore",function(param){
-                that.setTop(param.top);
-                that.setLeft(param.left);
-                that.setWidth(param.width);
-                that.setHeight(param.height);
-                that._onRestore && that._onRestore(that);
-            });
-            this._dialog.bind("dialogClose",function(){
-                that._onClose && that._onClose(that);
-            });
         }
+      
+        var that = this;
+        this._dialog.bind("dialogMax",function(param){
+            that.setTop(param.top);
+            that.setLeft(param.left);
+            that.setWidth(param.width);
+            that.setHeight(param.height);
+            that._onMax && that._onMax(that);
+        });
+
+        this._dialog.bind("dialogRestore",function(param){
+            that.setTop(param.top);
+            that.setLeft(param.left);
+            that.setWidth(param.width);
+            that.setHeight(param.height);
+            that._onRestore && that._onRestore(that);
+        });
+        this._dialog.bind("dialogClose",function(){
+            that._dialog = null;
+            that.remove();
+            that._onClose && that._onClose(that);
+        });
+        this._dialog.bind("dialogIFrameLoad", function (ev, frmwin) {
+            try {
+                var w = jQuery(frmwin.document).width();
+                var h = jQuery(frmwin.document).height();
+                that.setWidth(w);
+                that.setHeight(h);
+                that._reDrawDialog();
+                // console.log(w + ' x ' + h);
+            } catch (e) {
+                console.warn(e.message);
+            }
+        });
+
+        //for themes
+        this._dialog.addClass(this.getClassName().replace(/\./g,"_"));
     },
 
     //渲染前处理方法
@@ -263,24 +290,7 @@ wis.widget.Dialog.prototype = {
 
     //渲染方法
     render: function () {
-        if( this._dialog && !this.getType() )
-        {
-            //position
-            this._dialog.css({
-                top: this.getTop() || this._dialog.position().top,
-                left: this.getLeft() || this._dialog.position().left
-            });
-
-             // width and  height
-            this._dialog._setWidth( this.getWidth() );
-            this._dialog._setHeight( this.getHeight() );   
-            //
-            this._dialog.titleTarget.html( this.getTitle() );
-            this._dialog._setMask( this.getModal() );
-            this._dialog._setIsDrag( this.getCanDrag());
-            this._dialog._setMaxSupport( this.getCanMax() ) ;
-        }
-        
+        this._reDrawDialog();
         if (this._dialog) {
             this._dialog._setOption({
                 url: this.getUrl(),
@@ -294,8 +304,27 @@ wis.widget.Dialog.prototype = {
             this._dialog.setContent();
             this.setRefreshFlag(false);
         }
-        
     },
+
+    _reDrawDialog: function() {
+        if (this._dialog && !this.getType()) {
+          //position
+            this._dialog.css({
+                top: this.getTop() || this._dialog.position().top,
+                left: this.getLeft() || this._dialog.position().left
+            });
+
+             // width and  height
+            this._dialog._setWidth( this.getWidth() );
+            this._dialog._setHeight( this.getHeight() );   
+            //
+            this._dialog.titleTarget.html( this.getTitle() );
+            this._dialog._setMask( this.getModal() );
+            this._dialog._setIsDrag( this.getCanDrag());
+            this._dialog._setMaxSupport( this.getCanMax() ) ;
+        };
+    },
+
 
     //渲染后处理方法
     afterRender: function () {

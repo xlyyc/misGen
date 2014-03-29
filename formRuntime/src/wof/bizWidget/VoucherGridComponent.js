@@ -25,21 +25,21 @@ wof.bizWidget.VoucherGridComponent = function () {
 		priority : 50,
 		method : 'this._onSaveDataCompleted(message);'
 	}, {
-		id : 'wof.functionWidget.DeleteRecordComponent_active',
+		id : 'wof.functionWidget.DeleteRecordComponent_click',
 		priority : 50,
-		method : 'this._onDeleteRecordComponent_active(message)'
+		method : 'this._onDeleteRecordComponent_click(message)'
 	}, {
-		id : 'wof.functionWidget.AddRecordComponent_active',
+		id : 'wof.functionWidget.AddRecordComponent_click',
 		priority : 50,
-		method : 'this._onAddRecordComponent_active(message)'
+		method : 'this._onAddRecordComponent_click(message)'
 	}, {
-		id : 'wof.functionWidget.UpdateRecordComponent_active',
+		id : 'wof.functionWidget.UpdateRecordComponent_click',
 		priority : 50,
-		method : 'this._onUpdateRecordComponent_active(message)'
+		method : 'this._onUpdateRecordComponent_click(message)'
 	}, {
-		id : 'wof.functionWidget.CommitComponent_active',
+		id : 'wof.functionWidget.CommitComponent_click',
 		priority : 50,
-		method : 'this._onCommitRecordComponent_active(message)'
+		method : 'this._onCommitRecordComponent_click(message)'
 	},
 	{
 		id : 'wof.bizWidget.GridComponent_rowSelect',
@@ -338,23 +338,30 @@ wof.bizWidget.VoucherGridComponent.prototype = {
     _cachePageNo: null,
     _gridData: null,
     _currentRow:null,
+    _currentRowId:null,
     _grid:null,
-
-    getCurrentRow: function () {
-    	//TODO 临时实现，等lovey提供 onselected  事件
-    	try{
-    		return this.getGridData()[0];
-    	}catch(e){
-    		
-    	}
-    	return null;
-    	
-        //return this._currentRow;
-    },
-    setCurrentRow: function (currentRow) {
-        this._currentRow = currentRow;
-    },
-    
+    getCurrentRowId:function (){
+		return this._currentRowId;
+	},
+	setCurrentRow : function(currentRow) {
+		this._currentRow = currentRow;
+	},
+    reload:function (mode){
+		if(!mode){
+			mode = 'currentPage';
+		}
+		switch(mode){
+		   case 'currentPage':
+			   this.gotoPage(this.getPageNo(true));   
+			   break;
+		   case 'firstPage':
+			   this.gotoPage(1,true);
+			   break;
+		   case 'lastPage':
+			   this.gotoPage(this.getTotalPage(),true);
+			   break;
+		}
+	},
     getPageId: function () {
         return this._pageId;
     },
@@ -392,7 +399,15 @@ wof.bizWidget.VoucherGridComponent.prototype = {
         this._gridData = gridData;
     },
     getSelectedRows: function () {
-        return [{zgid : '1'}];
+    	var rows = this.grid.getSelectedRows();
+		var gridData = this.getGridData();
+		var selectedRows = [];
+		for (var i = 0; i < rows.length; i++) {
+			var row = rows[i];
+			var data = gridData[row].data;
+			selectedRows.push(data);
+		}
+		return selectedRows;
     },
     /**
      * 初始化
@@ -406,7 +421,7 @@ wof.bizWidget.VoucherGridComponent.prototype = {
         this.setColumns([]);
         this.setMode('view');
         this.setNumberDisplay(true);
-        this.setGridSchema(data);
+        this.updateVoucherGridComponent(data);
         this.setRefData(this.getDataSource().getRefData());
     },
     beforeRender: function () {
@@ -415,7 +430,6 @@ wof.bizWidget.VoucherGridComponent.prototype = {
     },
     initRender:function (){
     	var that = this;
-	
     	var objs = wof$.find('*');
  	    for(var i=0;i<objs.size();i++){
  	        var obj = objs.get(i);
@@ -424,18 +438,10 @@ wof.bizWidget.VoucherGridComponent.prototype = {
  	        	break;
  	        }
  	    }
- 	    
  		this.setRefData(this.getRefData());
 		this.gotoPage(this.getPageNo());
-		
-//	    this.gotoPage(this.getPageNo());
-//    	this.grid = wis$.create('Grid',{
-//    		  width: this.getWidth(),
-//              height: this.getHeight()
-//    	});
     },
     render: function () {
-    	
     	if (!this.grid) {
 			var that = this;
 			this.grid = wis$.create('Grid', {
@@ -467,64 +473,31 @@ wof.bizWidget.VoucherGridComponent.prototype = {
 				},
 				onToFirst : function() {
 					that.gotoPage(1);
+				},
+				onSelectRow : function (data,index){
+					var gridData = that._getDataByIndex(index);
+					var idPro = that._getIdPro();
+					that._currentRowId = gridData[idPro];
+					that.sendMessage('wof.bizWidget.GridComponent_rowSelect',{componentId : that.getComponentId(),data:gridData,index:index,id : gridData[that._getIdPro()].value});
+				},
+				onReload : function (){
+					that.gotoPage(that.getPageNo(),true);
 				}
 			});
 		}
-
+    	
+    	
 		var grid = this.grid;
-		grid.setTitle("表格示范");
+		grid.setTitle(this.getName());
 		grid.setWidth(800);
 		grid.setHeight(600);
 		grid.setCheckbox(true);
 		grid.setPage(this.getPageNo());
 		grid.setPageSize(this.getPageSize());
 		grid.setGridData(this.getGridData());
+		grid.setTotal(this.getPageBar().total);
 		grid.render();
 		this.getDomInstance().append(grid.getDomInstance());
-//        var vo = {
-//            grid: {
-//                width: this.getWidth(),
-//                height: this.getHeight(),
-//                top: this.getTop(),
-//                left: this.getLeft(),
-//                isHide: this.getHiden(),
-//                name: this.getName(),
-//                bindEntityId: this.getBindEntityId(),
-//                headerHeight: this.getHeaderHeight(),
-//                rowHeight: this.getRowHeight(),
-//                numberDisplay: this.getNumberDisplay(),
-//                useMutiplePage: this.getUseMutiplePage(),
-//                columns: this.getGridColumnsData(),
-//                pageBar: this.getPageBar(),
-//                data: this.getGridData(),
-//                refData: this.setRefData()
-//            }
-//        };
-//        var grid = this.grid;
-//        grid.setTitle("表格示范");
-//        grid.setWidth(800);
-//        grid.setHeight(600);
-//        grid.setCheckbox(true);
-//        grid.onCheckRow(function(){
-//            alert("AA");
-//        });
-//        grid.render();
-//        grid.appendTo(this.getDomInstance());
-//
-//        if (this._grid == null) {
-//            this._grid = new wof.widget.Grid();
-//            if (this.getMode() == 'view') {
-//                // grid.setData(vo);
-//                // grid.render();
-//                console.log(vo);
-//            } else {
-//                // todo edit 没实现
-//            }
-//        } else {
-//            // grid.setData(vo);
-//            // grid.render();
-//            console.log(vo);
-//        }
     },
     nextPage: function () {
         var pageNo = this.getPageNo();
@@ -550,15 +523,13 @@ wof.bizWidget.VoucherGridComponent.prototype = {
      *
      */
     gotoPage: function (pageNo, forceFlush) {
-    	if (pageNo <= 0 || pageNo > this.getTotalPage()) {
-			alert(pageNo + '页号不存在'); // todo 调用widget下的对话框
-			return;
+    	if(pageNo != 1){
+			if (pageNo <= 0 || pageNo > this.getTotalPage()) {
+				alert(pageNo + '页号不存在'); // todo 调用widget下的对话框
+				return;
+			}
 		}
-    	var currentRow = this._currentMainRowId || this._bindComponent.getCurrentMainRowData();
-        if(!currentRow){
-        	console.log("currentRow is null.");
-        	return;
-        }
+    	var currentRow = this.getCurrentMainRowId();
         this.setPageNo(pageNo);
         // 表明pageNo不在缓存中需要发起新的查询或者强制加载数据
         if(true == forceFlush || null == this._getPageDataInCache(pageNo)) {
@@ -571,8 +542,8 @@ wof.bizWidget.VoucherGridComponent.prototype = {
         }
 		this.render();
     },
-    _getCurrentRowId : function (){
-    	var currentRow = this._currentMainRowId || this._bindComponent.getCurrentMainRowData();
+    getCurrentMainRowId : function (){
+    	var currentRow = this._currentMainRowId || this._bindComponent.getCurrentRowId();
         if(!currentRow){
         	console.log("currentRow is null.");
         	return;
@@ -584,11 +555,11 @@ wof.bizWidget.VoucherGridComponent.prototype = {
         if (this._isPageDataInCache(pageNo) == -1) {
             return null;
         }
-     	var currentRow = this._getCurrentRowId();
+     	var currentMainRowId = this.getCurrentMainRowId();
         var data = [];
 		var cachePageNo = this.getCachePageNo();
 		var offset = (cachePageNo[0] == pageNo) ? 0 : this.getPageSize();
-		var cacheData = this.getDataSource().getLocalData({'childEntityAlias': this.getBindEntityId(), 'mainRowId': currentRow});
+		var cacheData = this.getDataSource().getLocalData({'childEntityAlias': this.getBindEntityId(), 'mainRowId': currentMainRowId});
 		if(cacheData){
 			var rows = cacheData.rows;
 			// end为指定页数据的结束下标位置(下标从0开始)
@@ -607,27 +578,65 @@ wof.bizWidget.VoucherGridComponent.prototype = {
         }
         return null;
     },
-    _onDeleteRecordComponent_active: function (message) {
-        var bindComponentId = message.sender.bindComponents;
-        if (bindComponentId == this.getComponentId()) {
-            console.log('删除按钮点击。。');
-            var selectedRows = this.getSelectedRows();
-            this.deleteRow(selectedRows);
-        }
-    },
+    
+    
+    _onAddRecordComponent_click : function(message) {
+		var bindComponentId = message.sender.bindComponents;
+		if (bindComponentId == this.getComponentId()) {
+		   this.addRow();
+		}
+	},
+	_onDeleteRecordComponent_click : function(message) {
+		var bindComponentId = message.sender.bindComponents;
+		if (bindComponentId == this.getComponentId()) {
+			var selectedRows = this.getSelectedRows();
+			if (!selectedRows || selectedRows.length == 0) {
+				alert('请选择!');
+				return;
+			}
+			this.deleteRow(selectedRows);
+		}
+	},
+	_onUpdateRecordComponent_click : function(message) {
+		var bindComponentId = message.sender.bindComponents;
+		if (bindComponentId == this.getComponentId()) {
+			var selectedRows = this.getSelectedRows();
+			if (!selectedRows || selectedRows.length == 0) {
+				alert('请选择!');
+				return;
+			}
+			if (selectedRows.length > 1) {
+				alert('请选择一条记录修改!')
+				return;
+			}
+			this.grid.updateRow();
+		}
+	},
+	_onCommitRecordComponent_click : function(message) {
+		var bindComponentId = message.sender.bindComponents;
+		if (bindComponentId == this.getComponentId()) {
+		   this.commitRow();
+		}
+	},
     /**
      *"JZGJBXXB.361974512142520320.jtcychild"
      * 查询完成后 将触发此函数
      */
     _onQueryDataCompleted: function (message) {
         if (this._isDataChange(message)) {
-            this.setCachePageNo([ this.getPageNo(), this.getPageNo() + 1 ]);
-            var dataSource = this.getDataSource();
-            var total = dataSource.getLocalOriginalData().totalCount;
-            var pageBar = this.getPageBar();
-            pageBar.total = parseInt(total);
-            this.setPageBar(pageBar);
-            this.setGridData(this._getPageDataInCache(this.getPageNo()));
+   		    this.setCachePageNo([ this.getPageNo(), this.getPageNo() + 1 ]);
+        	var data = this._getPageDataInCache(this.getPageNo());
+        	if(data && data.length){
+                 var dataSource = this.getDataSource();
+                 var total = dataSource.getLocalOriginalData({'childEntityAlias': this.getBindEntityId(), 'mainRowId': this.getCurrentMainRowId()}).totalCount;
+                 var pageBar = this.getPageBar();
+                 pageBar.total = parseInt(total);
+                 this.setPageBar(pageBar);
+        	}else{
+        		 var pageBar = this.getPageBar();
+                 pageBar.total = 0;
+        	}
+            this.setGridData(data);
         }
     },
     _onAddDataCompleted: function (message) {
@@ -657,54 +666,12 @@ wof.bizWidget.VoucherGridComponent.prototype = {
         }
     },
     
-
-	commitRow : function() {
-		
-		var map = new wof.util.Hashtable();
-        var columns = this.getColumns();
-        for(var i = 0; i < columns.length;i++){
-        	var column = columns[i];
-        	if(column.bindDataField){
-        		map.add(column.bindDataField,column);
-        	}
-        }
-        
-		var currentData = this.grid.getCurrentData();
+    _getIdPro : function (){
+		return this.getDataSource().getLocalOriginalData({'childEntityAlias': this.getBindEntityId(), 'mainRowId': this.getCurrentMainRowId()}).idPro;
+	},
+	_getDataByIndex:function (index){
 		var gridData = this.getGridData();
-		var updateData = [];
-		for (var i = 0; i < currentData.length; i++) {
-			var data = currentData[i];
-			if (i < gridData.length) {
-				var originalData = gridData[i].data;
-				for ( var d in data) {
-					var value = data[d];
-					var column = map.items(d);
-	        		var message = this.validate(value,column);
-	        		if(true != message){
-	        			alert(message);
-	        			return;
-	        		}
-					originalData[d] = value;
-				}
-				updateData.push(originalData);
-			}
-		}
-		
-		var addData = this.grid.getCurrentAddData();
-        for(var i = 0; i < addData.length;i++){
-        	var row = addData[i]
-        	for(var prop in row){
-        		var column = map.items(prop);
-        		var message = this.validate(row[prop],column);
-        		if(true != message){
-        			alert(message);
-        			return;
-        		}
-        	}
-        }
-		this.getDataSource().addData(addData);
-		this.getDataSource().updateData(updateData);
-		//this.getDataSource().saveData();
+		return gridData[index].data;
 	},
 	
     _isDataChange: function (message) {
@@ -876,21 +843,92 @@ wof.bizWidget.VoucherGridComponent.prototype = {
     getDataObject: function () {
         return this._dataObject;
     },
-    addRow: function (data) {
-        this.getDataSource().addData(data);
-    },
-    deleteRow: function (data) {
-        this.getDataSource().deleteData(data);
-    },
-    updateRow: function (data) {
-        this.getDataSource().updateData(data);
-    },
-    undeleteData: function () {
-        this.getDataSource().undeleteData();
-    },
-    saveData: function () {
-        this.getDataSource().saveData();
-    },
+	addRow : function(data) {
+		// this.getDataSource().addData(data);
+		this.grid.addRow(data,{'childEntityAlias': this.getBindEntityId(), 'mainRowId': this.getCurrentMainRowId()});
+	},
+	deleteRow : function(data) {
+		this.getDataSource().deleteData(data,{'childEntityAlias': this.getBindEntityId(), 'mainRowId': this.getCurrentMainRowId()});
+	},
+	updateRow : function(data) {
+		this.getDataSource().updateData(data,{'childEntityAlias': this.getBindEntityId(), 'mainRowId': this.getCurrentMainRowId()});
+	},
+	commitRow : function() {
+		
+		var map = new wof.util.Hashtable();
+        var columns = this.getColumns();
+        for(var i = 0; i < columns.length;i++){
+        	var column = columns[i];
+        	if(column.bindDataField){
+        		map.add(column.bindDataField,column);
+        	}
+        }
+        
+		var currentData = this.grid.getCurrentData();
+		var gridData = this.getGridData();
+		var updateData = [];
+		for (var i = 0; i < currentData.length; i++) {
+			var data = currentData[i];
+			if (i < gridData.length) {
+				var originalData = gridData[i].data;
+				for ( var d in data) {
+					var value = data[d];
+					var column = map.items(d);
+	        		var message = this.validate(value,column);
+	        		if(true != message){
+	        			alert(message);
+	        			return;
+	        		}
+					originalData[d] = value;
+				}
+				updateData.push(originalData);
+			}
+		}
+		
+		var addData = this.grid.getCurrentAddData();
+        for(var i = 0; i < addData.length;i++){
+        	var row = addData[i]
+        	for(var prop in row){
+        		var column = map.items(prop);
+        		var message = this.validate(row[prop],column);
+        		if(true != message){
+        			alert(message);
+        			return;
+        		}
+        	}
+        }
+		this.getDataSource().addData(addData,{'childEntityAlias': this.getBindEntityId(), 'mainRowId': this.getCurrentMainRowId()});
+		this.getDataSource().updateData(updateData,{'childEntityAlias': this.getBindEntityId(), 'mainRowId': this.getCurrentMainRowId()});
+		//this.getDataSource().saveData();
+	},
+	validate:function (value,columnDef){
+		var result = true;
+		var rule = '[';
+		if(columnDef.required){
+			rule+='required,';
+		}
+		if(columnDef.max){
+			rule+='maxValue,';
+		}
+		if(columnDef.min){
+			rule+='minValue,';
+		}
+		if(columnDef.length){
+			rule+='length,'
+		}
+		if(rule.length > 1){
+			rule = rule.substring(0,rule.length-1);
+			rule +=']';
+		}
+		result = emap_validate.doValidate(value,''+rule+'');
+		return result;
+	},
+	undeleteData : function() {
+		this.getDataSource().undeleteData();
+	},
+	saveData : function() {
+		this.getDataSource().saveData();
+	},
     // 事件
     /**
      *
@@ -944,7 +982,7 @@ wof.bizWidget.VoucherGridComponent.prototype = {
     /**
      * 设置属性
      */
-    setGridSchema: function (options) {
+    updateVoucherGridComponent: function (options) {
         if (!options) {
             return;
         }

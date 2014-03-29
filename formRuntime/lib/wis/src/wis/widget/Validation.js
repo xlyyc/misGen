@@ -13,14 +13,14 @@ wis.widget.Validation.prototype = {
     _customRule: null,		// 可扩展验证规则的集合,使用者可重新设置
     _ruleFunction: null,		// 自定义验证的函数：Func ,alertText，优先校验此项
     _errorMsg: null,		// 错误信息(默认提示)
-    _msgPosition: 'topRight', 	// 错误提示信息的定位 
+    _msgPosition:null, 	// 错误提示信息的定位 
     						  	// 可选 : topLeft, topRight, bottomLeft, centerRight, bottomRight
     
-    _alertTextFlag: false,		// 是否启用默认提示
-    _returnDealFunc: null,		// 校验返回信息处理函数，alertTextFlag为false时生效
-    _liveEvent:true,			// 即时触发，为true时绑定_validationEventTriggers指定的事件
-    _validationEventTriggers: 'blur', // 触发校验的事件
-    _returnIsValid: false, 		//通过校验是否也返回提示，如对号标识
+    //_alertTextFlag: false,		// 是否启用默认提示
+    //_returnDealFunc: null,		// 校验返回信息处理函数，alertTextFlag为false时生效
+    //_liveEvent:true,			// 即时触发，为true时绑定_validationEventTriggers指定的事件
+    //_validationEventTriggers: null, // 触发校验的事件
+    //_returnIsValid: false, 		//通过校验是否也返回提示，如对号标识
     
     getCid: function () {
         return this._cid;
@@ -70,7 +70,7 @@ wis.widget.Validation.prototype = {
     },
 
     getMsgPosition: function () {
-        return this._msgPosition;
+        return this._msgPosition||'topRight';
     },
 
     setMsgPosition: function (msgPosition) {
@@ -231,12 +231,12 @@ wis.widget.Validation.prototype = {
                 default :
                     break;
             }
-            if(errorMsg!=""){
+            //if(errorMsg!=""){
             	// 校验一个不通过就返回，不再校验？？
             	// 有些情形可能有清空错误的处理，可能全部校验完再返回结果
             	//break;
             	//return errorMsg;
-            }
+            //}
     	}
     	if(errorMsg==""){
     		return true;

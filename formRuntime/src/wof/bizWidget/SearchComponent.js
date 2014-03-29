@@ -56,6 +56,7 @@ wof.bizWidget.SearchComponent.prototype = {
 
     _componentId:null,
 
+    _button:null, //搜索按钮
     /**
      * get/set 属性方法定义
      */
@@ -239,6 +240,9 @@ wof.bizWidget.SearchComponent.prototype = {
         if(data.top!=null){
             this.setTop(Number(data.top));
         }
+        if(data.colsNum!=null){
+            this.setColsNum(Number(data.colsNum));
+        }
         var newSearchItem = wof$.create('SearchItem');
         newSearchItem.appendTo(this);
         this.calcLayout();
@@ -320,6 +324,14 @@ wof.bizWidget.SearchComponent.prototype = {
                 break;
             }
         }
+        //如果是clone过来的 会直接创建一个button对象 需要先移除
+        var nodes = this.childNodes();
+        for(var i=0;i<nodes.length;i++){
+            if(nodes[i].getClassName()=='wof.widget.Button'){
+                nodes[i].remove(true);
+                break;
+            }
+        }
         this.calcLayout();
     },
 
@@ -332,6 +344,8 @@ wof.bizWidget.SearchComponent.prototype = {
             insertSearchItem.beforeTo(searchItem);
 
             this.calcLayout();
+
+            this.render();
 
             this.sendMessage('wof.bizWidget.SearchComponent_active');
             return false;
@@ -922,9 +936,17 @@ wof.bizWidget.SearchComponent.prototype = {
         }
         //设置searchComponent div容器高度和宽度
         if(this.getIsExpand()==true){
-            this.setHeight(itemHeight*this.getRows()+labelHeight);
+            var searchItems = this.findSearchItems();
+            for(var i=0;i<searchItems.length;i++){
+                searchItems[i].setHiden(false);
+            }
+            this.setHeight(itemHeight*this.getRows()+labelHeight+35);
         }else{
-            this.setHeight(labelHeight);
+            var searchItems = this.findSearchItems();
+            for(var i=0;i<searchItems.length;i++){
+                searchItems[i].setHiden(true);
+            }
+            this.setHeight(labelHeight+35);
         }
         //重设行列号
         searchItems = this.findSearchItems();
@@ -962,6 +984,20 @@ wof.bizWidget.SearchComponent.prototype = {
         }else{
             this._label.appendTo(this);
         }
+
+        //添加搜索按钮
+        if(this._button==null){
+            var button = wof$.create('Button');
+            button.setIsInside(true);
+            button.setWidth(80);
+            button.setHeight(30);
+            this._button = button;
+        }
+        this._button.setLabel('搜索');
+        this._button.setLeft(this.getWidth()-this._button.getWidth());
+        this._button.setTop(this.getHeight()-this._button.getHeight());
+        this._button.remove();
+        this._button.appendTo(this);
     },
 
     //进行流式布局

@@ -156,18 +156,22 @@ wof.functionWidget.DeleteRecordComponent.prototype = {
 
     initRender: function () {
     	var that = this;
-        var button = wis$.create('Button',{value : '删除',click:function (){
-        	 //that.sendMessage('wof.functionWidget.DeleteRecordComponent_active');
-        }});
-        button.render();
-        button.appendTo(this.getDomInstance());
+        var button = wof$.create('Button');
+		button.setLabel(this.getCallItemCaption());
+		button.setIsInside(true);
+		//var clickFunc = function (){
+        // 	 that.sendMessage('wof.functionWidget.DeleteRecordComponent_click');
+        // };
+        // button.onClick(clickFunc);
+        // button.render();
+        button.appendTo(this);
+      
         this._btn = button;
     },
 
     //选择实现
     beforeRender: function () {
-
-       // this._btn.setValue(this.getCallItemCaption());
+    	this._btn.setLabel(this.getCallItemCaption());
     },
 
     //----------必须实现----------
@@ -179,7 +183,15 @@ wof.functionWidget.DeleteRecordComponent.prototype = {
     afterRender: function () {
 
     },
-
+    _insideOnReceiveMessage:{
+        'wof.widget.Button_onclick':function(message){
+        	var that = this;
+        	if (that._btn!=null&&message.sender!=null&&
+    				that._btn.getId() == message.sender.id) {
+        		that.sendMessage('wof.functionWidget.DeleteRecordComponent_click');
+        	}
+        }
+    },
     /**
      * getData/setData 方法定义
      */
