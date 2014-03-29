@@ -7,6 +7,12 @@
 <link href="lib/jquery.ui.multiselect/css/jquery.multiselect.css" rel="stylesheet">
 <link href="lib/jquery.ui.multiselect/css/jquery.multiselect.filter.css" rel="stylesheet">
 <link href="lib/jquery.ztree/css/zTreeStyle/zTreeStyle.css" rel="stylesheet">
+
+<link href="lib/lovey/style/css/lovey.css" rel="stylesheet" type="text/css"/>
+<link href="lib/lovey/style/css/ui_toolbar.css" rel="stylesheet" type="text/css"/>
+<link href="lib/lovey/style/css/ui_btn.css" rel="stylesheet" type="text/css"/>
+<link href="lib/lovey/style/css/ui_icon.css" rel="stylesheet" type="text/css"/>
+
 <style type="text/css">
 <!--
 	* {
@@ -122,6 +128,7 @@
 <script src="lib/wis/src/wis/util/Tool.js"></script>
 
 <script src="lib/wis/src/wis/widget/Tab.js"></script>
+<script src="lib/wis/src/wis/widget/Button.js"></script>
 
 <script src="lib/wis/src/wis/kernel/initSystem.js"></script>
 
@@ -550,10 +557,6 @@ jQuery(function(){
             wof.customWindow.PageParamWindow.run();
         }else if(id=='saveBtn'){
 
-           /* var xmldoc = wof.util.Tool.stringToXml('<node id="node1">测试XML数据</node>');
-            alert(wof.util.Tool.xmlToString(xmldoc));*/
-
-
             var json = {};
 			var layout = getContentLayout();
 
@@ -567,7 +570,13 @@ jQuery(function(){
                 if(spann!=null){
 				 
 						if(spann.prototype.exportData!=null){
-							_leafsData.push(spann.prototype.exportData(node));
+                            var componentData = {};
+                            componentData['ID'] = node.getId();
+                            componentData['CallStr'] = node.getCallStr();
+                            componentData['ControlType'] = shortName;
+                            componentData['ControlContext'] = spann.prototype.exportData(node);
+							_leafsData.push(componentData);
+
 						}
 				
                   
