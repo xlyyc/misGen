@@ -768,7 +768,7 @@ wof.bizWidget.SearchComponent.prototype = {
                     var left = (c-1) * searchItemWidth;
                     var obj = placeSearchItemTable.items(top+','+left);
                     if(obj.getTop()==top){
-                        if(obj.isChange()==false){
+                        if(obj.canDelete()==true){
                             count++;
                         }else{
                             break;
