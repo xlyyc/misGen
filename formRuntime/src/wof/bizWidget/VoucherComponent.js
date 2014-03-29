@@ -402,10 +402,13 @@ wof.bizWidget.VoucherComponent.prototype = {
                 if(data['rows'].length==0){ //如果当前do中没有缓存数据 则增加一条数据
                     this.getDataSource().addData([{}]);
                 }
+                var idPro = this.getDataSource().getLocalData()['idPro'];
+                this.setCurrentRowId(this.getRowData()['data'][idPro]['value']);
             }else{ //如果是View\Edit 则先发起查询
                 var idPro = this.getDataSource().getLocalData()['idPro'];
                 var queryParam = {'type':'fieldQuery','field':idPro,'operation':'equals','value1':this.getCurrentRowId()};
                 this.getDataSource().queryData('main',null,queryParam,0,1);
+                this.setCurrentRowId(this.getRowData()['data'][idPro]['value']);
             }
         }
 
