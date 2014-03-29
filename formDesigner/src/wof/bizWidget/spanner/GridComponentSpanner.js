@@ -423,76 +423,76 @@ wof.bizWidget.spanner.GridComponentSpanner.prototype = {
 //            <ParamMaps/>
 //        </GridComponent>
 
-//        if(node.getClassName()=='wof.bizWidget.GridComponent'){
-//            var tool = wof.util.Tool;
-//            var root = tool.stringToXml("<GridComponent></GridComponent>");
-//            var rootElement = root.documentElement;
-//            tool.setAttribute(rootElement,'rowsCount',node.getRowsCount());
-//            tool.setAttribute(rootElement,'useMutiplePage',node.getUseMutiplePage());
-//            tool.setAttribute(rootElement,'rowHeight',node.getRowHeight());
-//            tool.setAttribute(rootElement,'headerHeight',node.getHeaderHeight());
-//            tool.setAttribute(rootElement,'index',node.getIndex());
-//            tool.setAttribute(rootElement,'ID',node.getComponentId());
-//            tool.setAttribute(rootElement,'BindEntityID',node.getBindEntityID());
-//            tool.setAttribute(rootElement,'GridComponentState',node.getGridComponentState());
-//            tool.setAttribute(rootElement,'numberDisplay',node.getNumberDisplay());
-//            tool.setAttribute(rootElement,'Name',node.getName());
-//            tool.setAttribute(rootElement,'CallStr',node.getCallStr());
-//            tool.setAttribute(rootElement,"InitActionName",node.getInitActionName());
-//            tool.setAttribute(rootElement,'rowsCount',node.getRowsCount());
-//
-//            var columnsElement = tool.createElement(root,'Columns');
-//            var childNodes = node.childNodes();
-//            for(var i=0;i<childNodes.length;i++){
-//                var column = tool.createElement(root,"Column");
-//                var childNode = childNodes[i];
-//                tool.setAttribute(column,"LinkForm",childNode.getLinkForm());
-//                tool.setAttribute(column,"CheckErrorInfo",childNode.getCheckErrorInfo());
-//                tool.setAttribute(column,"RefSearchCondition",childNode.getRefSearchCondition());
-//                tool.setAttribute(column,"RegExp",childNode.getRegExp());
-//                tool.setAttribute(column,"ScaleLength",childNode.getScaleLength());
-//                tool.setAttribute(column,"IntLength",childNode.getIntLength());
-//                tool.setAttribute(column,"Max",childNode.getMax());
-//                tool.setAttribute(column,"Min",childNode.getMin());
-//                tool.setAttribute(column,"Length",childNode.getLength());
-//                tool.setAttribute(column,"CanSearch",childNode.getCanSearch());
-//                tool.setAttribute(column,"OrderByType",childNode.getOrderByType());
-//                tool.setAttribute(column,"Required",childNode.getRequired());
-//                tool.setAttribute(column,"ReadOnly",childNode.getReadOnly());
-//                tool.setAttribute(column,"VisbleType",childNode.getVisbleType());
-//                tool.setAttribute(column,"selectPattern",childNode.getSelectPattern());
-//                tool.setAttribute(column,"picUrl",childNode.getPicUrl());
-//                tool.setAttribute(column,"editor",childNode.getEditor());
-//                tool.setAttribute(column,"DateTimeFormat",childNode.getDateTimeFormat());
-//                tool.setAttribute(column,"IsPin",childNode.getIsPin());
-//                tool.setAttribute(column,"Display",childNode.getDisplay());
-//                tool.setAttribute(column,"GridId",childNode.getGridId());
-//                tool.setAttribute(column,"BindDataField",childNode.getBindDataField());
-//                tool.setAttribute(column,"columnWidth",childNode.getColumnWidth());
-//                tool.setAttribute(column,"Caption",childNode.getCaption());
-//                tool.setAttribute(column,"ColumnType",childNode.getColumnType());
-//                tool.setAttribute(column,"UseMultiSelect",childNode.getUseMultiSelect());
-//                tool.setAttribute(column,"Name",childNode.getName());
-//                tool.appendChild(columnsElement,column);
-//            }
-//            tool.appendChild(rootElement,columnsElement);
-//
-//            var paramMapsElement = tool.createElement(root,'ParamMaps');
-//            var paramMapElement = tool.createElement(root,'ParamMap');
-//            for(var k in node.getParamMaps()){
-//                tool.setAttribute(paramMapElement,k,node.getParameters()[k]);
-//            }
-//            tool.appendChild(paramMapsElement,paramMapElement);
-//            tool.appendChild(rootElement,paramMapsElement);
-//
-////            var mutiplePageInfo = tool.createElement(root,'MutiplePageInfo');
-////            tool.setAttribute(mutiplePageInfo,"RowsCount",node.getRowsCount());
-////            tool.appendChild(rootElement,mutiplePageInfo);
-//            //console.log(tool.xmlToString(root));
-//            //return tool.xmlToString(root);
-//        }
+        if(node.getClassName()=='wof.bizWidget.GridComponent'){
+            var tool = wof.util.Tool;
+            var root = tool.stringToXml("<GridComponent></GridComponent>");
+            var rootElement = root.documentElement;
+            tool.setAttribute(rootElement,'rowsCount',node.getRowsCount());
+            tool.setAttribute(rootElement,'useMutiplePage',node.getUseMutiplePage());
+            tool.setAttribute(rootElement,'rowHeight',node.getRowHeight());
+            tool.setAttribute(rootElement,'headerHeight',node.getHeaderHeight());
+            tool.setAttribute(rootElement,'index',node.getIndex());
+            tool.setAttribute(rootElement,'ID',node.getComponentId());
+            tool.setAttribute(rootElement,'BindEntityID',node.getBindEntityID());
+            tool.setAttribute(rootElement,'GridComponentState',node.getGridComponentState());
+            tool.setAttribute(rootElement,'numberDisplay',node.getNumberDisplay());
+            tool.setAttribute(rootElement,'Name',node.getName());
+            tool.setAttribute(rootElement,'CallStr',node.getCallStr());
+            tool.setAttribute(rootElement,"InitActionName",node.getInitActionName());
+            tool.setAttribute(rootElement,'rowsCount',node.getRowsCount());
 
+            var columnsElement = tool.createElement(root,'Columns');
+            var childNodes = node.childNodes();
+            for(var i=0;i<childNodes.length;i++){
+                var column = tool.createElement(root,"Column");
+                var childNode = childNodes[i];
+                tool.setAttribute(column,"LinkForm",childNode.getLinkForm());
+                tool.setAttribute(column,"CheckErrorInfo",childNode.getCheckErrorInfo());
+                tool.setAttribute(column,"RefSearchCondition",childNode.getRefSearchCondition());
+                tool.setAttribute(column,"RegExp",childNode.getRegExp());
+                tool.setAttribute(column,"ScaleLength",childNode.getScaleLength());
+                tool.setAttribute(column,"IntLength",childNode.getIntLength());
+                tool.setAttribute(column,"Max",childNode.getMax());
+                tool.setAttribute(column,"Min",childNode.getMin());
+                tool.setAttribute(column,"Length",childNode.getLength());
+                tool.setAttribute(column,"CanSearch",childNode.getCanSearch());
+                tool.setAttribute(column,"OrderByType",childNode.getOrderByType());
+                tool.setAttribute(column,"Required",childNode.getRequired());
+                tool.setAttribute(column,"ReadOnly",childNode.getReadOnly());
+                tool.setAttribute(column,"VisbleType",childNode.getVisbleType());
+                tool.setAttribute(column,"selectPattern",childNode.getSelectPattern());
+                tool.setAttribute(column,"picUrl",childNode.getPicUrl());
+                tool.setAttribute(column,"editor",childNode.getEditor());
+                tool.setAttribute(column,"DateTimeFormat",childNode.getDateTimeFormat());
+                tool.setAttribute(column,"IsPin",childNode.getIsPin());
+                tool.setAttribute(column,"Display",childNode.getDisplay());
+                tool.setAttribute(column,"GridId",childNode.getGridId());
+                tool.setAttribute(column,"BindDataField",childNode.getBindDataField());
+                tool.setAttribute(column,"columnWidth",childNode.getColumnWidth());
+                tool.setAttribute(column,"Caption",childNode.getCaption());
+                tool.setAttribute(column,"ColumnType",childNode.getColumnType());
+                tool.setAttribute(column,"UseMultiSelect",childNode.getUseMultiSelect());
+                tool.setAttribute(column,"Name",childNode.getName());
+                tool.appendChild(columnsElement,column);
+            }
+            tool.appendChild(rootElement,columnsElement);
 
+            var paramMapsElement = tool.createElement(root,'ParamMaps');
+            var paramMapElement = tool.createElement(root,'ParamMap');
+            for(var k in node.getParamMaps()){
+                tool.setAttribute(paramMapElement,k,node.getParameters()[k]);
+            }
+            tool.appendChild(paramMapsElement,paramMapElement);
+            tool.appendChild(rootElement,paramMapsElement);
+
+            /*var mutiplePageInfo = tool.createElement(root,'MutiplePageInfo');
+             tool.setAttribute(mutiplePageInfo,"RowsCount",node.getRowsCount());
+             tool.appendChild(rootElement,mutiplePageInfo);*/
+            console.log(tool.xmlToString(root));
+            return tool.xmlToString(root);
+        }
+
+        /*
         var json = {};
         if(node.getClassName()=='wof.bizWidget.GridComponent'){
             json.className = node.getClassName();
@@ -553,7 +553,7 @@ wof.bizWidget.spanner.GridComponentSpanner.prototype = {
             json.columns = columns;
         }
         console.log(JSON.stringify(json));
-        return json;
+        return json;*/
     },
 
     //加工并发送数据

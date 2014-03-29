@@ -54,6 +54,8 @@ wof.bizWidget.SearchComponent.prototype = {
 
     _componentId:null,
 
+    _button:null, //搜索按钮
+
     /**
      * get/set 属性方法定义
      */
@@ -299,6 +301,14 @@ wof.bizWidget.SearchComponent.prototype = {
                 break;
             }
         }
+        //如果是clone过来的 会直接创建一个button对象 需要先移除
+        var nodes = this.childNodes();
+        for(var i=0;i<nodes.length;i++){
+            if(nodes[i].getClassName()=='wof.widget.Button'){
+                nodes[i].remove(true);
+                break;
+            }
+        }
         this.calcLayout();
     },
 
@@ -312,6 +322,7 @@ wof.bizWidget.SearchComponent.prototype = {
 
             this.calcLayout();
 
+            this.render();
             this.sendMessage('wof.bizWidget.SearchComponent_active');
             return false;
         },
@@ -359,6 +370,84 @@ wof.bizWidget.SearchComponent.prototype = {
         }
     },
 
+
+    /**
+     * 在指定行列插入searchItem
+     * 如果指定的行列位置下已经有数据 则在其后插入新的item
+     * searchItemData searchItem数据
+     * searchItemRank 指定行列
+     *
+     */
+    insertSearchItem: function(searchItemData, searchItemRank){
+        if(!jQuery.isEmptyObject(searchItemData)){
+            if(jQuery.isEmptyObject(searchItemRank)){
+                searchItemRank = this.getActiveSearchItemRank();
+            }
+            var searchItem = this.findSearchItemByRank(searchItemRank);
+            if(searchItem!=null){
+                var newSearchItem = null;
+                if(searchItem.isChange()==false){
+                    newSearchItem = searchItem;
+                }else{  //指定位置的item已经被修改过属性
+                    newSearchItem = wof$.create('SearchItem');
+                    newSearchItem.afterTo(searchItem);
+                }
+                if(searchItemData.colspan!=null){
+                    newSearchItem.setColspan(Number(searchItemData.colspan));
+                }
+                if(searchItemData.name!=null){
+                    newSearchItem.setName(searchItemData.name);
+                }
+                if(searchItemData.isFixItem!=null){
+                    newSearchItem.setIsFixItem((searchItemData.isFixItem=='true'||searchItemData.isFixItem==true)?true:false);
+                }
+                if(searchItemData.rowspan!=null){
+                    newSearchItem.setRowspan(Number(searchItemData.rowspan));
+                }
+                if(searchItemData.caption!=null){
+                    newSearchItem.setCaption(searchItemData.caption);
+                }
+                if(searchItemData.dataField!=null){
+                    newSearchItem.setDataField(searchItemData.dataField);
+                }
+                if(searchItemData.dateTimeBoxFormat!=null){
+                    newSearchItem.setDateTimeBoxFormat(searchItemData.dateTimeBoxFormat);
+                }
+                if(searchItemData.selectPattern!=null){
+                    newSearchItem.setSelectPattern(searchItemData.selectPattern);
+                }
+                if(searchItemData.useMultiSelect!=null){
+                    newSearchItem.setUseMultiSelect((searchItemData.useMultiSelect=='true'||searchItemData.useMultiSelect==true)?true:false);
+                }
+                if(searchItemData.visbleType!=null){
+                    newSearchItem.setVisbleType(searchItemData.visbleType);
+                }
+                if(searchItemData.fromTo!=null){
+                    newSearchItem.setFromTo((searchItemData.fromTo=='true'||searchItemData.fromTo==true)?true:false);
+                }
+                if(searchItemData.labelWidth!=null){
+                    newSearchItem.setLabelWidth(searchItemData.labelWidth==''?'':Number(searchItemData.labelWidth));
+                }
+                if(searchItemData.inputWidth!=null){
+                    newSearchItem.setInputWidth(searchItemData.inputWidth==''?'':Number(searchItemData.inputWidth));
+                }
+                if(searchItemData.inputHeight!=null){
+                    newSearchItem.setInputHeight(searchItemData.inputHeight==''?'':Number(searchItemData.inputHeight));
+                }
+                if(searchItemData.tipValue!=null){
+                    newSearchItem.setTipValue(searchItemData.tipValue);
+                }
+                if(searchItemData.linkageItem!=null){
+                    newSearchItem.setLinkageItem(searchItemData.linkageItem);
+                }
+                this.calcLayout();
+            }else{
+                console.log('不存在的searchItem');
+            }
+        }else{
+            console.log('没有数据 不能插入');
+        }
+    },
 
     /**
      * 修改指定的searchItem
@@ -823,9 +912,17 @@ wof.bizWidget.SearchComponent.prototype = {
         }
         //设置searchComponent div容器高度和宽度
         if(this.getIsExpand()==true){
-            this.setHeight(itemHeight*this.getRows()+labelHeight);
+            var searchItems = this.findSearchItems();
+            for(var i=0;i<searchItems.length;i++){
+                searchItems[i].setHiden(false);
+            }
+            this.setHeight(itemHeight*this.getRows()+labelHeight+35);
         }else{
-            this.setHeight(labelHeight);
+            var searchItems = this.findSearchItems();
+            for(var i=0;i<searchItems.length;i++){
+                searchItems[i].setHiden(true);
+            }
+            this.setHeight(labelHeight+35);
         }
         //重设行列号
         searchItems = this.findSearchItems();
@@ -863,6 +960,20 @@ wof.bizWidget.SearchComponent.prototype = {
         }else{
             this._label.appendTo(this);
         }
+
+        //添加搜索按钮
+        if(this._button==null){
+            var button = wof$.create('Button');
+            button.setIsInside(true);
+            button.setWidth(80);
+            button.setHeight(30);
+            this._button = button;
+        }
+        this._button.setLabel('搜索');
+        this._button.setLeft(this.getWidth()-this._button.getWidth());
+        this._button.setTop(this.getHeight()-this._button.getHeight());
+        this._button.remove();
+        this._button.appendTo(this);
     },
 
     //进行流式布局

@@ -620,92 +620,90 @@ wof.bizWidget.spanner.VoucherComponentSpanner.prototype = {
          </VoucherComponent>
          */
 
-//        if(node.getClassName()=='wof.bizWidget.VoucherComponent'){
-//            var tool = wof.util.Tool;
-//            var root = tool.stringToXml("<VoucherComponent></VoucherComponent>");
-//            var rootElement = root.documentElement;
-//            tool.setAttribute(rootElement,'CallStr',node.getCallStr());
-//            tool.setAttribute(rootElement,'BindEntityID',node.getBindEntityID());
-//            tool.setAttribute(rootElement,'ID',node.getComponentId());
-//            tool.setAttribute(rootElement,'index',node.getIndex());
-//            tool.setAttribute(rootElement,'ViewType',node.getViewType());
-//            tool.setAttribute(rootElement,'Caption',node.getCaption());
-//            tool.setAttribute(rootElement,'width',node.getWidth());
-//            tool.setAttribute(rootElement,'State',node.getState());
-//            tool.setAttribute(rootElement,'InitActionName',node.getInitActionName());
-//            tool.setAttribute(rootElement,'ItemHeight',node.getItemHeight());
-//
-//            var childNodes = node._voucherItemGroups;
-//            for(var i=0;i<childNodes.length;i++){
-//                if(childNodes[i].getClassName()=='wof.bizWidget.VoucherItemGroup'){
-//                    var group = childNodes[i];
-//                    var voucherItemGroup = tool.createElement(root,"VoucherItemGroup");
-//                    tool.setAttribute(voucherItemGroup,"MustInOrder",group.getMustInOrder());
-//                    tool.setAttribute(voucherItemGroup,"ColsNum",group.getColsNum());
-//                    tool.setAttribute(voucherItemGroup,"GroupCaption",group.getGroupCaption());
-//                    tool.setAttribute(voucherItemGroup,"IsHead",group.getIsHead());
-//                    tool.setAttribute(voucherItemGroup,"ItemHeight",group.getItemHeight());
-//                    tool.setAttribute(voucherItemGroup,"index",group.getIndex());
-//                    var cns = group.childNodes();
-//                    for(var t=0;t<cns.length;t++){
-//                        if(cns[t].getClassName()=='wof.bizWidget.VoucherItem'){
-//                            var item = cns[t];
-//                            var voucherItem = tool.createElement(root,"VoucherItem");
-//
-//                            tool.setAttribute(voucherItem,"ItemName",item.getItemName());
-//                            tool.setAttribute(voucherItem,"TipValue",item.getTipValue());
-//                            tool.setAttribute(voucherItem,"ReadOnly",item.getReadOnly());
-//                            tool.setAttribute(voucherItem,"InputWidth",item.getInputWidth());
-//                            tool.setAttribute(voucherItem,"InputHeight",item.getInputHeight());
-//                            tool.setAttribute(voucherItem,"Visiable",item.getVisiable());
-//                            tool.setAttribute(voucherItem,"ItemLabel",item.getItemLabel());
-//                            tool.setAttribute(voucherItem,"LabelWidth",item.getLabelWidth());
-//                            tool.setAttribute(voucherItem,"DataField",item.getDataField());
-//                            tool.setAttribute(voucherItem,"Colspan",item.getColspan());
-//                            tool.setAttribute(voucherItem,"VisbleType",item.getVisbleType());
-//                            tool.setAttribute(voucherItem,"LinkageItem",item.getLinkageItem());
-//                            tool.setAttribute(voucherItem,"UseMultiSelect",item.getUseMultiSelect());
-//                            tool.setAttribute(voucherItem,"selectPattern",item.getSelectPattern());
-//                            tool.setAttribute(voucherItem,"CheckErrorInfo",item.getCheckErrorInfo());
-//                            tool.setAttribute(voucherItem,"RegExp",item.getRegExp());
-//                            tool.setAttribute(voucherItem,"Max",item.getMax());
-//                            tool.setAttribute(voucherItem,"Min",item.getMin());
-//                            tool.setAttribute(voucherItem,"Length",item.getLength());
-//                            tool.setAttribute(voucherItem,"Required",item.getRequired());
-//                            tool.setAttribute(voucherItem,"ReadOnly",item.getReadOnly());
-//                            tool.setAttribute(voucherItem,"DateTimeBoxFormat",item.getDateTimeBoxFormat());
-//                            tool.setAttribute(voucherItem,"ReadOnly",item.getReadOnly());
-//                            tool.setAttribute(voucherItem,"Rowspan",item.getRowspan());
-//                            tool.setAttribute(voucherItem,"IsFixItem",item.getIsFixItem());
-//                            tool.setAttribute(voucherItem,"RowNum",item.getRowNum());
-//                            tool.setAttribute(voucherItem,"ColNum",item.getColNum());
-//                            //tool.setAttribute(voucherItem,"Index",item.getIndex());
-//                            tool.appendChild(voucherItemGroup,voucherItem);
-//                        }
-//                    }
-//
-//                    tool.appendChild(rootElement,voucherItemGroup);
-//                }
-//            }
-//
-//            var paramMaps = tool.createElement(root,"ParamMaps");
-//
-//            var paramMap = tool.createElement(root,"ParamMap");
-//
-//            for(var k in node.getParamMaps()){
-//                var param = node.getParamMaps()[k];
-//                tool.setAttribute(paramMap,k,param);
-//            }
-//
-//            tool.appendChild(paramMaps,paramMap);
-//
-//            tool.appendChild(rootElement,paramMaps);
-//
-//            //console.log(tool.xmlToString(root));
-//           // return tool.xmlToString(root);
-//        }
+        if(node.getClassName()=='wof.bizWidget.VoucherComponent'){
+            var tool = wof.util.Tool;
+            var root = tool.stringToXml("<VoucherComponent></VoucherComponent>");
+            var rootElement = root.documentElement;
+            tool.setAttribute(rootElement,'CallStr',node.getCallStr());
+            tool.setAttribute(rootElement,'BindEntityID',node.getBindEntityID());
+            tool.setAttribute(rootElement,'ID',node.getComponentId());
+            tool.setAttribute(rootElement,'ViewType',node.getViewType());
+            tool.setAttribute(rootElement,'Caption',node.getCaption());
+            tool.setAttribute(rootElement,'width',node.getWidth());
+            tool.setAttribute(rootElement,'State',node.getState());
+            tool.setAttribute(rootElement,'InitActionName',node.getInitActionName());
+            tool.setAttribute(rootElement,'ItemHeight',node.getItemHeight());
 
-        var json = {};
+            var childNodes = node._voucherItemGroups;
+            for(var i=0;i<childNodes.length;i++){
+                if(childNodes[i].getClassName()=='wof.bizWidget.VoucherItemGroup'){
+                    var group = childNodes[i];
+                    var voucherItemGroup = tool.createElement(root,"VoucherItemGroup");
+                    tool.setAttribute(voucherItemGroup,"MustInOrder",group.getMustInOrder());
+                    tool.setAttribute(voucherItemGroup,"ColsNum",group.getColsNum());
+                    tool.setAttribute(voucherItemGroup,"GroupCaption",group.getGroupCaption());
+                    tool.setAttribute(voucherItemGroup,"IsHead",group.getIsHead());
+                    tool.setAttribute(voucherItemGroup,"ItemHeight",group.getItemHeight());
+                    tool.setAttribute(voucherItemGroup,"index",group.getIndex());
+                    var cns = group.childNodes();
+                    for(var t=0;t<cns.length;t++){
+                        if(cns[t].getClassName()=='wof.bizWidget.VoucherItem'){
+                            var item = cns[t];
+                            var voucherItem = tool.createElement(root,"VoucherItem");
+
+                            tool.setAttribute(voucherItem,"ItemName",item.getItemName());
+                            tool.setAttribute(voucherItem,"TipValue",item.getTipValue());
+                            tool.setAttribute(voucherItem,"ReadOnly",item.getReadOnly());
+                            tool.setAttribute(voucherItem,"InputWidth",item.getInputWidth());
+                            tool.setAttribute(voucherItem,"InputHeight",item.getInputHeight());
+                            tool.setAttribute(voucherItem,"Visiable",item.getVisiable());
+                            tool.setAttribute(voucherItem,"ItemLabel",item.getItemLabel());
+                            tool.setAttribute(voucherItem,"LabelWidth",item.getLabelWidth());
+                            tool.setAttribute(voucherItem,"DataField",item.getDataField());
+                            tool.setAttribute(voucherItem,"Colspan",item.getColspan());
+                            tool.setAttribute(voucherItem,"VisbleType",item.getVisbleType());
+                            tool.setAttribute(voucherItem,"LinkageItem",item.getLinkageItem());
+                            tool.setAttribute(voucherItem,"UseMultiSelect",item.getUseMultiSelect());
+                            tool.setAttribute(voucherItem,"selectPattern",item.getSelectPattern());
+                            tool.setAttribute(voucherItem,"CheckErrorInfo",item.getCheckErrorInfo());
+                            tool.setAttribute(voucherItem,"RegExp",item.getRegExp());
+                            tool.setAttribute(voucherItem,"Max",item.getMax());
+                            tool.setAttribute(voucherItem,"Min",item.getMin());
+                            tool.setAttribute(voucherItem,"Length",item.getLength());
+                            tool.setAttribute(voucherItem,"Required",item.getRequired());
+                            tool.setAttribute(voucherItem,"ReadOnly",item.getReadOnly());
+                            tool.setAttribute(voucherItem,"DateTimeBoxFormat",item.getDateTimeBoxFormat());
+                            tool.setAttribute(voucherItem,"ReadOnly",item.getReadOnly());
+                            tool.setAttribute(voucherItem,"Rowspan",item.getRowspan());
+                            tool.setAttribute(voucherItem,"IsFixItem",item.getIsFixItem());
+                            tool.setAttribute(voucherItem,"RowNum",item.getRowNum());
+                            tool.setAttribute(voucherItem,"ColNum",item.getColNum());
+                            tool.appendChild(voucherItemGroup,voucherItem);
+                        }
+                    }
+
+                    tool.appendChild(rootElement,voucherItemGroup);
+                }
+            }
+
+            var paramMaps = tool.createElement(root,"ParamMaps");
+
+            var paramMap = tool.createElement(root,"ParamMap");
+
+            for(var k in node.getParamMaps()){
+                var param = node.getParamMaps()[k];
+                tool.setAttribute(paramMap,k,param);
+            }
+
+            tool.appendChild(paramMaps,paramMap);
+
+            tool.appendChild(rootElement,paramMaps);
+
+            console.log(tool.xmlToString(root));
+            return tool.xmlToString(root);
+        }
+
+        /*var json = {};
         if(node.getClassName()=='wof.bizWidget.VoucherComponent'){
             json.className = node.getClassName();
             json.itemHeight = node.getItemHeight();
@@ -779,7 +777,7 @@ wof.bizWidget.spanner.VoucherComponentSpanner.prototype = {
             json.voucherItemGroups = voucherItemGroups;
         }
         console.log(JSON.stringify(json));
-        return json;
+        return json;*/
     }
 
 };

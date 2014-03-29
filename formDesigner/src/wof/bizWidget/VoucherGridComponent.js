@@ -189,7 +189,7 @@ wof.bizWidget.VoucherGridComponent.prototype = {
     },
 
     getInitActionName: function(){
-        return this._initActionName;
+        return this._initActionName || '';
     },
 
     setInitActionName: function(initActionName){
@@ -466,6 +466,9 @@ wof.bizWidget.VoucherGridComponent.prototype = {
             }
             if(voucherGridComponentData.bindEntityID!=null){
                 this.setBindEntityID(voucherGridComponentData.bindEntityID);
+            }
+            if(voucherGridComponentData.voucherHeadComponent!=null){
+                this.setVoucherHeadComponent(voucherGridComponentData.voucherHeadComponent);
             }
             if(voucherGridComponentData.headerHeight!=null){
                 this.setHeaderHeight(Number(voucherGridComponentData.headerHeight));
