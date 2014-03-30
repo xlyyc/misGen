@@ -263,21 +263,24 @@ wof.bizWidget.SearchItem.prototype = {
     /**
      * Render 方法定义
      */
+    initRender:function(){
+        var label = wof$.create('Label');
+        label.setIsInside(true);
+        label.setLeft(0);
+        label.setIsUnderline(false);
+        label.setScale(this.getScale());
+        label.appendTo(this);
+        this._label = label;
+    },
 
     //选择实现
     beforeRender: function () {
 
-        this.getDomInstance().children().remove();
-        if(this.getCaption()!=''&&this.getVisbleType()!=''){
-            var label = jQuery('<label style="width:'+this.getLabelWidth()+'px;">'+(this.getCaption()==''?'&nbsp;':this.getCaption())+(this.getDataField()==''?'':'('+this.getDataField()+')')+'</label>');
-            this.getDomInstance().append(label);
-            var hr = jQuery('<hr style="width:96%;border-top:1px solid black;">');
-            this.getDomInstance().append(hr);
-            var component = this.createComponent();
-            this.getDomInstance().append(component);
-            var bgImg = jQuery('<img src="src/img/backgroud.gif" style="position:absolute;cursor:pointer;top:0px;left:0px;opacity:0;filter:alpha(opacity=0);width:100%;height:100%;">');
-            this.getDomInstance().append(bgImg);
-        }
+        this._label.setWidth(this.getLabelWidth());
+        this._label.setText(this.getCaption());
+        this._label.setTip(this.getTipValue());
+
+        this._setComponent();
     },
 
     //----------必须实现----------
@@ -344,9 +347,7 @@ wof.bizWidget.SearchItem.prototype = {
     //创建元件
     createComponent: function(){
         var component = null;
-        if(this.getVisbleType()=='id'){
-            component = jQuery('<input type="text" style="width:'+this.getInputWidth()+'px;height:'+this.getInputHeight()+'px;">');
-        }else if(this.getVisbleType()=='text'){
+        if(this.getVisbleType()=='text'){
             component = jQuery('<input type="text" style="width:'+this.getInputWidth()+'px;height:'+this.getInputHeight()+'px;">');
         }else if(this.getVisbleType()=='textArea'){
             component = jQuery('<textarea style="width:'+this.getInputWidth()+'px;height:'+this.getInputHeight()+'px;"></textarea>');
@@ -366,6 +367,60 @@ wof.bizWidget.SearchItem.prototype = {
             component = jQuery('<input type="text" style="width:'+this.getInputWidth()+'px;height:'+this.getInputHeight()+'px;">');
         }
         return component;
+    },
+
+    //根据当前的显示类型设置对应的元件
+    _setComponent: function(){
+        if(this.getDataField().length>0){
+            var component = null;
+            var clzName = '';
+            var setValMethod = '';
+            var visbleType = this.getVisbleType();
+            if(visbleType=='text'){
+                clzName = 'wof.widget.Input';
+                setValMethod = 'setValue';
+            }else if(visbleType=='textArea'){
+                clzName = 'wof.widget.TextArea';
+            }else if(visbleType=='richTextArea'){
+                clzName = 'wof.widget.HTMLEditor';
+            }else if(visbleType=='select'){
+                clzName = 'wof.widget.ComboBox';
+            }else if(visbleType=='checkBox'){
+                clzName = 'wof.widget.CheckBox';
+            }else if(visbleType=='date'){
+                clzName = 'wof.widget.DateBox';
+            }else if(visbleType=='radio'){
+                clzName = 'wof.widget.RadioGroup';
+            }else if(visbleType=='file'){
+                clzName = 'wof.widget.FileBox';
+            }else if(visbleType=='number'){
+                clzName = 'wof.widget.Input';
+            }
+
+            /**
+             * todo 暂时使用
+             */
+            clzName = 'wof.widget.Input';
+            setValMethod = 'setValue';
+
+            if(this._component!=null&&this._component.getClassName()==clzName){
+                component = this._component;
+            }else{
+                if(this._component!=null){
+                    this._component.removeChildren(true);
+                    this._component.remove(true);
+                    this._component = null;
+                }
+                component = wof$.create(clzName);
+                component.setIsInside(true);
+                component.appendTo(this);
+                this._component = component;
+            }
+            component.setLeft(this.getLabelWidth());
+            component.setWidth(this.getInputWidth());
+            component.setHeight(this.getInputHeight());
+
+        }
     },
 
     //是否已经被修改过数据

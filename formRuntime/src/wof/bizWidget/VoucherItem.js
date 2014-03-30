@@ -459,31 +459,6 @@ wof.bizWidget.VoucherItem.prototype = {
         }
     },
 
-    //创建元件
-    createComponent: function(){
-        var component = null;
-         if(this.getVisbleType()=='text'){
-            component = jQuery('<input type="text" style="width:'+this.getInputWidth()+'px;height:'+this.getInputHeight()+'px;">');
-        }else if(this.getVisbleType()=='textArea'){
-            component = jQuery('<textarea style="width:'+this.getInputWidth()+'px;height:'+this.getInputHeight()+'px;"></textarea>');
-        }else if(this.getVisbleType()=='richTextArea'){
-            component = jQuery('<textarea style="width:'+this.getInputWidth()+'px;height:'+this.getInputHeight()+'px;"></textarea>');
-        }else if(this.getVisbleType()=='select'){
-            component = jQuery('<select style="width:'+this.getInputWidth()+'px;height:'+this.getInputHeight()+'px;"><option></option></select>');
-        }else if(this.getVisbleType()=='checkBox'){
-            component = jQuery('<input type="checkBox" style="width:'+this.getInputWidth()+'px;height:'+this.getInputHeight()+'px;">');
-        }else if(this.getVisbleType()=='date'){
-            component = jQuery('<input type="text" style="width:'+this.getInputWidth()+'px;height:'+this.getInputHeight()+'px;"><img src="src/img/calendar.gif">');
-        }else if(this.getVisbleType()=='radio'){
-            component = jQuery('<input type="radio" style="width:'+this.getInputWidth()+'px;height:'+this.getInputHeight()+'px;">');
-        }else if(this.getVisbleType()=='file'){
-            component = jQuery('<input type="file" style="width:'+this.getInputWidth()+'px;height:'+this.getInputHeight()+'px;">');
-        }else if(this.getVisbleType()=='number'){
-            component = jQuery('<input type="text" style="width:'+this.getInputWidth()+'px;height:'+this.getInputHeight()+'px;">');
-        }
-        return component;
-    },
-
     //根据当前的显示类型设置对应的元件
     _setComponent: function(){
         if(this.getDataField().length>0){
