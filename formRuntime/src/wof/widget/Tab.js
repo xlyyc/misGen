@@ -41,12 +41,14 @@ wof.widget.Tab.prototype = {
     initRender: function(){
         var _this = this;
         var tab = wis$.create('Tab');
-        tab.onClick(function(_tab){
+        tab.onClick = function(_tab){
             var itemIndex=_tab.getActiveItemIndex();
             _this.setActiveItemIndex(itemIndex);
             _this.sendMessage('wof.widget.Tab_active');
-        });
-        tab.appendTo(this.getDomInstance());
+        }
+        var div = jQuery('<div>');
+        this.getDomInstance().append(div);
+        tab.appendTo(div);
         this._tab = tab;
     },
 

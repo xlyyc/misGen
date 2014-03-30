@@ -46,7 +46,9 @@ wof.widget.Tab.prototype = {
             _this.setActiveItemIndex(itemIndex);
             _this.sendMessage('wof.widget.Tab_active');
         }
-        tab.appendTo(this.getDomInstance());
+        var div = jQuery('<div>');
+        this.getDomInstance().append(div);
+        tab.appendTo(div);
         this._tab = tab;
     },
 
