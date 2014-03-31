@@ -114,6 +114,46 @@ wof.bizWidget.FlowLayout.prototype = {
     },
 
     _insideOnReceiveMessage:{
+        'wof.bizWidget.FlowLayoutItem_widgetDrop':function(message){
+            console.log(message.id+'   '+this.getClassName());
+            var obj = wof.util.ObjectManager.get(message.data.widgetId);
+            this.insertNode(obj);
+
+            var section = this.findSectionByIndex(this.getActiveSectionIndex());
+            section.calcLayout();
+            this.calcLayout();
+
+            this.sendMessage('wof_object_resize');
+            this.sendMessage('wof.bizWidget.FlowLayout_active');
+            return false;
+        },
+        'wof.bizWidget.FlowLayoutItem_newWidgetDrop':function(message){
+            console.log(message.id+'   '+this.getClassName());
+            var obj = wof.util.ObjectManager.get(message.data.widgetId);
+            var item = wof.util.ObjectManager.get(message.sender.id);
+            var node = null;
+            if(obj.getType()=='composite'){
+                var json = {};
+                try{
+                    json = JSON.parse(getPageComponentTemplateById(obj.getValue()));
+                    node = eval('(new '+json.className+'())');     //todo 改用wof$方式
+                    node.setData(json);
+                }catch(e){
+                    alert(e);
+                }
+            }else{
+                node = eval('(new '+obj.getValue()+'()).createSelf('+item.getWidth()+','+item.getHeight()+');');
+            }
+            this.insertNode(node);
+
+            var section = this.findSectionByIndex(this.getActiveSectionIndex());
+            section.calcLayout();
+            this.calcLayout();
+
+            this.sendMessage('wof_object_resize');
+            this.sendMessage('wof.bizWidget.FlowLayout_active');
+            return false;
+        },
         'wof.bizWidget.FlowLayoutSection_mousedown':function(message){
             console.log(message.id+'   '+this.getClassName());
             var section = wof.util.ObjectManager.get(message.sender.id);
@@ -160,6 +200,21 @@ wof.bizWidget.FlowLayout.prototype = {
             var sectionIndex = item.parentNode().getIndex();
             this.setActiveSectionIndex(sectionIndex);
             this.setActiveItemRank({row:item.getRow(),col:item.getCol()});
+            this.render();
+
+            this.sendMessage('wof.bizWidget.FlowLayout_active');
+            return false;
+        },
+        'wof.bizWidget.FlowLayoutSection_drop':function(message){
+            console.log(message.id+'   '+this.getClassName());
+            var insertSection = wof.util.ObjectManager.get(message.data.sectionId);
+            var section = wof.util.ObjectManager.get(message.sender.id);
+            insertSection.remove();
+            insertSection.beforeTo(section);
+            this.calcLayout();
+            var insertSectionIndex = section.getIndex();
+            this.setActiveSectionIndex(insertSectionIndex);
+            this.setActiveItemRank(null);
             this.render();
 
             this.sendMessage('wof.bizWidget.FlowLayout_active');
@@ -664,6 +719,19 @@ wof.bizWidget.FlowLayout.prototype = {
             }
         }
         this.calcLayout();
+    },
+
+    //创建新的FlowLayout
+    createSelf: function(width, height){
+        var node = wof$.create('FlowLayout');
+        node.setLeft(0);
+        node.setTop(0);
+        node.setWidth(width);
+        node.setCols(2);
+        node.setItemHeight(60);
+        var sectionData = {title:'未命名',width:width,titleHeight:30,cols:2,itemHeight:80};
+        node.insertSection(sectionData);
+        return node;
     }
 
 };
