@@ -561,7 +561,8 @@ jQuery(function(){
 			var layout = getContentLayout();
 
             //将叶子节点数据拉平导出
-            var _leafsData = [];
+            var _components = [];
+            var _commandComponents = [];
             function _getLeafData(node){
                 var clz = node.getClassName();
                 var shortName = clz.substring(clz.lastIndexOf('.')+1);
@@ -570,16 +571,18 @@ jQuery(function(){
                 if(spann!=null){
 				 
 						if(spann.prototype.exportData!=null){
-                            var componentData = {};
-                            componentData['ID'] = node.getId();
-                            componentData['CallStr'] = node.getCallStr();
-                            componentData['ControlType'] = shortName;
-                            componentData['ControlContext'] = spann.prototype.exportData(node);
-							_leafsData.push(componentData);
-
+                            if(clz.indexOf('wof.bizWidget')>=0){
+                                var componentData = {};
+                                componentData['ID'] = node.getId();
+                                componentData['CallStr'] = node.getCallStr();
+                                componentData['ControlType'] = shortName;
+                                componentData['ControlContext'] = spann.prototype.exportData(node);
+                                _components.push(componentData);
+                            }else{
+                                _commandComponents.push(spann.prototype.exportData(node));
+                            }
 						}
-				
-                  
+
                 }
                 var childNodes = node.childNodes();
                 if(childNodes.length>0){
@@ -588,8 +591,8 @@ jQuery(function(){
                     }
                 }
             }
-				
-				    _getLeafData(layout);
+
+            _getLeafData(layout);
 
             var _inputParam = [];
             function _getInputParam(){
@@ -601,7 +604,8 @@ jQuery(function(){
             _getInputParam();
 
             json.inputParam = _inputParam;
-            json.components = _leafsData;
+            json.components = _components;
+            json.commandComponents = _commandComponents;
             json.layout = layout.getData();
 
             try{
