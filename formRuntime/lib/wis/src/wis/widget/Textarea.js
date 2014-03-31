@@ -130,7 +130,7 @@ wis.widget.Textarea.prototype = {
      * 仅在第一次调用render时执行
      */
     initRender: function () {
-    	this._root = $('<textarea />');
+    	this._root = $('<textarea  class="wis_textarea_style_default"/>');
 		this._root.val(this.getPlaceholder());
 		this.getDomInstance().append(this._root);
 		//this._unbindEvents();

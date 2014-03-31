@@ -172,7 +172,7 @@ wis.widget.Input.prototype = {
      * 仅在第一次调用render时执行
      */
     initRender: function () {
-    	this._rootObj = jQuery('<input type="'+this.getType()+'"/>');
+    	this._rootObj = jQuery('<input class="wis_input_style_default" type="'+this.getType()+'"/>');
 		this._rootObj.val(this.getPlaceholder());
 		this.getDomInstance().append(this._rootObj);
 		//this._unbindEvents();

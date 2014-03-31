@@ -112,7 +112,7 @@ wis.widget.Checkbox.prototype = {
      */
     initRender: function () {
         this._rootObj = $('<div></div>'); //1. 根节点
-        this._labelObj = $('<label class="ui_checkbox"></label>');// 2. Label节点
+        this._labelObj = $('<label class="wis_checkbox_style_default"></label>');// 2. Label节点
         this._inputObj = $('<input type="checkbox"/>');// 3. 复选框节点
         this._linkObj = $('<a class="checkbox_text"/>'); // 4. 显示内容节点
         this._spanObj = $('<span></span>'); // Span节点
@@ -180,14 +180,14 @@ wis.widget.Checkbox.prototype = {
     },
     // 解除事件绑定
     _unbindEvents: function(){
-		this._linkObj.off('click');
-		this._linkObj.off('change');
+		this._inputObj.off('click');
+		this._inputObj.off('change');
 	},
 	//绑定事件
     _bindEvents: function () {
         //单击事件
         var that = this;
-        this._linkObj.on("click", function (e) {
+        this._inputObj.on("click", function (e) {
         	var checked = that._inputObj.attr('checked');//是否选中
         	//disabled状态不处理
             if (that._labelObj.hasClass("ui_checkbox_disabled")) {
@@ -212,7 +212,7 @@ wis.widget.Checkbox.prototype = {
             }
             that.setChecked(checked);
         });
-        this._linkObj.on('change',function(e) {
+        this._inputObj.on('change',function(e) {
 			var value = that._inputObj.val();
 			that.setValue(value);
 			if (that._onChange) {

@@ -21,6 +21,12 @@ wis.widget.Radio.prototype = {
     _radio:null, // 底层组件对象
     _root:null, // 组件节点
     
+    _rootObj: null,
+    _labelObj: null,
+    _inputObj: null,
+    _linkObj: null,
+    _spanObj: null,
+    
     _onClick: null, //点击事件
     _onChange: null, //修改事件
     _onSelect: null,// 选中事件
@@ -101,11 +107,24 @@ wis.widget.Radio.prototype = {
      * 仅在第一次调用render时执行
      */
     initRender: function () {
-    	this._radio = $('<input type="radio"/>');
-		this._root = $('<label></label>').append(this._radio);
-        this.getDomInstance().append(this._root);
+    	this._rootObj = $('<div></div>'); //1. 根节点
+        this._labelObj = $('<label></label>');// 2. Label节点   TODO  class="ui_radio"
+        this._inputObj = $('<input type="radio"/>');// 3. 复选框节点
+        this._linkObj = $('<a/>'); // 4. 显示内容节点   TODO  class="radio_text"
+        this._spanObj = $('<span></span>'); // Span节点
+        this._labelObj.append(this._inputObj).append(this._linkObj);
+        this._rootObj.append(this._labelObj).append(this._spanObj);
+        this.getDomInstance().append(this._rootObj.children());
+    	
+    	
+    	
+    	
+    	//this._radio = $('<input type="radio"/>');
+		//this._root = $('<label></label>').append(this._radio);
+        //this.getDomInstance().append(this._root);
         if(this.getCid()){
-    		this._radio.attr('id', getCid()); //也可不配置
+    		//this._radio.attr('id', getCid()); //也可不配置
+        	this._inputObj.attr('id', getCid()); //也可不配置
         }
 		this._bindEvents();
     },
@@ -116,23 +135,37 @@ wis.widget.Radio.prototype = {
     //渲染方法
     render: function () {
     	if(this.getCid()){
-    		this._radio.attr('id', getCid());
+    		this._inputObj.attr('id', getCid());
         }
         if(this.getName()){
-        	this._radio.attr('name', this.getName());
+        	this._inputObj.attr('name', this.getName());
         }
         if(this.getValue()){
-        	this._radio.val(this.getValue());
+        	this._inputObj.val(this.getValue());
         }
         if(this.getLabel()){
-        	this._root.empty();
-			this._root.append(this._radio).append(this.getLabel());
+        	//this._root.empty();
+			//this._root.append(this._radio).append(this.getLabel());
+        	this._spanObj.html(this.getLabel());
         }
         if(this.getDisabled()){
-        	this._radio.attr('disabled', this.getDisabled());
+        	this._inputObj.attr('disabled', this.getDisabled());
         }
-        if(this.getChecked()){
-    		options.checked = this.getChecked();
+        //disabled状态
+        if (this.getDisabled()) {
+            this._inputObj.attr("disabled", "disabled");
+            //this._labelObj.addClass("ui_radio_disabled");
+        } else {
+            this._inputObj.removeAttr("disabled");
+            //this._labelObj.removeClass("ui_radio_disabled");
+        }
+        //checked状态
+        if (this.getChecked()) {
+            this._inputObj.attr("checked", "checked");
+            //this._labelObj.addClass("ui_radio_checked");
+        } else {
+            this._inputObj.removeAttr("checked");
+            //this._labelObj.removeClass("ui_radio_checked");
         }
         /*TODO 校验暂时不加
          * if(this.getCustomValidate()){
@@ -174,14 +207,14 @@ wis.widget.Radio.prototype = {
     },
     // 解除事件绑定
     _unbindEvents: function(){
-		this._radio.off('click');
-		this._radio.off('change');
+		this._inputObj.off('click');
+		this._inputObj.off('change');
 	},
     // 绑定事件
     _bindEvents: function(){
 		var that = this;
-		this._radio.on('click',function(e) {
-			var checked = that._radio.attr('checked');//是否选中
+		this._inputObj.on('click',function(e) {
+			var checked = that._inputObj.attr('checked');//是否选中
 			if (checked && that.getChecked()&&that._onSelect) {
 				that._onSelect(this);//选中事件
 			}
@@ -190,8 +223,8 @@ wis.widget.Radio.prototype = {
 			}
 			that.setChecked(checked);
 		});
-		this._radio.on('change',function(e) {
-			var value = that._radio.val();
+		this._inputObj.on('change',function(e) {
+			var value = that._linkObj.val();
 			that.setValue(value);
 			if (that._onChange) {
 				that._onChange(this);
