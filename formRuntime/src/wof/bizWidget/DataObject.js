@@ -207,13 +207,16 @@ wof.bizWidget.DataObject.prototype = {
 
     //选择实现
     afterRender: function () {
+
         //this.queryData('main', null, null, 0, 100);
 
         //this.queryData('child', {'childEntityAlias':'hjxxchild', 'mainRowId':'1'}, null, 0, 100);
 
+       // this.deleteData([{"jxjlid":"1"}],{'childEntityAlias':'hjxxchild', 'mainRowId':'1'});
+
         //this.updateData([{"zglbref.lbbz":"外聘员工111","zgid":"362646149296820224"}]);
 
-        //this.deleteData([{"zgid":"362646149296820224"}]);
+        //this.deleteData([{"zgid":"1"}]);
 
         //console.log('已经删除的数据====='+JSON.stringify(this.getLocalDeleteData()));
 
@@ -222,8 +225,8 @@ wof.bizWidget.DataObject.prototype = {
         this.addData([{"hjmc":"好员工333"}], {'childEntityAlias':'hjxxchild', 'mainRowId':'1'});
 
         //this.undeleteData();
-
-        this.saveData('mainAndChild',{'childEntityAlias':'hjxxchild', 'mainRowId':'1'} );*/
+ */
+        //this.saveData('mainAndChild',{'childEntityAlias':'hjxxchild', 'mainRowId':'1'} );
     },
 
     /**
@@ -376,7 +379,7 @@ wof.bizWidget.DataObject.prototype = {
                 //在主缓冲区查找列号(返回-1表示没有找到)
                 function _findRowFromPrimaryById(record){
                     var row = -1;
-                    var id = record[idPro].value;
+                    var id = record[idPro];
                     for(var i=0;i<primary.length;i++){
                         if(id==primary[i]['data'][idPro]["value"]){
                             row = i;
@@ -767,8 +770,9 @@ wof.bizWidget.DataObject.prototype = {
             data[this._mainEntityAlias] = _getEnt(this._mainEntityAlias);
             console.log('只保存主实体数据');
         }
+        console.log('提交数据:'+JSON.stringify(data));
 
-       var rsp = jQuery.ajax(
+        var rsp = jQuery.ajax(
             {
                 url:_this.getDataServicesUrl()+'/saveOrUpdate',
                 async:_this.getAsyncSave(),
@@ -778,8 +782,9 @@ wof.bizWidget.DataObject.prototype = {
             }
         );
         console.log('服务器返回:'+rsp.responseText);
+
         this.sendMessage('wof.bizWidget.DataObject_save',aliasArr);
-        console.log('提交数据:'+JSON.stringify(data));
+
     },
 
     /**

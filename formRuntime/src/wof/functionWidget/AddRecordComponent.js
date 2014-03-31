@@ -333,6 +333,7 @@ wof.functionWidget.AddRecordComponent.prototype = {
             				buttons.push(btn_ok);
             				buttons.push(btn_cancel);
             				dialog.setButtons(buttons);
+            				dialog.setCanDrag(true);
             				this._dialog = dialog;
             				this._dialog.appendTo(this);
             			}

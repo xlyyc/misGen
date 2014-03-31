@@ -352,7 +352,7 @@ wof.bizWidget.VoucherGridComponent.prototype = {
 		}
 		switch(mode){
 		   case 'currentPage':
-			   this.gotoPage(this.getPageNo(true));   
+			   this.gotoPage(this.getPageNo(),true);   
 			   break;
 		   case 'firstPage':
 			   this.gotoPage(1,true);
@@ -476,9 +476,12 @@ wof.bizWidget.VoucherGridComponent.prototype = {
 				},
 				onSelectRow : function (data,index){
 					var gridData = that._getDataByIndex(index);
-					var idPro = that._getIdPro();
-					that._currentRowId = gridData[idPro];
-					that.sendMessage('wof.bizWidget.GridComponent_rowSelect',{componentId : that.getComponentId(),data:gridData,index:index,id : gridData[that._getIdPro()].value});
+					if(gridData != null){
+						var idPro = that._getIdPro();
+						that._currentRowId = gridData[idPro];
+						that.sendMessage('wof.bizWidget.GridComponent_rowSelect',{componentId : that.getComponentId(),data:gridData,index:index,id : gridData[that._getIdPro()].value});
+					}
+					
 				},
 				onReload : function (){
 					that.gotoPage(that.getPageNo(),true);
@@ -545,8 +548,7 @@ wof.bizWidget.VoucherGridComponent.prototype = {
     getCurrentMainRowId : function (){
     	var currentRow = this._currentMainRowId || this._bindComponent.getCurrentRowId();
         if(!currentRow){
-        	console.log("currentRow is null.");
-        	return;
+        	return ;
         }
         return currentRow;
     },
@@ -578,12 +580,14 @@ wof.bizWidget.VoucherGridComponent.prototype = {
         }
         return null;
     },
-    
-    
     _onAddRecordComponent_click : function(message) {
 		var bindComponentId = message.sender.bindComponents;
 		if (bindComponentId == this.getComponentId()) {
-		   this.addRow();
+		   if(this.getCurrentMainRowId() != null){
+			   this.addRow();
+		   }else{
+			   alert('未选择数据 ！')
+		   }
 		}
 	},
 	_onDeleteRecordComponent_click : function(message) {
@@ -641,13 +645,12 @@ wof.bizWidget.VoucherGridComponent.prototype = {
     },
     _onAddDataCompleted: function (message) {
         if (this._isDataChange(message)) {
-            // todo 在grid上面用特殊颜色标识
-            console.log(message);
+        	this.gotoPage(this.getPageNo());
         }
     },
     _onUpdateDataCompleted: function (message) {
         if (this._isDataChange(message)) {
-            this.gotoPage(this.getPageNo());
+           // this.gotoPage(this.getPageNo());
         }
     },
     _onDeleteDataCompleted: function (message) {
@@ -671,7 +674,14 @@ wof.bizWidget.VoucherGridComponent.prototype = {
 	},
 	_getDataByIndex:function (index){
 		var gridData = this.getGridData();
+		if(typeof index == 'string'){
+			index = parseInt(index);
+		}
+		if(index >= gridData.length){
+			return null;
+		}
 		return gridData[index].data;
+		
 	},
 	
     _isDataChange: function (message) {
@@ -890,16 +900,18 @@ wof.bizWidget.VoucherGridComponent.prototype = {
         	var row = addData[i]
         	for(var prop in row){
         		var column = map.items(prop);
-        		var message = this.validate(row[prop],column);
-        		if(true != message){
-        			alert(message);
-        			return;
+        		if(column){
+        			var message = this.validate(row[prop],column);
+            		if(true != message){
+            			alert(message);
+            			return;
+            		}
         		}
+        		
         	}
         }
 		this.getDataSource().addData(addData,{'childEntityAlias': this.getBindEntityId(), 'mainRowId': this.getCurrentMainRowId()});
 		this.getDataSource().updateData(updateData,{'childEntityAlias': this.getBindEntityId(), 'mainRowId': this.getCurrentMainRowId()});
-		//this.getDataSource().saveData();
 	},
 	validate:function (value,columnDef){
 		var result = true;

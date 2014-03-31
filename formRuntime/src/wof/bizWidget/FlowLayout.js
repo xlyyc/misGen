@@ -175,9 +175,6 @@ wof.bizWidget.FlowLayout.prototype = {
      * 如果sectionIndex为null 缺省在最后插入
      */
     insertSection: function(sectionData, sectionIndex){
-        if(sectionIndex==null){
-            sectionIndex = 1;
-        }
         var title = sectionData.title;
         var width = sectionData.width!=null?sectionData.width:this.getWidth();
         var titleHeight = sectionData.titleHeight!=null?sectionData.titleHeight:null;

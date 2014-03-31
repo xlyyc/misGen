@@ -270,6 +270,7 @@ wof.functionWidget.UpdateRecordComponent.prototype = {
                     				buttons.push(btn_ok);
                     				buttons.push(btn_cancel);
                     				dialog.setButtons(buttons);
+                    				dialog.setCanDrag(true);
                 	        		dialog.appendTo(this);
                 	        		this._dialog = dialog;
             					}

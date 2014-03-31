@@ -236,6 +236,7 @@ wof.functionWidget.ViewRecordComponent.prototype = {
                     				buttons.push(btn_ok);
                     				buttons.push(btn_cancel);
                     				dialog.setButtons(buttons);
+                    				dialog.setCanDrag(true);
                    	        		this._dialog = dialog;
                					}
                	        		if(this.getOpenUrl().indexOf("?")>-1){

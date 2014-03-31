@@ -324,7 +324,7 @@ wof.bizWidget.GridComponent.prototype = {
 		}
 		switch(mode){
 		   case 'currentPage':
-			   this.gotoPage(this.getPageNo(true));   
+			   this.gotoPage(this.getPageNo(),true);   
 			   break;
 		   case 'firstPage':
 			   this.gotoPage(1,true);
@@ -377,7 +377,7 @@ wof.bizWidget.GridComponent.prototype = {
 	setGridData : function(gridData) {
 		this._gridData = gridData;
 	},
-	getSelectedRows : function() {
+	getCheckedRows : function() {
 		var rows = this.grid.getSelectedRows();
 		var gridData = this.getGridData();
 		var selectedRows = [];
@@ -446,9 +446,11 @@ wof.bizWidget.GridComponent.prototype = {
 				},
 				onSelectRow : function (data,index){
 					var gridData = that._getDataByIndex(index);
-					var idPro = that._getIdPro();
-					that._currentRowId = gridData[idPro];
-					that.sendMessage('wof.bizWidget.GridComponent_rowSelect',{componentId : that.getComponentId(),data:gridData,index:index,id : gridData[that._getIdPro()].value});
+					if(gridData != null){
+						var idPro = that._getIdPro();
+						that._currentRowId = gridData[idPro];
+						that.sendMessage('wof.bizWidget.GridComponent_rowSelect',{componentId : that.getComponentId(),data:gridData,index:index,id : gridData[that._getIdPro()].value});
+					}
 				},
 				onReload : function (){
 					that.gotoPage(that.getPageNo(),true);
@@ -553,7 +555,7 @@ wof.bizWidget.GridComponent.prototype = {
 	_onDeleteRecordComponent_click : function(message) {
 		var bindComponentId = message.sender.bindComponents;
 		if (bindComponentId == this.getComponentId()) {
-			var selectedRows = this.getSelectedRows();
+			var selectedRows = this.getCheckedRows();
 			if (!selectedRows || selectedRows.length == 0) {
 				alert('请选择!');
 				return;
@@ -564,7 +566,7 @@ wof.bizWidget.GridComponent.prototype = {
 	_onUpdateRecordComponent_click : function(message) {
 		var bindComponentId = message.sender.bindComponents;
 		if (bindComponentId == this.getComponentId()) {
-			var selectedRows = this.getSelectedRows();
+			var selectedRows = this.getCheckedRows();
 			if (!selectedRows || selectedRows.length == 0) {
 				alert('请选择!');
 				return;
@@ -628,7 +630,14 @@ wof.bizWidget.GridComponent.prototype = {
 	},
 	_getDataByIndex:function (index){
 		var gridData = this.getGridData();
+		if(typeof index == 'string'){
+			index = parseInt(index);
+		}
+		if(index >= gridData.length){
+			return null;
+		}
 		return gridData[index].data;
+		
 	},
 	getCurrentMainRowData : function() {
 		var currentRowData = [];
@@ -801,10 +810,6 @@ wof.bizWidget.GridComponent.prototype = {
 	setPageNo : function(pageNo) {
 		this.getPageBar().pageNo = pageNo;
 	},
-	refreshGridData : function() {
-		this.gotoPage(this.getPageNo(), true);
-		$(this).trigger('afterRefreshData', {});
-	},
 	setDataObject : function(dataObject) {
 		this._dataObject = dataObject;
 	},
@@ -842,12 +847,15 @@ wof.bizWidget.GridComponent.prototype = {
 				for ( var d in data) {
 					var value = data[d];
 					var column = map.items(d);
-	        		var message = this.validate(value,column);
-	        		if(true != message){
-	        			alert(message);
-	        			return;
-	        		}
-					originalData[d] = value;
+					if(column){
+						var message = this.validate(value,column);
+		        		if(true != message){
+		        			alert(message);
+		        			return;
+		        		}
+						originalData[d] = value;
+					}
+	        		
 				}
 				updateData.push(originalData);
 			}
@@ -867,7 +875,6 @@ wof.bizWidget.GridComponent.prototype = {
         }
 		this.getDataSource().addData(addData);
 		this.getDataSource().updateData(updateData);
-		//this.getDataSource().saveData();
 	},
 	validate:function (value,columnDef){
 		var result = true;
@@ -909,8 +916,11 @@ wof.bizWidget.GridComponent.prototype = {
 	/**
 	 * 列表刷新
 	 */
-	onRefreshData : function() {
+	onReload : function() {
 
+	},
+	onRowSelected :function (){
+		
 	},
 	/**
 	 * 添加一行之后

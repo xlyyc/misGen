@@ -35,7 +35,8 @@ wof.functionWidget.DeleteRecordComponent.prototype = {
 
     _paramMaps: null,
 
-
+    _bindComp:null,
+    
     _componentId: null,
 
     /**
@@ -127,6 +128,15 @@ wof.functionWidget.DeleteRecordComponent.prototype = {
     setBindComponents: function (bindComponents) {
         this._bindComponents = bindComponents;
     },
+    
+    getBindComp : function (){
+        return this._bindComp;
+    },
+
+    setBindComp : function (bindComp){
+        this._bindComp = bindComp;
+    },
+    
     _init: function (data) {
         this.setWidth(110);
         this.setHeight(30);
@@ -185,13 +195,39 @@ wof.functionWidget.DeleteRecordComponent.prototype = {
     },
     _insideOnReceiveMessage:{
         'wof.widget.Button_onclick':function(message){
-        	var that = this;
-        	if (that._btn!=null&&message.sender!=null&&
-    				that._btn.getId() == message.sender.id) {
-        		that.sendMessage('wof.functionWidget.DeleteRecordComponent_click');
+        	if (this._btn!=null&&message.sender!=null&&
+        			this._btn.getId() == message.sender.id) {
+        		if(this.getBindComponents()!=null&&this.getBindComponents()!=""&&this.getBindComponents()!="null"){
+            		if(!this.getBindComp()){
+            			var bindComp = this.getBindComp()||this._getObjByComponentId(this.getBindComponents());
+            			if(bindComp){
+        					this.setBindComp(bindComp);
+        				}
+        			}
+            		if(this.getBindComp()!=null){
+            			var selectRows = this.getBindComp().getSelectedRows();//getCheckedRows//
+            			if(selectRows!=null&&selectRows.length>0){
+            				this.sendMessage('wof.functionWidget.DeleteRecordComponent_click');
+            			}else{
+            				// TODO 
+            			}
+            		}
+        		}else{
+        			// TODO 
+        		}	
         	}
         }
     },
+    _getObjByComponentId: function (compId) {
+    	var objs = wof$.find('*');
+	    for(var i=0;i<objs.size();i++){
+	        var obj = objs.get(i);
+	        if(obj!=null&&obj.getComponentId()!=null&&obj.getComponentId()==compId){
+	        	return obj;
+	        }
+	    }
+	    return null;
+    }, 
     /**
      * getData/setData 方法定义
      */
