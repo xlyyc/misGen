@@ -51,8 +51,8 @@
 
         getContextParams: function(){
             var json = [];
-            json.push({"dataType":"char","name":"userId","caption":"用户ID"});
-            json.push({"dataType":"char","name":"userName","caption":"用户名称"});
+            json.push({"dataType":"char","name":"pagestate","caption":"页面状态"});
+            json.push({"dataType":"char","name":"dataId","caption":"主记录ID"});
             return json;
         }
 		
