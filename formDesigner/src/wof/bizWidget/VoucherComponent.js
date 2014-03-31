@@ -43,6 +43,8 @@ wof.bizWidget.VoucherComponent.prototype = {
 
     _componentId:null,
 
+    _fkField: null, //外键对应字段
+
     /**
      * get/set 属性方法定义
      */
@@ -162,6 +164,15 @@ wof.bizWidget.VoucherComponent.prototype = {
     setActiveVoucherItemRank: function(activeVoucherItemRank){
         this._activeVoucherItemRank = activeVoucherItemRank;
     },
+
+    getFkField: function(){
+        return this._fkField;
+    },
+
+    setFkField: function(fkField){
+        this._fkField = fkField;
+    },
+
     getBindEntity : function (){
         var bindEntityId = this.getBindEntityID();
         if(bindEntityId){
@@ -221,7 +232,9 @@ wof.bizWidget.VoucherComponent.prototype = {
 
             itemHeight: this.getItemHeight(),
             activeVoucherItemGroupIndex: this.getActiveVoucherItemGroupIndex(),
-            activeVoucherItemRank: this.getActiveVoucherItemRank()
+            activeVoucherItemRank: this.getActiveVoucherItemRank(),
+
+            fkField: this.getFkField()
         };
     },
     //----------必须实现----------
@@ -238,6 +251,8 @@ wof.bizWidget.VoucherComponent.prototype = {
         this.setItemHeight(data.itemHeight);
         this.setActiveVoucherItemGroupIndex(data.activeVoucherItemGroupIndex);
         this.setActiveVoucherItemRank(data.activeVoucherItemRank);
+
+        this.setFkField(data.fkField);
 
         this._setInternalVariables();
     },
@@ -576,6 +591,9 @@ wof.bizWidget.VoucherComponent.prototype = {
             }
             if(voucherComponentData.paramMaps!=null){
                 this.setParamMaps(voucherComponentData.paramMaps);
+            }
+            if(voucherComponentData.fkField!=null){
+                this.setFkField(voucherComponentData.fkField);
             }
 
             for(var i=0;i<this._voucherItemGroups.length;i++){

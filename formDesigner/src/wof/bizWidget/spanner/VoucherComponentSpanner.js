@@ -23,7 +23,8 @@ wof.bizWidget.spanner.VoucherComponentSpanner = function () {
             'scale':{prop:'scale','name':'缩放比例','type':'positiveIntegerOrPositiveDecimal','readOnly':false,'isHide':false,required:true},
             'viewType':{prop:'viewType','name':'展现方式','type':'enum','readOnly':false,'isHide':false, 'enumData':{'group':'分组','tab':'标签页'},required:false},
             'bindEntityID':{prop:'bindEntityID','name':'绑定实体','type':'custom','readOnly':false,'isHide':false,required:false, customMethod:'wof.customWindow.MetaTreeSelector', customParam:'mainEntity'},
-            'paramMaps':{prop:'paramMaps','name':'参数','type':'custom','readOnly':false,'isHide':false,required:false, customMethod:'wof.customWindow.ParamMapsWindow', customParam:'dataId'}
+            'fkField':{prop:'fkField','name':'绑定外键','type':'custom','readOnly':false,'isHide':false,required:false, customMethod:'wof.customWindow.MetaTreeSelector', customParam:'field'},
+            'paramMaps':{prop:'paramMaps','name':'参数','type':'custom','readOnly':false,'isHide':false,required:false, customMethod:'wof.customWindow.ParamMapsWindow', customParam:'dataId,fkId'}
         },
         'VoucherItemGroup':{
             'groupCaption':{prop:'groupCaption','name':'标题','type':'text','readOnly':false,'isHide':false,required:false},
@@ -509,6 +510,7 @@ wof.bizWidget.spanner.VoucherComponentSpanner.prototype = {
             }else{
                 parameters.activeClass = 'VoucherComponent';
                 parameters.bindEntityID = voucherComponent.getBindEntityID();
+                parameters.fkField = voucherComponent.getFkField();
                 parameters.caption = voucherComponent.getCaption();
                 parameters.callStr = voucherComponent.getCallStr();
                 parameters.initActionName = voucherComponent.getInitActionName();
@@ -626,6 +628,7 @@ wof.bizWidget.spanner.VoucherComponentSpanner.prototype = {
             var rootElement = root.documentElement;
             tool.setAttribute(rootElement,'CallStr',node.getCallStr());
             tool.setAttribute(rootElement,'BindEntityID',node.getBindEntityID());
+            tool.setAttribute(rootElement,'FkField',node.getFkField());
             tool.setAttribute(rootElement,'ID',node.getComponentId());
             tool.setAttribute(rootElement,'ViewType',node.getViewType());
             tool.setAttribute(rootElement,'Caption',node.getCaption());
@@ -692,7 +695,11 @@ wof.bizWidget.spanner.VoucherComponentSpanner.prototype = {
 
             for(var k in node.getParamMaps()){
                 var param = node.getParamMaps()[k];
-                tool.setAttribute(paramMap,k,param);
+                tool.setAttribute(paramMap,'MapType',param['mapType']);
+                tool.setAttribute(paramMap,'CompParamName',param['compParamName']);
+                tool.setAttribute(paramMap,'CompParamValue',param['compParamValue']);
+                tool.setAttribute(paramMap,'PageParamName',param['pageParamName']);
+                tool.setAttribute(paramMap,'ChangeExpt',param['changeExpt']);
             }
 
             tool.appendChild(paramMaps,paramMap);

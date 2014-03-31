@@ -29,9 +29,6 @@ wof.functionWidget.AddRecordComponent.prototype = {
 
     _callType: null,    //调用类型。类型包括系统内置菜单命令项、自定义菜单命令项。自定义命令项需提前在Action节点中提前定义.
 
-    //按钮文本
-    _text:null,
-
     _bindComponents: null, //绑定构件ID
 
     _isAutoCommit: null,      //是否自动提交
@@ -43,6 +40,8 @@ wof.functionWidget.AddRecordComponent.prototype = {
     _formFunctionId:null,
 
     _componentId:null,
+
+    _fkIdName: null,      //外键id名称
 
     /**
      * get/set 属性方法定义
@@ -150,6 +149,15 @@ wof.functionWidget.AddRecordComponent.prototype = {
         this._bindComponents = bindComponents;
     },
 
+    getFkIdName : function (){
+        return this._fkIdName || '';
+    },
+
+    setFkIdName : function (fkIdName){
+        this._fkIdName = fkIdName;
+    },
+
+
     /**
      * Render 方法定义
      */
@@ -198,7 +206,8 @@ wof.functionWidget.AddRecordComponent.prototype = {
             functionID: this.getFunctionID(),
             callItemName: this.getCallItemName(),
             callItemCaption: this.getCallItemCaption(),
-            callType: this.getCallType()
+            callType: this.getCallType(),
+            fkIdName: this.getFkIdName()
         };
     },
     //----------必须实现----------
@@ -215,6 +224,7 @@ wof.functionWidget.AddRecordComponent.prototype = {
         this.setCallItemName(data.callItemName);
         this.setCallItemCaption(data.callItemCaption);
         this.setCallType(data.callType);
+        this.setFkIdName(data.fkIdName);
     },
 
     _insideOnReceiveMessage:{
@@ -254,7 +264,9 @@ wof.functionWidget.AddRecordComponent.prototype = {
             if(data.paramMaps!=null){
                 this.setParamMaps(data.paramMaps);
             }
-
+            if(data.fkIdName!=null){
+                this.setFkIdName(data.fkIdName);
+            }
         }
     },
 

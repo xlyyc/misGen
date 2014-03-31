@@ -479,9 +479,16 @@ wof.bizWidget.spanner.GridComponentSpanner.prototype = {
 
             var paramMapsElement = tool.createElement(root,'ParamMaps');
             var paramMapElement = tool.createElement(root,'ParamMap');
+
             for(var k in node.getParamMaps()){
-                tool.setAttribute(paramMapElement,k,node.getParameters()[k]);
+                var param = node.getParamMaps()[k];
+                tool.setAttribute(paramMapElement,'MapType',param['mapType']);
+                tool.setAttribute(paramMapElement,'CompParamName',param['compParamName']);
+                tool.setAttribute(paramMapElement,'CompParamValue',param['compParamValue']);
+                tool.setAttribute(paramMapElement,'PageParamName',param['pageParamName']);
+                tool.setAttribute(paramMapElement,'ChangeExpt',param['changeExpt']);
             }
+
             tool.appendChild(paramMapsElement,paramMapElement);
             tool.appendChild(rootElement,paramMapsElement);
 

@@ -18,6 +18,7 @@ wof.functionWidget.spanner.AddRecordComponentSpanner = function () {
             'formFunctionId':{prop:'formFunctionId','name':'绑定页面','type':'custom','readOnly':false,'isHide':false,required:false, customMethod:'wof.customWindow.PageFormSelector', customParam:''},
             'bindComponents':{prop:'bindComponents','name':'绑定构件','type':'custom','readOnly':false,'isHide':false,required:false, customMethod:'wof.customWindow.ComponentTreeSelector', customParam:'gridComponent,voucherGridComponent'},
             'commandItemID':{prop:'commandItemID','name':'功能构件ID','type':'text','readOnly':false,'isHide':false},
+            'fkIdName':{prop:'fkIdName','name':'外键参数名','type':'text','readOnly':false,'isHide':false},
             'iSPermissionControl':{prop:'iSPermissionControl','name':'是否权限控制','type':'yesOrNo','readOnly':false,'isHide':false},
             'callItemCaption':{prop:'callItemCaption','name':'显示名称','type':'text','readOnly':false,'isHide':false}
         }
@@ -151,6 +152,7 @@ wof.functionWidget.spanner.AddRecordComponentSpanner.prototype = {
             parameters.functionID = this.getPropertys().functionID;
             parameters.callItemName = this.getPropertys().callItemName;
             parameters.callItemCaption = this.getPropertys().callItemCaption;
+            parameters.fkIdName = this.getPropertys().fkIdName;
 
 
             parameters.activeClass = 'AddRecordComponent';
@@ -279,6 +281,14 @@ wof.functionWidget.spanner.AddRecordComponentSpanner.prototype = {
             paramMap2.pageParamName = '';
             paramMap2.changeExpt = '';
             paramMaps.push(paramMap2);
+
+            var paramMap3 = {};
+            paramMap3.mapType = 'value';
+            paramMap3.compParamName = 'fkIdName';
+            paramMap3.compParamValue = node.getFkIdName()==null?'':node.getFkIdName();
+            paramMap3.pageParamName = '';
+            paramMap3.changeExpt = '';
+            paramMaps.push(paramMap3);
 
             json.paramMaps = paramMaps;
         }
