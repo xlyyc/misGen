@@ -25,7 +25,6 @@ wof.bizWidget.FlowLayout.prototype = {
     //聚焦item行、列号
     _activeItemRank: null,
 
-
     /**
      * get/set 属性方法定义
      */
@@ -115,46 +114,6 @@ wof.bizWidget.FlowLayout.prototype = {
     },
 
     _insideOnReceiveMessage:{
-        'wof.bizWidget.FlowLayoutItem_widgetDrop':function(message){
-            console.log(message.id+'   '+this.getClassName());
-            var obj = wof.util.ObjectManager.get(message.data.widgetId);
-            this.insertNode(obj);
-
-            var section = this.findSectionByIndex(this.getActiveSectionIndex());
-            section.calcLayout();
-            this.calcLayout();
-
-            this.sendMessage('wof_object_resize');
-            this.sendMessage('wof.bizWidget.FlowLayout_active');
-            return false;
-        },
-        'wof.bizWidget.FlowLayoutItem_newWidgetDrop':function(message){
-            console.log(message.id+'   '+this.getClassName());
-            var obj = wof.util.ObjectManager.get(message.data.widgetId);
-            var item = wof.util.ObjectManager.get(message.sender.id);
-            var node = null;
-            if(obj.getType()=='composite'){
-                var json = {};
-                try{
-                    json = JSON.parse(getPageComponentTemplateById(obj.getValue()));
-                    node = eval('(new '+json.className+'())');     //todo 改用wof$方式
-                    node.setData(json);
-                }catch(e){
-                    alert(e);
-                }
-            }else{
-                node = eval('(new '+obj.getValue()+'()).createSelf('+item.getWidth()+','+item.getHeight()+');');
-            }
-            this.insertNode(node);
-
-            var section = this.findSectionByIndex(this.getActiveSectionIndex());
-            section.calcLayout();
-            this.calcLayout();
-
-            this.sendMessage('wof_object_resize');
-            this.sendMessage('wof.bizWidget.FlowLayout_active');
-            return false;
-        },
         'wof.bizWidget.FlowLayoutSection_mousedown':function(message){
             console.log(message.id+'   '+this.getClassName());
             var section = wof.util.ObjectManager.get(message.sender.id);
@@ -205,21 +164,6 @@ wof.bizWidget.FlowLayout.prototype = {
 
             this.sendMessage('wof.bizWidget.FlowLayout_active');
             return false;
-        },
-        'wof.bizWidget.FlowLayoutSection_drop':function(message){
-            console.log(message.id+'   '+this.getClassName());
-            var insertSection = wof.util.ObjectManager.get(message.data.sectionId);
-            var section = wof.util.ObjectManager.get(message.sender.id);
-            insertSection.remove();
-            insertSection.beforeTo(section);
-            this.calcLayout();
-            var insertSectionIndex = section.getIndex();
-            this.setActiveSectionIndex(insertSectionIndex);
-            this.setActiveItemRank(null);
-            this.render();
-
-            this.sendMessage('wof.bizWidget.FlowLayout_active');
-            return false;
         }
 
     },
@@ -231,9 +175,6 @@ wof.bizWidget.FlowLayout.prototype = {
      * 如果sectionIndex为null 缺省在最后插入
      */
     insertSection: function(sectionData, sectionIndex){
-        if(sectionIndex==null){
-            sectionIndex = 1;
-        }
         var title = sectionData.title;
         var width = sectionData.width!=null?sectionData.width:this.getWidth();
         var titleHeight = sectionData.titleHeight!=null?sectionData.titleHeight:null;
@@ -271,16 +212,18 @@ wof.bizWidget.FlowLayout.prototype = {
      * 在指定item插入节点
      * 如果itemRank和sectionIndex为null 则在当前焦点的item中插入
      * node 节点对象
-     * itemIndex 在指定item序号内插入(序号从1开始)
+     * itemRank 在指定item内插入
      * sectionIndex section 序号
      */
     insertNode: function(node, itemRank, sectionIndex){
         if(node!=null){
-            if(itemRank==null && sectionIndex==null){
+            if(sectionIndex==null){
                 sectionIndex = this.getActiveSectionIndex();
+            }
+            if(jQuery.isEmptyObject(itemRank)){
                 itemRank = this.getActiveItemRank();
             }
-            if(itemRank!=null && sectionIndex!=null){
+            if(!jQuery.isEmptyObject(itemRank) && sectionIndex!=null){
                 var section = this.findSectionByIndex(sectionIndex);
                 if(section!=null){
                     var item = section.findItemByRank(itemRank);
@@ -289,7 +232,7 @@ wof.bizWidget.FlowLayout.prototype = {
                             node.appendTo(item);
                         }else{
                             var newItem = wof$.create('FlowLayoutItem');
-                            newItem.beforeTo(item);
+                            newItem.afterTo(item);
                             node.appendTo(newItem);
                         }
                         //如果该分组内容自适应高度 则需要重新计算
@@ -298,7 +241,7 @@ wof.bizWidget.FlowLayout.prototype = {
                             this.calcLayout();
                         }
                     }else{
-                        console.log('不存在item 请先插入新的item');
+                        console.log('不存在的item');
                     }
                 }else{
                     console.log('不存在section 请先插入新的section');
@@ -421,6 +364,7 @@ wof.bizWidget.FlowLayout.prototype = {
             if(flowLayoutData.onReceiveMessage!=null){
                 this.setOnReceiveMessage(flowLayoutData.onReceiveMessage);
             }
+
             var childNodes = this.childNodes();
             for(var i=0;i<childNodes.length;i++){
                 var node = childNodes[i];
@@ -502,9 +446,9 @@ wof.bizWidget.FlowLayout.prototype = {
                     if(itemData.rowspan!=null){
                         item.setRowspan(Number(itemData.rowspan));
                     }
+                    section.calcLayout();
+                    this.calcLayout();
                 }
-                section.calcLayout();
-                this.calcLayout();
             }
         }
     },
@@ -720,19 +664,6 @@ wof.bizWidget.FlowLayout.prototype = {
             }
         }
         this.calcLayout();
-    },
-
-    //创建新的FlowLayout
-    createSelf: function(width, height){
-        var node = wof$.create('FlowLayout');
-        node.setLeft(0);
-        node.setTop(0);
-        node.setWidth(width);
-        node.setCols(2);
-        node.setItemHeight(60);
-        var sectionData = {title:'未命名',width:width,titleHeight:30,cols:2,itemHeight:80};
-        node.insertSection(sectionData);
-        return node;
     }
 
 };

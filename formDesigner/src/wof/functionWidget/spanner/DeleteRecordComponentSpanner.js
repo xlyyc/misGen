@@ -203,7 +203,7 @@ wof.functionWidget.spanner.DeleteRecordComponentSpanner.prototype = {
          </CommandItem>
          */
 
-        if(node.getClassName()=='wof.functionWidget.DeleteRecordComponent'){
+        /*if(node.getClassName()=='wof.functionWidget.DeleteRecordComponent'){
             var tool = wof.util.Tool;
             var root = tool.stringToXml("<CommandItem></CommandItem>");
             var rootElement = root.documentElement;
@@ -240,8 +240,8 @@ wof.functionWidget.spanner.DeleteRecordComponentSpanner.prototype = {
             tool.appendChild(rootElement,Return);
             console.log(tool.xmlToString(root));
             return tool.xmlToString(root);
-        }
-        /*
+        }*/
+
         var json = {};
         if(node.getClassName()=='wof.functionWidget.DeleteRecordComponent'){
             json.commandItemID = node.getComponentId();
@@ -265,7 +265,7 @@ wof.functionWidget.spanner.DeleteRecordComponentSpanner.prototype = {
             json.paramMaps = paramMaps;
         }
         console.log(JSON.stringify(json));
-        return json;*/
+        return json;
     },
 
 

@@ -204,7 +204,8 @@ wof.functionWidget.spanner.ViewRecordComponentSpanner.prototype = {
          </ParamMaps>
          </CommandItem>
          */
-        if(node.getClassName()=='wof.functionWidget.ViewRecordComponent'){
+
+        /*if(node.getClassName()=='wof.functionWidget.ViewRecordComponent'){
             var tool = wof.util.Tool;
             var root = tool.stringToXml("<CommandItem></CommandItem>");
             var rootElement = root.documentElement;
@@ -251,9 +252,9 @@ wof.functionWidget.spanner.ViewRecordComponentSpanner.prototype = {
 
             console.log(tool.xmlToString(root));
             return tool.xmlToString(root);
-        }
+        }*/
 
-        /*var json = {};
+        var json = {};
         if(node.getClassName()=='wof.functionWidget.ViewRecordComponent'){
             json.commandItemID = node.getComponentId();
             json.className = node.getClassName();
@@ -284,7 +285,7 @@ wof.functionWidget.spanner.ViewRecordComponentSpanner.prototype = {
             json.paramMaps = paramMaps;
         }
         console.log(JSON.stringify(json));
-        return json;*/
+        return json;
     },
 
 

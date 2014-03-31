@@ -203,7 +203,7 @@ wof.functionWidget.spanner.UpdateRecordComponentSpanner.prototype = {
          </CommandItem>
          */
 
-        if(node.getClassName()=='wof.functionWidget.UpdateRecordComponent'){
+        /*if(node.getClassName()=='wof.functionWidget.UpdateRecordComponent'){
             var tool = wof.util.Tool;
             var root = tool.stringToXml("<CommandItem></CommandItem>");
             var rootElement = root.documentElement;
@@ -250,9 +250,9 @@ wof.functionWidget.spanner.UpdateRecordComponentSpanner.prototype = {
 
             console.log(tool.xmlToString(root));
             return tool.xmlToString(root);
-        }
+        }*/
 
-        /*var json = {};
+        var json = {};
         if(node.getClassName()=='wof.functionWidget.UpdateRecordComponent'){
             json.commandItemID = node.getComponentId();
             json.className = node.getClassName();
@@ -283,7 +283,7 @@ wof.functionWidget.spanner.UpdateRecordComponentSpanner.prototype = {
             json.paramMaps = paramMaps;
         }
         console.log(JSON.stringify(json));
-        return json;*/
+        return json;
     },
 
 

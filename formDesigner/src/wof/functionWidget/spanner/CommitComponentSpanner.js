@@ -206,7 +206,7 @@ wof.functionWidget.spanner.CommitComponentSpanner.prototype = {
          </CommandItem>
          */
 
-        if(node.getClassName()=='wof.functionWidget.CommitComponent'){
+        /*if(node.getClassName()=='wof.functionWidget.CommitComponent'){
             var tool = wof.util.Tool;
             var root = tool.stringToXml("<CommandItem></CommandItem>");
             var rootElement = root.documentElement;
@@ -255,9 +255,8 @@ wof.functionWidget.spanner.CommitComponentSpanner.prototype = {
 
             console.log(tool.xmlToString(root));
             return tool.xmlToString(root);
-        }
+        }*/
 
-       /*
        var json = {};
         if(node.getClassName()=='wof.functionWidget.CommitComponent'){
             json.commandItemID = node.getComponentId();
@@ -289,7 +288,7 @@ wof.functionWidget.spanner.CommitComponentSpanner.prototype = {
             json.paramMaps = paramMaps;
         }
         console.log(JSON.stringify(json));
-        return json;*/
+        return json;
     },
 
 
