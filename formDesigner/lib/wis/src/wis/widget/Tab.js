@@ -116,7 +116,6 @@ wis.widget.Tab.prototype = {
     //渲染后处理方法
     afterRender: function () {
         this.getDomInstance().tabs('refresh');
-        console.log();
         this.getDomInstance().tabs({'active':(this.getActiveItemIndex()-1)});
         this._renderFlag = false;
     },
