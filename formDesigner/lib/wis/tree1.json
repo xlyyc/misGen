@@ -1,0 +1,8 @@
+[
+ {name: "AAA1",open:true,  children: [
+     {name: "BBB1"},
+     {name: "BBB2"}
+ ]},
+ {name: "父节点2",leaf : true},
+ {name: "父节点3",open : true}
+ ]
