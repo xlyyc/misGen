@@ -1,0 +1,55 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>wis</title>
+
+<script type="text/javascript" src="lib/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="lib/json2.js"></script>
+<script type="text/javascript" src="lib/fixConsole.js"></script>
+<script type="text/javascript" src="src/wis/kernel/initNamespace.js"></script>
+
+<script type="text/javascript" src="src/wis/util/Hashtable.js"></script>
+<script type="text/javascript" src="src/wis/util/ObjectManager.js"></script>
+<script type="text/javascript" src="src/wis/util/Observer.js"></script>
+<script type="text/javascript" src="src/wis/util/ArrayList.js"></script>
+<script type="text/javascript" src="src/wis/util/Selector.js"></script>
+<script type="text/javascript" src="src/wis/util/SelectorList.js"></script>
+<script type="text/javascript" src="src/wis/util/GlobalObject.js"></script>
+<script type="text/javascript" src="src/wis/util/Tool.js"></script>
+
+
+
+<script type="text/javascript" src="../lovey/js/plugins/theme.js"></script>
+<script type="text/javascript" src="src/wis/widget/Themes.js"></script>
+<script type="text/javascript" src="src/wis/kernel/initSystem.js"></script>
+
+<script type="text/javascript">
+
+    var themes = null;
+    function create()
+    {
+        themes = wis$.create('Themes');
+        themes.render();
+    }
+    function change()
+    {
+        themes.setThemesName('flat');
+        themes.render();
+    }
+
+</script>
+</head>
+
+<body>
+<input type="button" value="创建主题" onclick="create();">
+<input type="button" value="更换主题" onclick="change();">
+<div id="container" style="position:absolute;width:400px;height:300px;top:50px;left:150px;">
+
+
+
+
+</div>
+
+</body>
+</html>
