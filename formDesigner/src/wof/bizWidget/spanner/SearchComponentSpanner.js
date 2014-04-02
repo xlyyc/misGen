@@ -407,56 +407,56 @@ wof.bizWidget.spanner.SearchComponentSpanner.prototype = {
          */
         if(node.getClassName()=='wof.bizWidget.SearchComponent'){
             var tool = wof.util.Tool;
-            var root = tool.stringToXml("<SearchComponent></SearchComponent>");
+            var root = tool.stringToXml("<searchComponent></searchComponent>");
             var rootElement = root.documentElement;
 
-            tool.setAttribute(rootElement,"ColsNum",node.getColsNum());
-            tool.setAttribute(rootElement,"State",node.getState());
-            tool.setAttribute(rootElement,"LinkComponentID",node.getLinkComponentID());
-            tool.setAttribute(rootElement,"Caption",node.getCaption());
+            tool.setAttribute(rootElement,"colsNum",node.getColsNum());
+            tool.setAttribute(rootElement,"state",node.getState());
+            tool.setAttribute(rootElement,"linkComponentID",node.getLinkComponentID());
+            tool.setAttribute(rootElement,"caption",node.getCaption());
             tool.setAttribute(rootElement,"index",node.getIndex());
-            tool.setAttribute(rootElement,"Id",node.getComponentId());
-            tool.setAttribute(rootElement,"CallStr",node.getCallStr());
-            tool.setAttribute(rootElement,"Name",node.getName());
-            tool.setAttribute(rootElement,"InitActionName",node.getInitActionName());
-            tool.setAttribute(rootElement,"ItemHeight",node.getItemHeight());
+            tool.setAttribute(rootElement,"id",node.getComponentId());
+            tool.setAttribute(rootElement,"callStr",node.getCallStr());
+            tool.setAttribute(rootElement,"name",node.getName());
+            tool.setAttribute(rootElement,"initActionName",node.getInitActionName());
+            tool.setAttribute(rootElement,"itemHeight",node.getItemHeight());
 
             var childNodes = node.childNodes();
             for(var i=0;i<childNodes.length;i++){
                 if(childNodes[i].getClassName()=='wof.bizWidget.SearchItem'){
                     var item = childNodes[i];
-                    var SearchItem = tool.createElement(root,"SearchItem");
-                    tool.setAttribute(SearchItem,"Caption",item.getCaption());
-                    tool.setAttribute(SearchItem,"Name",item.getName());
-                    tool.setAttribute(SearchItem,"ColNum",item.getColNum());
-                    tool.setAttribute(SearchItem,"IsFixItem",item.getIsFixItem());
+                    var SearchItem = tool.createElement(root,"searchItem");
+                    tool.setAttribute(SearchItem,"caption",item.getCaption());
+                    tool.setAttribute(SearchItem,"name",item.getName());
+                    tool.setAttribute(SearchItem,"colNum",item.getColNum());
+                    tool.setAttribute(SearchItem,"isFixItem",item.getIsFixItem());
                     tool.setAttribute(SearchItem,"rowspan",item.getRowspan());
-                    tool.setAttribute(SearchItem,"Colspan",item.getColspan());
-                    tool.setAttribute(SearchItem,"DataField",item.getDataField());
-                    tool.setAttribute(SearchItem,"DateTimeBoxFormat",item.getDateTimeBoxFormat());
+                    tool.setAttribute(SearchItem,"colspan",item.getColspan());
+                    tool.setAttribute(SearchItem,"dataField",item.getDataField());
+                    tool.setAttribute(SearchItem,"dateTimeBoxFormat",item.getDateTimeBoxFormat());
                     tool.setAttribute(SearchItem,"selectPattern",item.getSelectPattern());
-                    tool.setAttribute(SearchItem,"UseMultiSelect",item.getUseMultiSelect());
-                    tool.setAttribute(SearchItem,"VisbleType",item.getVisbleType());
-                    tool.setAttribute(SearchItem,"FromTo",item.getFromTo());
-                    tool.setAttribute(SearchItem,"LabelWidth",item.getLabelWidth());
-                    tool.setAttribute(SearchItem,"InputWidth",item.getInputWidth());
-                    tool.setAttribute(SearchItem,"InputHeight",item.getInputHeight());
-                    tool.setAttribute(SearchItem,"TipValue",item.getTipValue());
-                    tool.setAttribute(SearchItem,"LinkageItem",item.getLinkageItem());
+                    tool.setAttribute(SearchItem,"useMultiSelect",item.getUseMultiSelect());
+                    tool.setAttribute(SearchItem,"visbleType",item.getVisbleType());
+                    tool.setAttribute(SearchItem,"fromTo",item.getFromTo());
+                    tool.setAttribute(SearchItem,"labelWidth",item.getLabelWidth());
+                    tool.setAttribute(SearchItem,"inputWidth",item.getInputWidth());
+                    tool.setAttribute(SearchItem,"inputHeight",item.getInputHeight());
+                    tool.setAttribute(SearchItem,"tipValue",item.getTipValue());
+                    tool.setAttribute(SearchItem,"linkageItem",item.getLinkageItem());
                     tool.appendChild(rootElement,SearchItem);
                 }
             }
 
-            var paramMapsElement = tool.createElement(root,'ParamMaps');
-            var paramMapElement = tool.createElement(root,'ParamMap');
+            var paramMapsElement = tool.createElement(root,'paramMaps');
+            var paramMapElement = tool.createElement(root,'paramMap');
 
             for(var k in node.getParamMaps()){
                 var param = node.getParamMaps()[k];
-                tool.setAttribute(paramMapElement,'MapType',param['mapType']);
-                tool.setAttribute(paramMapElement,'CompParamName',param['compParamName']);
-                tool.setAttribute(paramMapElement,'CompParamValue',param['compParamValue']);
-                tool.setAttribute(paramMapElement,'PageParamName',param['pageParamName']);
-                tool.setAttribute(paramMapElement,'ChangeExpt',param['changeExpt']);
+                tool.setAttribute(paramMapElement,'mapType',param['mapType']);
+                tool.setAttribute(paramMapElement,'compParamName',param['compParamName']);
+                tool.setAttribute(paramMapElement,'compParamValue',param['compParamValue']);
+                tool.setAttribute(paramMapElement,'pageParamName',param['pageParamName']);
+                tool.setAttribute(paramMapElement,'changeExpt',param['changeExpt']);
             }
 
             tool.appendChild(paramMapsElement,paramMapElement);

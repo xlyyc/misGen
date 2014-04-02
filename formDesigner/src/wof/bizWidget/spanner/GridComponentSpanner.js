@@ -425,75 +425,75 @@ wof.bizWidget.spanner.GridComponentSpanner.prototype = {
 
         if(node.getClassName()=='wof.bizWidget.GridComponent'){
             var tool = wof.util.Tool;
-            var root = tool.stringToXml("<GridComponent></GridComponent>");
+            var root = tool.stringToXml("<gridComponent></gridComponent>");
             var rootElement = root.documentElement;
             tool.setAttribute(rootElement,'rowsCount',node.getRowsCount());
             tool.setAttribute(rootElement,'useMutiplePage',node.getUseMutiplePage());
             tool.setAttribute(rootElement,'rowHeight',node.getRowHeight());
             tool.setAttribute(rootElement,'headerHeight',node.getHeaderHeight());
             tool.setAttribute(rootElement,'index',node.getIndex());
-            tool.setAttribute(rootElement,'ID',node.getComponentId());
-            tool.setAttribute(rootElement,'BindEntityID',node.getBindEntityID());
-            tool.setAttribute(rootElement,'GridComponentState',node.getGridComponentState());
+            tool.setAttribute(rootElement,'id',node.getComponentId());
+            tool.setAttribute(rootElement,'bindEntityID',node.getBindEntityID());
+            tool.setAttribute(rootElement,'gridComponentState',node.getGridComponentState());
             tool.setAttribute(rootElement,'numberDisplay',node.getNumberDisplay());
-            tool.setAttribute(rootElement,'Name',node.getName());
-            tool.setAttribute(rootElement,'CallStr',node.getCallStr());
-            tool.setAttribute(rootElement,"InitActionName",node.getInitActionName());
+            tool.setAttribute(rootElement,'name',node.getName());
+            tool.setAttribute(rootElement,'callStr',node.getCallStr());
+            tool.setAttribute(rootElement,"initActionName",node.getInitActionName());
             tool.setAttribute(rootElement,'rowsCount',node.getRowsCount());
 
-            var columnsElement = tool.createElement(root,'Columns');
+            var columnsElement = tool.createElement(root,'columns');
             var childNodes = node.childNodes();
             for(var i=0;i<childNodes.length;i++){
-                var column = tool.createElement(root,"Column");
+                var column = tool.createElement(root,"column");
                 var childNode = childNodes[i];
-                tool.setAttribute(column,"LinkForm",childNode.getLinkForm());
-                tool.setAttribute(column,"CheckErrorInfo",childNode.getCheckErrorInfo());
-                tool.setAttribute(column,"RefSearchCondition",childNode.getRefSearchCondition());
-                tool.setAttribute(column,"RegExp",childNode.getRegExp());
-                tool.setAttribute(column,"ScaleLength",childNode.getScaleLength());
-                tool.setAttribute(column,"IntLength",childNode.getIntLength());
-                tool.setAttribute(column,"Max",childNode.getMax());
-                tool.setAttribute(column,"Min",childNode.getMin());
-                tool.setAttribute(column,"Length",childNode.getLength());
-                tool.setAttribute(column,"CanSearch",childNode.getCanSearch());
-                tool.setAttribute(column,"OrderByType",childNode.getOrderByType());
-                tool.setAttribute(column,"Required",childNode.getRequired());
-                tool.setAttribute(column,"ReadOnly",childNode.getReadOnly());
-                tool.setAttribute(column,"VisbleType",childNode.getVisbleType());
+                tool.setAttribute(column,"linkForm",childNode.getLinkForm());
+                tool.setAttribute(column,"checkErrorInfo",childNode.getCheckErrorInfo());
+                tool.setAttribute(column,"refSearchCondition",childNode.getRefSearchCondition());
+                tool.setAttribute(column,"regExp",childNode.getRegExp());
+                tool.setAttribute(column,"scaleLength",childNode.getScaleLength());
+                tool.setAttribute(column,"intLength",childNode.getIntLength());
+                tool.setAttribute(column,"max",childNode.getMax());
+                tool.setAttribute(column,"min",childNode.getMin());
+                tool.setAttribute(column,"length",childNode.getLength());
+                tool.setAttribute(column,"canSearch",childNode.getCanSearch());
+                tool.setAttribute(column,"orderByType",childNode.getOrderByType());
+                tool.setAttribute(column,"required",childNode.getRequired());
+                tool.setAttribute(column,"readOnly",childNode.getReadOnly());
+                tool.setAttribute(column,"visbleType",childNode.getVisbleType());
                 tool.setAttribute(column,"selectPattern",childNode.getSelectPattern());
                 tool.setAttribute(column,"picUrl",childNode.getPicUrl());
                 tool.setAttribute(column,"editor",childNode.getEditor());
-                tool.setAttribute(column,"DateTimeFormat",childNode.getDateTimeFormat());
-                tool.setAttribute(column,"IsPin",childNode.getIsPin());
-                tool.setAttribute(column,"Display",childNode.getDisplay());
-                tool.setAttribute(column,"GridId",childNode.getGridId());
-                tool.setAttribute(column,"BindDataField",childNode.getBindDataField());
+                tool.setAttribute(column,"dateTimeFormat",childNode.getDateTimeFormat());
+                tool.setAttribute(column,"isPin",childNode.getIsPin());
+                tool.setAttribute(column,"display",childNode.getDisplay());
+                tool.setAttribute(column,"gridId",childNode.getGridId());
+                tool.setAttribute(column,"bindDataField",childNode.getBindDataField());
                 tool.setAttribute(column,"columnWidth",childNode.getColumnWidth());
-                tool.setAttribute(column,"Caption",childNode.getCaption());
-                tool.setAttribute(column,"ColumnType",childNode.getColumnType());
-                tool.setAttribute(column,"UseMultiSelect",childNode.getUseMultiSelect());
-                tool.setAttribute(column,"Name",childNode.getName());
+                tool.setAttribute(column,"caption",childNode.getCaption());
+                tool.setAttribute(column,"columnType",childNode.getColumnType());
+                tool.setAttribute(column,"useMultiSelect",childNode.getUseMultiSelect());
+                tool.setAttribute(column,"name",childNode.getName());
                 tool.appendChild(columnsElement,column);
             }
             tool.appendChild(rootElement,columnsElement);
 
-            var paramMapsElement = tool.createElement(root,'ParamMaps');
-            var paramMapElement = tool.createElement(root,'ParamMap');
+            var paramMapsElement = tool.createElement(root,'paramMaps');
+            var paramMapElement = tool.createElement(root,'paramMap');
 
             for(var k in node.getParamMaps()){
                 var param = node.getParamMaps()[k];
-                tool.setAttribute(paramMapElement,'MapType',param['mapType']);
-                tool.setAttribute(paramMapElement,'CompParamName',param['compParamName']);
-                tool.setAttribute(paramMapElement,'CompParamValue',param['compParamValue']);
-                tool.setAttribute(paramMapElement,'PageParamName',param['pageParamName']);
-                tool.setAttribute(paramMapElement,'ChangeExpt',param['changeExpt']);
+                tool.setAttribute(paramMapElement,'mapType',param['mapType']);
+                tool.setAttribute(paramMapElement,'compParamName',param['compParamName']);
+                tool.setAttribute(paramMapElement,'compParamValue',param['compParamValue']);
+                tool.setAttribute(paramMapElement,'pageParamName',param['pageParamName']);
+                tool.setAttribute(paramMapElement,'changeExpt',param['changeExpt']);
             }
 
             tool.appendChild(paramMapsElement,paramMapElement);
             tool.appendChild(rootElement,paramMapsElement);
 
-            /*var mutiplePageInfo = tool.createElement(root,'MutiplePageInfo');
-             tool.setAttribute(mutiplePageInfo,"RowsCount",node.getRowsCount());
+            /*var mutiplePageInfo = tool.createElement(root,'mutiplePageInfo');
+             tool.setAttribute(mutiplePageInfo,"rowsCount",node.getRowsCount());
              tool.appendChild(rootElement,mutiplePageInfo);*/
             console.log(tool.xmlToString(root));
             return tool.xmlToString(root);
