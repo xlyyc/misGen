@@ -137,7 +137,7 @@
 
 jQuery(function(){
 	var headerHeight = 35;
-	var sidebar1Width = 150;
+	var sidebar1Width = 200;
 	var sidebar2Width = 237;
 	var container = jQuery('#container');
 	var header = jQuery('#header');
@@ -185,17 +185,17 @@ jQuery(function(){
 
         tab.insertItem({title:'构件'});
 
-        var gridLayout = wof$.create('GridLayout');
-        gridLayout.setOnSendMessage([{id:'wof.bizWidget.GridLayout_active',method:'return false;'}]);
-        gridLayout.setOverflow('y');
-        gridLayout.setWidth(sidebar1Width);
-        gridLayout.setHeight(windowHeight-headerHeight-5);
-        gridLayout.setTop(0);
-        gridLayout.setLeft(0);
-        gridLayout.setCss('ui-widget-content');
-        gridLayout.setOverflow('y');
+        var gridLayout1 = wof$.create('GridLayout');
+        gridLayout1.setOnSendMessage([{id:'wof.bizWidget.GridLayout_active',method:'return false;'}]);
+        gridLayout1.setOverflow('y');
+        gridLayout1.setWidth(sidebar1Width-18);
+        gridLayout1.setHeight(tab.getHeight()-108);
+        gridLayout1.setTop(0);
+        gridLayout1.setLeft(0);
+        gridLayout1.setCss('ui-widget-content');
+        gridLayout1.setOverflow('y');
 
-        tab.insertNode(gridLayout,1);
+        tab.insertNode(gridLayout1,1);
 
         var components = [];
         var layoutComponents = [];
@@ -203,73 +203,73 @@ jQuery(function(){
         var widgetComponents = [];
 
         var flowLayoutSpanner = wof$.create('FlowLayoutSpanner');
-        flowLayoutSpanner.appendTo(gridLayout);
+        flowLayoutSpanner.appendTo(gridLayout1);
         layoutComponents.push(flowLayoutSpanner);
         components.push(flowLayoutSpanner);
 
         var gridLayoutSpanner = wof$.create('GridLayoutSpanner');
-        gridLayoutSpanner.appendTo(gridLayout);
+        gridLayoutSpanner.appendTo(gridLayout1);
         layoutComponents.push(gridLayoutSpanner);
         components.push(gridLayoutSpanner);
 
         var voucherComponentSpanner = wof$.create('VoucherComponentSpanner');
-        voucherComponentSpanner.appendTo(gridLayout);
+        voucherComponentSpanner.appendTo(gridLayout1);
         bizWidgetComponents.push(voucherComponentSpanner);
         components.push(voucherComponentSpanner);
 
         var searchComponentSpanner = wof$.create('SearchComponentSpanner');
-        searchComponentSpanner.appendTo(gridLayout);
+        searchComponentSpanner.appendTo(gridLayout1);
         bizWidgetComponents.push(searchComponentSpanner);
         components.push(searchComponentSpanner);
 
         var gridComponentSpanner = wof$.create('GridComponentSpanner');
-        gridComponentSpanner.appendTo(gridLayout);
+        gridComponentSpanner.appendTo(gridLayout1);
         bizWidgetComponents.push(gridComponentSpanner);
         components.push(gridComponentSpanner);
 
         var voucherGridComponentSpanner = wof$.create('VoucherGridComponentSpanner');
-        voucherGridComponentSpanner.appendTo(gridLayout);
+        voucherGridComponentSpanner.appendTo(gridLayout1);
         bizWidgetComponents.push(voucherGridComponentSpanner);
         components.push(voucherGridComponentSpanner);
 
         var pageComponentSpanner = wof$.create('PageComponentSpanner');
-        pageComponentSpanner.appendTo(gridLayout);
+        pageComponentSpanner.appendTo(gridLayout1);
         bizWidgetComponents.push(pageComponentSpanner);
         components.push(pageComponentSpanner);
 
     /*    var buttonSpanner = wof$.create('ButtonSpanner');
-        buttonSpanner.appendTo(gridLayout);
+        buttonSpanner.appendTo(gridLayout1);
         widgetComponents.push(buttonSpanner);
         components.push(buttonSpanner);
 
         var tabSpanner = wof$.create('TabSpanner');
-        tabSpanner.appendTo(gridLayout);
+        tabSpanner.appendTo(gridLayout1);
         widgetComponents.push(tabSpanner);
         components.push(tabSpanner);*/
 
         var commitComponentSpanner = wof$.create('CommitComponentSpanner');
-        commitComponentSpanner.appendTo(gridLayout);
+        commitComponentSpanner.appendTo(gridLayout1);
         widgetComponents.push(commitComponentSpanner);
         components.push(commitComponentSpanner);
 
         var viewRecordComponentSpanner = wof$.create('ViewRecordComponentSpanner');
-        viewRecordComponentSpanner.appendTo(gridLayout);
+        viewRecordComponentSpanner.appendTo(gridLayout1);
         widgetComponents.push(viewRecordComponentSpanner);
         components.push(viewRecordComponentSpanner);
 
         var updateRecordComponentSpanner = wof$.create('UpdateRecordComponentSpanner');
-        updateRecordComponentSpanner.appendTo(gridLayout);
+        updateRecordComponentSpanner.appendTo(gridLayout1);
         widgetComponents.push(updateRecordComponentSpanner);
         components.push(updateRecordComponentSpanner);
 
         var addRecordComponentSpanner = wof$.create('AddRecordComponentSpanner');
-        addRecordComponentSpanner.appendTo(gridLayout);
+        addRecordComponentSpanner.appendTo(gridLayout1);
         widgetComponents.push(addRecordComponentSpanner);
         components.push(addRecordComponentSpanner);
 
 
         var deleteRecordComponentSpanner = wof$.create('DeleteRecordComponentSpanner');
-        deleteRecordComponentSpanner.appendTo(gridLayout);
+        deleteRecordComponentSpanner.appendTo(gridLayout1);
         widgetComponents.push(deleteRecordComponentSpanner);
         components.push(deleteRecordComponentSpanner);
 
@@ -296,10 +296,25 @@ jQuery(function(){
         objectBar.setLayoutComponents(layoutComponents);
         objectBar.setBizWidgetComponents(bizWidgetComponents);
         objectBar.setWidgetComponents(widgetComponents);
-        objectBar.setWidth(sidebar1Width-18);
+        objectBar.setWidth(sidebar1Width-35);
         objectBar.setTop(0);
         objectBar.setLeft(0);
-        objectBar.appendTo(gridLayout);
+        objectBar.appendTo(gridLayout1);
+
+
+        tab.insertItem({title:'对象视图'});
+
+        var gridLayout2 = wof$.create('GridLayout');
+        gridLayout2.setOnSendMessage([{id:'wof.bizWidget.GridLayout_active',method:'return false;'}]);
+        gridLayout2.setOverflow('y');
+        gridLayout2.setWidth(sidebar1Width-18);
+        gridLayout2.setHeight(tab.getHeight()-108);
+        gridLayout2.setTop(0);
+        gridLayout2.setLeft(0);
+        gridLayout2.setCss('ui-widget-content');
+        gridLayout2.setOverflow('y');
+
+        tab.insertNode(gridLayout2,2);
 
         tab.render();
 	}
@@ -308,7 +323,7 @@ jQuery(function(){
         try{
             var windowWidth = jQuery(window).width();
             var windowHeight = jQuery(window).height();
-            var tab = wof.util.ObjectManager.get(sidebar1.children('div[oid]').first().attr('oid'));
+            var tab = wof$.find('#'+(sidebar1.children('div[oid]').first().attr('oid'))).get(0);
             tab.setHeight(windowHeight-headerHeight-12);
             tab.render();
         }catch(e){}
@@ -346,7 +361,7 @@ jQuery(function(){
         tab.insertItem({title:'属性'});
         var propertyBar = wof$.create('PropertyBar');
         propertyBar.setWidth(sidebar2Width-24);
-        propertyBar.setHeight(windowHeight-headerHeight-56);
+        propertyBar.setHeight(tab.getHeight()-44);
         var method = 'if(!jQuery.isEmptyObject(message.sender.parameters)){this.setParameters(message.sender.parameters);this.setMeta(message.sender.meta);this.render();}';
         var onReceiveMessage = [];
         for(var i=0;i<messageIds.length;i++){
@@ -360,7 +375,7 @@ jQuery(function(){
         tab.insertItem({title:'发送'});
         var onSendMessageBar = wof$.create('OnSendMessageBar');
         onSendMessageBar.setWidth(sidebar2Width-24);
-        onSendMessageBar.setHeight(windowHeight-headerHeight-56);
+        onSendMessageBar.setHeight(tab.getHeight()-44);
         var meth = 'if(!jQuery.isEmptyObject(message.sender.parameters)){this.setParameters(message.sender.parameters);this.setSendMessages(message.sender.meta.sendMessages);this.render();}';
         var receives = [];
         for(var i=0;i<messageIds.length;i++){
@@ -374,7 +389,7 @@ jQuery(function(){
         tab.insertItem({title:'监听'});
         var onReceiveMessageBar = wof$.create('OnReceiveMessageBar');
         onReceiveMessageBar.setWidth(sidebar2Width-24);
-        onReceiveMessageBar.setHeight(windowHeight-headerHeight-56);
+        onReceiveMessageBar.setHeight(tab.getHeight()-44);
         var met = 'if(!jQuery.isEmptyObject(message.sender.parameters)){this.setParameters(message.sender.parameters);this.render();}';
         var receiv = [];
         for(var i=0;i<messageIds.length;i++){
@@ -393,7 +408,7 @@ jQuery(function(){
 		try{
 			var windowWidth = jQuery(window).width();
 			var windowHeight = jQuery(window).height();
-			var tab = wof.util.ObjectManager.get(sidebar2.children('div[oid]').first().attr('oid'));
+            var tab = wof$.find('#'+(sidebar2.children('div[oid]').first().attr('oid'))).get(0);
             tab.setHeight(windowHeight-headerHeight-12);
             tab.render();
 		}catch(e){}
@@ -620,10 +635,10 @@ jQuery(function(){
                         var name = jQuery('#dialog_form_name').val();
                         if(name!=null&&name.length>0){
                             var templateData = null;
-                            var obj = wof.util.ObjectManager.get(wof.util.GlobalObject.get('cutObjectId'));
-                            if(obj!=null){
+                            var cutObj = wof$.find('#'+(wof.util.GlobalObject.get('cutObjectId'))).get(0);
+                            if(cutObj!=null){
                                 if(window.confirm('是否只保存剪切板中的内容？')){
-                                    templateData = obj.getData();
+                                    templateData = cutObj.getData();
                                 }else{
                                     templateData = getContentLayout().getData();
                                 }
@@ -651,7 +666,7 @@ jQuery(function(){
 });
 
 window.getContentLayout = function(){
-    return wof.util.ObjectManager.get(jQuery('#content').children('div[oid]').first().attr('oid'));
+    return wof$.find('#'+(jQuery('#content').children('div[oid]').first().attr('oid'))).get(0);
 }
 var pageInputParam = {};
 

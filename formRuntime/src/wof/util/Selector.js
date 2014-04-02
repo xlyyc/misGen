@@ -58,7 +58,7 @@ if (!wof.util.Selector) {
             _getObjectById: function(oid) {
                 var sls = new wof.util.SelectorList();
                 var obj = wof.util.ObjectManager.get(oid);
-                if(obj.getIsInside()!=true){
+                if(obj!=null&&obj.getIsInside()!=true){
                     sls.add(obj);
                 }
                 return sls;
@@ -73,7 +73,7 @@ if (!wof.util.Selector) {
                 var oIds = wof.util.ObjectManager.oIds();
                 for(var i=0;i<oIds.length;i++){
                     var obj = wof.util.ObjectManager.get(oIds[i]);
-                    if(obj.getIsInside()!=true){
+                    if(obj!=null&&obj.getIsInside()!=true){
                         sls.add(obj);
                     }
                 }
