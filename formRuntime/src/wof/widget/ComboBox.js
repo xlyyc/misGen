@@ -7,16 +7,15 @@
 
 wof.widget.ComboBox = function () {
     this._version = '1.0';
-    this._selectBoxWidth = 200;
-    this._multiSelectSplit = ',';
+    // this._selectBoxWidth = 200;
+    // this._multiSelectSplit = ',';
 };
 
 wof.widget.ComboBox.prototype = {
 
     _url: null, // 加载数据url
 
-    _comboboxData: null, // 下拉框时数据格式： [{text:'男',value:'1'},{'text':'女',value:2}]
-
+    _comboBoxData: null, // 下拉框时数据格式： [{text:'男',value:'1'},{'text':'女',value:2}]
     _tree: null, // 下拉树
 
     // 下拉表格时数据格式:
@@ -33,21 +32,20 @@ wof.widget.ComboBox.prototype = {
     // ]);
     _gridColumn: null, // 下拉表格
 
-    _isMultiSelect: null, // 是否可多选
-
-    _multiSelectSplit: null, // 多选后显示、值分隔符
+    _isMultiSelect: false, // 是否可多选
+    _multiSelectSplit: ',', // 多选后显示、值分隔符
 
     _selectedValue: null, // 当前选中的值
-
     _selectedText: null, //  当前选中的文本
 
-    _selectBoxHeight: null, //  下拉框的高度
+    // _selectBoxHeight: null, //  下拉框的高度
+    // _selectBoxWidth: null, //  下拉框的宽度
 
-    _selectBoxWidth: null, //  下拉框的宽度
-
-    _selectName: null,
+    _name: null,
+    _value: null,
+    _readonly: false,
     _isMultSelect: false,
-    _mode: null,
+    // _mode: null,
     _initValue: null,
     _isAsync: false,
 
@@ -58,12 +56,43 @@ wof.widget.ComboBox.prototype = {
         this._gridColumn = gridColumn || [];
     },
 
-    getSelectName: function () {
-        return this._selectName;
+    setMultiSelectSplit: function (split) {
+        this._multiSelectSplit = split || ',';
+    },
+    getMultiSelectSplit: function () {
+        return this._multiSelectSplit;
     },
 
-    setSelectName: function (selectName) {
-        this._selectName = selectName;
+    getName: function () {
+        return this._name;
+    },
+
+    setName: function (selectName) {
+        this._name = selectName;
+    },
+
+    setValue: function (val) {
+        this._value = val;
+    },
+
+    getValue: function () {
+        return this._value;
+    },
+
+    getReadonly: function () {
+        return this._readonly;
+    },
+
+    setReadonly: function (ro) {
+        this._readonly = ro;
+    },
+
+    getSelectedText: function () {
+        return this._selectedText;
+    }, 
+
+    getSelectedValue: function () {
+        return this._selectedValue;
     },
 
     getIsMultSelect: function () {
@@ -74,13 +103,13 @@ wof.widget.ComboBox.prototype = {
         this._isMultSelect = isMultSelect;
     },
 
-    getMode: function () {
-        return this._mode;
-    },
+    // getMode: function () {
+    //     return this._mode;
+    // },
 
-    setMode: function (mode) {
-        this._mode = mode;
-    },
+    // setMode: function (mode) {
+    //     this._mode = mode;
+    // },
 
     getInitValue: function () {
         return this._initValue;
@@ -98,16 +127,16 @@ wof.widget.ComboBox.prototype = {
         this._isAsync = isAsync;
     },
 
-    getSelectBoxWidth: function () {
-        return this._getSelectBoxWidth;
-    },
+    // getSelectBoxWidth: function () {
+    //     return this._getSelectBoxWidth;
+    // },
 
     getComboboxData: function () {
-        return this._comboboxData;
+        return this._comboBoxData;
     },
 
     setComboboxData: function (comboboxData) {
-        this._comboboxData = comboboxData || [];
+        this._comboBoxData = comboboxData || [];
     },
 
     onBeforeSelect: function (callBack) {
@@ -135,10 +164,10 @@ wof.widget.ComboBox.prototype = {
         // })
 
         this._select = wis$.create('Select');
-  
-        this._select.setSelectName(this.getSelectName());
+
+        this._select.setSelectName(this.getName());
         this._select.setIsMultSelect(this.getIsMultSelect());
-        this._select.setMode(this.getMode());
+        // this._select.setMode(this.getMode());
         this._select.setInitValue(this.getInitValue());
         this._select.setIsAsync(this.getIsAsync());
         this._select.setSelectData(this.getComboboxData());
@@ -156,6 +185,8 @@ wof.widget.ComboBox.prototype = {
 
         this._select.onSelected(function (val, text) {
             _this._onSelected && _this._onSelected(val, text);
+            _this._selectedText = text;
+            _this._selectedValue = val;
             _this.sendMessage('wof.widget.ComboBox_selected');
         });
 

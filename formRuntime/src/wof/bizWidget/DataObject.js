@@ -207,13 +207,12 @@ wof.bizWidget.DataObject.prototype = {
 
     //选择实现
     afterRender: function () {
+        /**
+        this.queryData('main', null, null, 0, 100);
 
-        //this.queryData('main', null, null, 0, 100);
+        this.queryData('child', {'childEntityAlias':'hjxxchild', 'mainRowId':'1'}, null, 0, 100);
 
-        //this.queryData('child', {'childEntityAlias':'hjxxchild', 'mainRowId':'1'}, null, 0, 100);
-
-       // this.deleteData([{"jxjlid":"1"}],{'childEntityAlias':'hjxxchild', 'mainRowId':'1'});
-
+         */
         //this.updateData([{"zglbref.lbbz":"外聘员工111","zgid":"362646149296820224"}]);
 
         //this.deleteData([{"zgid":"1"}]);
@@ -226,7 +225,7 @@ wof.bizWidget.DataObject.prototype = {
 
         //this.undeleteData();
  */
-        //this.saveData('mainAndChild',{'childEntityAlias':'hjxxchild', 'mainRowId':'1'} );
+        this.saveData('mainAndChild',{'childEntityAlias':'hjxxchild', 'mainRowId':'1'} );
     },
 
     /**

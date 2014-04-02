@@ -13,7 +13,7 @@ wof.widget.Input = function () {
 wof.widget.Input.prototype = {
 
     _name: null,                    //名称
-    _validate:null,					//语义层面的验证，如数据类型，生日，长度，中英文，邮件…
+    _validateRule:null,					//语义层面的验证，如数据类型，生日，长度，中英文，邮件…
     _customValidate: null,          //自定义验证器
     _errorMsg: null,                //验证失败信息
 
@@ -36,11 +36,11 @@ wof.widget.Input.prototype = {
     setName: function (name) {
         this._name = name;
     },
-    getValidate: function () {
-        return this._validate;
+    getValidateRule: function () {
+        return this._validateRule;
     },
-    setValidate: function (validate) {
-        this._validate = validate;
+    setValidateRule: function (validate) {
+        this._validateRule = validate;
     },
     getCustomValidate: function () {
         return this._customValidate;
@@ -102,22 +102,12 @@ wof.widget.Input.prototype = {
     setReadonly: function (readonly) {
         this._readonly = readonly;
     },
-
-    onClick: function (callBack) {
-        this._onClick = callBack;
+    /**
+     * 初始化方法
+     */
+    _init: function (data) {
+    	this.setOptions(data);
     },
-
-    onBlur: function (callBack) {
-        this._onBlur = callBack;
-    },
-    onChange: function (callBack) {
-        this._onChange = callBack;
-    },
-
-    onFocus: function (callBack) {
-        this._onFocus = callBack;
-    },
-
     initRender: function () {
         var _this = this;
         this._input = wis$.create('Input');
@@ -155,9 +145,9 @@ wof.widget.Input.prototype = {
     //----------必须实现----------
     render: function () {
         this._input.setName(this.getName());
-        this._input.setValidate(this.getValidate());
-        this._input.setCustomValidate(this.getCustomValidate());
-        this._input.setErrorMsg(this.getErrorMsg());
+        //this._input.setValidateRule(this.getValidateRule());
+        //this._input.setCustomValidate(this.getCustomValidate());
+        //this._input.setErrorMsg(this.getErrorMsg());
         this._input.setDisplayType(this.getDisplayType());
         this._input.setFormat(this.getFormat());
         this._input.setType(this.getType());
@@ -170,13 +160,78 @@ wof.widget.Input.prototype = {
         this._input.setHeight(this.getHeight());
 
     },
-
+    
     //选择实现
     afterRender: function () {
         this._input.render();
         this.sendMessage('wof.widget.Input_render');
     },
-
+    //----------自定义实现----------
+	getOptions: function () {
+		return {
+            cid: this.getCid(),
+            name: this.getName(),
+            validateRule:this.getValidateRule(),
+            themes:this.getThemes(),
+            customValidate: this.getCustomValidate(),
+            value: this.getValue(),
+            errorMsg: this.getErrorMsg(),
+            displayType: this.getDisplayType(),
+            format:this.getFormat(),
+			type:this.getType(),
+			maxLength: this.getMaxLength(),
+            placeholder: this.getPlaceholder(),
+            disabled: this.getDisabled(),
+            readonly: this.getReadonly()
+        }
+    },
+    //----------自定义实现(进行必要的校验和默认值设置)----------
+    setOptions: function (data) {
+    	if (!data) {
+    		return;
+    	}
+        if(data.name){
+        	this.setName(data.name);
+		}
+        if(data.themes){
+        	this.setThemes(data.themes);
+		}
+        if(data.value){
+    		this.setValue(data.value);
+    	}
+        if(data.validateRule){
+        	this.setValidateRule(data.validateRule);
+    	}
+        if(data.format){
+        	this.setFormat(data.format);
+    	}
+        if(data.type){
+        	this.setType(data.type);
+    	}else{
+    		this.setType("text");
+    	}
+        if(data.placeholder){
+        	this.setPlaceholder(data.placeholder);
+    	}
+        if(data.customValidate){
+        	this.setCustomValidate(data.customValidate);
+    	}
+        if(data.errorMsg){
+        	this.setErrorMsg(data.errorMsg);
+    	}
+        if(data.displayType){
+        	this.setDisplayType(data.displayType);
+    	} 
+        if(data.maxlength){
+        	this.setMaxLength(data.maxlength);
+    	}
+        if(data.disabled){
+        	this.setDisabled(data.disabled);
+    	}
+        if(data.readonly){
+        	this.setReadonly(data.readonly);
+    	}
+    },
     /**
      * getData/setData 方法定义
      */
@@ -185,7 +240,7 @@ wof.widget.Input.prototype = {
     getData: function () {
         return {
             name: this.getName(),
-            validate:this.getValidate(),
+            validateRule:this.getValidateRule(),
             customValidate: this.getCustomValidate(),
             value: this.getValue(),
             errorMsg: this.getErrorMsg(),
@@ -202,7 +257,7 @@ wof.widget.Input.prototype = {
     setData: function (data) {
         this.setName(data.name);
         this.setValue(data.value);
-        this.setValidate(data.validate);
+        this.setValidateRule(data.validate);
         this.setFormat(data.format);
         this.setType(data.type);
         this.setPlaceholder(data.placeholder);

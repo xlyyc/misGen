@@ -227,17 +227,12 @@ wof.functionWidget.AddRecordComponent.prototype = {
         var button = wof$.create('Button');
         button.setLabel(this.getCallItemCaption());
         button.setIsInside(true);
-        //var clickFunc = function (){
-        	
-        // };
-        //button.onClick(clickFunc);
         button.appendTo(this);
         that._btn = button;
     },
 
     //选择实现
-    beforeRender: function () {
-    },
+    beforeRender: function () {},
 
     //----------必须实现----------
     render: function () {
@@ -247,9 +242,7 @@ wof.functionWidget.AddRecordComponent.prototype = {
     },
 
     //选择实现
-    afterRender: function () {
-
-    },
+    afterRender: function () {},
 
     /**
      * getData/setData 方法定义
@@ -290,7 +283,6 @@ wof.functionWidget.AddRecordComponent.prototype = {
     // 初始化监听消息 
     _insideOnReceiveMessage:{
         'wof.widget.Dialog_close':function(message){
-        	//var that = this;
         	if (this._dialog!=null&&message.sender!=null&&
 				this._dialog.getId() == message.sender.id) {
 				if(this.getBindComponents()){
@@ -310,7 +302,6 @@ wof.functionWidget.AddRecordComponent.prototype = {
         	}
         },
         'wof.widget.Button_onclick':function(message){
-        	//var that = this;
         	if (this._btn!=null&&message.sender!=null&&
     				this._btn.getId() == message.sender.id) {
         		if(this.getBindComponents()!=null&&this.getBindComponents()!=""&&this.getBindComponents()!="null"){
@@ -321,34 +312,54 @@ wof.functionWidget.AddRecordComponent.prototype = {
             				dialog.setIsInside(true);
             				//按钮[ { text: '确定', onclick: function (item, dialog) { alert(item.text); } ]
             				var buttons = [];
-            				var btn_ok = { text: '全部提交', onclick: function (item, dialog) {
-            					//TODO dialog.frame.EmapDataObject.commitRecord();	
-            					dialog.close();
-            					} 
-            				};
-            				var btn_cancel = { text: '取消', onclick: function (item, dialog) {
+            				
+            				var btn_clocse = { text: '关闭', onclick: function (item, dialog) {
         							dialog.close();
         						} 
             				};
-            				buttons.push(btn_ok);
-            				buttons.push(btn_cancel);
+            				buttons.push(btn_clocse);
             				dialog.setButtons(buttons);
             				dialog.setCanDrag(true);
             				this._dialog = dialog;
             				this._dialog.appendTo(this);
             			}
-    	        		if(this.getOpenUrl().indexOf("?")>-1){
-    	        			this._dialog.setUrl(this.getOpenUrl()+"&pagestate=Add");
-    	           		}else{
-    	           			this._dialog.setUrl(this.getOpenUrl()+"?pagestate=Add");
-    	           		}
-    	        		this._dialog.render();
+            			if(!this.getBindComp()){
+							var bindComp = this._getObjByComponentId(this.getBindComponents());
+							if(bindComp){
+								this.setBindComp(bindComp);
+							}
+						}
+						var linkMainParamStr = '';
+            			if(this.getBindComp()!=null){
+							if(this.getBindComp()!=null&&this.getBindComp().getClassName()!=null 
+									&& this.getBindComp().getClassName()=="wof.bizWidget.VoucherGridComponent"){
+		    					var linkMainValue = this.getBindComp().getCurrentMainRowId();
+		    					if(linkMainValue!=null){
+		    						linkMainParamStr = '&'+this.getParamMaps()['linkMainFiledKey']+'='+linkMainValue;
+		    					}
+							}
+							if(this.getOpenUrl().indexOf("?")>-1){
+	    	        			this._dialog.setUrl(this.getOpenUrl()+"&pagestate=Add"+linkMainParamStr);
+	    	           		}else{
+	    	           			this._dialog.setUrl(this.getOpenUrl()+"?pagestate=Add"+linkMainParamStr);
+	    	           		}
+	    	        		this._dialog.render();
+						}else{
+							var dialog = wof$.create('Dialog');
+	        				dialog.setType("warn");
+	        				dialog.setTextContent("绑定列表不存在!");
+	        				dialog.render();
+						}
+            			
             		}else{
             			//行编辑
             			this.sendMessage('wof.functionWidget.AddRecordComponent_click');
             		}
             	}else{
-            		alert("未绑定列表！");
+            		var dialog = wof$.create('Dialog');
+    				dialog.setType("warn");
+    				dialog.setTextContent("未绑定列表!");
+    				dialog.render();
             	}	
         	}
         }
@@ -380,12 +391,6 @@ wof.functionWidget.AddRecordComponent.prototype = {
 
         }
     },
-    /**
-	 * 新增对话框关闭的参数
-	 */
-	_onDialogClose : function(message) {
-		
-	},
 	/**
 	 *　根据构件ＩＤ查找构件对象
 	 */

@@ -1,5 +1,5 @@
 wof.bizWidget.GridComponent = function() {
-	// 初始化监听消息 
+	// 初始化监听消息
 	this.setOnReceiveMessage([ {
 		id : 'wof.bizWidget.DataObject_query',
 		priority : 50,
@@ -36,18 +36,55 @@ wof.bizWidget.GridComponent = function() {
 		id : 'wof.functionWidget.UpdateRecordComponent_click',
 		priority : 50,
 		method : 'this._onUpdateRecordComponent_click(message)'
-	},
-	{
+	}, {
 		id : 'wof.functionWidget.CommitRecordComponent_click',
 		priority : 50,
 		method : 'this._onCommitRecordComponent_click(message)'
-	}	
-	]);
+	}, {
+		id : 'wof.widget.Grid_reload',
+		priority : 50,
+		method : 'this._onGridReload(message)'
+	}, {
+		id : 'wof.widget.Grid_onToNext',
+		priority : 50,
+		method : 'this._onGridReload(message)'
+	} ]);
 
-	
 };
-
 wof.bizWidget.GridComponent.prototype = {
+
+	_insideOnReceiveMessage : {
+		"wof.widget.Grid_onToNext" : function(message) {
+			this.nextPage();
+			this.sendMessage('wof.bizWidget.GridComponent_ToNext');
+		},
+		"wof.widget.Grid_onToPrev" : function(message) {
+			this.prevPage();
+			this.sendMessage('wof.bizWidget.GridComponent_ToPrev');
+		},
+		"wof.widget.Grid_onToFirst" : function(message) {
+			this.gotoPage(1);
+			this.sendMessage('wof.bizWidget.GridComponent_ToFirst');
+		},
+		"wof.widget.Grid_onToLast" : function(message) {
+			this.gotoPage(this.getTotalPage());
+			this.sendMessage('wof.bizWidget.GridComponent_ToLast');
+		},
+		"wof.widget.Grid_onReload" : function(message) {
+			this.gotoPage(this.getPageNo(), true);
+			this.sendMessage('wof.bizWidget.GridComponent_OnReload');
+		},
+		"wof.widget.Grid_onSelectRow" : function(message) {
+			this._currentSelectedRowIndex = message.sender.currentSelectedRowIndex;
+			var gridData = this._getDataByIndex(this._currentSelectedRowIndex);
+			this._currentSelectedRowData = gridData;
+			if (gridData != null) {
+				var idPro = this._getIdPro();
+				this._currentRowId = gridData[idPro].value;
+			}
+			this.sendMessage('wof.bizWidget.GridComponent_selectRow');
+		}
+	},
 	/**
 	 * 设计时属性
 	 */
@@ -315,26 +352,28 @@ wof.bizWidget.GridComponent.prototype = {
 	_cachePageNo : null,
 	_gridData : null,
 	_currentRow : null,
-	_currentRowId:null,
+	_currentRowId : null,
 	_grid : null,
+	_currentSelectedRowIndex : null,
+	_currentSelectedRowData : null,
 
-	reload:function (mode){
-		if(!mode){
+	reload : function(mode) {
+		if (!mode) {
 			mode = 'currentPage';
 		}
-		switch(mode){
-		   case 'currentPage':
-			   this.gotoPage(this.getPageNo(),true);   
-			   break;
-		   case 'firstPage':
-			   this.gotoPage(1,true);
-			   break;
-		   case 'lastPage':
-			   this.gotoPage(this.getTotalPage(),true);
-			   break;
+		switch (mode) {
+		case 'currentPage':
+			this.gotoPage(this.getPageNo(), true);
+			break;
+		case 'firstPage':
+			this.gotoPage(1, true);
+			break;
+		case 'lastPage':
+			this.gotoPage(this.getTotalPage(), true);
+			break;
 		}
 	},
-	getCurrentRowId:function (){
+	getCurrentRowId : function() {
 		return this._currentRowId;
 	},
 	setCurrentRow : function(currentRow) {
@@ -414,7 +453,7 @@ wof.bizWidget.GridComponent.prototype = {
 	render : function() {
 		if (!this.grid) {
 			var that = this;
-			this.grid = wis$.create('Grid', {
+			this.grid = wof$.create('Grid', {
 				width : this.getWidth(),
 				height : this.getHeight(),
 				top : this.getTop(),
@@ -428,34 +467,12 @@ wof.bizWidget.GridComponent.prototype = {
 				useMutiplePage : this.getUseMutiplePage(),
 				columns : this.getGridColumnsData(),
 				total : this.getPageBar().total,
-				pageNo : this.getPageBar().pageNo,
+				page : this.getPageBar().pageNo,
 				pageSize : this.getPageBar().pageSize,
 				data : this.getGridData(),
-				refData : this.getRefData(),
-				onToNext : function(e) {
-					that.nextPage();
-				},
-				onToPrev : function(e) {
-					that.prevPage();
-				},
-				onToLast : function() {
-					that.gotoPage(that.getTotalPage());
-				},
-				onToFirst : function() {
-					that.gotoPage(1);
-				},
-				onSelectRow : function (data,index){
-					var gridData = that._getDataByIndex(index);
-					if(gridData != null){
-						var idPro = that._getIdPro();
-						that._currentRowId = gridData[idPro];
-						that.sendMessage('wof.bizWidget.GridComponent_rowSelect',{componentId : that.getComponentId(),data:gridData,index:index,id : gridData[that._getIdPro()].value});
-					}
-				},
-				onReload : function (){
-					that.gotoPage(that.getPageNo(),true);
-				}
+				refData : this.getRefData()
 			});
+			this.grid.setIsInside(true);
 		}
 
 		var grid = this.grid;
@@ -468,8 +485,8 @@ wof.bizWidget.GridComponent.prototype = {
 		grid.setGridData(this.getGridData());
 		grid.setTotal(this.getPageBar().total);
 		grid.render();
- 		this.getDomInstance().append(grid.getDomInstance());
- 	},
+		grid.appendTo(this);
+	},
 	nextPage : function() {
 		var pageNo = this.getPageNo();
 		var totalPage = this.getTotalPage();
@@ -494,15 +511,15 @@ wof.bizWidget.GridComponent.prototype = {
 	 * 
 	 */
 	gotoPage : function(pageNo, forceFlush) {
-		if(pageNo != 1){
+		if (pageNo != 1) {
 			if (pageNo <= 0 || pageNo > this.getTotalPage()) {
 				alert(pageNo + '页号不存在'); // todo 调用widget下的对话框
 				return;
 			}
 		}
 		this.setPageNo(pageNo);
-		 // 表明pageNo不在缓存中需要发起新的查询或者强制加载数据
-        if(true == forceFlush || null == this._getPageDataInCache(pageNo)) {
+		// 表明pageNo不在缓存中需要发起新的查询或者强制加载数据
+		if (true == forceFlush || null == this._getPageDataInCache(pageNo)) {
 			var offset = (pageNo - 1) * this.getPageSize();
 			var rowsCount = this.getPageSize() * 2;
 			var dataSource = this.getDataSource();
@@ -522,7 +539,7 @@ wof.bizWidget.GridComponent.prototype = {
 		var cachePageNo = this.getCachePageNo();
 		var offset = (cachePageNo[0] == pageNo) ? 0 : this.getPageSize();
 		var cacheData = this.getDataSource().getLocalData();
-		if(cacheData){
+		if (cacheData) {
 			var rows = cacheData.rows;
 			// end为指定页数据的结束下标位置(下标从0开始)
 			var end = ((offset + this.getPageSize()) < rows.length ? (offset + this
@@ -541,7 +558,17 @@ wof.bizWidget.GridComponent.prototype = {
 		return null;
 	},
 	getData : function() {
-		return {};
+		return {
+			componentId : this.getComponentId(),
+			currentSelectedRowData : this.getCurrentSelectedRowData(),
+			currentRowId : this.getCurrentRowId()
+		};
+	},
+	getCurrentSelectedRowIndex : function() {
+		return this._currentSelectedRowIndex;
+	},
+	getCurrentSelectedRowData : function() {
+		return this._currentSelectedRowData;
 	},
 	setData : function() {
 
@@ -549,7 +576,7 @@ wof.bizWidget.GridComponent.prototype = {
 	_onAddRecordComponent_click : function(message) {
 		var bindComponentId = message.sender.bindComponents;
 		if (bindComponentId == this.getComponentId()) {
-		   this.addRow();
+			this.addRow();
 		}
 	},
 	_onDeleteRecordComponent_click : function(message) {
@@ -581,7 +608,7 @@ wof.bizWidget.GridComponent.prototype = {
 	_onCommitRecordComponent_click : function(message) {
 		var bindComponentId = message.sender.bindComponents;
 		if (bindComponentId == this.getComponentId()) {
-		   this.commitRow();
+			this.commitRow();
 		}
 	},
 	/**
@@ -625,19 +652,19 @@ wof.bizWidget.GridComponent.prototype = {
 			this.gotoPage(1, true);
 		}
 	},
-	_getIdPro : function (){
+	_getIdPro : function() {
 		return this.getDataSource().getLocalData().idPro;
 	},
-	_getDataByIndex:function (index){
+	_getDataByIndex : function(index) {
 		var gridData = this.getGridData();
-		if(typeof index == 'string'){
+		if (typeof index == 'string') {
 			index = parseInt(index);
 		}
-		if(index >= gridData.length){
+		if (index >= gridData.length) {
 			return null;
 		}
 		return gridData[index].data;
-		
+
 	},
 	getCurrentMainRowData : function() {
 		var currentRowData = [];
@@ -650,7 +677,7 @@ wof.bizWidget.GridComponent.prototype = {
 			var data = gridData[row].data[idPro].value;
 			currentRowData.push(data);
 		}
-		return currentRowData.length  == 0 ? null  : currentRowData;
+		return currentRowData.length == 0 ? null : currentRowData;
 	},
 	_isDataChange : function(message) {
 		var flag = false;
@@ -821,22 +848,31 @@ wof.bizWidget.GridComponent.prototype = {
 		this.grid.addRow(data);
 	},
 	deleteRow : function(data) {
-		this.getDataSource().deleteData(data);
+		var array = [];
+		for (var i = 0; i < data.length; i++) {
+			var obj = {};
+			var d = data[i];
+			for ( var attr in d) {
+				obj[attr] = d[attr].value;
+			}
+			array.push(obj);
+		}
+		this.getDataSource().deleteData(array);
 	},
 	updateRow : function(data) {
 		this.getDataSource().updateData(data);
 	},
 	commitRow : function() {
-		
+
 		var map = new wof.util.Hashtable();
-        var columns = this.getColumns();
-        for(var i = 0; i < columns.length;i++){
-        	var column = columns[i];
-        	if(column.bindDataField){
-        		map.add(column.bindDataField,column);
-        	}
-        }
-        
+		var columns = this.getColumns();
+		for (var i = 0; i < columns.length; i++) {
+			var column = columns[i];
+			if (column.bindDataField) {
+				map.add(column.bindDataField, column);
+			}
+		}
+
 		var currentData = this.grid.getCurrentData();
 		var gridData = this.getGridData();
 		var updateData = [];
@@ -847,55 +883,55 @@ wof.bizWidget.GridComponent.prototype = {
 				for ( var d in data) {
 					var value = data[d];
 					var column = map.items(d);
-					if(column){
-						var message = this.validate(value,column);
-		        		if(true != message){
-		        			alert(message);
-		        			return;
-		        		}
+					if (column) {
+						var message = this.validate(value, column);
+						if (true != message) {
+							alert(message);
+							return;
+						}
 						originalData[d] = value;
 					}
-	        		
+
 				}
 				updateData.push(originalData);
 			}
 		}
-		
+
 		var addData = this.grid.getCurrentAddData();
-        for(var i = 0; i < addData.length;i++){
-        	var row = addData[i]
-        	for(var prop in row){
-        		var column = map.items(prop);
-        		var message = this.validate(row[prop],column);
-        		if(true != message){
-        			alert(message);
-        			return;
-        		}
-        	}
-        }
+		for (var i = 0; i < addData.length; i++) {
+			var row = addData[i]
+			for ( var prop in row) {
+				var column = map.items(prop);
+				var message = this.validate(row[prop], column);
+				if (true != message) {
+					alert(message);
+					return;
+				}
+			}
+		}
 		this.getDataSource().addData(addData);
 		this.getDataSource().updateData(updateData);
 	},
-	validate:function (value,columnDef){
+	validate : function(value, columnDef) {
 		var result = true;
 		var rule = '[';
-		if(columnDef.required){
-			rule+='required,';
+		if (columnDef.required) {
+			rule += 'required,';
 		}
-		if(columnDef.max){
-			rule+='maxValue,';
+		if (columnDef.max) {
+			rule += 'maxValue,';
 		}
-		if(columnDef.min){
-			rule+='minValue,';
+		if (columnDef.min) {
+			rule += 'minValue,';
 		}
-		if(columnDef.length){
-			rule+='length,'
+		if (columnDef.length) {
+			rule += 'length,'
 		}
-		if(rule.length > 1){
-			rule = rule.substring(0,rule.length-1);
-			rule +=']';
+		if (rule.length > 1) {
+			rule = rule.substring(0, rule.length - 1);
+			rule += ']';
 		}
-		result = emap_validate.doValidate(value,''+rule+'');
+		result = emap_validate.doValidate(value, '' + rule + '');
 		return result;
 	},
 	undeleteData : function() {
@@ -903,56 +939,6 @@ wof.bizWidget.GridComponent.prototype = {
 	},
 	saveData : function() {
 		this.getDataSource().saveData();
-	},
-	// 事件
-	/**
-	 * 
-	 * @param data
-	 *            data.newSize 改变后大小 data.oldSize 改变前大小
-	 */
-	onResize : function(data) {
-
-	},
-	/**
-	 * 列表刷新
-	 */
-	onReload : function() {
-
-	},
-	onRowSelected :function (){
-		
-	},
-	/**
-	 * 添加一行之后
-	 * 
-	 * @param rowData
-	 */
-	afterAddRow : function(data) {
-
-	},
-	/**
-	 * 删除一行之后
-	 * 
-	 * @param rowData
-	 */
-	afterDeleteRow : function(data) {
-
-	},
-	/**
-	 * 
-	 * @param data
-	 *            data.columnData data.newIndex data.oldIndex
-	 */
-	onColumnMove : function(data) {
-
-	},
-	/**
-	 * 
-	 * @param data
-	 *            data.Rank 行列号 data.newValue 改变后的值 data.oldValue 改变前的值
-	 */
-	onCellValueChange : function(data) {
-
 	},
 	/**
 	 * 设置属性

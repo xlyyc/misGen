@@ -205,15 +205,32 @@ wof.functionWidget.DeleteRecordComponent.prototype = {
         				}
         			}
             		if(this.getBindComp()!=null){
-            			var selectRows = this.getBindComp().getSelectedRows();//getCheckedRows//
+            			var selectRows = this.getBindComp().getCheckedRows();//getCheckedRows//
             			if(selectRows!=null&&selectRows.length>0){
-            				this.sendMessage('wof.functionWidget.DeleteRecordComponent_click');
+            				// TODO 调用对话框，确认删除操作
+            				var dialog = wof$.create('Dialog');
+            				dialog.setType("confirm");
+            				dialog.setTextContent("确定要删除所选记录吗!");
+            				var callback_ = function(rs){
+            					if(rs){
+            						this.sendMessage('wof.functionWidget.DeleteRecordComponent_click');
+            					}
+            				}
+            				dialog.onClickTypeButton(callback_);
+            				dialog.render();
+            				
             			}else{
-            				// TODO 
+            				var dialog = wof$.create('Dialog');
+            				dialog.setType("warn");
+            				dialog.setTextContent("未选择数据!");
+            				dialog.render();
             			}
             		}
         		}else{
-        			// TODO 
+        			var dialog = wof$.create('Dialog');
+    				dialog.setType("warn");
+    				dialog.setTextContent("未绑定列表!");
+    				dialog.render();
         		}	
         	}
         }

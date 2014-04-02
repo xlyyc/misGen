@@ -9,7 +9,6 @@ wis.widget.Textarea = function () {
 };
 wis.widget.Textarea.prototype = {
 
-    _cid: null,                     //id
     _name: null,                    //名称
     _themes:null,					//文本域的样式，对应主题里面的样式名
     _value: null,                    //本框的值
@@ -19,7 +18,9 @@ wis.widget.Textarea.prototype = {
     _cols: null,                     //规定文本区内可见的列数
     _wrap: null,                     //自动换行
 
-    _customValidate: null,          //自定义验证器
+    _validateRule:null,					//语义层面的验证，如数据类型，生日，长度，中英文，邮件…
+    _customValidate: null,          //自定义验证器 
+    _errorMsg: null,                //验证失败信息
     _disabled: null,                 //规定该文本框只做展示用，提交时无法获取值
     _readonly: null,                //	规定该文本区只读。文本框不允许修改，提交时可以获取值
 
@@ -30,26 +31,12 @@ wis.widget.Textarea.prototype = {
 
     _root:null,//底层组件对象
     
-    getCid: function () {
-        return this._cid || this.getId();
-    },
-    setCid: function (cid) {
-        this._cid = cid;
-    },
     getName: function () {
         return this._name;
     },
     setName: function (name) {
         this._name = name;
     },
-
-    getCustomValidate: function () {
-        return this._customValidate;
-    },
-    setCustomValidate: function (customValidate) {
-        this._customValidate = customValidate;
-    },
-
     getValue: function () {
         return this._value || '';
     },
@@ -104,7 +91,27 @@ wis.widget.Textarea.prototype = {
     setReadonly: function (readonly) {
         this._readonly = readonly;
     },
-
+    getValidateRule: function () {
+        return this._validateRule;
+    },
+    
+    setValidateRule: function (validate) {
+        this._validateRule = validate;
+    },
+    getCustomValidate: function () {
+        return this._customValidate;
+    },
+    
+    setCustomValidate: function (customValidate) {
+        this._customValidate = customValidate;
+    },
+    getErrorMsg: function () {
+        return this._errorMsg || '';
+    },
+    
+    setErrorMsg: function (errorMsg) {
+        this._errorMsg = errorMsg;
+    },
     onClick: function (callBack) {
         this._onClick = callBack;
     },
@@ -141,7 +148,6 @@ wis.widget.Textarea.prototype = {
 
     //渲染方法
     render: function () {
-    	//if (this.getCid()) this._root.attr('id', this.getCid());//cid 不允许设置
 		if (this.getName()) this._root.attr('name',this.getName());
 		if (this.getDisabled()) this._root.attr('disabled',this.getDisabled());
 		if (this.getValue()) this._root.attr('value',this.getValue());
@@ -151,9 +157,8 @@ wis.widget.Textarea.prototype = {
 		if (this.getWrap()) this._root.attr('wrap',this.getWrap());
 		if(this.getWidth()!=null) this._rootObj.css('width',this.getWidth()+'px');
         if(this.getHeight()!=null) this._rootObj.css('height',this.getHeight()+'px');
-		//themes
-		//wrap
-		//maxlength
+        if(this.getMaxLength()!=null) this._rootObj.css('maxlength',this.getMaxLength());
+        //themes
     },
 
     //渲染后处理方法
@@ -166,16 +171,17 @@ wis.widget.Textarea.prototype = {
     //----------必须实现----------
     getData: function () {
     	return {
-            cid: this.getCid(),
             name: this.getName(),
             row:this.getRow(),
             cols: this.getCols(),
             wrap: this.getWrap(),
             themes:this.getThemes(),
-            customValidate: this.getCustomValidate(),
             value: this.getValue(),
 			maxLength: this.getMaxLength(),
             placeholder: this.getPlaceholder(),
+            validateRule:this.getValidateRule(),
+            customValidate: this.getCustomValidate(),
+            errorMsg: this.getErrorMsg(),
             disabled: this.getDisabled(),
             readonly: this.getReadonly()
         }
@@ -186,18 +192,19 @@ wis.widget.Textarea.prototype = {
     	if (!data) {
     		return;
     	}
-        this.setCid(data.cid);
         this.setName(data.name);
 		this.setThemes(data.themes);
 		this.setValue(data.value);
     	this.setPlaceholder(data.placeholder);
     	this.setRow(data.row);
     	this.setCols(data.cols);
-    	this.setCustomValidate(data.customValidate);
     	this.setMaxLength(data.maxlength);
     	this.setWrap(data.wrap);
     	this.setDisabled(data.disabled);
     	this.setReadonly(data.readonly);
+    	 this.setValidateRule(data.validate);
+     	this.setCustomValidate(data.customValidate);
+     	this.setErrorMsg(data.errorMsg);
     },
     //解除事件绑定
     _unbindEvents: function() {
@@ -246,22 +253,23 @@ wis.widget.Textarea.prototype = {
 	//----------自定义实现----------
 	getOptions: function () {
 		return {
-            cid: this.getCid(),
             name: this.getName(),
             row:this.getRow(),
             wrap: this.getWrap(),
             themes:this.getThemes(),
-            customValidate: this.getCustomValidate(),
             value: this.getValue(),
             cols: this.getCols(),
 			maxLength: this.getMaxLength(),
             placeholder: this.getPlaceholder(),
             disabled: this.getDisabled(),
             readonly: this.getReadonly(),
-            onclick:this._onClick,
+            validateRule:this.getValidateRule(),
+            customValidate: this.getCustomValidate(),
+            errorMsg: this.getErrorMsg()
+           /* onclick:this._onClick,
             onblur:this._onBlur,
             onfocus:this._onFocus,
-            onchange:this._onChange
+            onchange:this._onChange*/
         }
     },
 
@@ -270,9 +278,6 @@ wis.widget.Textarea.prototype = {
     	if (!data) {
     		return;
     	}
-        /*if(data.cid){
-    		this.setCid(data.cid);
-    	}*/
         if(data.name){
         	this.setName(data.name);
 		}
@@ -300,9 +305,6 @@ wis.widget.Textarea.prototype = {
     	}else{
     		this.setCols(20);
     	}
-        if(data.customValidate){
-        	this.setCustomValidate(data.customValidate);
-    	}
         if(data.maxlength){
         	this.setMaxLength(data.maxlength);
     	}
@@ -312,6 +314,16 @@ wis.widget.Textarea.prototype = {
         if(data.readonly){
         	this.setReadonly(data.readonly);
     	}
+        if(data.validateRule){
+        	this.setValidateRule(data.validateRule);
+    	}
+        if(data.customValidate){
+        	this.setCustomValidate(data.customValidate);
+    	}
+        if(data.errorMsg){
+        	this.setErrorMsg(data.errorMsg);
+    	}
+
         if(data.onClick&&(typeof this.onClick == "function")){
     		this.onClick(this.onClick);
     	}

@@ -650,8 +650,8 @@
          //$.ligerDialog.blurElement();
 
     };
-
-    $.ligerDialog.confirm = function (content, title, callback, className, type) {
+                          
+    $.ligerDialog.confirm = function (content, title, className ,callback, type) {
         var className = (callback && typeof(callback) == "string") ? callback : ((className && typeof(className == 'string')) ? className : $.ligerDefaults.Dialog.className);
         if (typeof (title) == "function") {
             callback = title;
@@ -678,6 +678,8 @@
         var dialogContent =  $.ligerDialog.open(p);
         dialogContent.focus();
         //$.ligerDialog.blurElement();
+
+        return dialogContent;
     };
 
     $.ligerDialog.warning = function (content, title, callback) {

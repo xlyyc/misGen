@@ -258,17 +258,11 @@ wof.functionWidget.UpdateRecordComponent.prototype = {
                 	        		dialog.setIsInside(true);
                 	        		//按钮[ { text: '确定', onclick: function (item, dialog) { alert(item.text); } ]
                     				var buttons = [];
-                    				var btn_ok = { text: '全部提交', onclick: function (item, dialog) {
-                    					//TODO dialog.frame.EmapDataObject.commitRecord();	
-                    					dialog.close();
-                    					} 
-                    				};
-                    				var btn_cancel = { text: '取消', onclick: function (item, dialog) {
+                    				var btn_clocse = { text: '关闭', onclick: function (item, dialog) {
                 							dialog.close();
                 						} 
                     				};
-                    				buttons.push(btn_ok);
-                    				buttons.push(btn_cancel);
+                    				buttons.push(btn_clocse);
                     				dialog.setButtons(buttons);
                     				dialog.setCanDrag(true);
                 	        		dialog.appendTo(this);
@@ -285,32 +279,34 @@ wof.functionWidget.UpdateRecordComponent.prototype = {
                     			this.sendMessage('wof.functionWidget.UpdateRecordComponent_click');
                     		}	
             			}else{
-            				alert("未选择数据！");
+            				var dialog = wof$.create('Dialog');
+            				dialog.setType("warn");
+            				dialog.setTextContent("未选择数据!");
+            				dialog.render();
             			}
             		}else{
-            			alert("未绑定列表！");
+            			var dialog = wof$.create('Dialog');
+        				dialog.setType("warn");
+        				dialog.setTextContent("未绑定列表!");
+        				dialog.render();
             		}
             	}else{
-            		alert("未配置操作！");
+            		var dialog = wof$.create('Dialog');
+    				dialog.setType("warn");
+    				dialog.setTextContent("未配置操作!");
+    				dialog.render();
             	}
         	}
         }
     },
     //选择实现
-    beforeRender: function () {
-
-        //this._btn.setText(this.getCallItemCaption());
-    },
+    beforeRender: function () { },
 
     //----------必须实现----------
-    render: function () {
-
-    },
+    render: function () {},
 
     //选择实现
-    afterRender: function () {
-
-    },
+    afterRender: function () { },
 
     /**
      * getData/setData 方法定义
@@ -346,21 +342,6 @@ wof.functionWidget.UpdateRecordComponent.prototype = {
         this.setCallItemCaption(data.callItemCaption);
         this.setCallType(data.callType);
     },
-
-    /*_insideOnReceiveMessage:{
-        'wof.widget.Button_mousedown':function(message){
-            console.log(message.id+'   '+this.getClassName());
-            this.sendMessage('wof.functionWidget.UpdateRecordComponent_active');
-            return false;
-        },
-        'wof.widget.Button_dblclick':function(message){
-            console.log(message.id+'   '+this.getClassName());
-            this.sendMessage('wof.functionWidget.UpdateRecordComponent_active');
-            return false;
-        }
-
-    },*/
-
     updateUpdateRecordComponent: function(data){
         if(!jQuery.isEmptyObject(data)){
             if(data.bindComponents!=null){
@@ -396,12 +377,6 @@ wof.functionWidget.UpdateRecordComponent.prototype = {
 	    }
 	    return null;
     }, 
-    /**
-	 * 修改 对话框关闭的参数
-	 */
-	_onDialogClose : function(message) {
-		
-	},
     //创建初始化的button
     createSelf: function(width, height){
         var node = new wof.functionWidget.UpdateRecordComponent();

@@ -132,7 +132,7 @@ wof.functionWidget.CommitComponent.prototype = {
     },
 
     getBindComponents : function (){
-        return this._bindComponents || '';
+        return this._bindComponents;
     },
 
     setBindComponents : function (bindComponents){

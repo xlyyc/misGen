@@ -222,11 +222,13 @@ wis.widget.Dialog.prototype = {
                 case "question":
                     dialogOpenFun = jQuery.ligerDialog.question;
                     break ;
+                case "confirm":
+                    dialogOpenFun = jQuery.ligerDialog.confirm;
                 default:
                     break ;
             }
             var clickButton = this._onClickTypeButton || ( function(){} );
-            this._dialog = dialogOpenFun(this.getTextContent(), this.getTitle() , jQuery.ligerDefaults.Dialog.btnClassName, clickButton);
+            this._dialog = dialogOpenFun(this.getTextContent(), this.getTitle() , jQuery.ligerDefaults.Dialog.className, clickButton);
         }
         else
         {
@@ -266,7 +268,12 @@ wis.widget.Dialog.prototype = {
             that.remove();
             that._onClose && that._onClose(that);
         });
+
+        // 自适应对话框大小
         this._dialog.bind("dialogIFrameLoad", function (ev, frmwin) {
+            if (that.getScroll()) {
+                return; // 设置滚动条时不做自适应
+            };
             try {
                 var w = jQuery(frmwin.document).width();
                 var h = jQuery(frmwin.document).height();
@@ -275,7 +282,7 @@ wis.widget.Dialog.prototype = {
                 that._reDrawDialog();
                 // console.log(w + ' x ' + h);
             } catch (e) {
-                console.warn(e.message);
+                window.console && console.warn(e.message);
             }
         });
 

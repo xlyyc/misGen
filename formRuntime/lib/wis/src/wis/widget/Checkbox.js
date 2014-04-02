@@ -9,12 +9,13 @@ wis.widget.Checkbox = function () {
 };
 wis.widget.Checkbox.prototype = {
 
-    _cid: null,  //复选框的id
     _name: null,  //复选框的名称
     _value: null, //复选框的值
     _themes:null,
     _label: null, //复选框的文字
-    _customValidate: null,//自定义验证器
+    _validateRule:null,					//语义层面的验证，如数据类型，生日，长度，中英文，邮件…
+    _customValidate: null,          //自定义验证器 
+    _errorMsg: null,                //验证失败信息
     _disabled: null, //禁用
     _checked: null, //选中
 
@@ -27,14 +28,6 @@ wis.widget.Checkbox.prototype = {
     _onClick: null,
     _onChange: null,
     _onSelect: null,
-
-    getCid: function () {
-        return this._cid|| this.getId();
-    },
-
-    setCid: function (cid) {
-        this._cid = cid;
-    },
 
     getName: function () {
         return this._name;
@@ -49,14 +42,6 @@ wis.widget.Checkbox.prototype = {
     setThemes: function (themes) {
         this._themes = themes;
     },
-    getCustomValidate: function () {
-        return this._customValidate;
-    },
-
-    setCustomValidate: function (customValidate) {
-        this._customValidate = customValidate;
-    },
-
     getValue: function () {
         return this._value || '';
     },
@@ -72,7 +57,27 @@ wis.widget.Checkbox.prototype = {
     setLabel: function (label) {
         this._label = label;
     },
-
+    getValidateRule: function () {
+        return this._validateRule;
+    },
+    
+    setValidateRule: function (validate) {
+        this._validateRule = validate;
+    },
+    getCustomValidate: function () {
+        return this._customValidate;
+    },
+    
+    setCustomValidate: function (customValidate) {
+        this._customValidate = customValidate;
+    },
+    getErrorMsg: function () {
+        return this._errorMsg || '';
+    },
+    
+    setErrorMsg: function (errorMsg) {
+        this._errorMsg = errorMsg;
+    },
     getDisabled: function () {
         return this._disabled;
     },
@@ -121,7 +126,6 @@ wis.widget.Checkbox.prototype = {
         this.getDomInstance().append(this._rootObj.children());
         
         this._bindEvents();
-        if (this.getCid()) this._labelObj.attr('id', this.getCid());//也可不配置
     }, 
     //渲染前处理方法
     beforeRender: function (){},
@@ -159,10 +163,12 @@ wis.widget.Checkbox.prototype = {
     //----------必须实现----------
     getData: function () {
         return {
-            cid: this.getCid(),
             name: this.getName(),
-            customValidate: this.getCustomValidate(),
             value: this.getValue(),
+            label:this.getLabel(),
+            validateRule:this.getValidateRule(),
+            customValidate: this.getCustomValidate(),
+            errorMsg: this.getErrorMsg(),
             disabled: this.getDisabled(),
             checked: this.getChecked()
         };
@@ -170,11 +176,12 @@ wis.widget.Checkbox.prototype = {
 
     //----------必须实现----------
     setData: function (data) {
-        this.setCid(data.cid);
         this.setName(data.name);
         this.setLabel(data.label);
-        this.setCustomValidate(data.customValidate);
         this.setValue(data.value);
+        this.setValidateRule(data.validate);
+    	this.setCustomValidate(data.customValidate);
+    	this.setErrorMsg(data.errorMsg);
         this.setDisabled(data.disabled);
         this.setChecked(data.checked);
     },
@@ -223,17 +230,16 @@ wis.widget.Checkbox.prototype = {
     //----------自定义实现----------
 	getOptions: function () {
 		return {
-            cid: this.getCid(),
             name: this.getName(),
-            customValidate: this.getCustomValidate(),
             themes:this.getThemes(),
             label: this.getLabel(),
             value: this.getValue(),
             disabled: this.getDisabled(),
             checked: this.getChecked(),
-            onclick:this._onClick,
-            onchange:this._onChange,
-            onselect:this._onSelect
+            validateRule:this.getValidateRule(),
+            customValidate: this.getCustomValidate(),
+            errorMsg: this.getErrorMsg()
+
         }
     },
 
@@ -241,9 +247,6 @@ wis.widget.Checkbox.prototype = {
     setOptions: function (data) {
     	if (!data) {
     		return;
-    	}
-        if(data.cid){
-    		this.setCid(data.cid);
     	}
 	    if(data.name){
 			this.setName(data.name);
@@ -257,14 +260,20 @@ wis.widget.Checkbox.prototype = {
         if(data.label){
     		this.setLabel(data.label);
     	}
-        if(data.customValidate){
-    		this.setCustomValidate(data.customValidate);
-    	}
         if(data.disabled){
     		this.setDisabled(data.disabled);
     	}
         if(data.checked){
     		this.setChecked(data.checked);
+    	}
+        if(data.validateRule){
+        	this.setValidateRule(data.validateRule);
+    	}
+        if(data.customValidate){
+        	this.setCustomValidate(data.customValidate);
+    	}
+        if(data.errorMsg){
+        	this.setErrorMsg(data.errorMsg);
     	}
         if(data.onclick){
     		this.onClick(data.onclick);

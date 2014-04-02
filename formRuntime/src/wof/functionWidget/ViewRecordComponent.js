@@ -200,7 +200,6 @@ wof.functionWidget.ViewRecordComponent.prototype = {
     // 初始化监听消息 
     _insideOnReceiveMessage:{
     	'wof.widget.Dialog_close':function(message){
-        	//var that = this;
     		if (this._dialog!=null&&message.sender!=null&&
     				this._dialog.getId() == message.sender.id) {
     			this._dialog.remove(true);
@@ -208,7 +207,6 @@ wof.functionWidget.ViewRecordComponent.prototype = {
     		}
         },
     	'wof.widget.Button_onclick':function(message){
-        	//var this = this;
         	if (this._btn!=null&&message.sender!=null&&
     				this._btn.getId() == message.sender.id) {
         		if(this.getBindComponents()!=null&&this.getBindComponents()!=""&&this.getBindComponents()!="null"){
@@ -224,17 +222,11 @@ wof.functionWidget.ViewRecordComponent.prototype = {
                    	        		dialog.appendTo(this);
                    	        		//按钮[ { text: '确定', onclick: function (item, dialog) { alert(item.text); } ]
                     				var buttons = [];
-                    				var btn_ok = { text: '全部提交', onclick: function (item, dialog) {
-                    					//TODO dialog.frame.EmapDataObject.commitRecord();	
-                    					dialog.close();
-                    					} 
-                    				};
-                    				var btn_cancel = { text: '取消', onclick: function (item, dialog) {
+                    				var btn_clocse = { text: '关闭', onclick: function (item, dialog) {
                 							dialog.close();
                 						} 
                     				};
-                    				buttons.push(btn_ok);
-                    				buttons.push(btn_cancel);
+                    				buttons.push(btn_clocse);
                     				dialog.setButtons(buttons);
                     				dialog.setCanDrag(true);
                    	        		this._dialog = dialog;
@@ -247,17 +239,28 @@ wof.functionWidget.ViewRecordComponent.prototype = {
                	        		this._dialog.render();
                	        		
                        		}else{
-                       			//查看不需要发送消息
-                       			//this.sendMessage('wof.functionWidget.UpdateRecordComponent_active');
+                       			var dialog = wof$.create('Dialog');
+    	        				dialog.setType("warn");
+    	        				dialog.setTextContent("未关联页面!");
+    	        				dialog.render();
                        		}	
                			}else{
-               				alert("未选择数据！");
+               				var dialog = wof$.create('Dialog');
+	        				dialog.setType("warn");
+	        				dialog.setTextContent("未选择数据!");
+	        				dialog.render();
                			}
                		}else{
-               			alert("未绑定列表！");
+               			var dialog = wof$.create('Dialog');
+        				dialog.setType("warn");
+        				dialog.setTextContent("未绑定列表!");
+        				dialog.render();
                		}
                	}else{
-               		alert("未配置操作！");
+               		var dialog = wof$.create('Dialog');
+    				dialog.setType("warn");
+    				dialog.setTextContent("未配置操作!");
+    				dialog.render();
                	}
         	}
         }
@@ -333,16 +336,6 @@ wof.functionWidget.ViewRecordComponent.prototype = {
 
         }
     },
-    /**
-	 * 查看 对话框关闭的参数
-	 */
-	_onDialogClose : function(message) {
-		var that = this;
-		if (that._dialog!=null&&that._dialog == message.sender) {
-			that.sendMessage('wof.bizWidget.DataObject_query');// TODO 参数
-			that._dialog = null; // 还原为null，下次弹出时重新赋值
-		}
-	},
     //创建初始化的button
     createSelf: function(width, height){
         var node = new wof.functionWidget.ViewRecordComponent();

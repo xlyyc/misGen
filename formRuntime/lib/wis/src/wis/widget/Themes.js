@@ -71,8 +71,14 @@ wis.widget.Themes.prototype = {
 
     //渲染后处理方法
     afterRender: function () {
-
-
+	
+	var keys = wis.util.ObjectManager.keys();
+	for(var i=0;i<keys.length;i++){
+	var key = keys[i];
+	var obj = wis.util.ObjectManager.get(key);
+	var cls = wis.util.Tool.replaceAll(obj.getClassName(),'[.]','_');
+	alert(this.getThemesName()+'/'+obj.getLibName()+'/'+cls+'.css');
+	}
     },
 
     //----------必须实现----------

@@ -8,6 +8,10 @@
 			return obj;
 		},
 		
+		keys: function() {
+            return wis.util.ObjectManager._objs.keys();
+		},
+		
 		add: function(oId, obj) {
 			return wis.util.ObjectManager._objs.add(oId, obj);
 		},
