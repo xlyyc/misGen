@@ -1,8 +1,3 @@
-/**
- * 
- * 
- * 
- */
 wis.widget.Grid = function() {
 	this._version = '1.0';
 

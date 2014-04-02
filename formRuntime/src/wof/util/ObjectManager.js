@@ -23,13 +23,16 @@
         create: function(className, data){
             var obj = null;
             with(wof.widget)
-                with(wof.bizWidget)
-                    with(wof.functionWidget){
-                        obj = eval('new '+className+'()');
-                        if(obj._init!=null&& !jQuery.isEmptyObject(data)){
-                            obj._init(data);
-                        }
-                    }
+                with(wof.widget.spanner)
+                    with(wof.bizWidget)
+                        with(wof.bizWidget.spanner)
+                            with(wof.functionWidget)
+                                with(wof.functionWidget.spanner){
+                                    obj = eval('new '+className+'()');
+                                    if(obj._init!=null&& !jQuery.isEmptyObject(data)){
+                                        obj._init(data);
+                                    }
+                                }
             return obj;
         }
 		

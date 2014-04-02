@@ -6,10 +6,9 @@ wis.widget.Input = function () {
 };
 wis.widget.Input.prototype = {
 
-    _cid: null,                     //文本框唯一标识,页面唯一
     _name: null,                    //名称
     _themes:null,					//文本框的样式，对应主题里面的样式名
-    _validate:null,					//语义层面的验证，如数据类型，生日，长度，中英文，邮件…
+    _validateRule:null,					//语义层面的验证，如数据类型，生日，长度，中英文，邮件…
     _customValidate: null,          //自定义验证器 
     _errorMsg: null,                //验证失败信息
    
@@ -29,14 +28,6 @@ wis.widget.Input.prototype = {
     _onChange: null,                //当元素改变时执行脚本
 
     _rootObj: null,					//底层组件节点（内部使用,不参与序列化）					
-
-    getCid: function () {
-        return this._cid || this.getId();
-    },
-    
-    setCid: function (cid) {
-        this._cid = cid;
-    },
     
     getName: function () {
         return this._name;
@@ -54,13 +45,6 @@ wis.widget.Input.prototype = {
         this._themes = themes;
     },
     
-    getValidate: function () {
-        return this._validate;
-    },
-    
-    setValidate: function (validate) {
-        this._validate = validate;
-    },
     
     getFormat: function () {
         return this._format;
@@ -77,7 +61,13 @@ wis.widget.Input.prototype = {
     setType: function (type) {
         this._type = type;
     },
+    getValidateRule: function () {
+        return this._validateRule;
+    },
     
+    setValidateRule: function (validate) {
+        this._validateRule = validate;
+    },
     getCustomValidate: function () {
         return this._customValidate;
     },
@@ -85,7 +75,13 @@ wis.widget.Input.prototype = {
     setCustomValidate: function (customValidate) {
         this._customValidate = customValidate;
     },
+    getErrorMsg: function () {
+        return this._errorMsg || '';
+    },
     
+    setErrorMsg: function (errorMsg) {
+        this._errorMsg = errorMsg;
+    },
     getValue: function () {
         if(this.getDisabled()){// TODO 规定该文本框只做展示用，提交时无法获取值??
         	return null; 
@@ -95,14 +91,6 @@ wis.widget.Input.prototype = {
     
     setValue: function (value) {
         this._value = value;
-    },
-
-    getErrorMsg: function () {
-        return this._errorMsg || '';
-    },
-    
-    setErrorMsg: function (errorMsg) {
-        this._errorMsg = errorMsg;
     },
 
     getDisplayType: function () {
@@ -172,10 +160,9 @@ wis.widget.Input.prototype = {
      * 仅在第一次调用render时执行
      */
     initRender: function () {
-    	this._rootObj = jQuery('<input type="'+this.getType()+'"/>');
+    	this._rootObj = jQuery('<input class="wis_input_style_default" type="'+this.getType()+'"/>');
 		this._rootObj.val(this.getPlaceholder());
 		this.getDomInstance().append(this._rootObj);
-		//this._unbindEvents();
 		this._bindEvents();
     },
 
@@ -184,8 +171,8 @@ wis.widget.Input.prototype = {
 
     //渲染方法
     render: function () {
-        //if (this.getCid()) this._rootObj.attr('id', this.getCid());//cid不允许修改
-    	//if (this.getType()) this._rootObj.attr('type', this.getType());//type属性不允许更改
+        //type属性不允许更改
+    	//validate  customValidate 校验信息不处理，运行时调用校验器处理
         if (this.getName()) this._rootObj.attr('name', this.getName());
         this._rootObj.attr('value', this.getValue());
         if (this.getMaxLength()) this._rootObj.attr('maxlength', this.getMaxLength());
@@ -194,11 +181,11 @@ wis.widget.Input.prototype = {
         if(this.getWidth()!=null) this._rootObj.css('width',this.getWidth()+'px');
         if(this.getHeight()!=null) this._rootObj.css('height',this.getHeight()+'px');
         
-        //themes
-         //validate
-         //customValidate
-         //displayType
-         //format
+        //themes 
+        //validate  ??
+        //customValidate  ??
+        //displayType  ??
+        //format  ??
     },
 
     //渲染后处理方法
@@ -211,13 +198,12 @@ wis.widget.Input.prototype = {
     //----------必须实现----------
     getData: function () {
     	return {
-            cid: this.getCid(),
             name: this.getName(),
-            validate:this.getValidate(),
-            themes:this.getThemes(),
+            validateRule:this.getValidateRule(),
             customValidate: this.getCustomValidate(),
-            value: this.getValue(),
             errorMsg: this.getErrorMsg(),
+            themes:this.getThemes(),
+            value: this.getValue(),
             displayType: this.getDisplayType(),
             format:this.getFormat(),
 			type:this.getType(),
@@ -230,16 +216,15 @@ wis.widget.Input.prototype = {
 
     //----------必须实现----------
     setData: function (data) {
-        this.setCid(data.cid);
     	this.setName(data.name);
 		this.setThemes(data.themes);
 		this.setValue(data.value);
-    	this.setValidate(data.validate);
+    	this.setValidateRule(data.validate);
+    	this.setCustomValidate(data.customValidate);
+    	this.setErrorMsg(data.errorMsg);
     	this.setFormat(data.format);
     	this.setType(data.type);
     	this.setPlaceholder(data.placeholder);
-    	this.setCustomValidate(data.customValidate);
-    	this.setErrorMsg(data.errorMsg);
     	this.setDisplayType(data.displayType);
     	this.setMaxLength(data.maxlength);
     	this.setDisabled(data.disabled);
@@ -276,7 +261,6 @@ wis.widget.Input.prototype = {
 
 		this._rootObj.on('change', function(e) {
 			//参数1为文本框的当前值，参数2为未修改前的值
-			//var value2 = that.getValue();
 			var value1 = that._rootObj.val();
 			that.setValue(value1);//修改值
 			if (that._onChange) {
@@ -293,13 +277,13 @@ wis.widget.Input.prototype = {
 	//----------自定义实现----------
 	getOptions: function () {
 		return {
-            cid: this.getCid(),
             name: this.getName(),
-            validate:this.getValidate(),
+            validate:this.getValidateRule(),
             themes:this.getThemes(),
+            validateRule:this.getValidateRule(),
             customValidate: this.getCustomValidate(),
-            value: this.getValue(),
             errorMsg: this.getErrorMsg(),
+            value: this.getValue(),
             displayType: this.getDisplayType(),
             format:this.getFormat(),
 			type:this.getType(),
@@ -328,8 +312,14 @@ wis.widget.Input.prototype = {
         if(data.value){
     		this.setValue(data.value);
     	}
-        if(data.validate){
-        	this.setValidate(data.validate);
+        if(data.validateRule){
+        	this.setValidateRule(data.validateRule);
+    	}
+        if(data.customValidate){
+        	this.setCustomValidate(data.customValidate);
+    	}
+        if(data.errorMsg){
+        	this.setErrorMsg(data.errorMsg);
     	}
         if(data.format){
         	this.setFormat(data.format);
@@ -342,12 +332,7 @@ wis.widget.Input.prototype = {
         if(data.placeholder){
         	this.setPlaceholder(data.placeholder);
     	}
-        if(data.customValidate){
-        	this.setCustomValidate(data.customValidate);
-    	}
-        if(data.errorMsg){
-        	this.setErrorMsg(data.errorMsg);
-    	}
+        
         if(data.displayType){
         	this.setDisplayType(data.displayType);
     	} 

@@ -6,8 +6,6 @@ wis.widget.Tree.prototype = {
 
 	//============基本属性============
 
-	_cid : null, //ID
-
 	_name : null, //名称
 
 	_themes : null, //主题
@@ -75,15 +73,6 @@ wis.widget.Tree.prototype = {
 	_onCheck : null,
 
 	// ============Getter/Setter============
-
-	getCid : function() {
-		return this._cid;
-	},
-
-	setCid : function(cid) {
-		this._cid = cid;
-	},
-
 	getName : function() {
 		return this._name;
 	},
@@ -257,7 +246,7 @@ wis.widget.Tree.prototype = {
 	initRender : function() {
 		var setting = {};
 		//以下为默认设置
-		setting.treeId = this.getCid();
+		setting.treeId = this.getId();
 		//设置异步加载
 		if (this.getUrl()) {
 			setting.async = {};
@@ -448,7 +437,6 @@ wis.widget.Tree.prototype = {
 	//----------必须实现----------
 	getData : function() {
 		return {
-			cid:this.getCid(),
 			
 			name:this.getName(),
 			
@@ -499,7 +487,6 @@ wis.widget.Tree.prototype = {
 		if (!data) {
 			return;
 		}
-		if(data.cid) this.setCid(data.cid);
 		
 		if(data.name) this.setName(data.name);
 		
@@ -632,7 +619,6 @@ wis.widget.Tree.prototype = {
 	//----------自定义实现----------
 	getOptions : function() {
 		return {
-			cid:this.getCid(),
 			
 			name:this.getName(),
 			
@@ -691,7 +677,6 @@ wis.widget.Tree.prototype = {
 		if (!data) {
 			return;
 		}
-		if(data.cid) this.setCid(data.cid);
 		
 		if(data.name) this.setName(data.name);
 		

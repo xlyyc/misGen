@@ -5,12 +5,11 @@
  */
 wis.widget.Themes = function () {
     this._version = '1.0';
-
 };
 
 wis.widget.Themes.prototype = {
-    _cid: null,  //表格id
-    _themesName: null,  //表格id
+    _cid: null,  //id
+    _themesName: null,  //主题名称
 
     getCid: function () {
         return this._cid;
@@ -21,17 +20,33 @@ wis.widget.Themes.prototype = {
     },
 
     getThemesName: function () {
-        return this._themesName;
+        return this._themesName || "default" ;
     },
 
     setThemesName: function (themesName) {
         this._themesName = themesName;
     },
 
+    getTop: function () {
+        return  null ;
+    },
+
+    getLeft: function () {
+        return  null ;
+    },
+
+    getWidth: function () {
+        return  null ;
+    },
+
+    getHeight: function () {
+        return  null;
+    },
     /**
      * 初始化方法
      */
     _init: function (data) {
+        this.setData(data)
     },
 
     /**
@@ -39,8 +54,9 @@ wis.widget.Themes.prototype = {
      * 仅在第一次调用render时执行
      */
     initRender: function () {
-        this._input = jQuery('<input type="text">');
-        this.getDomInstance().append(this._input);
+        this._themes = jQuery('<link id="wisThemes" href="../lovey/themes/default/css/wis-widget-all.css" rel="stylesheet" type="text/css"/>');
+        jQuery("head").append(this._themes);
+        jQuery("title").after(this._themes);
     },
 
     //渲染前处理方法
@@ -50,24 +66,32 @@ wis.widget.Themes.prototype = {
 
     //渲染方法
     render: function () {
-
+        changeThemes(this.getThemesName());
     },
 
     //渲染后处理方法
     afterRender: function () {
-
-
+	
+	var keys = wis.util.ObjectManager.keys();
+	for(var i=0;i<keys.length;i++){
+	var key = keys[i];
+	var obj = wis.util.ObjectManager.get(key);
+	var cls = wis.util.Tool.replaceAll(obj.getClassName(),'[.]','_');
+	alert(this.getThemesName()+'/'+obj.getLibName()+'/'+cls+'.css');
+	}
     },
 
     //----------必须实现----------
     getData: function () {
         return {
-            cid: this.getCid()
+            cid: this.getCid(),
+            themesName:this.getThemesName()
         };
     },
 
     //----------必须实现----------
     setData: function (data) {
         this.setCid(data.cid);
+        this.setThemesName(data.themesName);
     }
 };

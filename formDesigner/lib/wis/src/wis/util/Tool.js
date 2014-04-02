@@ -9,6 +9,10 @@
             s[12] = "4";
             s[16] = hexDigits.substr((s[16] & 0x3) | 0x8, 1);
             return s.join("");
+        },
+
+        replaceAll: function(str, s1, s2) {
+            return str.replace(new RegExp(s1,"gm"),s2);
         }
 
 };

@@ -74,18 +74,11 @@ wis.widget.Button.prototype = {
      * 仅在第一次调用render时执行
      */
     initRender: function () {
-        this._rootObj = jQuery('<div class="ui_toolbar" style="height:100%;"></div>');
-        this._spanObj = jQuery('<span class="pull_left" style="width: 100%;height:100%;"></span>');
         this._linkObj = jQuery('<a class="ui_btn ui_btn_small" onclick="" style="width: 100%;height:100%"></a>');
         this._iObj = jQuery('<i></i>');
-        this._rootObj.append(this._spanObj);
-        this._spanObj.append(this._linkObj);
         this._linkObj.append(this._iObj);
-        this.getDomInstance().append(this._rootObj);
-        this._bindEvents();
-    },
-
-    _bindEvents: function () {
+        this.getDomInstance().append(this._linkObj);
+        
         //单击事件
         var that = this;
         this._linkObj.on("click", function (e) {
@@ -103,6 +96,7 @@ wis.widget.Button.prototype = {
             }
 
         });
+
     },
 
     //渲染前处理方法
@@ -114,12 +108,12 @@ wis.widget.Button.prototype = {
     render: function () {
         if( this.getCid() )
         {
-            this._rootObj.attr('id', this.getCid());
+            this._linkObj.attr('id', this.getCid());
         }
         
         if( this.getName() )
         {
-            this._rootObj.attr('name', this.getName());
+            this._linkObj.attr('name', this.getName());
         }
          
         if( this.getIcon() )
@@ -140,16 +134,16 @@ wis.widget.Button.prototype = {
             }
             
         }
-      
-        //to do ......  for   disabled
+
         //disabled状态
-        /* if (this.getDisabled()) {
-         this._inputObj.attr("disabled", "disabled");
-         this._labelObj.addClass("ui_checkbox_disabled");
-         } else {
-         this._inputObj.removeAttr("disabled");
-         this._labelObj.removeClass("ui_checkbox_disabled");
-         }*/
+         if (this.getDisabled()) 
+         {
+            this._linkObj.addClass("disabled");
+         }
+         else
+         {
+            this._linkObj.removeClass("disabled");
+         }
     },
 
     //渲染后处理方法

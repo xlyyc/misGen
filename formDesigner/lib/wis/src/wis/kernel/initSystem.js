@@ -22,6 +22,20 @@ var wis$_aop = (function(){
                     obj[o].prototype.setZIndex = function(zIndex) {
                         this._zIndex = zIndex;
                     };
+					obj[o].prototype._libName = null;
+                    obj[o].prototype.getLibName = function() {
+                        return this._libName || '';
+                    };
+                    obj[o].prototype.setLibName = function(libName) {
+                        this._libName = libName;
+                    };
+                    obj[o].prototype._cid = null;
+                    obj[o].prototype.getCid = function() {
+                        return this._cid || this.getId();
+                    };
+                    obj[o].prototype.setCid = function(cid) {
+                        this._cid = cid;
+                    };
                     obj[o].prototype._themes = null;
                     obj[o].prototype.getThemes = function() {
                         return this._themes || '';
@@ -40,7 +54,8 @@ var wis$_aop = (function(){
                     obj[o].prototype._domInstance = null;
                     obj[o].prototype.getDomInstance = function(){
                         if(this._domInstance==null){
-                            this._domInstance=jQuery('<div oid="'+this.getId()+'" classname="'+this.getClassName()+'">');
+                            var cls = wis.util.Tool.replaceAll(this.getClassName(),'[.]','_');
+                            this._domInstance=jQuery('<div oid="'+this.getId()+'"class="'+cls+'" classname="'+this.getClassName()+'">');
                         }
                         return this._domInstance;
                     };
@@ -147,6 +162,8 @@ var wis$_aop = (function(){
                             data.zIndex = this.getZIndex();
                             data.scale = this.getScale();
                             data.themes = this.getThemes();
+							data.libName = this.getLibName();
+                            data.cid = this.getCid();
                             if(this.getWidth()!=null){
                                 data.width=this.getWidth();
                             }
@@ -182,6 +199,8 @@ var wis$_aop = (function(){
                             this.setZIndex(data.zIndex);
                             this.setScale(data.scale);
                             this.setThemes(data.themes);
+							this.setLibName(data.libName);
+                            this.setCid(data.cid);
                             this._setData(data);
                         };
                     }

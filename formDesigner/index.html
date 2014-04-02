@@ -169,224 +169,224 @@ jQuery(function(){
 		sidebar2.css('left', (windowWidth-sidebar2Width)+'px');
 		sidebar2.css('top', headerHeight+'px');
 	}
-	//重设左侧边栏
-	function resizeSidebar1(){
-		try{
-			var windowWidth = jQuery(window).width();
-			var windowHeight = jQuery(window).height();
-			var gridLayout = wof.util.ObjectManager.get(sidebar1.children('div[oid]').first().attr('oid'));
-            gridLayout.setHeight(windowHeight-headerHeight-5);
-            gridLayout.render();
-		}catch(e){}
-	}
 	//初始化左侧边栏
 	function initSidebar1(){
 		var windowWidth = jQuery(window).width();
 		var windowHeight = jQuery(window).height();
-        with(wof.widget)
-            with(wof.bizWidget)
-                with(wof.functionWidget)
-                    with(wof.bizWidget.spanner)
-                        with(wof.widget.spanner)
-                            with(wof.functionWidget.spanner)
-                            with(wof.kernel){
-                            var gridLayout = new GridLayout();
-                            gridLayout.setOnSendMessage([{id:'wof.bizWidget.GridLayout_active',method:'return false;'}]);
-                            gridLayout.setOverflow('y');
-                            gridLayout.setWidth(sidebar1Width);
-                            gridLayout.setHeight(windowHeight-headerHeight-5);
-                            gridLayout.setTop(0);
-                            gridLayout.setLeft(0);
-                            gridLayout.setCss('ui-widget-content');
-                            gridLayout.setOverflow('y');
-                            sidebar1.append(gridLayout.getDomInstance());
-                            wof.util.ObjectManager.add(gridLayout.getId(), gridLayout);
 
-                            var components = [];
-                            var layoutComponents = [];
-                            var bizWidgetComponents = [];
-                            var widgetComponents = [];
+        var tab = wof$.create('Tab');
+        tab.setOnSendMessage([{id:'wof.widget.Tab_active',method:'return false;'}]);
+        tab.setWidth(sidebar1Width-7);
+        tab.setHeight(windowHeight-headerHeight-12);
+        tab.setTop(0);
+        tab.setLeft(0);
+        tab.setActiveItemIndex(1);
+        tab.appendTo(sidebar1);
 
-                            var flowLayoutSpanner = new FlowLayoutSpanner();
-                            flowLayoutSpanner.appendTo(gridLayout);
-                            layoutComponents.push(flowLayoutSpanner);
-                            components.push(flowLayoutSpanner);
+        tab.insertItem({title:'构件'});
 
-                            var gridLayoutSpanner = new GridLayoutSpanner();
-                            gridLayoutSpanner.appendTo(gridLayout);
-                            layoutComponents.push(gridLayoutSpanner);
-                            components.push(gridLayoutSpanner);
+        var gridLayout = wof$.create('GridLayout');
+        gridLayout.setOnSendMessage([{id:'wof.bizWidget.GridLayout_active',method:'return false;'}]);
+        gridLayout.setOverflow('y');
+        gridLayout.setWidth(sidebar1Width);
+        gridLayout.setHeight(windowHeight-headerHeight-5);
+        gridLayout.setTop(0);
+        gridLayout.setLeft(0);
+        gridLayout.setCss('ui-widget-content');
+        gridLayout.setOverflow('y');
 
-                            var voucherComponentSpanner = new VoucherComponentSpanner();
-                            voucherComponentSpanner.appendTo(gridLayout);
-                            bizWidgetComponents.push(voucherComponentSpanner);
-                            components.push(voucherComponentSpanner);
+        tab.insertNode(gridLayout,1);
 
-                            var searchComponentSpanner = new SearchComponentSpanner();
-                            searchComponentSpanner.appendTo(gridLayout);
-                            bizWidgetComponents.push(searchComponentSpanner);
-                            components.push(searchComponentSpanner);
+        var components = [];
+        var layoutComponents = [];
+        var bizWidgetComponents = [];
+        var widgetComponents = [];
 
-                            var gridComponentSpanner = new GridComponentSpanner();
-                            gridComponentSpanner.appendTo(gridLayout);
-                            bizWidgetComponents.push(gridComponentSpanner);
-                            components.push(gridComponentSpanner);
+        var flowLayoutSpanner = wof$.create('FlowLayoutSpanner');
+        flowLayoutSpanner.appendTo(gridLayout);
+        layoutComponents.push(flowLayoutSpanner);
+        components.push(flowLayoutSpanner);
 
-                            var voucherGridComponentSpanner = new VoucherGridComponentSpanner();
-                            voucherGridComponentSpanner.appendTo(gridLayout);
-                            bizWidgetComponents.push(voucherGridComponentSpanner);
-                            components.push(voucherGridComponentSpanner);
+        var gridLayoutSpanner = wof$.create('GridLayoutSpanner');
+        gridLayoutSpanner.appendTo(gridLayout);
+        layoutComponents.push(gridLayoutSpanner);
+        components.push(gridLayoutSpanner);
 
-                            var pageComponentSpanner = new PageComponentSpanner();
-                            pageComponentSpanner.appendTo(gridLayout);
-                            bizWidgetComponents.push(pageComponentSpanner);
-                            components.push(pageComponentSpanner);
+        var voucherComponentSpanner = wof$.create('VoucherComponentSpanner');
+        voucherComponentSpanner.appendTo(gridLayout);
+        bizWidgetComponents.push(voucherComponentSpanner);
+        components.push(voucherComponentSpanner);
 
-                        /*    var buttonSpanner = new ButtonSpanner();
-                            buttonSpanner.appendTo(gridLayout);
-                            widgetComponents.push(buttonSpanner);
-                            components.push(buttonSpanner);
+        var searchComponentSpanner = wof$.create('SearchComponentSpanner');
+        searchComponentSpanner.appendTo(gridLayout);
+        bizWidgetComponents.push(searchComponentSpanner);
+        components.push(searchComponentSpanner);
 
-                            var tabSpanner = new TabSpanner();
-                            tabSpanner.appendTo(gridLayout);
-                            widgetComponents.push(tabSpanner);
-                            components.push(tabSpanner);*/
+        var gridComponentSpanner = wof$.create('GridComponentSpanner');
+        gridComponentSpanner.appendTo(gridLayout);
+        bizWidgetComponents.push(gridComponentSpanner);
+        components.push(gridComponentSpanner);
 
-                            var commitComponentSpanner = new CommitComponentSpanner();
-                            commitComponentSpanner.appendTo(gridLayout);
-                            widgetComponents.push(commitComponentSpanner);
-                            components.push(commitComponentSpanner);
+        var voucherGridComponentSpanner = wof$.create('VoucherGridComponentSpanner');
+        voucherGridComponentSpanner.appendTo(gridLayout);
+        bizWidgetComponents.push(voucherGridComponentSpanner);
+        components.push(voucherGridComponentSpanner);
 
-                            var viewRecordComponentSpanner = new ViewRecordComponentSpanner();
-                            viewRecordComponentSpanner.appendTo(gridLayout);
-                            widgetComponents.push(viewRecordComponentSpanner);
-                            components.push(viewRecordComponentSpanner);
+        var pageComponentSpanner = wof$.create('PageComponentSpanner');
+        pageComponentSpanner.appendTo(gridLayout);
+        bizWidgetComponents.push(pageComponentSpanner);
+        components.push(pageComponentSpanner);
 
-                            var updateRecordComponentSpanner = new UpdateRecordComponentSpanner();
-                            updateRecordComponentSpanner.appendTo(gridLayout);
-                            widgetComponents.push(updateRecordComponentSpanner);
-                            components.push(updateRecordComponentSpanner);
+    /*    var buttonSpanner = wof$.create('ButtonSpanner');
+        buttonSpanner.appendTo(gridLayout);
+        widgetComponents.push(buttonSpanner);
+        components.push(buttonSpanner);
 
-                            var addRecordComponentSpanner = new AddRecordComponentSpanner();
-                            addRecordComponentSpanner.appendTo(gridLayout);
-                            widgetComponents.push(addRecordComponentSpanner);
-                            components.push(addRecordComponentSpanner);
+        var tabSpanner = wof$.create('TabSpanner');
+        tabSpanner.appendTo(gridLayout);
+        widgetComponents.push(tabSpanner);
+        components.push(tabSpanner);*/
+
+        var commitComponentSpanner = wof$.create('CommitComponentSpanner');
+        commitComponentSpanner.appendTo(gridLayout);
+        widgetComponents.push(commitComponentSpanner);
+        components.push(commitComponentSpanner);
+
+        var viewRecordComponentSpanner = wof$.create('ViewRecordComponentSpanner');
+        viewRecordComponentSpanner.appendTo(gridLayout);
+        widgetComponents.push(viewRecordComponentSpanner);
+        components.push(viewRecordComponentSpanner);
+
+        var updateRecordComponentSpanner = wof$.create('UpdateRecordComponentSpanner');
+        updateRecordComponentSpanner.appendTo(gridLayout);
+        widgetComponents.push(updateRecordComponentSpanner);
+        components.push(updateRecordComponentSpanner);
+
+        var addRecordComponentSpanner = wof$.create('AddRecordComponentSpanner');
+        addRecordComponentSpanner.appendTo(gridLayout);
+        widgetComponents.push(addRecordComponentSpanner);
+        components.push(addRecordComponentSpanner);
 
 
-                            var deleteRecordComponentSpanner = new DeleteRecordComponentSpanner();
-                            deleteRecordComponentSpanner.appendTo(gridLayout);
-                            widgetComponents.push(deleteRecordComponentSpanner);
-                            components.push(deleteRecordComponentSpanner);
+        var deleteRecordComponentSpanner = wof$.create('DeleteRecordComponentSpanner');
+        deleteRecordComponentSpanner.appendTo(gridLayout);
+        widgetComponents.push(deleteRecordComponentSpanner);
+        components.push(deleteRecordComponentSpanner);
 
 
-                            for(var i=0;i<components.length;i++){
-                                var name = components[i].getMeta().name;
-                                for(var t=0;t<components.length;t++){
-                                    var n = components[t].getMeta().name;
-                                    if(name!=n){
-                                        var onReceiveMessage = components[t].getOnReceiveMessage();
-                                        onReceiveMessage.push({id: name+'_active',method:'this._receivePropertysAndRenderSelf(null);'});
-                                        components[t].setOnReceiveMessage(onReceiveMessage);
-                                    }
-                                }
-                            }
+        for(var i=0;i<components.length;i++){
+            var name = components[i].getMeta().name;
+            for(var t=0;t<components.length;t++){
+                var n = components[t].getMeta().name;
+                if(name!=n){
+                    var onReceiveMessage = components[t].getOnReceiveMessage();
+                    onReceiveMessage.push({id: name+'_active',method:'this._receivePropertysAndRenderSelf(null);'});
+                    components[t].setOnReceiveMessage(onReceiveMessage);
+                }
+            }
+        }
 
-                            var compositeComponentsData = [];
-                            try{
-                                compositeComponentsData = JSON.parse(pageComponentTemplateList());
-                            }catch(e){
-                            }
-                            var objectBar = new ObjectBar();
-                            objectBar.setCompositeComponents(compositeComponentsData);
-                            objectBar.setLayoutComponents(layoutComponents);
-                            objectBar.setBizWidgetComponents(bizWidgetComponents);
-                            objectBar.setWidgetComponents(widgetComponents);
-                            objectBar.setWidth(sidebar1Width-18);
-                            objectBar.setTop(0);
-                            objectBar.setLeft(0);
-                            objectBar.appendTo(gridLayout);
+        var compositeComponentsData = [];
+        try{
+            compositeComponentsData = JSON.parse(pageComponentTemplateList());
+        }catch(e){
+        }
+        var objectBar = wof$.create('ObjectBar');
+        objectBar.setCompositeComponents(compositeComponentsData);
+        objectBar.setLayoutComponents(layoutComponents);
+        objectBar.setBizWidgetComponents(bizWidgetComponents);
+        objectBar.setWidgetComponents(widgetComponents);
+        objectBar.setWidth(sidebar1Width-18);
+        objectBar.setTop(0);
+        objectBar.setLeft(0);
+        objectBar.appendTo(gridLayout);
 
-                            gridLayout.render();
-		}
+        tab.render();
 	}
-	
+    //重设左侧边栏
+    function resizeSidebar1(){
+        try{
+            var windowWidth = jQuery(window).width();
+            var windowHeight = jQuery(window).height();
+            var tab = wof.util.ObjectManager.get(sidebar1.children('div[oid]').first().attr('oid'));
+            tab.setHeight(windowHeight-headerHeight-12);
+            tab.render();
+        }catch(e){}
+    }
 	//初始化右侧边栏
 	function initSidebar2(){
 		var windowWidth = jQuery(window).width();
 		var windowHeight = jQuery(window).height();
-		with(wof.widget)
-            with(wof.bizWidget){
 
-                var messageIds = [
-                    'wof.bizWidget.spanner.FlowLayoutSpanner_render',
-                    'wof.widget.spanner.ButtonSpanner_render',
-                    'wof.bizWidget.spanner.GridLayoutSpanner_render',
-                    'wof.bizWidget.spanner.VoucherComponentSpanner_render',
-                    'wof.bizWidget.spanner.SearchComponentSpanner_render',
-                    'wof.bizWidget.spanner.VoucherGridComponentSpanner_render',
-                    'wof.bizWidget.spanner.GridComponentSpanner_render',
-                    'wof.bizWidget.spanner.PageComponentSpanner_render',
-                    'wof.functionWidget.spanner.CommitComponentSpanner_render',
-                    'wof.functionWidget.spanner.ViewRecordComponentSpanner_render',
-                    'wof.functionWidget.spanner.UpdateRecordComponentSpanner_render',
-                    'wof.functionWidget.spanner.DeleteRecordComponentSpanner_render',
-                    'wof.functionWidget.spanner.AddRecordComponentSpanner_render'
-                ];
+        var messageIds = [
+            'wof.bizWidget.spanner.FlowLayoutSpanner_render',
+            'wof.widget.spanner.ButtonSpanner_render',
+            'wof.bizWidget.spanner.GridLayoutSpanner_render',
+            'wof.bizWidget.spanner.VoucherComponentSpanner_render',
+            'wof.bizWidget.spanner.SearchComponentSpanner_render',
+            'wof.bizWidget.spanner.VoucherGridComponentSpanner_render',
+            'wof.bizWidget.spanner.GridComponentSpanner_render',
+            'wof.bizWidget.spanner.PageComponentSpanner_render',
+            'wof.functionWidget.spanner.CommitComponentSpanner_render',
+            'wof.functionWidget.spanner.ViewRecordComponentSpanner_render',
+            'wof.functionWidget.spanner.UpdateRecordComponentSpanner_render',
+            'wof.functionWidget.spanner.DeleteRecordComponentSpanner_render',
+            'wof.functionWidget.spanner.AddRecordComponentSpanner_render'
+        ];
 
-                var tab = new Tab();
-                tab.setOnSendMessage([{id:'wof.widget.Tab_active',method:'return false;'}]);
-                tab.setWidth(sidebar2Width-7);
-                tab.setHeight(windowHeight-headerHeight-12);
-                tab.setTop(0);
-                tab.setLeft(0);
-                tab.setActiveItemIndex(1);
-                sidebar2.append(tab.getDomInstance());
-                wof.util.ObjectManager.add(tab.getId(), tab);
+        var tab = wof$.create('Tab');
+        tab.setOnSendMessage([{id:'wof.widget.Tab_active',method:'return false;'}]);
+        tab.setWidth(sidebar2Width-7);
+        tab.setHeight(windowHeight-headerHeight-12);
+        tab.setTop(0);
+        tab.setLeft(0);
+        tab.setActiveItemIndex(1);
+        tab.appendTo(sidebar2);
 
-                tab.insertItem({title:'属性'});
-                var propertyBar = new PropertyBar();
-                propertyBar.setWidth(sidebar2Width-24);
-                propertyBar.setHeight(windowHeight-headerHeight-56);
-                var method = 'if(!jQuery.isEmptyObject(message.sender.parameters)){this.setParameters(message.sender.parameters);this.setMeta(message.sender.meta);this.render();}';
-                var onReceiveMessage = [];
-                for(var i=0;i<messageIds.length;i++){
-                    onReceiveMessage.push({id:messageIds[i],method:method});
-                }
-                propertyBar.setOnReceiveMessage(onReceiveMessage);
-                propertyBar.setTop(0);
-                propertyBar.setLeft(4);
-                tab.insertNode(propertyBar,1);
+        tab.insertItem({title:'属性'});
+        var propertyBar = wof$.create('PropertyBar');
+        propertyBar.setWidth(sidebar2Width-24);
+        propertyBar.setHeight(windowHeight-headerHeight-56);
+        var method = 'if(!jQuery.isEmptyObject(message.sender.parameters)){this.setParameters(message.sender.parameters);this.setMeta(message.sender.meta);this.render();}';
+        var onReceiveMessage = [];
+        for(var i=0;i<messageIds.length;i++){
+            onReceiveMessage.push({id:messageIds[i],method:method});
+        }
+        propertyBar.setOnReceiveMessage(onReceiveMessage);
+        propertyBar.setTop(0);
+        propertyBar.setLeft(4);
+        tab.insertNode(propertyBar,1);
 
-                tab.insertItem({title:'发送'});
-                var onSendMessageBar = new OnSendMessageBar();
-                onSendMessageBar.setWidth(sidebar2Width-24);
-                onSendMessageBar.setHeight(windowHeight-headerHeight-56);
-                var meth = 'if(!jQuery.isEmptyObject(message.sender.parameters)){this.setParameters(message.sender.parameters);this.setSendMessages(message.sender.meta.sendMessages);this.render();}';
-                var receives = [];
-                for(var i=0;i<messageIds.length;i++){
-                    receives.push({id:messageIds[i],method:meth});
-                }
-                onSendMessageBar.setOnReceiveMessage(receives);
-                onSendMessageBar.setTop(0);
-                onSendMessageBar.setLeft(4);
-                tab.insertNode(onSendMessageBar,2);
+        tab.insertItem({title:'发送'});
+        var onSendMessageBar = wof$.create('OnSendMessageBar');
+        onSendMessageBar.setWidth(sidebar2Width-24);
+        onSendMessageBar.setHeight(windowHeight-headerHeight-56);
+        var meth = 'if(!jQuery.isEmptyObject(message.sender.parameters)){this.setParameters(message.sender.parameters);this.setSendMessages(message.sender.meta.sendMessages);this.render();}';
+        var receives = [];
+        for(var i=0;i<messageIds.length;i++){
+            receives.push({id:messageIds[i],method:meth});
+        }
+        onSendMessageBar.setOnReceiveMessage(receives);
+        onSendMessageBar.setTop(0);
+        onSendMessageBar.setLeft(4);
+        tab.insertNode(onSendMessageBar,2);
 
-                tab.insertItem({title:'监听'});
-                var onReceiveMessageBar = new OnReceiveMessageBar();
-                onReceiveMessageBar.setWidth(sidebar2Width-24);
-                onReceiveMessageBar.setHeight(windowHeight-headerHeight-56);
-                var met = 'if(!jQuery.isEmptyObject(message.sender.parameters)){this.setParameters(message.sender.parameters);this.render();}';
-                var receiv = [];
-                for(var i=0;i<messageIds.length;i++){
-                    receiv.push({id:messageIds[i],method:met});
-                }
-                onReceiveMessageBar.setOnReceiveMessage(receiv);
-                onReceiveMessageBar.setTop(0);
-                onReceiveMessageBar.setLeft(4);
-                tab.insertNode(onReceiveMessageBar,3);
+        tab.insertItem({title:'监听'});
+        var onReceiveMessageBar = wof$.create('OnReceiveMessageBar');
+        onReceiveMessageBar.setWidth(sidebar2Width-24);
+        onReceiveMessageBar.setHeight(windowHeight-headerHeight-56);
+        var met = 'if(!jQuery.isEmptyObject(message.sender.parameters)){this.setParameters(message.sender.parameters);this.render();}';
+        var receiv = [];
+        for(var i=0;i<messageIds.length;i++){
+            receiv.push({id:messageIds[i],method:met});
+        }
+        onReceiveMessageBar.setOnReceiveMessage(receiv);
+        onReceiveMessageBar.setTop(0);
+        onReceiveMessageBar.setLeft(4);
+        tab.insertNode(onReceiveMessageBar,3);
 
-                tab.render();
-		}
+        tab.render();
+
 	}
 	//重设右侧边栏
 	function resizeSidebar2(){
@@ -407,23 +407,24 @@ jQuery(function(){
         var flowLayoutHelper = wof$.create('FlowLayoutHelper');
 
 
-       /* var gridLayout = new GridLayout();
+       /*
+        var gridLayout = wof$.create('GridLayout');
         gridLayout.setOverflow('auto');
         gridLayout.setWidth(windowWidth-sidebar1Width-sidebar2Width);
         gridLayout.setHeight(windowHeight-headerHeight-5);
         gridLayout.setTop(0);
         gridLayout.setLeft(0);
-        content.append(gridLayout.getDomInstance());
-        wof.util.ObjectManager.add(gridLayout.getId(), gridLayout);*/
+        gridLayout.appendTo(content);*/
 
-        /*var pageComponent = new PageComponent();
+        /*
+        var pageComponent = wof$.create('PageComponent');
         pageComponent.setOverflow('auto');
         pageComponent.setWidth(windowWidth-sidebar1Width-sidebar2Width);
         pageComponent.setHeight(windowHeight-headerHeight-5);
         pageComponent.setTop(0);
         pageComponent.setLeft(0);
-        content.append(pageComponent.getDomInstance());
-        wof.util.ObjectManager.add(pageComponent.getId(), pageComponent);*/
+        pageComponent.appendTo(content);
+         */
 
         var pageMetas = {};
         try{
@@ -437,8 +438,7 @@ jQuery(function(){
             pageInputParam = pageMetas.inputParam;
             var node = eval('(new '+pageMetas.layout.className+'())');
             node.setData(pageMetas.layout);
-            content.append(node.getDomInstance());
-            wof.util.ObjectManager.add(node.getId(), node);
+            node.appendTo(content);
 
             node.render();
         }else{
@@ -461,10 +461,6 @@ jQuery(function(){
 
             var sectionData1 = {title:'默认分组1',width:width,titleHeight:30,cols:2,itemHeight:300};
             flowLayout.insertSection(sectionData1);
-
-
-
-
 
 
             flowLayout.render();

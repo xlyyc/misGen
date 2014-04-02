@@ -140,8 +140,12 @@ wis.widget.Select.prototype = {
 
     // 渲染后处理方法
     afterRender: function () {
-
-
+        // 替换掉ligerui的表格
+        // if (this.getGridColumn() && this.getGridColumn().length > 0) {
+        //     console.log(this.getGridColumn());
+        //     console.log(this.getSelectData());
+        //     jQuery('table', this.getDomInstance()).remove();
+        // };
     },
 
     // ----------必须实现----------

@@ -7,7 +7,6 @@ wis.widget.Validation = function () {
 };
 
 wis.widget.Validation.prototype = {
-    _cid: null,				// 唯一标识
     _themes:null,			// 主题
     _prefabricateRule: null,	// 默认验证规则的集合(包括基本校验和提供的ajax校验)。不可更改
     _customRule: null,		// 可扩展验证规则的集合,使用者可重新设置
@@ -22,14 +21,6 @@ wis.widget.Validation.prototype = {
     //_validationEventTriggers: null, // 触发校验的事件
     //_returnIsValid: false, 		//通过校验是否也返回提示，如对号标识
     
-    getCid: function () {
-        return this._cid;
-    },
-
-    setCid: function (cid) {
-        this._cid = cid;
-    },
-
     getPrefabricateRule: function () {
         return this._prefabricateRule;
     },
@@ -106,7 +97,6 @@ wis.widget.Validation.prototype = {
     //----------必须实现----------
     getData: function () {
     	return {
-            cid: this.getCid(),
             name: this.getName(),
             themes:this.getThemes(),
             prefabricateRule: this.getPrefabricateRule(),
@@ -120,9 +110,6 @@ wis.widget.Validation.prototype = {
     setData: function (data) {
     	if (!data) {
     		return;
-    	}
-        if(data.cid){
-    		this.setCid(data.cid);
     	}
 	    if(data.name){
 			this.setName(data.name);
@@ -146,7 +133,6 @@ wis.widget.Validation.prototype = {
     //----------自定义实现----------
 	getOptions: function () {
 		return {
-            cid: this.getCid(),
             name: this.getName(),
             themes:this.getThemes(),
             prefabricateRule: this.getPrefabricateRule(),
@@ -406,9 +392,6 @@ wis.widget.Validation.prototype = {
     	this.setCustomRule(customRule);
     	if (!data) {
     		data = {};
-    	}
-        if(data.cid){
-    		this.setCid(data.cid);
     	}
 	    if(data.name){
 			this.setName(data.name);
