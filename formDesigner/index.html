@@ -4,26 +4,25 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>业务设计器</title>
 <link href="lib/jquery.ui/themes/redmond/jquery-ui.min.css" rel="stylesheet">
+<link href="lib/jquery.ztree/css/zTreeStyle/zTreeStyle.css" rel="stylesheet">
 <link href="lib/jquery.ui.multiselect/css/jquery.multiselect.css" rel="stylesheet">
 <link href="lib/jquery.ui.multiselect/css/jquery.multiselect.filter.css" rel="stylesheet">
-<link href="lib/jquery.ztree/css/zTreeStyle/zTreeStyle.css" rel="stylesheet">
 
-<link href="lib/lovey/style/css/lovey.css" rel="stylesheet" type="text/css"/>
-<link href="lib/lovey/style/css/ui_toolbar.css" rel="stylesheet" type="text/css"/>
-<link href="lib/lovey/style/css/ui_btn.css" rel="stylesheet" type="text/css"/>
-<link href="lib/lovey/style/css/ui_icon.css" rel="stylesheet" type="text/css"/>
+
 
 <style type="text/css">
 <!--
 	* {
 		margin:0;
-		padding:0
+		padding:0;
 	}
 	body{
 		font: 12px "Trebuchet MS", sans-serif;
 	}
+
 -->
 </style>
+
 <script src="lib/jquery/jquery.min.js"></script>
 <script src="lib/jquery.ui/jquery-ui-1.10.1.custom.min.js"></script>
 <script src="lib/jquery.ui.multiselect/js/jquery.multiselect.min.js"></script>
@@ -187,12 +186,11 @@ jQuery(function(){
 
         var gridLayout1 = wof$.create('GridLayout');
         gridLayout1.setOnSendMessage([{id:'wof.bizWidget.GridLayout_active',method:'return false;'}]);
-        gridLayout1.setOverflow('y');
         gridLayout1.setWidth(sidebar1Width-18);
         gridLayout1.setHeight(tab.getHeight()-108);
         gridLayout1.setTop(0);
         gridLayout1.setLeft(0);
-        gridLayout1.setCss('ui-widget-content');
+        //gridLayout1.setCss('ui-widget-content');
         gridLayout1.setOverflow('y');
 
         tab.insertNode(gridLayout1,1);
@@ -302,19 +300,28 @@ jQuery(function(){
         objectBar.appendTo(gridLayout1);
 
 
-        tab.insertItem({title:'对象视图'});
+        tab.insertItem({title:'层次视图'});
 
         var gridLayout2 = wof$.create('GridLayout');
         gridLayout2.setOnSendMessage([{id:'wof.bizWidget.GridLayout_active',method:'return false;'}]);
-        gridLayout2.setOverflow('y');
         gridLayout2.setWidth(sidebar1Width-18);
         gridLayout2.setHeight(tab.getHeight()-108);
         gridLayout2.setTop(0);
         gridLayout2.setLeft(0);
-        gridLayout2.setCss('ui-widget-content');
+        //gridLayout2.setCss('ui-widget-content');
         gridLayout2.setOverflow('y');
 
         tab.insertNode(gridLayout2,2);
+
+
+        var objectInspector = wof$.create('ObjectInspector');
+        objectInspector.setHeight(tab.getHeight()-108);
+        objectInspector.setWidth(sidebar1Width-35);
+        objectInspector.setTop(0);
+        objectInspector.setLeft(0);
+        objectInspector.appendTo(gridLayout2);
+
+
 
         tab.render();
 	}
@@ -325,6 +332,11 @@ jQuery(function(){
             var windowHeight = jQuery(window).height();
             var tab = wof$.find('#'+(sidebar1.children('div[oid]').first().attr('oid'))).get(0);
             tab.setHeight(windowHeight-headerHeight-12);
+            var ic = tab.getItemsCount();
+            for(var i=1;i<=ic;i++){
+                var node = tab.getNodesByItemIndex(i)[0];
+                node.setHeight(tab.getHeight()-108);
+            }
             tab.render();
         }catch(e){}
     }
@@ -361,7 +373,7 @@ jQuery(function(){
         tab.insertItem({title:'属性'});
         var propertyBar = wof$.create('PropertyBar');
         propertyBar.setWidth(sidebar2Width-24);
-        propertyBar.setHeight(tab.getHeight()-44);
+        propertyBar.setHeight(tab.getHeight()-108);
         var method = 'if(!jQuery.isEmptyObject(message.sender.parameters)){this.setParameters(message.sender.parameters);this.setMeta(message.sender.meta);this.render();}';
         var onReceiveMessage = [];
         for(var i=0;i<messageIds.length;i++){
@@ -375,7 +387,7 @@ jQuery(function(){
         tab.insertItem({title:'发送'});
         var onSendMessageBar = wof$.create('OnSendMessageBar');
         onSendMessageBar.setWidth(sidebar2Width-24);
-        onSendMessageBar.setHeight(tab.getHeight()-44);
+        onSendMessageBar.setHeight(tab.getHeight()-108);
         var meth = 'if(!jQuery.isEmptyObject(message.sender.parameters)){this.setParameters(message.sender.parameters);this.setSendMessages(message.sender.meta.sendMessages);this.render();}';
         var receives = [];
         for(var i=0;i<messageIds.length;i++){
@@ -389,7 +401,7 @@ jQuery(function(){
         tab.insertItem({title:'监听'});
         var onReceiveMessageBar = wof$.create('OnReceiveMessageBar');
         onReceiveMessageBar.setWidth(sidebar2Width-24);
-        onReceiveMessageBar.setHeight(tab.getHeight()-44);
+        onReceiveMessageBar.setHeight(tab.getHeight()-108);
         var met = 'if(!jQuery.isEmptyObject(message.sender.parameters)){this.setParameters(message.sender.parameters);this.render();}';
         var receiv = [];
         for(var i=0;i<messageIds.length;i++){
@@ -399,7 +411,11 @@ jQuery(function(){
         onReceiveMessageBar.setTop(0);
         onReceiveMessageBar.setLeft(4);
         tab.insertNode(onReceiveMessageBar,3);
-
+        var ic = tab.getItemsCount();
+        for(var i=1;i<=ic;i++){
+            var node = tab.getNodesByItemIndex(i)[0];
+            node.setHeight(tab.getHeight()-108);
+        }
         tab.render();
 
 	}
@@ -534,6 +550,7 @@ jQuery(function(){
 
             voucherComponent2.render();
 
+
         }
 
     }
@@ -584,7 +601,7 @@ jQuery(function(){
 						if(spann.prototype.exportData!=null){
                             if(clz.indexOf('wof.bizWidget')>=0){
                                 var componentData = {};
-                                componentData['ID'] = node.getId();
+                                componentData['ID'] = node.getComponentId();
                                 componentData['CallStr'] = node.getCallStr();
                                 componentData['ControlType'] = shortName;
                                 componentData['ControlContext'] = spann.prototype.exportData(node);

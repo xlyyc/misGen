@@ -4,84 +4,35 @@
  * @copyright author
  * @Time: 13-9-21 下午08:46
  */
-
-
 wof.bizWidget.ObjectInspector = function (root) {
     this._version = '1.0';
-
-    this.getDomInstance().mousedown(function (event) {
-        event.stopPropagation();
-    });
 };
 wof.bizWidget.ObjectInspector.prototype = {
 
-    _getCurrentStructureJson: function (root) {
-        var convertInstanceToJson = function (instances) {
-                var jsonArray = '[',
-                    index = 0;
-                if (instances) {
-                    for (var i = 0; i < instances.length; i++) {
-                        var instance = instances[i],
-                            className = instance.getClassName(),
-                            id = instance.getId();
-                        if (!id || !className || className.indexOf('Spanner') >= 0) {
-                            continue;
-                        }
-                        if (index > 0) {
-                            jsonArray += ',';
-                        }
-                        index++;
-                        var children = instance.childNodes();
-                        if (children.length) {
-                            jsonArray += '{"name" : "' + className + '","oid" : "' + id + '"';
-                            var childrenJson = convertInstanceToJson(children);
-                            if (childrenJson) {
-                                jsonArray += ',"children" : ' + childrenJson;
-                            }
-                            jsonArray += '}';
-                        } else {
-                            jsonArray += '{"name" : "' + className + '","oid" : "' + id + '"}';
-                        }
-                    }
-                }
-                if (index == 0) {
-                    return null;
-                }
-                return jsonArray += ']';
-            },
-            jsonStr = '';
-        if (root) {
-            var instances = [];
-            root.children().each(function () {
-                var oid = jQuery(this).attr('oid'),
-                    instance = wof.util.ObjectManager.get(oid);
-                if (instance) {
-                    instances.push(instance);
-                }
-            });
-            jsonStr = convertInstanceToJson(instances);
-            return JSON.parse(jsonStr);
-        }
-        return [];
-    },
+    _tree: null,
 
     initRender: function(){
-        tree = wof$.create('Tree');
+        var tree = wof$.create('Tree');
         tree.setIsInside(true);
-        tree.setNodes(this._getCurrentStructureJson(jQuery('#content')));
-        tree.onClick = function (e, treeId, treeNode) {
-            if (treeNode.oid) {
-                var prevSelect = this.getZTreeObj().setting._prevSelect;
-                if (prevSelect) {
-                    prevSelect.node.css('border', prevSelect.border);
-                }
-                var node = jQuery('*[oid="' + treeNode.oid + '"]');
-                var oldBorder = node.css('border');
-                node.css('border', '1px solid red');
-                this.getZTreeObj().setting._prevSelect = {node: node, border: oldBorder};
-            }
-        };
+        tree.setTop(0);
+        tree.setLeft(0);
+        tree.setChkStyle('radio');
+        tree.setRadioType('all');
+        tree.setWidth(this.getWidth()-8);
+        tree.setHeight(this.getHeight()-30);
+
+        var nodes = [
+            {nodeId:'1',name: "父节点1", children: [
+                {nodeId:'2',name: "子节点1"},
+                {nodeId:'3',name: "子节点2"}
+            ]},
+            {nodeId:'4',name: "父节点2",leaf : true},
+            {nodeId:'5',name: "父节点3",open : true}
+        ];
+        tree.setNodes(nodes);
+
         tree.appendTo(this);
+        this._tree = tree;
     },
 
     //选择实现

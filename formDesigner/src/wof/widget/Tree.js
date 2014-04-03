@@ -83,7 +83,7 @@ wof.widget.Tree.prototype = {
     onExpand: jQuery.noop,
 
     //选择实现
-    beforeRender: function () {
+    initRender: function () {
         var _this = this;
         this._ztree = jQuery.fn.zTree.init(this.getDomInstance().addClass('ztree'),
             {
@@ -105,12 +105,7 @@ wof.widget.Tree.prototype = {
                 }
             }
         );
-        this._ztree.addNodes(null, this.getNodes());
 
-        var nodes = this._ztree.getNodes();
-        if(nodes.length>0){
-            this._ztree.expandNode(nodes[0], true, true, true);
-        }
     },
 
     //----------必须实现----------
@@ -120,7 +115,12 @@ wof.widget.Tree.prototype = {
 
     //选择实现
     afterRender: function () {
+        this._ztree.addNodes(null, this.getNodes());
 
+        var nodes = this._ztree.getNodes();
+        if(nodes.length>0){
+            this._ztree.expandNode(nodes[0], true, true, true);
+        }
     },
 
     /**
