@@ -6,8 +6,6 @@
 
 <link href="lib/jquery.ui/themes/redmond/jquery-ui.min.css" rel="stylesheet">
 <link href="lib/jquery.ztree/css/zTreeStyle/zTreeStyle.css" rel="stylesheet">
-<link href="lib/jquery.ui.multiselect/css/jquery.multiselect.css" rel="stylesheet">
-<link href="lib/jquery.ui.multiselect/css/jquery.multiselect.filter.css" rel="stylesheet">
 
 
 <style type="text/css">
@@ -22,12 +20,96 @@
 
 -->
 </style>
-
 <script src="lib/jquery/jquery.min.js"></script>
 <script src="lib/jquery.ui/jquery-ui-1.10.1.custom.min.js"></script>
 <script src="lib/jquery.ui.multiselect/js/jquery.multiselect.min.js"></script>
 <script src="lib/jquery.ui.multiselect/js/jquery.multiselect.filter.min.js"></script>
 <script src="lib/jquery.ztree/js/jquery.ztree.all-3.5.js"></script>
+<script src="lib/json2.js"></script>
+<script src="lib/fixConsole.js"></script>
+<script src="lib/jsonpath-0.8.0.js"></script>
+<script src="src/wof/kernel/initNamespace.js"></script>
+
+<script src="src/wof/util/Hashtable.js"></script>
+<script src="src/wof/util/ObjectManager.js"></script>
+<script src="src/wof/util/Observer.js"></script>
+<script src="src/wof/util/ArrayList.js"></script>
+<script src="src/wof/util/Selector.js"></script>
+<script src="src/wof/util/SelectorList.js"></script>
+<script src="src/wof/util/GlobalObject.js"></script>
+<script src="src/wof/util/Tool.js"></script>
+
+<script src="src/wof/widget/Mediator.js"></script>
+
+<script src="src/wof/customWindow/MetaTreeSelector.js"></script>
+<script src="src/wof/customWindow/ComponentTreeSelector.js"></script>
+<script src="src/wof/customWindow/ParamMapsWindow.js"></script>
+<script src="src/wof/customWindow/PageParamWindow.js"></script>
+<script src="src/wof/customWindow/PageFormSelector.js"></script>
+
+<script src="src/wof/widget/Tab.js"></script>
+<script src="src/wof/widget/TabItem.js"></script>
+<script src="src/wof/widget/Toolbar.js"></script>
+<script src="src/wof/widget/ToolbarItem.js"></script>
+<script src="src/wof/widget/Grid.js"></script>
+<script src="src/wof/widget/Button.js"></script>
+<script src="src/wof/widget/DateBox.js"></script>
+<script src="src/wof/widget/Label.js"></script>
+<script src="src/wof/widget/RadioGroupItem.js"></script>
+<script src="src/wof/widget/RadioGroup.js"></script>
+<script src="src/wof/widget/ComboBox.js"></script>
+<script src="src/wof/widget/Tree.js"></script>
+<script src="src/wof/widget/spanner/ButtonSpanner.js"></script>
+<script src="src/wof/widget/spanner/TabSpanner.js"></script>
+
+<script src="src/wof/bizWidget/FlowLayout.js"></script>
+<script src="src/wof/bizWidget/FlowLayoutSection.js"></script>
+<script src="src/wof/bizWidget/FlowLayoutItem.js"></script>
+<script src="src/wof/bizWidget/FlowLayoutHelper.js"></script>
+<script src="src/wof/bizWidget/GridLayout.js"></script>
+<script src="src/wof/bizWidget/PageComponent.js"></script>
+<script src="src/wof/bizWidget/PropertyBar.js"></script>
+<script src="src/wof/bizWidget/ObjectBar.js"></script>
+<script src="src/wof/bizWidget/OnSendMessageBar.js"></script>
+<script src="src/wof/bizWidget/OnReceiveMessageBar.js"></script>
+<script src="src/wof/bizWidget/VoucherComponent.js"></script>
+<script src="src/wof/bizWidget/VoucherItemGroup.js"></script>
+<script src="src/wof/bizWidget/VoucherItem.js"></script>
+<script src="src/wof/bizWidget/VoucherGridComponent.js"></script>
+<script src="src/wof/bizWidget/VoucherGridComponentColumn.js"></script>
+<script src="src/wof/bizWidget/GridComponent.js"></script>
+<script src="src/wof/bizWidget/GridComponentColumn.js"></script>
+<script src="src/wof/bizWidget/VoucherGridComponent.js"></script>
+<script src="src/wof/bizWidget/SearchComponent.js"></script>
+<script src="src/wof/bizWidget/SearchItem.js"></script>
+<script src="src/wof/bizWidget/BizEntityTree.js"></script>
+<script src="src/wof/bizWidget/PageFormTree.js"></script>
+<script src="src/wof/bizWidget/ComponentsTree.js"></script>
+<script src="src/wof/bizWidget/ParamWindow.js"></script>
+<script src="src/wof/bizWidget/PageParamWindow.js"></script>
+
+<script src="src/wof/bizWidget/spanner/GridLayoutSpanner.js"></script>
+<script src="src/wof/bizWidget/spanner/PageComponentSpanner.js"></script>
+<script src="src/wof/bizWidget/spanner/FlowLayoutSpanner.js"></script>
+<script src="src/wof/bizWidget/spanner/VoucherComponentSpanner.js"></script>
+<script src="src/wof/bizWidget/spanner/SearchComponentSpanner.js"></script>
+<script src="src/wof/bizWidget/spanner/VoucherGridComponentSpanner.js"></script>
+<script src="src/wof/bizWidget/spanner/GridComponentSpanner.js"></script>
+<script src="src/wof/bizWidget/ObjectInspector.js"></script>
+
+<script src="src/wof/functionWidget/CommitComponent.js"></script>
+<script src="src/wof/functionWidget/ViewRecordComponent.js"></script>
+<script src="src/wof/functionWidget/UpdateRecordComponent.js"></script>
+<script src="src/wof/functionWidget/DeleteRecordComponent.js"></script>
+<script src="src/wof/functionWidget/AddRecordComponent.js"></script>
+
+<script src="src/wof/functionWidget/spanner/CommitComponentSpanner.js"></script>
+<script src="src/wof/functionWidget/spanner/ViewRecordComponentSpanner.js"></script>
+<script src="src/wof/functionWidget/spanner/UpdateRecordComponentSpanner.js"></script>
+<script src="src/wof/functionWidget/spanner/DeleteRecordComponentSpanner.js"></script>
+<script src="src/wof/functionWidget/spanner/AddRecordComponentSpanner.js"></script>
+
+<script src="src/wof/kernel/initAOP.js"></script>
 
 <script>
 
@@ -81,7 +163,7 @@ jQuery(function(){
 
         var setting = {	};
 
-        var zNodes =[
+       /* var zNodes =[
             { name:"父节点1 - 展开", open:true,
                 children: [
                     { name:"父节点11 - 折叠",
@@ -126,12 +208,38 @@ jQuery(function(){
                 ]},
             { name:"父节点3 - 没有子节点", isParent:true}
 
+        ];*/
+
+        //jQuery.fn.zTree.init(jQuery('#test'), setting, zNodes);
+
+        var objectInspector = wof$.create('ObjectInspector');
+        objectInspector.setHeight(200);
+        objectInspector.setWidth(sidebar1Width-35);
+        objectInspector.setTop(0);
+        objectInspector.setLeft(0);
+        objectInspector.appendTo(jQuery('#tabs-1'));
+        objectInspector.render();
+
+       /* var tree = wof$.create('Tree');
+        tree.setIsInside(true);
+        //tree.setTop(0);
+        tree.setLeft(0);
+        tree.setChkStyle('radio');
+        tree.setRadioType('all');
+        tree.setWidth(200);
+        tree.setHeight(200);
+
+        var nodes = [
+            {nodeId:'1',name: "父节点1", children: [
+                {nodeId:'2',name: "子节点1"},
+                {nodeId:'3',name: "子节点2"}
+            ]},
+            {nodeId:'4',name: "父节点2",leaf : true},
+            {nodeId:'5',name: "父节点3",open : true}
         ];
-
-        jQuery.fn.zTree.init(jQuery('#test'), setting, zNodes);
-
-
-
+        tree.setNodes(nodes);
+        tree.appendTo(jQuery('#tabs-1'));
+        tree.render();*/
 	}
 	jQuery(window).load(function(){
 		layout();
@@ -159,7 +267,7 @@ jQuery(function(){
             </ul>
             <div id="tabs-1">
 
-                <div id="test" class="ztree">
+
 
 
             </div>
