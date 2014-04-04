@@ -263,14 +263,33 @@ wof.bizWidget.FlowLayout.prototype = {
         }
     },
 
+    _updateItem: function(item, itemData){
+        if(!jQuery.isEmptyObject(itemData)){
+            if(itemData.colspan!=null){
+                if(item.parentNode().getCols()>=Number(itemData.colspan)){
+                    item.setColspan(Number(itemData.colspan));
+                }else{
+                    console.log('设置colspan值错误:大于该分组cols值');
+                }
+            }
+            if(itemData.isFixItem!=null){
+                item.setIsFixItem((itemData.isFixItem=='true'||itemData.isFixItem==true)?true:false);
+            }
+            if(itemData.rowspan!=null){
+                item.setRowspan(Number(itemData.rowspan));
+            }
+        }
+    },
+
     /**
      * 在指定item插入节点
      * 如果itemRank和sectionIndex为null 则在当前焦点的item中插入
      * node 节点对象
      * itemRank 在指定item内插入
      * sectionIndex section 序号
+     * itemData item数据
      */
-    insertNode: function(node, itemRank, sectionIndex){
+    insertNode: function(node, itemRank, sectionIndex, itemData){
         if(node!=null){
             if(sectionIndex==null){
                 sectionIndex = this.getActiveSectionIndex();
@@ -285,16 +304,15 @@ wof.bizWidget.FlowLayout.prototype = {
                     if(item!=null){
                         if(item.childNodes().length==0){
                             node.appendTo(item);
+                            this._updateItem(item,itemData);
                         }else{
                             var newItem = wof$.create('FlowLayoutItem');
                             newItem.afterTo(item);
                             node.appendTo(newItem);
+                            this._updateItem(newItem,itemData);
                         }
-                        //如果该分组内容自适应高度 则需要重新计算
-                        if(section.getIsAutoExt()==true){
-                            section.calcLayout();
-                            this.calcLayout();
-                        }
+                        section.calcLayout();
+                        this.calcLayout();
                     }else{
                         console.log('不存在的item');
                     }
@@ -488,19 +506,7 @@ wof.bizWidget.FlowLayout.prototype = {
             if(section!=null){
                 var item = section.findItemByRank({row:Number(itemData.row),col:Number(itemData.col)});
                 if(item!=null){
-                    if(itemData.colspan!=null){
-                        if(section.getCols()>=Number(itemData.colspan)){
-                            item.setColspan(Number(itemData.colspan));
-                        }else{
-                            console.log('设置colspan值错误:大于该分组cols值');
-                        }
-                    }
-                    if(itemData.isFixItem!=null){
-                        item.setIsFixItem((itemData.isFixItem=='true'||itemData.isFixItem==true)?true:false);
-                    }
-                    if(itemData.rowspan!=null){
-                        item.setRowspan(Number(itemData.rowspan));
-                    }
+                    this._updateItem(item, itemData);
                     section.calcLayout();
                     this.calcLayout();
                 }

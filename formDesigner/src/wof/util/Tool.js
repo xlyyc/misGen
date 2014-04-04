@@ -41,7 +41,10 @@
         },
 
         setAttribute : function (element,name,value){
-                element.setAttribute(name,value);
+            if(value==null){
+                value = '';
+            }
+            element.setAttribute(name,value);
         },
 
         appendChild : function (element,node){

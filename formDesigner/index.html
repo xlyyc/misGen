@@ -488,15 +488,10 @@ jQuery(function(){
              + '\n layout.render();'
              +'\n return false;';
             // flowLayout.setOnReceiveMessage([{id:'wof.widget.Button_mousedown',priority:50,method:method}]);
-             flowLayout.setOnSendMessage([{id:'wof.bizWidget.FlowLayout_render',method:'console.log(this.getCols());'}]);
+             //flowLayout.setOnSendMessage([{id:'wof.bizWidget.FlowLayout_render',method:'console.log(this.getCols());'}]);
 
             var sectionData1 = {title:'默认分组1',width:width,titleHeight:30,cols:2,itemHeight:300};
             flowLayout.insertSection(sectionData1);
-
-
-            flowLayout.render();
-
-            flowLayout.appendTo(content);
 
             var voucherComponent = wof$.create('VoucherComponent');
             voucherComponent.setLeft(0);
@@ -534,9 +529,9 @@ jQuery(function(){
             };
             voucherComponent.insertVoucherItem(voucherItemData1, {rowNum:1,colNum:1}, 1);
 
-            flowLayout.insertNode(voucherComponent,{row:1,col:1},1);
+            flowLayout.insertNode(voucherComponent,{row:1,col:1},1,{isFixItem:false,rowspan:2});
 
-            voucherComponent.render();
+            //voucherComponent.render();
 
 
             var json = voucherComponent.getData();
@@ -548,8 +543,13 @@ jQuery(function(){
 
             flowLayout.insertNode(voucherComponent2,{row:1,col:2},1);
 
-            voucherComponent2.render();
+            //voucherComponent2.render();
 
+            //flowLayout.getDomInstance().css('height', '630px');
+            //flowLayout.childNodes()[0].getDomInstance().css('height','630px');
+            flowLayout.render();
+
+            flowLayout.appendTo(content);
 
         }
 
