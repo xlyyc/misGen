@@ -313,6 +313,7 @@ jQuery(function(){
 
         tab.insertNode(gridLayout2,2);
 
+        tab.render();
 
         var objectInspector = wof$.create('ObjectInspector');
         objectInspector.setHeight(tab.getHeight()-108);
@@ -321,9 +322,7 @@ jQuery(function(){
         objectInspector.setLeft(0);
         objectInspector.appendTo(gridLayout2);
 
-
-
-        tab.render();
+        objectInspector.render();     //由于树与tab样式冲突 所以需要在tab render后再添加树 并且直接渲染树
 	}
     //重设左侧边栏
     function resizeSidebar1(){

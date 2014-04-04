@@ -1,7 +1,6 @@
 wof.widget.Tree = function () {
     this._version = '1.0';
 
-
 };
 
 wof.widget.Tree.prototype = {

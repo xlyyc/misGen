@@ -111,6 +111,22 @@
 
 <script src="src/wof/kernel/initAOP.js"></script>
 
+<script src="lib/wis/src/wis/kernel/initNamespace.js"></script>
+
+<script src="lib/wis/src/wis/util/Hashtable.js"></script>
+<script src="lib/wis/src/wis/util/ObjectManager.js"></script>
+<script src="lib/wis/src/wis/util/Observer.js"></script>
+<script src="lib/wis/src/wis/util/ArrayList.js"></script>
+<script src="lib/wis/src/wis/util/Selector.js"></script>
+<script src="lib/wis/src/wis/util/SelectorList.js"></script>
+<script src="lib/wis/src/wis/util/GlobalObject.js"></script>
+<script src="lib/wis/src/wis/util/Tool.js"></script>
+
+<script src="lib/wis/src/wis/widget/Tab.js"></script>
+<script src="lib/wis/src/wis/widget/Button.js"></script>
+
+<script src="lib/wis/src/wis/kernel/initSystem.js"></script>
+
 <script>
 
 jQuery(function(){
@@ -137,7 +153,7 @@ jQuery(function(){
 		sidebar1.css('width', sidebar1Width+'px');
 		sidebar1.css('height', (windowHeight-headerHeight-5)+'px');
 		sidebar1.css('left', '0px');
-		sidebar1.css('top', headerHeight+'px');		
+		sidebar1.css('top', headerHeight+'px');
 		content.css('width', (windowWidth-sidebar1Width-sidebar2Width)+'px');
 		content.css('height', (windowHeight-headerHeight-5)+'px');
 		content.css('left', sidebar1Width+'px');
@@ -212,13 +228,51 @@ jQuery(function(){
 
         //jQuery.fn.zTree.init(jQuery('#test'), setting, zNodes);
 
+
+      /*  var tab = wof$.create('Tab');
+        tab.setOnSendMessage([{id:'wof.widget.Tab_active',method:'return false;'}]);
+        tab.setWidth(200);
+        tab.setHeight(300);
+        tab.setTop(0);
+        tab.setLeft(0);
+        tab.setActiveItemIndex(1);
+        tab.appendTo(sidebar1);
+
+        tab.insertItem({title:'构件'});*/
+
+
+        var tab = wis$.create('Tab');
+        tab.appendTo(sidebar1);
+        tab.insertItem({name:'name11',width:100,label:'测试',closeable:true,icon:'add',iconPosition:'left'});
+
+        tab.setWidth(300);
+        tab.setHeight(300);
+
+
+        var gridLayout1 = wof$.create('GridLayout');
+        gridLayout1.setOnSendMessage([{id:'wof.bizWidget.GridLayout_active',method:'return false;'}]);
+        gridLayout1.setWidth(sidebar1Width-18);
+        gridLayout1.setHeight(tab.getHeight()-108);
+        gridLayout1.setTop(0);
+        gridLayout1.setLeft(0);
+        gridLayout1.setOverflow('y');
+
+
         var objectInspector = wof$.create('ObjectInspector');
-        objectInspector.setHeight(200);
-        objectInspector.setWidth(sidebar1Width-35);
+        objectInspector.setHeight(300);
+        objectInspector.setWidth(sidebar1Width);
         objectInspector.setTop(0);
         objectInspector.setLeft(0);
-        objectInspector.appendTo(jQuery('#tabs-1'));
-        objectInspector.render();
+        objectInspector.appendTo(gridLayout1);
+
+
+
+        tab.insertNode(gridLayout1.getDomInstance(),1);
+        tab.render();
+        gridLayout1.render();
+
+
+
 
        /* var tree = wof$.create('Tree');
         tree.setIsInside(true);
@@ -255,7 +309,7 @@ jQuery(function(){
 <div id="container" style="position:absolute;">
 
 	<div id="sidebar1" style="position:absolute;z-index:90000;">
-    	
+
     </div>
     <div id="content" style="position:absolute;z-index: auto;">
 
@@ -283,7 +337,7 @@ jQuery(function(){
 
     </div>
     <div id="sidebar2" style="position:absolute;z-index:90000;">
-    	
+
     </div>
 </div>
 </body>

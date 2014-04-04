@@ -13,6 +13,7 @@ wof.bizWidget.ObjectInspector.prototype = {
 
     initRender: function(){
         var tree = wof$.create('Tree');
+        tree.setPosition('static');
         tree.setIsInside(true);
         tree.setTop(0);
         tree.setLeft(0);
