@@ -77,6 +77,7 @@ jQuery(function(){
 	var sidebar1 = jQuery('#sidebar1');
 	var sidebar2 = jQuery('#sidebar2');
 	var content = jQuery('#content');
+    var components = [];
 
 	//设置布局
 	function layout(){
@@ -125,16 +126,13 @@ jQuery(function(){
         gridLayout1.setHeight(tab.getHeight()-108);
         gridLayout1.setTop(0);
         gridLayout1.setLeft(0);
-        //gridLayout1.setCss('ui-widget-content');
         gridLayout1.setOverflow('y');
 
         tab.insertNode(gridLayout1,1);
 
-        var components = [];
-
         var layoutComponents = [];
-        var bizWidgetComponents = [];  //页面组件
-        var widgetComponents = [];   //基础组件
+        var bizWidgetComponents = [];
+        var widgetComponents = [];
 
         for(var i=0;i<wof$_layoutComponents.length;i++){
             var layoutComponentSpanner = wof$.create(wof$_layoutComponents[i]);
@@ -230,21 +228,11 @@ jQuery(function(){
 		var windowWidth = jQuery(window).width();
 		var windowHeight = jQuery(window).height();
 
-        var messageIds = [
-            'wof.bizWidget.spanner.FlowLayoutSpanner_render',
-            'wof.widget.spanner.ButtonSpanner_render',
-            'wof.bizWidget.spanner.GridLayoutSpanner_render',
-            'wof.bizWidget.spanner.VoucherComponentSpanner_render',
-            'wof.bizWidget.spanner.SearchComponentSpanner_render',
-            'wof.bizWidget.spanner.VoucherGridComponentSpanner_render',
-            'wof.bizWidget.spanner.GridComponentSpanner_render',
-            'wof.bizWidget.spanner.PageComponentSpanner_render',
-            'wof.functionWidget.spanner.CommitComponentSpanner_render',
-            'wof.functionWidget.spanner.ViewRecordComponentSpanner_render',
-            'wof.functionWidget.spanner.UpdateRecordComponentSpanner_render',
-            'wof.functionWidget.spanner.DeleteRecordComponentSpanner_render',
-            'wof.functionWidget.spanner.AddRecordComponentSpanner_render'
-        ];
+        var messageIds = [];
+        for(var i=0;i<components.length;i++){
+            var componentSpanner = components[i];
+            messageIds.push(componentSpanner.getClassName()+'_render');
+        }
 
         var tab = wof$.create('Tab');
         tab.setOnSendMessage([{id:'wof.widget.Tab_active',method:'return false;'}]);
@@ -452,16 +440,16 @@ jQuery(function(){
 		}catch(e){}
 	}
 	jQuery(window).load(function(){
-		layout();
-		initSidebar2();
-        initContent();
+        layout();
         initSidebar1();
+        initContent();
+		initSidebar2();
 	});
 	jQuery(window).resize(function(){
 		layout();
 		resizeSidebar1();
-		resizeSidebar2();
         resizeContent();
+		resizeSidebar2();
 	});
 	jQuery("#pageParamBtn,#saveBtn,#saveToCompositeComponentBtn").button().click(function(event){
 		event.preventDefault();
