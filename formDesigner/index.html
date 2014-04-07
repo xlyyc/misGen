@@ -43,75 +43,9 @@
 <script src="src/wof/util/GlobalObject.js"></script>
 <script src="src/wof/util/Tool.js"></script>
 
-<script src="src/wof/widget/Mediator.js"></script>
 
-<script src="src/wof/customWindow/MetaTreeSelector.js"></script>
-<script src="src/wof/customWindow/ComponentTreeSelector.js"></script>
-<script src="src/wof/customWindow/ParamMapsWindow.js"></script>
-<script src="src/wof/customWindow/PageParamWindow.js"></script>
-<script src="src/wof/customWindow/PageFormSelector.js"></script>
+<script src="componentList.js"></script>
 
-<script src="src/wof/widget/Tab.js"></script>
-<script src="src/wof/widget/TabItem.js"></script>
-<script src="src/wof/widget/Toolbar.js"></script>
-<script src="src/wof/widget/ToolbarItem.js"></script>
-<script src="src/wof/widget/Grid.js"></script>
-<script src="src/wof/widget/Button.js"></script>
-<script src="src/wof/widget/DateBox.js"></script>
-<script src="src/wof/widget/Label.js"></script>
-<script src="src/wof/widget/RadioGroupItem.js"></script>
-<script src="src/wof/widget/RadioGroup.js"></script>
-<script src="src/wof/widget/ComboBox.js"></script>
-<script src="src/wof/widget/Tree.js"></script>
-<script src="src/wof/widget/spanner/ButtonSpanner.js"></script>
-<script src="src/wof/widget/spanner/TabSpanner.js"></script>
-
-<script src="src/wof/bizWidget/FlowLayout.js"></script>
-<script src="src/wof/bizWidget/FlowLayoutSection.js"></script>
-<script src="src/wof/bizWidget/FlowLayoutItem.js"></script>
-<script src="src/wof/bizWidget/FlowLayoutHelper.js"></script>
-<script src="src/wof/bizWidget/GridLayout.js"></script>
-<script src="src/wof/bizWidget/PageComponent.js"></script>
-<script src="src/wof/bizWidget/PropertyBar.js"></script>
-<script src="src/wof/bizWidget/ObjectBar.js"></script>
-<script src="src/wof/bizWidget/OnSendMessageBar.js"></script>
-<script src="src/wof/bizWidget/OnReceiveMessageBar.js"></script>
-<script src="src/wof/bizWidget/VoucherComponent.js"></script>
-<script src="src/wof/bizWidget/VoucherItemGroup.js"></script>
-<script src="src/wof/bizWidget/VoucherItem.js"></script>
-<script src="src/wof/bizWidget/VoucherGridComponent.js"></script>
-<script src="src/wof/bizWidget/VoucherGridComponentColumn.js"></script>
-<script src="src/wof/bizWidget/GridComponent.js"></script>
-<script src="src/wof/bizWidget/GridComponentColumn.js"></script>
-<script src="src/wof/bizWidget/VoucherGridComponent.js"></script>
-<script src="src/wof/bizWidget/SearchComponent.js"></script>
-<script src="src/wof/bizWidget/SearchItem.js"></script>
-<script src="src/wof/bizWidget/BizEntityTree.js"></script>
-<script src="src/wof/bizWidget/PageFormTree.js"></script>
-<script src="src/wof/bizWidget/ComponentsTree.js"></script>
-<script src="src/wof/bizWidget/ParamWindow.js"></script>
-<script src="src/wof/bizWidget/PageParamWindow.js"></script>
-
-<script src="src/wof/bizWidget/spanner/GridLayoutSpanner.js"></script>
-<script src="src/wof/bizWidget/spanner/PageComponentSpanner.js"></script>
-<script src="src/wof/bizWidget/spanner/FlowLayoutSpanner.js"></script>
-<script src="src/wof/bizWidget/spanner/VoucherComponentSpanner.js"></script>
-<script src="src/wof/bizWidget/spanner/SearchComponentSpanner.js"></script>
-<script src="src/wof/bizWidget/spanner/VoucherGridComponentSpanner.js"></script>
-<script src="src/wof/bizWidget/spanner/GridComponentSpanner.js"></script>
-<script src="src/wof/bizWidget/ObjectInspector.js"></script>
-
-<script src="src/wof/functionWidget/CommitComponent.js"></script>
-<script src="src/wof/functionWidget/ViewRecordComponent.js"></script>
-<script src="src/wof/functionWidget/UpdateRecordComponent.js"></script>
-<script src="src/wof/functionWidget/DeleteRecordComponent.js"></script>
-<script src="src/wof/functionWidget/AddRecordComponent.js"></script>
-
-<script src="src/wof/functionWidget/spanner/CommitComponentSpanner.js"></script>
-<script src="src/wof/functionWidget/spanner/ViewRecordComponentSpanner.js"></script>
-<script src="src/wof/functionWidget/spanner/UpdateRecordComponentSpanner.js"></script>
-<script src="src/wof/functionWidget/spanner/DeleteRecordComponentSpanner.js"></script>
-<script src="src/wof/functionWidget/spanner/AddRecordComponentSpanner.js"></script>
 
 <script src="src/wof/kernel/initAOP.js"></script>
 
@@ -143,6 +77,7 @@ jQuery(function(){
 	var sidebar1 = jQuery('#sidebar1');
 	var sidebar2 = jQuery('#sidebar2');
 	var content = jQuery('#content');
+
 	//设置布局
 	function layout(){
 		var windowWidth = jQuery(window).width();
@@ -196,80 +131,31 @@ jQuery(function(){
         tab.insertNode(gridLayout1,1);
 
         var components = [];
+
         var layoutComponents = [];
-        var bizWidgetComponents = [];
-        var widgetComponents = [];
+        var bizWidgetComponents = [];  //页面组件
+        var widgetComponents = [];   //基础组件
 
-        var flowLayoutSpanner = wof$.create('FlowLayoutSpanner');
-        flowLayoutSpanner.appendTo(gridLayout1);
-        layoutComponents.push(flowLayoutSpanner);
-        components.push(flowLayoutSpanner);
+        for(var i=0;i<wof$_layoutComponents.length;i++){
+            var layoutComponentSpanner = wof$.create(wof$_layoutComponents[i]);
+            layoutComponentSpanner.appendTo(gridLayout1);
+            layoutComponents.push(layoutComponentSpanner);
+            components.push(layoutComponentSpanner);
+        }
 
-        var gridLayoutSpanner = wof$.create('GridLayoutSpanner');
-        gridLayoutSpanner.appendTo(gridLayout1);
-        layoutComponents.push(gridLayoutSpanner);
-        components.push(gridLayoutSpanner);
+        for(var i=0;i<wof$_bizWidgetComponents.length;i++){
+            var bizWidgetComponentSpanner = wof$.create(wof$_bizWidgetComponents[i]);
+            bizWidgetComponentSpanner.appendTo(gridLayout1);
+            bizWidgetComponents.push(bizWidgetComponentSpanner);
+            components.push(bizWidgetComponentSpanner);
+        }
 
-        var voucherComponentSpanner = wof$.create('VoucherComponentSpanner');
-        voucherComponentSpanner.appendTo(gridLayout1);
-        bizWidgetComponents.push(voucherComponentSpanner);
-        components.push(voucherComponentSpanner);
-
-        var searchComponentSpanner = wof$.create('SearchComponentSpanner');
-        searchComponentSpanner.appendTo(gridLayout1);
-        bizWidgetComponents.push(searchComponentSpanner);
-        components.push(searchComponentSpanner);
-
-        var gridComponentSpanner = wof$.create('GridComponentSpanner');
-        gridComponentSpanner.appendTo(gridLayout1);
-        bizWidgetComponents.push(gridComponentSpanner);
-        components.push(gridComponentSpanner);
-
-        var voucherGridComponentSpanner = wof$.create('VoucherGridComponentSpanner');
-        voucherGridComponentSpanner.appendTo(gridLayout1);
-        bizWidgetComponents.push(voucherGridComponentSpanner);
-        components.push(voucherGridComponentSpanner);
-
-        var pageComponentSpanner = wof$.create('PageComponentSpanner');
-        pageComponentSpanner.appendTo(gridLayout1);
-        bizWidgetComponents.push(pageComponentSpanner);
-        components.push(pageComponentSpanner);
-
-    /*    var buttonSpanner = wof$.create('ButtonSpanner');
-        buttonSpanner.appendTo(gridLayout1);
-        widgetComponents.push(buttonSpanner);
-        components.push(buttonSpanner);
-
-        var tabSpanner = wof$.create('TabSpanner');
-        tabSpanner.appendTo(gridLayout1);
-        widgetComponents.push(tabSpanner);
-        components.push(tabSpanner);*/
-
-        var commitComponentSpanner = wof$.create('CommitComponentSpanner');
-        commitComponentSpanner.appendTo(gridLayout1);
-        widgetComponents.push(commitComponentSpanner);
-        components.push(commitComponentSpanner);
-
-        var viewRecordComponentSpanner = wof$.create('ViewRecordComponentSpanner');
-        viewRecordComponentSpanner.appendTo(gridLayout1);
-        widgetComponents.push(viewRecordComponentSpanner);
-        components.push(viewRecordComponentSpanner);
-
-        var updateRecordComponentSpanner = wof$.create('UpdateRecordComponentSpanner');
-        updateRecordComponentSpanner.appendTo(gridLayout1);
-        widgetComponents.push(updateRecordComponentSpanner);
-        components.push(updateRecordComponentSpanner);
-
-        var addRecordComponentSpanner = wof$.create('AddRecordComponentSpanner');
-        addRecordComponentSpanner.appendTo(gridLayout1);
-        widgetComponents.push(addRecordComponentSpanner);
-        components.push(addRecordComponentSpanner);
-
-
-        var deleteRecordComponentSpanner = wof$.create('DeleteRecordComponentSpanner');
-        deleteRecordComponentSpanner.appendTo(gridLayout1);
-        widgetComponents.push(deleteRecordComponentSpanner);
-        components.push(deleteRecordComponentSpanner);
+        for(var i=0;i<wof$_widgetComponents.length;i++){
+            var widgetComponentSpanner = wof$.create(wof$_widgetComponents[i]);
+            widgetComponentSpanner.appendTo(gridLayout1);
+            widgetComponents.push(widgetComponentSpanner);
+            components.push(widgetComponentSpanner);
+        }
 
 
         for(var i=0;i<components.length;i++){
