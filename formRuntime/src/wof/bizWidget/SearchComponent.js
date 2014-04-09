@@ -351,6 +351,15 @@ wof.bizWidget.SearchComponent.prototype = {
             this.render();
             this.sendMessage('wof.bizWidget.SearchComponent_active');
             return false;
+        },
+        'wof.widget.Button_onclick':function(message){
+            console.log(message.id+'   '+this.getClassName());
+            if(this.getLinkComponentID().length>0){
+
+            }else{
+                alert('请首先绑定构件');
+            }
+            return false;
         }
     },
 
