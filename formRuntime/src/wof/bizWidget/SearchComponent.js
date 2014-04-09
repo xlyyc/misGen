@@ -355,7 +355,8 @@ wof.bizWidget.SearchComponent.prototype = {
         'wof.widget.Button_onclick':function(message){
             console.log(message.id+'   '+this.getClassName());
             if(this.getLinkComponentID().length>0){
-
+                 // var queryParam = {'type':'fieldQuery','field':idPro,'operation':'equals','value1':this.getCurrentRowId()};
+                // this.getDataSource().queryData('main',null,queryParam,0,1);
             }else{
                 alert('请首先绑定构件');
             }
