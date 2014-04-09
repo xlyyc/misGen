@@ -281,6 +281,9 @@ wof.bizWidget.SearchItem.prototype = {
         this._label.setTip(this.getTipValue());
 
         this._setComponent();
+
+
+
     },
 
     //----------必须实现----------
@@ -369,59 +372,179 @@ wof.bizWidget.SearchItem.prototype = {
         return component;
     },
 
-    //根据当前的显示类型设置对应的元件
-    _setComponent: function(){
-        if(this.getDataField().length>0){
-            var component = null;
-            var clzName = '';
-            var setValMethod = '';
-            var visbleType = this.getVisbleType();
-            if(visbleType=='text'){
-                clzName = 'wof.widget.Input';
-                setValMethod = 'setValue';
-            }else if(visbleType=='textArea'){
-                clzName = 'wof.widget.TextArea';
-            }else if(visbleType=='richTextArea'){
-                clzName = 'wof.widget.HTMLEditor';
-            }else if(visbleType=='select'){
-                clzName = 'wof.widget.ComboBox';
-            }else if(visbleType=='checkBox'){
-                clzName = 'wof.widget.CheckBox';
-            }else if(visbleType=='date'){
-                clzName = 'wof.widget.DateBox';
-            }else if(visbleType=='radio'){
-                clzName = 'wof.widget.RadioGroup';
-            }else if(visbleType=='file'){
-                clzName = 'wof.widget.FileBox';
-            }else if(visbleType=='number'){
-                clzName = 'wof.widget.Input';
-            }
 
-            /**
-             * todo 暂时使用
-             */
-            clzName = 'wof.widget.Input';
-            setValMethod = 'setValue';
-
-            if(this._component!=null&&this._component.getClassName()==clzName){
-                component = this._component;
-            }else{
-                if(this._component!=null){
-                    this._component.removeChildren(true);
-                    this._component.remove(true);
-                    this._component = null;
-                }
-                component = wof$.create(clzName);
-                component.setIsInside(true);
-                component.appendTo(this);
-                this._component = component;
-            }
-            component.setLeft(this.getLabelWidth());
-            component.setWidth(this.getInputWidth());
-            component.setHeight(this.getInputHeight());
-
+    _insideOnReceiveMessage: {
+        'wof.widget.Input_blur': function(message) {
+            console.log(message.id+'   '+this.getClassName());
+            var input = wof.util.ObjectManager.get(message.sender.id);
+            this.setValue(input.getValue());
+            this.sendMessage('wof.bizWidget.SearchItem_change');
+            return false;
+        }, 
+        'wof.widget.ComboBox_selected': function (message) {
+            console.log(message.id+'   '+this.getClassName());
+            var cb = wof.util.ObjectManager.get(message.sender.id);
+            // console.log('selected: %s -> %s', cb.getSelectedText(), cb.getSelectedValue());
+            this.setValue(cb.getSelectedValue());
+            this.sendMessage('wof.bizWidget.SearchItem_change');
         }
     },
+
+
+
+    _initComponent: function(clzName, readonlyMethod) {
+        if (this._component && 
+                this._component.getClassName() !== clzName) {
+            this._component.removeChildren(true);
+            this._component.remove(true);
+            this._component = null;
+        }
+
+        if (this._component == null) {
+            this._component = wof$.create(clzName);
+            this._component.setIsInside(true);
+            this._component.appendTo(this);
+        }
+
+        this._component.setLeft(this.getLabelWidth());
+        this._component.setWidth(this.getInputWidth());
+        this._component.setHeight(this.getInputHeight());
+
+        // if (!readonlyMethod) {
+        //     readonlyMethod = 'setReadonly';
+        // }
+        // switch (this.getOriginNode().getState()) {
+        // case 'Add':
+        //     this._component[readonlyMethod](false);
+        //     break;
+        // case 'View':
+        //     this._component[readonlyMethod](true);
+        //     break;
+        // default:
+        //     this._component[readonlyMethod](this.getReadOnly() ? true : false);
+        // }
+    },
+
+
+    //根据当前的显示类型设置对应的元件
+    _setComponent: function(){
+        if(this.getDataField().length <= 0) {
+            return;
+        }
+
+        var visbleType = this.getVisbleType();
+        switch (visbleType) {
+        case 'text':
+            this._initComponent('wof.widget.Input');
+            this._component.setValue(this.getValue());
+            break;
+
+        case 'textArea':
+            this._initComponent('wof.widget.TextArea');
+            break;
+        
+        case 'richTextArea':
+            this._initComponent('wof.widget.HTMLEditor');
+            break;
+        
+        case 'select':
+            this._initComponent('wof.widget.ComboBox');
+            var refData = this.getOriginNode().getDataSource().getRefData();
+            var ref = refData[this.getDataField()];
+            if(!jQuery.isEmptyObject(ref)){ //并且参照字段有值
+                var data = [];
+                for(var i=0;ref['data']!=null&&i<ref['data'].length;i++){
+                    var row = ref['data'][i];
+                    data.push({'name':row['name'],'value':row['value']});
+                }
+                this._component.setValue(0);//默认值
+                this._component.setComboboxData(data);
+            }
+            break;
+        
+        case 'checkBox':
+            this._initComponent('wof.widget.CheckBox');
+            break;
+        
+        case 'date':
+            this._initComponent('wof.widget.DateBox');
+            break;
+        
+        case 'radio':
+            this._initComponent('wof.widget.RadioGroup');
+            break;
+        
+        case 'file':
+            this._initComponent('wof.widget.FileBox');
+            break;
+        
+        case 'number':
+            this._initComponent('wof.widget.Input');
+            break;
+        
+        default:
+        }
+    },
+
+    // _createComponent: function(){
+    //     var visbleType = this.getVisbleType();
+    //     var clzName = '';
+    //     if(visbleType=='text'){
+    //         clzName = 'wof.widget.Input';
+    //     }else if(visbleType=='textArea'){
+    //         clzName = 'wof.widget.TextArea';
+    //     }else if(visbleType=='richTextArea'){
+    //         clzName = 'wof.widget.HTMLEditor';
+    //     }else if(visbleType=='select'){
+    //         clzName = 'wof.widget.ComboBox';
+    //     }else if(visbleType=='checkBox'){
+    //         clzName = 'wof.widget.CheckBox';
+    //     }else if(visbleType=='date'){
+    //         clzName = 'wof.widget.DateBox';
+    //     }else if(visbleType=='radio'){
+    //         clzName = 'wof.widget.RadioGroup';
+    //     }else if(visbleType=='file'){
+    //         clzName = 'wof.widget.FileBox';
+    //     }else if(visbleType=='number'){
+    //         clzName = 'wof.widget.Input';
+    //     }
+    //     /**
+    //      * todo 暂时使用
+    //      */
+    //     //clzName = 'wof.widget.Input';
+
+    //     if(this._component!=null&&this._component.getClassName()==clzName){
+    //         component = this._component;
+    //     }else{
+    //         if(this._component!=null){
+    //             this._component.removeChildren(true);
+    //             this._component.remove(true);
+    //             this._component = null;
+    //         }
+    //         component = wof$.create(clzName);
+    //         component.setIsInside(true);
+    //         component.appendTo(this);
+    //         this._component = component;
+    //     }
+    //     component.setLeft(this.getLabelWidth());
+    //     component.setWidth(this.getInputWidth());
+    //     component.setHeight(this.getInputHeight());
+
+    //     var refData = this.getOriginNode().getDataSource().getRefData();
+    //     //如果显示类型为下拉框 则需要初始化参照值
+    //     if(visbleType=='select'){
+    //         var ref = refData[this.getDataField()];
+    //         if(!jQuery.isEmptyObject(ref)){ //并且参照字段有值
+    //             var data = [];
+    //             for(var i=0;ref['data']!=null&&i<ref['data'].length;i++){
+    //                 var row = ref['data'][i];
+    //                 data.push({'name':row['name'],'value':row['value']});
+    //             }
+    //             component.setInitValue('0');//默认值
+    //             component.setComboboxData(data);
+    //         }
+    //     }
+    // },
 
     //是否已经被修改过数据
     isChange:function(){

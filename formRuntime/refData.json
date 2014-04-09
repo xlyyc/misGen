@@ -1,11 +1,14 @@
 {
-    "fieldName1":{
+    "xb":{
         "totalCount":"1",
-        "data":[{"name":"优秀团队","value":"1"}]
+        "data":[
+            {"name":"男","value":"1"},
+            {"name":"女","value":"0"}
+        ]
     },
-    "fieldName2":{
+    "zzjgref.zzmc":{
         "totalCount":"1",
-        "data":[{"name":"党员","value":"1"}]
+        "data":[{"name":"计算机学院","value":"001"}]
     }
 
 }

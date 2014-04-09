@@ -97,7 +97,12 @@ wof.bizWidget.GridComponent.prototype = {
 	_rowsCount : null,
 	_paramMaps : null,
 
-	setName : function(name) {
+    /**
+     * get/set 属性方法定义
+     */
+
+
+    setName : function(name) {
 		this._name = name;
 	},
 	getName : function() {
@@ -491,7 +496,7 @@ wof.bizWidget.GridComponent.prototype = {
 		var pageNo = this.getPageNo();
 		var totalPage = this.getTotalPage();
 		if (pageNo >= totalPage) {
-			alert('没有下页'); // todo 调用widget下的对话框
+			//alert('没有下页'); // todo 调用widget下的对话框
 			return;
 		}
 		pageNo++;
@@ -500,7 +505,7 @@ wof.bizWidget.GridComponent.prototype = {
 	prevPage : function() {
 		var pageNo = this.getPageNo();
 		if (pageNo <= 1) {
-			alert('没有上页'); // todo 调用widget下的对话框
+			//alert('没有上页'); // todo 调用widget下的对话框
 			return;
 		}
 		pageNo--;
@@ -947,6 +952,9 @@ wof.bizWidget.GridComponent.prototype = {
 		if (!options) {
 			return;
 		}
+        if(options.componentName!=null){
+            this.setComponentName(options.componentName);
+        }
 		if (options.height) {
 			this.setHeight(options.height);
 		}

@@ -7,7 +7,7 @@ wis.widget.Tab = function () {
     this._version = '1.0';
 
     //this.getDomInstance().css('overflow','hidden');
-    this.setPosition('static');
+    //this.setPosition('static');
 };
 wis.widget.Tab.prototype = {
 

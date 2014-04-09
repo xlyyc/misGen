@@ -54,7 +54,7 @@ wof.widget.RadioGroup.prototype = {
      */
     initRender: function () {
     	
-    }
+    },
     //选择实现
     beforeRender: function () {},
 
@@ -92,7 +92,7 @@ wof.widget.RadioGroup.prototype = {
         if(data.childNodes){
     		this.setChildNodes(data.childNodes);
     	}
-    }
+    },
     /**
      * getData/setData 方法定义
      */

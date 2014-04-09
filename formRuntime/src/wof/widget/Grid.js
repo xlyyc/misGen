@@ -266,38 +266,20 @@ wof.widget.Grid.prototype = {
 		}
 	},
 	addRow : function() {
-		var obj = {};
-		for (var i = 0; i < this.getColumns().length; i++) {
-			var column = this.getColumns()[i];
-			obj[column.bindDataField] = '';
-		}
-		var row = this._grid.addRow(obj);
-		var rowDom = row[0];
-		var childNodes = rowDom.childNodes;
-		this._grid.applyEditor(jQuery(childNodes[1]).children(":first"));
+		this._grid.addRow();
 	},
 	getCurrentData : function() {
-		return this._grid.currentData.Rows;
+		return this._grid.getCurrentData();
 	},
 	getCurrentAddData : function() {
-		var rows = this._grid.currentData.Rows;
-		var added = [];
-		for (var i = 0; i < rows.length; i++) {
-			var row = rows[i];
-			if (row.__status == "add") {
-				delete row.__status;
-				added.push(row);
-			}
-		}
-		return added;
+		return this._grid.getCurrentData();
 	},
 	getSelectedRows : function() {
-		var rows = this._grid.ligerGetGridManager().getSelectedRowsIndex();
+		var rows = this._grid.getSelectedRows();
 		return rows;
 	},
 	updateRow : function() {
-		var rows = jQuery(this._grid.ligerGetGridManager().getCheckedRowObjs());
-		this._grid.applyEditor(rows.children(":first").next());
+		this._grid.updateRow();
 	},
 	/**
 	 * 初始化渲染方法 仅在第一次调用render时执行

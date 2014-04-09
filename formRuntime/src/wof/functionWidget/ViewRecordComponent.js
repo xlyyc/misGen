@@ -43,22 +43,9 @@ wof.functionWidget.ViewRecordComponent.prototype = {
     
     _bindComp: null,
 
-    _componentId:null,
-
     /**
      * get/set 属性方法定义
      */
-
-    getComponentId: function(){
-        if(this._componentId==null){
-            this._componentId=this.getId();
-        }
-        return this._componentId;
-    },
-
-    setComponentId: function(componentId){
-        this._componentId = componentId;
-    },
 
     getBindComponents : function (){
         return this._bindComponents || '';
@@ -213,7 +200,7 @@ wof.functionWidget.ViewRecordComponent.prototype = {
                		var bindComp = this._getObjByComponentId(this.getBindComponents());
                		if(bindComp!=null){
                			var selectMainId = bindComp.getCurrentRowId();// value,status 
-               			if(selectMainId!=null&&selectMainId.value!=""){
+               			if(selectMainId!=null&&selectMainId!=""){
                				if(this.getFormFunctionId()!=null&&this.getFormFunctionId()!=""
                	        		&&this.getFormFunctionId()!="null"&&this.getOpenUrl()!=null){
                					if(this._dialog==null){ // 目前每次都重新渲染
@@ -232,9 +219,9 @@ wof.functionWidget.ViewRecordComponent.prototype = {
                    	        		this._dialog = dialog;
                					}
                	        		if(this.getOpenUrl().indexOf("?")>-1){
-               	        			this._dialog.setUrl(this.getOpenUrl()+"&pagestate=View&dataId="+selectMainId.value);
+               	        			this._dialog.setUrl(this.getOpenUrl()+"&pagestate=View&dataId="+selectMainId);
                	           		}else{
-               	           			this._dialog.setUrl(this.getOpenUrl()+"?pagestate=View&dataId="+selectMainId.value);
+               	           			this._dialog.setUrl(this.getOpenUrl()+"?pagestate=View&dataId="+selectMainId);
                	           		}
                	        		this._dialog.render();
                	        		
@@ -282,7 +269,6 @@ wof.functionWidget.ViewRecordComponent.prototype = {
     //----------必须实现----------
     getData: function () {
         return {
-            componentId: this.getComponentId(),
             bindComponents: this.getBindComponents(),
             formFunctionId: this.getFormFunctionId(),
             paramMaps: this.getParamMaps(),
@@ -297,7 +283,6 @@ wof.functionWidget.ViewRecordComponent.prototype = {
     },
     //----------必须实现----------
     setData: function (data) {
-        this.setComponentId(data.componentId);
         this.setBindComponents(data.bindComponents);
         this.setFormFunctionId(data.formFunctionId);
         this.setParamMaps(data.paramMaps);
@@ -312,6 +297,9 @@ wof.functionWidget.ViewRecordComponent.prototype = {
 
     updateViewRecordComponent: function(data){
         if(!jQuery.isEmptyObject(data)){
+            if(data.componentName!=null){
+                this.setComponentName(data.componentName);
+            }
             if(data.bindComponents!=null){
                 this.setBindComponents(data.bindComponents);
             }

@@ -101,7 +101,11 @@ wof.bizWidget.VoucherGridComponent.prototype = {
 	_paramMaps : null,
 	_voucherHeadComponent : null,
 
-	setVoucherHeadComponent : function(voucherHeadComponent) {
+    /**
+     * get/set 属性方法定义
+     */
+
+    setVoucherHeadComponent : function(voucherHeadComponent) {
 		this._voucherHeadComponent = voucherHeadComponent;
 	},
 	getVoucherHeadComponent : function() {
@@ -115,7 +119,9 @@ wof.bizWidget.VoucherGridComponent.prototype = {
 		return this._name;
 	},
 	getData : function() {
-		return {};
+		return {
+
+        };
 	},
 	setData : function() {
 
@@ -1050,6 +1056,9 @@ wof.bizWidget.VoucherGridComponent.prototype = {
 		if (!options) {
 			return;
 		}
+        if(options.componentName!=null){
+            this.setComponentName(options.componentName);
+        }
 		if (options.height) {
 			this.setHeight(options.height);
 		}

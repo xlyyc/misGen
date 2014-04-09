@@ -9,21 +9,21 @@ wis.widget.Select = function () {
 };
 
 wis.widget.Select.prototype = {
-    _cid: null,
     _selectName: null,
     _isMultSelect: false,
     _mode: null,
-    _initValue: null,
-    _isAsync: false,
+    // _initValue: null,
+    // _isAsync: false,
     _select: false,
+    _comboBox: false,
     
     /**
      * 数据格式
      * [
-                { value: 1, text: "金智科技"},
-                { value: 2, text: "金智教育"},
-                { value: 3, text: "金智投资"},
-                { value: 4, text: "金智智能"}
+                { value: 1, name: "金智科技"},
+                { value: 2, name: "金智教育"},
+                { value: 3, name: "金智投资"},
+                { value: 4, name: "金智智能"}
             ]
      */
     _selectData : null,
@@ -36,13 +36,6 @@ wis.widget.Select.prototype = {
     setSelectData:function (selectData){
 		this._selectData = selectData;
 	},
-    getCid: function () {
-        return this._cid;
-    },
-
-    setCid: function (cid) {
-        this._cid = cid;
-    },
 
     getSelectName: function () {
         return this._selectName;
@@ -68,12 +61,20 @@ wis.widget.Select.prototype = {
         this._mode = mode;
     },
 
-    getInitValue: function () {
-        return this._initValue;
+    // getInitValue: function () {
+    //     return this._initValue;
+    // },
+
+    // setInitValue: function (initValue) {
+    //     this._initValue = initValue;
+    // },
+
+    setValue: function(v) {
+        this._value = v;
     },
 
-    setInitValue: function (initValue) {
-        this._initValue = initValue;
+    getValue: function() {
+        return this._value;
     },
 
     getGridColumn: function () {
@@ -83,13 +84,13 @@ wis.widget.Select.prototype = {
         this._gridColumn = gridColumn || [];
     },
 
-    getIsAsync: function () {
-        return this._isAsync;
-    },
+    // getIsAsync: function () {
+    //     return this._isAsync;
+    // },
+    // setIsAsync: function (isAsync) {
+    //     this._isAsync = isAsync;
+    // },
 
-    setIsAsync: function (isAsync) {
-        this._isAsync = isAsync;
-    },
     /**
 	 * 初始化方法
 	 */
@@ -106,12 +107,21 @@ wis.widget.Select.prototype = {
 
         this.getDomInstance().append(this._select);
 
+        var _this = this;
         var options = {
             data: this.getSelectData(),
             isMultiSelect: this.getIsMultSelect(),
+            // selectBoxHeight: this.getHeight(),
+            width: this.getWidth(),
+            // initValue: this.getInitValue(), 
             isNotShowClear: true,
             onBeforeSelect:this._onBeforeSelect,
-            onSelected:this._onSelected
+            onSelected: function (val, txt) {
+                _this.setValue(val);
+                if (_this._onSelected) {
+                    _this._onSelected(val, txt);
+                }
+            }
         };
 
         if (this.getGridColumn() && this.getGridColumn().length > 0) {
@@ -120,11 +130,11 @@ wis.widget.Select.prototype = {
             options.columns = this.getGridColumn();
         } else {
             // 普通下拉框
-            options.textField = "text";
+            options.textField = "name";
             options.valueField = "value";
         }
 
-        var ligerComboBox = this._select.ligerComboBox(options);
+        this._comboBox = this._select.ligerComboBox(options);
     },
 
     // 渲染前处理方法
@@ -136,6 +146,7 @@ wis.widget.Select.prototype = {
     render: function () {
         this.getCid() && this._select.attr('id',this.getCid());
         this.getSelectName() && this._select.attr('name',this.getSelectName());
+        this._comboBox.selectValue(this._value);
     },
 
     // 渲染后处理方法

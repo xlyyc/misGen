@@ -71,20 +71,10 @@ wof.bizWidget.VoucherComponent.prototype = {
 
     _queryFlag: null, //是否需要发起查询标识 true需要 false不需要  搜索条件发生变化或者数据发生变化的情况下会修改此标识状态
 
+
     /**
      * get/set 属性方法定义
      */
-
-    getComponentId: function(){
-        if(this._componentId==null){
-            this._componentId=this.getId();
-        }
-        return this._componentId;
-    },
-
-    setComponentId: function(componentId){
-        this._componentId = componentId;
-    },
 
     getParamMaps: function(){
         if(this._paramMaps==null){
@@ -399,8 +389,7 @@ wof.bizWidget.VoucherComponent.prototype = {
 
     //选择实现
     beforeRender: function () {
-
-
+        this.setRefData(this.getDataSource().getRefData());
     },
 
     //----------必须实现----------
@@ -416,7 +405,7 @@ wof.bizWidget.VoucherComponent.prototype = {
         //如果缓存数据为空 则执行查询
         if(this._queryFlag==true){
             this._queryFlag = false;
-            this.setRefData(this.getDataSource().getRefData());
+
             if(this.getState()=='Add'){ //如果是Add状态 需要插入一条空白数据
                 var data = this.getDataSource().getLocalData();
                 if(data['rows'].length==0){ //如果当前do中没有缓存数据 则增加一条数据
@@ -453,6 +442,7 @@ wof.bizWidget.VoucherComponent.prototype = {
     //----------必须实现----------
     getData: function () {
         return {
+            componentName: this.getComponentName(),
             componentId: this.getComponentId(),
             paramMaps: this.getParamMaps(),
             callStr:this.getCallStr(),
@@ -473,6 +463,7 @@ wof.bizWidget.VoucherComponent.prototype = {
     },
     //----------必须实现----------
     setData: function (data) {
+        this.setComponentName(data.componentName);
         this.setComponentId(data.componentId);
         this.setParamMaps(data.paramMaps);
         this.setInitActionName(data.initActionName);
@@ -801,6 +792,9 @@ wof.bizWidget.VoucherComponent.prototype = {
      */
     updateVoucherComponent: function(voucherComponentData){
         if(!jQuery.isEmptyObject(voucherComponentData)){
+            if(voucherComponentData.componentName!=null){
+                this.setComponentName(voucherComponentData.componentName);
+            }
             if(voucherComponentData.state!=null){
                 this.setState(voucherComponentData.state);
             }
@@ -1170,7 +1164,7 @@ wof.bizWidget.VoucherComponent.prototype = {
                         var voucherItemData = voucherItemsData[i];
                         var item = wof$.create('VoucherItem');
                         item.afterTo(newVoucherItem);
-                        this._insertVoucherItem(voucherItemsData[i], item, voucherItemGroup)
+                        this._insertVoucherItem(voucherItemData, item, voucherItemGroup)
                     }
                     voucherItemGroup.calcLayout();
                     this.calcLayout();

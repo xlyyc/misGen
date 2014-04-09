@@ -15,7 +15,7 @@ wof.widget.ComboBox.prototype = {
 
     _url: null, // 加载数据url
 
-    _comboBoxData: null, // 下拉框时数据格式： [{text:'男',value:'1'},{'text':'女',value:2}]
+    _comboBoxData: null, // 下拉框时数据格式： [{'name':'男',value:'1'},{'name':'女',value:2}]
     _tree: null, // 下拉树
 
     // 下拉表格时数据格式:
@@ -47,7 +47,10 @@ wof.widget.ComboBox.prototype = {
     _isMultSelect: false,
     // _mode: null,
     _initValue: null,
-    _isAsync: false,
+    // _isAsync: false,
+
+
+    _renderFlag: true,
 
     getGridColumn: function () {
         return this._gridColumn;
@@ -73,10 +76,6 @@ wof.widget.ComboBox.prototype = {
 
     setValue: function (val) {
         this._value = val;
-    },
-
-    getValue: function () {
-        return this._value;
     },
 
     getReadonly: function () {
@@ -111,21 +110,39 @@ wof.widget.ComboBox.prototype = {
     //     this._mode = mode;
     // },
 
-    getInitValue: function () {
-        return this._initValue;
-    },
+    // setWidth: function (w) {
+    //     if (w > 0) {
+    //         this._width = w;
+    //         if (this._select) {
+    //             this._select.setWidth(w);
+    //         };
+    //     };
+    // },
 
-    setInitValue: function (initValue) {
-        this._initValue = initValue;
-    },
+    // setHeight: function (h) {
+    //     if (h > 0) {
+    //         this._height = h;
+    //         if (this._select) {
+    //             this._select.setHeight(h);
+    //         };
+    //     };
+    // },
 
-    getIsAsync: function () {
-        return this._isAsync;
-    },
+    // getInitValue: function () {
+    //     return this._initValue;
+    // },
 
-    setIsAsync: function (isAsync) {
-        this._isAsync = isAsync;
-    },
+    // setInitValue: function (initValue) {
+    //     this._initValue = initValue;
+    // },
+
+    // getIsAsync: function () {
+    //     return this._isAsync;
+    // },
+
+    // setIsAsync: function (isAsync) {
+    //     this._isAsync = isAsync;
+    // },
 
     // getSelectBoxWidth: function () {
     //     return this._getSelectBoxWidth;
@@ -168,8 +185,8 @@ wof.widget.ComboBox.prototype = {
         this._select.setSelectName(this.getName());
         this._select.setIsMultSelect(this.getIsMultSelect());
         // this._select.setMode(this.getMode());
-        this._select.setInitValue(this.getInitValue());
-        this._select.setIsAsync(this.getIsAsync());
+        // this._select.setInitValue(this.getInitValue());
+        // this._select.setIsAsync(this.getIsAsync());
         this._select.setSelectData(this.getComboboxData());
 
         this._select.setGridColumn(this.getGridColumn());
@@ -187,7 +204,10 @@ wof.widget.ComboBox.prototype = {
             _this._onSelected && _this._onSelected(val, text);
             _this._selectedText = text;
             _this._selectedValue = val;
-            _this.sendMessage('wof.widget.ComboBox_selected');
+            if (_this._renderFlag) {
+                _this._renderFlag = false;
+                _this.sendMessage('wof.widget.ComboBox_selected');
+            };
         });
 
         this._select.appendTo(this.getDomInstance());
@@ -195,11 +215,17 @@ wof.widget.ComboBox.prototype = {
     
     render: function () {
         //TODO lovey中如何改变已实例化的属性?
+
+        this._select.setWidth(this.getWidth());
+        this._select.setHeight(this.getHeight());
+        this._select.setValue(this._value);
+
         this._select.render();
     },
 
     afterRender: function () {
-      this.sendMessage('wof.widget.ComboBox_render');
+        this._renderFlag = false;
+        this.sendMessage('wof.widget.ComboBox_render');
     },
 
     getData: function () {

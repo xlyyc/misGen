@@ -53,24 +53,13 @@ wof.bizWidget.SearchComponent.prototype = {
 
     _paramMaps:null,
 
-
-    _componentId:null,
-
     _button:null, //搜索按钮
+
+    _dataSource: null,
+
     /**
      * get/set 属性方法定义
      */
-
-    getComponentId: function(){
-        if(this._componentId==null){
-            this._componentId=this.getId();
-        }
-        return this._componentId;
-    },
-
-    setComponentId: function(componentId){
-        this._componentId = componentId;
-    },
 
     getParamMaps: function(){
         if(this._paramMaps==null){
@@ -227,6 +216,13 @@ wof.bizWidget.SearchComponent.prototype = {
         this._activeSearchItemRank = activeSearchItemRank;
     },
 
+    getDataSource: function () {
+        return this._dataSource;
+    },
+    setDataSource: function (dataSource) {
+        this._dataSource = dataSource;
+    },
+
     _init: function(data){
         if(data.width!=null){
             this.setWidth(Number(data.width));
@@ -279,7 +275,6 @@ wof.bizWidget.SearchComponent.prototype = {
     //----------必须实现----------
     getData: function () {
         return {
-            componentId: this.getComponentId(),
             paramMaps: this.getParamMaps(),
             initActionName:this.getInitActionName(),
             itemHeight:this.getItemHeight(),
@@ -299,7 +294,6 @@ wof.bizWidget.SearchComponent.prototype = {
     },
     //----------必须实现----------
     setData: function (data) {
-        this.setComponentId(data.componentId);
         this.setParamMaps(data.paramMaps);
         this.setInitActionName(data.initActionName);
         this.setName(data.name);
@@ -366,6 +360,9 @@ wof.bizWidget.SearchComponent.prototype = {
      */
     updateSearchComponent: function(searchComponentDataData){
         if(!jQuery.isEmptyObject(searchComponentDataData)){
+            if(searchComponentDataData.componentName!=null){
+                this.setComponentName(searchComponentDataData.componentName);
+            }
             if(searchComponentDataData.itemHeight!=null){
                 this.setItemHeight(Number(searchComponentDataData.itemHeight));
             }
@@ -415,60 +412,96 @@ wof.bizWidget.SearchComponent.prototype = {
                     newSearchItem = wof$.create('SearchItem');
                     newSearchItem.afterTo(searchItem);
                 }
-                if(searchItemData.colspan!=null){
-                    newSearchItem.setColspan(Number(searchItemData.colspan));
-                }
-                if(searchItemData.name!=null){
-                    newSearchItem.setName(searchItemData.name);
-                }
-                if(searchItemData.isFixItem!=null){
-                    newSearchItem.setIsFixItem((searchItemData.isFixItem=='true'||searchItemData.isFixItem==true)?true:false);
-                }
-                if(searchItemData.rowspan!=null){
-                    newSearchItem.setRowspan(Number(searchItemData.rowspan));
-                }
-                if(searchItemData.caption!=null){
-                    newSearchItem.setCaption(searchItemData.caption);
-                }
-                if(searchItemData.dataField!=null){
-                    newSearchItem.setDataField(searchItemData.dataField);
-                }
-                if(searchItemData.dateTimeBoxFormat!=null){
-                    newSearchItem.setDateTimeBoxFormat(searchItemData.dateTimeBoxFormat);
-                }
-                if(searchItemData.selectPattern!=null){
-                    newSearchItem.setSelectPattern(searchItemData.selectPattern);
-                }
-                if(searchItemData.useMultiSelect!=null){
-                    newSearchItem.setUseMultiSelect((searchItemData.useMultiSelect=='true'||searchItemData.useMultiSelect==true)?true:false);
-                }
-                if(searchItemData.visbleType!=null){
-                    newSearchItem.setVisbleType(searchItemData.visbleType);
-                }
-                if(searchItemData.fromTo!=null){
-                    newSearchItem.setFromTo((searchItemData.fromTo=='true'||searchItemData.fromTo==true)?true:false);
-                }
-                if(searchItemData.labelWidth!=null){
-                    newSearchItem.setLabelWidth(searchItemData.labelWidth==''?'':Number(searchItemData.labelWidth));
-                }
-                if(searchItemData.inputWidth!=null){
-                    newSearchItem.setInputWidth(searchItemData.inputWidth==''?'':Number(searchItemData.inputWidth));
-                }
-                if(searchItemData.inputHeight!=null){
-                    newSearchItem.setInputHeight(searchItemData.inputHeight==''?'':Number(searchItemData.inputHeight));
-                }
-                if(searchItemData.tipValue!=null){
-                    newSearchItem.setTipValue(searchItemData.tipValue);
-                }
-                if(searchItemData.linkageItem!=null){
-                    newSearchItem.setLinkageItem(searchItemData.linkageItem);
-                }
+                this._insertSearchItem(searchItemData, newSearchItem);
                 this.calcLayout();
             }else{
                 console.log('不存在的searchItem');
             }
         }else{
             console.log('没有数据 不能插入');
+        }
+    },
+
+    _insertSearchItem: function(searchItemData, searchItem){
+        if(searchItemData.colspan!=null){
+            searchItem.setColspan(Number(searchItemData.colspan));
+        }
+        if(searchItemData.name!=null){
+            searchItem.setName(searchItemData.name);
+        }
+        if(searchItemData.isFixItem!=null){
+            searchItem.setIsFixItem((searchItemData.isFixItem=='true'||searchItemData.isFixItem==true)?true:false);
+        }
+        if(searchItemData.rowspan!=null){
+            searchItem.setRowspan(Number(searchItemData.rowspan));
+        }
+        if(searchItemData.caption!=null){
+            searchItem.setCaption(searchItemData.caption);
+        }
+        if(searchItemData.dataField!=null){
+            searchItem.setDataField(searchItemData.dataField);
+        }
+        if(searchItemData.dateTimeBoxFormat!=null){
+            searchItem.setDateTimeBoxFormat(searchItemData.dateTimeBoxFormat);
+        }
+        if(searchItemData.selectPattern!=null){
+            searchItem.setSelectPattern(searchItemData.selectPattern);
+        }
+        if(searchItemData.useMultiSelect!=null){
+            searchItem.setUseMultiSelect((searchItemData.useMultiSelect=='true'||searchItemData.useMultiSelect==true)?true:false);
+        }
+        if(searchItemData.visbleType!=null){
+            searchItem.setVisbleType(searchItemData.visbleType);
+        }
+        if(searchItemData.fromTo!=null){
+            searchItem.setFromTo((searchItemData.fromTo=='true'||searchItemData.fromTo==true)?true:false);
+        }
+        if(searchItemData.labelWidth!=null){
+            searchItem.setLabelWidth(searchItemData.labelWidth==''?'':Number(searchItemData.labelWidth));
+        }
+        if(searchItemData.inputWidth!=null){
+            searchItem.setInputWidth(searchItemData.inputWidth==''?'':Number(searchItemData.inputWidth));
+        }
+        if(searchItemData.inputHeight!=null){
+            searchItem.setInputHeight(searchItemData.inputHeight==''?'':Number(searchItemData.inputHeight));
+        }
+        if(searchItemData.tipValue!=null){
+            searchItem.setTipValue(searchItemData.tipValue);
+        }
+        if(searchItemData.linkageItem!=null){
+            searchItem.setLinkageItem(searchItemData.linkageItem);
+        }
+    },
+
+    /**
+     * 从指定行列开始批量插入searchItem
+     * 如果指定的行列位置下已经有数据 则在其后插入新的item
+     * searchItemsData searchItems数据
+     * searchItemRank 指定行列
+     */
+    insertSearchItems: function(searchItemsData, searchItemRank){
+        if(jQuery.isEmptyObject(searchItemRank)){
+            searchItemRank = this.getActiveSearchItemRank();
+        }
+        if(!jQuery.isEmptyObject(searchItemRank)){
+            var searchItem = this.findSearchItemByRank(searchItemRank);
+            if(searchItem!=null){
+                var newSearchItem = null;
+                if(searchItem.isChange()==false){
+                    newSearchItem = searchItem;
+                }else{  //指定位置的item已经被修改过属性
+                    newSearchItem = wof$.create('SearchItem');
+                    newSearchItem.afterTo(searchItem);
+                }
+                this._insertSearchItem(searchItemsData[0], newSearchItem);
+                for(var i=1;i<searchItemsData.length;i++){
+                    var searchItemData = searchItemsData[i];
+                    var item = wof$.create('SearchItem');
+                    item.afterTo(newSearchItem);
+                    this._insertSearchItem(searchItemData, item)
+                }
+                this.calcLayout();
+            }
         }
     },
 

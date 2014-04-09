@@ -14,13 +14,13 @@
         stringToXml: function(xmlString){
             var xmlDoc;
             if(typeof xmlString == "string"){
-                if (document.implementation.createDocument) { //FF
-                    var parser = new DOMParser();
-                    xmlDoc = parser.parseFromString(xmlString, "application/xml");
-                } else if (window.ActiveXObject) { //IE
-                    xmlDoc = new ActiveXObject("Microsoft.XMLDOM");
+                if (window.ActiveXObject) { //IE
+                    xmlDoc = new ActiveXObject("Msxml2.DOMDocument");
                     xmlDoc.async="false";
                     xmlDoc.loadXML(xmlString);
+                }else if (document.implementation.createDocument) { //FF
+                    var parser = new DOMParser();
+                    xmlDoc = parser.parseFromString(xmlString, "application/xml");
                 }
             } else {
                 xmlDoc = xmlString;
@@ -41,15 +41,14 @@
         },
 
         setAttribute : function (element,name,value){
-                element.setAttribute(name,value);
+            if(value==null){
+                value = '';
+            }
+            element.setAttribute(name,value);
         },
 
         appendChild : function (element,node){
               element.appendChild(node);
-        },
-
-        replaceAll: function(str, s1, s2) {
-            return str.replace(new RegExp(s1,"gm"),s2);
         }
 
 
