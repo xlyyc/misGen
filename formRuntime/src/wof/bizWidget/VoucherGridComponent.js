@@ -100,6 +100,15 @@ wof.bizWidget.VoucherGridComponent.prototype = {
 	_rowsCount : null,
 	_paramMaps : null,
 	_voucherHeadComponent : null,
+	
+	_queryParam : null,
+
+	setQueryParam : function(queryParam) {
+		this._queryParam = queryParam;
+	},
+	getQueryParam : function() {
+		return this._queryParam;
+	},
 
     /**
      * get/set 属性方法定义
@@ -565,11 +574,12 @@ wof.bizWidget.VoucherGridComponent.prototype = {
 			dataSource.queryData('child', {
 				'childEntityAlias' : this.getBindEntityId(),
 				'mainRowId' : currentRow
-			}, null, offset, rowsCount);
+			}, this.getQueryParam(), offset, rowsCount);
 		} else {
 			this.setGridData(this._getPageDataInCache(this.getPageNo()));
+			this.render();
 		}
-		this.render();
+	
 	},
 	getCurrentMainRowId : function() {
 		var currentRow = this._currentMainRowId
@@ -673,6 +683,7 @@ wof.bizWidget.VoucherGridComponent.prototype = {
 				pageBar.total = 0;
 			}
 			this.setGridData(data);
+			this.render();
 		}
 	},
 	_onAddDataCompleted : function(message) {

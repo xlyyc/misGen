@@ -97,12 +97,11 @@ wof.bizWidget.GridComponent.prototype = {
 	_rowsCount : null,
 	_paramMaps : null,
 
-    /**
-     * get/set 属性方法定义
-     */
+	/**
+	 * get/set 属性方法定义
+	 */
 
-
-    setName : function(name) {
+	setName : function(name) {
 		this._name = name;
 	},
 	getName : function() {
@@ -361,7 +360,14 @@ wof.bizWidget.GridComponent.prototype = {
 	_grid : null,
 	_currentSelectedRowIndex : null,
 	_currentSelectedRowData : null,
+	_queryParam : null,
 
+	setQueryParam : function(queryParam) {
+		this._queryParam = queryParam;
+	},
+	getQueryParam : function() {
+		return this._queryParam;
+	},
 	reload : function(mode) {
 		if (!mode) {
 			mode = 'currentPage';
@@ -496,7 +502,7 @@ wof.bizWidget.GridComponent.prototype = {
 		var pageNo = this.getPageNo();
 		var totalPage = this.getTotalPage();
 		if (pageNo >= totalPage) {
-			//alert('没有下页'); // todo 调用widget下的对话框
+			// alert('没有下页'); // todo 调用widget下的对话框
 			return;
 		}
 		pageNo++;
@@ -505,7 +511,7 @@ wof.bizWidget.GridComponent.prototype = {
 	prevPage : function() {
 		var pageNo = this.getPageNo();
 		if (pageNo <= 1) {
-			//alert('没有上页'); // todo 调用widget下的对话框
+			// alert('没有上页'); // todo 调用widget下的对话框
 			return;
 		}
 		pageNo--;
@@ -528,11 +534,12 @@ wof.bizWidget.GridComponent.prototype = {
 			var offset = (pageNo - 1) * this.getPageSize();
 			var rowsCount = this.getPageSize() * 2;
 			var dataSource = this.getDataSource();
-			dataSource.queryData('main', null, null, offset, rowsCount);
+			dataSource.queryData('main', null, this.getQueryParam(), offset,
+					rowsCount);
 		} else {
 			this.setGridData(this._getPageDataInCache(this.getPageNo()));
+			this.render();
 		}
-		this.render();
 
 	},
 	// 从缓存中获得指定页的数据
@@ -629,6 +636,7 @@ wof.bizWidget.GridComponent.prototype = {
 			pageBar.total = parseInt(total);
 			this.setPageBar(pageBar);
 			this.setGridData(this._getPageDataInCache(this.getPageNo()));
+			this.render();
 		}
 	},
 	_onAddDataCompleted : function(message) {
@@ -952,9 +960,9 @@ wof.bizWidget.GridComponent.prototype = {
 		if (!options) {
 			return;
 		}
-        if(options.componentName!=null){
-            this.setComponentName(options.componentName);
-        }
+		if (options.componentName != null) {
+			this.setComponentName(options.componentName);
+		}
 		if (options.height) {
 			this.setHeight(options.height);
 		}

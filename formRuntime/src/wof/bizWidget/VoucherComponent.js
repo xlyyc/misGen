@@ -208,7 +208,7 @@ wof.bizWidget.VoucherComponent.prototype = {
     //获得当前行号
     getCurrentRowId: function(){
         //return this.getRowData()['rowId'];
-        return this._currentRowId || '';
+        return this._currentRowId;
     },
 
     setCurrentRowId: function(rowId){

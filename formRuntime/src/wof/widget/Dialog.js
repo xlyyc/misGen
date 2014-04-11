@@ -223,8 +223,8 @@ wof.widget.Dialog.prototype = {
             self._onRestore && self._onRestore();
             self.sendMessage('wof.widget.Dialog_restore');
         });
-        this._dialog.onClickTypeButton(function () {
-            self._onClickTypeButton && self._onClickTypeButton();
+        this._dialog.onClickTypeButton(function (answer) {
+            self._onClickTypeButton && self._onClickTypeButton(answer);
             self.sendMessage('wof.widget.Dialog_clicktypebutton');
         });
         this._dialog.appendTo(this.getDomInstance());

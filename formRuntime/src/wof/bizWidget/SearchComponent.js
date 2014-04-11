@@ -355,13 +355,74 @@ wof.bizWidget.SearchComponent.prototype = {
         'wof.widget.Button_onclick':function(message){
             console.log(message.id+'   '+this.getClassName());
             if(this.getLinkComponentID().length>0){
-                 // var queryParam = {'type':'fieldQuery','field':idPro,'operation':'equals','value1':this.getCurrentRowId()};
-                // this.getDataSource().queryData('main',null,queryParam,0,1);
+                var grid = this._getObjByComponentId(this.getLinkComponentID());
+                if(grid!=null){
+                    var queryType = '';
+                    var entityParameter = null;
+                    var queryParam = null;
+                    if(grid.getClassName()=='wof.bizWidget.GridComponent'){
+                        queryType = 'main';
+                        queryParam = this._buildQuery();
+                        grid.setQueryParam(queryParam);
+                        grid.gotoPage(1, true);
+                        //this.getDataSource().queryData(queryType,entityParameter,queryParam,0,null);
+                    }else if(grid.getClassName()=='wof.bizWidget.VoucherGridComponent'){
+                        if(grid.getCurrentMainRowId()!=null){
+                            queryType = 'child';
+                            entityParameter = {'childEntityAlias':grid.getBindEntityId(), 'mainRowId':grid.getCurrentMainRowId()};
+                            queryParam = this._buildQuery();
+                            grid.setQueryParam(queryParam);
+                            grid.gotoPage(1, true);
+                            //this.getDataSource().queryData(queryType,entityParameter,queryParam,0,null);
+                        }
+                    }
+                }
             }else{
                 alert('请首先绑定构件');
             }
             return false;
         }
+    },
+    
+    _getObjByComponentId: function (compId) {
+    	var objs = wof$.find('*');
+	    for(var i=0;i<objs.size();i++){
+	        var obj = objs.get(i);
+	        if(obj!=null&&obj.getComponentId()!=null&&obj.getComponentId()==compId){
+	        	return obj;
+	        }
+	    }
+	    return null;
+    }, 
+
+    /**
+     * 建立查询参数数据
+     */
+    _buildQuery: function(){
+        var queryParam = {
+            type:'subQuery',
+            matchType:'matchAll',
+            items:[
+                //{type:'fieldQuery',field:'',operation:'equals',value1:''},
+               // {type:'fieldQuery',field:'',operation:'equals',value1:''}
+            ]
+        };
+
+
+        var items = this.findSearchItems();
+        for(var i=0;i<items.length;i++){
+            var item = items[i];
+            if(item.getDataField().length>0 && !jQuery.isEmptyObject(item.getValues())){
+                if(item.getFromTo()==false){
+                    var val = String(item.getValues());
+                    var fieldQuery = {type:'fieldQuery',field:item.getDataField(),operation:'equals',value1:val};
+                    queryParam.items.push(fieldQuery);
+                }else{ //todo 范围搜索
+                    console.log('范围搜索todo');
+                }
+            }
+        }
+        return queryParam;
     },
 
     /**

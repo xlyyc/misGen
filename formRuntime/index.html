@@ -356,7 +356,7 @@ jQuery(function(){
             dateTimeBoxFormat:'',
             selectPattern:'',
             useMultiSelect:'',
-            visbleType:'select',
+            visbleType:'text',
             fromTo:'false',
             labelWidth:'50',
             inputWidth:'70',
@@ -365,9 +365,64 @@ jQuery(function(){
             linkageItem:''
         };
 
+
+/*wof$.create('SearchComponent',{"left":0,"top":0,"colsNum":4,"itemHeight":45,"width":"775"});
+        comp_searchComp1.setComponentId('944EE91C978440EA86D244C0512A2742');
+        comp_searchComp1.setComponentName('searchComp1');
+        comp_searchComp1.setDataSource(emap_dataObject);
+        comp_searchComp1.setLinkComponentID('59E21C893D3846F9B9BC266C34369D37');
+        comp_searchComp1.setCaption('搜索');
+        comp_searchComp1.setIndex('');
+        comp_searchComp1.setInitActionName('');
+        comp_searchComp1.setName('');
+        comp_searchComp1.setState('');
+        comp_searchComp1.insertSearchItems(
+                [
+                    {
+                        "tipValue":"",
+                        "index":null,
+                        "labelWidth":null,
+                        "linkageItem":"",
+                        "colspan":1,
+                        "selectPattern":null,"inputHeight":20,
+                        "useMultiSelect":"FALSE",
+                        "caption":"学号",
+                        "inputWidth":100,
+                        "dataTimeBoxFormat":"YYYY_MM_DD",
+                        "rowspan":1,
+                        "dataFiled":"XSJBXXB.xh",
+                        "name":"","visibleType":"text"
+                    },
+                    {
+                        "tipValue":"",
+                        "index":null,
+                        "labelWidth":null,
+                        "linkageItem":"",
+                        "colspan":1,
+                        "selectPattern":null,
+                        "inputHeight":20,
+                        "useMultiSelect":"FALSE",
+                        "caption":"姓名",
+                        "inputWidth":100,
+                        "dataTimeBoxFormat":"YYYY_MM_DD",
+                        "rowspan":1,
+                        "dataFiled":"XSJBXXB.xm",
+                        "name":"",
+                        "visibleType":"text"
+                    },
+                    {"tipValue":"","index":null,"labelWidth":null,"linkageItem":"","colspan":1,"selectPattern":null,"inputHeight":20,"useMultiSelect":"FALSE","caption":"性别","inputWidth":100,"dataTimeBoxFormat":"YYYY_MM_DD","rowspan":1,"dataFiled":"","name":"","visibleType":"select"},{"tipValue":"","index":null,"labelWidth":null,"linkageItem":"","colspan":1,"selectPattern":null,"inputHeight":20,"useMultiSelect":"FALSE","caption":"年龄","inputWidth":100,"dataTimeBoxFormat":"YYYY_MM_DD","rowspan":1,"dataFiled":"XSJBXXB.nl","name":"","visibleType":"text"}],{rowNum:1,colNum:1});
+        if(comp_searchComp1!=undefined)
+            flowLayout_layoutComp1.insertNode(comp_searchComp1,{row:1,col:1},1,{rowspan:1,colspan:1,isFixItem:false});
+        if(comp_searchComp1!=undefined)comp_searchComp1.render();
+
+        */
+
+
         //searchComponent.insertSearchItem(searchItemData,{rowNum:1,colNum:1});
 
-        var searchItemsData = [];
+        var searchItemsData = [
+
+        ];
         searchItemsData.push(searchItemData);
         searchComponent.insertSearchItems(searchItemsData, {rowNum:1,colNum:1});
 

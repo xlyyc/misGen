@@ -28,7 +28,7 @@ wis.widget.Select.prototype = {
      */
     _selectData : null,
     _gridColumn : null,
-    
+    _renderFlag:null,
     
     getSelectData:function (){
     	return this._selectData;
@@ -115,11 +115,21 @@ wis.widget.Select.prototype = {
             width: this.getWidth(),
             // initValue: this.getInitValue(), 
             isNotShowClear: true,
-            onBeforeSelect:this._onBeforeSelect,
+            onBeforeSelect:function (val, txt) {
+                var flag = false;
+                if(_this._renderFlag==false){ //如果不是在render过程中触发
+                    if (_this._onBeforeSelect) {
+                        flag = _this._onBeforeSelect(val, txt);
+                    }
+                }
+                return flag;
+            },
             onSelected: function (val, txt) {
-                _this.setValue(val);
-                if (_this._onSelected) {
-                    _this._onSelected(val, txt);
+                if(_this._renderFlag==false){ //如果不是在render过程中触发
+                    _this.setValue(val);
+                    if (_this._onSelected) {
+                        _this._onSelected(val, txt);
+                    }
                 }
             }
         };
@@ -139,7 +149,7 @@ wis.widget.Select.prototype = {
 
     // 渲染前处理方法
     beforeRender: function () {
-
+        this._renderFlag = true;
     },
 
     // 渲染方法
@@ -151,6 +161,7 @@ wis.widget.Select.prototype = {
 
     // 渲染后处理方法
     afterRender: function () {
+        this._renderFlag = false;
         // 替换掉ligerui的表格
         // if (this.getGridColumn() && this.getGridColumn().length > 0) {
         //     console.log(this.getGridColumn());

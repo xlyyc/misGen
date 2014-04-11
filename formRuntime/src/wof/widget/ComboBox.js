@@ -49,9 +49,6 @@ wof.widget.ComboBox.prototype = {
     _initValue: null,
     // _isAsync: false,
 
-
-    _renderFlag: true,
-
     getGridColumn: function () {
         return this._gridColumn;
     },
@@ -200,15 +197,14 @@ wof.widget.ComboBox.prototype = {
             return ret;
         });
 
-        this._select.onSelected(function (val, text) {
-            _this._onSelected && _this._onSelected(val, text);
-            _this._selectedText = text;
-            _this._selectedValue = val;
-            if (_this._renderFlag) {
-                _this._renderFlag = false;
+        this._select.onSelected(
+            function (val, text) {
+                _this._onSelected && _this._onSelected(val, text);
+                _this._selectedText = text;
+                _this._selectedValue = val;
                 _this.sendMessage('wof.widget.ComboBox_selected');
-            };
-        });
+            }
+        );
 
         this._select.appendTo(this.getDomInstance());
     },
@@ -218,13 +214,13 @@ wof.widget.ComboBox.prototype = {
 
         this._select.setWidth(this.getWidth());
         this._select.setHeight(this.getHeight());
+        console.log('this._value==='+this._value);
         this._select.setValue(this._value);
 
         this._select.render();
     },
 
     afterRender: function () {
-        this._renderFlag = false;
         this.sendMessage('wof.widget.ComboBox_render');
     },
 

@@ -57,9 +57,19 @@ wof.bizWidget.SearchItem.prototype = {
     _rowspan: null,   //纵跨行数
 
 
+    _values:null, //当前选中值 如果是范围搜索 该值多于一个
+
     /**
      * get/set 属性方法定义
      */
+    getValues: function(){
+        return this._values;
+    },
+
+    setValues: function(values){
+        this._values = values;
+    },
+
     getName: function(){
         if(this._name==null){
             this._name = '';
@@ -377,16 +387,23 @@ wof.bizWidget.SearchItem.prototype = {
         'wof.widget.Input_blur': function(message) {
             console.log(message.id+'   '+this.getClassName());
             var input = wof.util.ObjectManager.get(message.sender.id);
-            this.setValue(input.getValue());
-            this.sendMessage('wof.bizWidget.SearchItem_change');
+            if(this.getFromTo()==false){
+                this.setValues(input.getValue());
+            }else{ //todo 范围搜索
+
+            }
             return false;
         }, 
         'wof.widget.ComboBox_selected': function (message) {
             console.log(message.id+'   '+this.getClassName());
             var cb = wof.util.ObjectManager.get(message.sender.id);
             // console.log('selected: %s -> %s', cb.getSelectedText(), cb.getSelectedValue());
-            this.setValue(cb.getSelectedValue());
-            this.sendMessage('wof.bizWidget.SearchItem_change');
+            if(this.getFromTo()==false){
+                this.setValues(cb.getValue());
+            }else{ //todo 范围搜索
+
+            }
+            return false;
         }
     },
 
@@ -427,7 +444,7 @@ wof.bizWidget.SearchItem.prototype = {
 
 
     //根据当前的显示类型设置对应的元件
-    _setComponent: function(){
+    _setComponent: function(){      //todo 需要考虑范围搜索的情况
         if(this.getDataField().length <= 0) {
             return;
         }
@@ -436,7 +453,7 @@ wof.bizWidget.SearchItem.prototype = {
         switch (visbleType) {
         case 'text':
             this._initComponent('wof.widget.Input');
-            this._component.setValue(this.getValue());
+            this._component.setValue(this.getValues());
             break;
 
         case 'textArea':
@@ -457,7 +474,7 @@ wof.bizWidget.SearchItem.prototype = {
                     var row = ref['data'][i];
                     data.push({'name':row['name'],'value':row['value']});
                 }
-                this._component.setValue(0);//默认值
+                this._component.setValue(this.getValues());
                 this._component.setComboboxData(data);
             }
             break;
