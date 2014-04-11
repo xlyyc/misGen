@@ -14,6 +14,7 @@ wof.functionWidget.spanner.AddRecordComponentSpanner = function () {
     this._meta.sendMessages = {'wof.functionWidget.AddRecordComponent_mousedown':'单击'};
     this._meta.propertys = {
         'AddRecordComponent':{
+            'componentName':{prop:'componentName','name':'构件名称','type':'text','readOnly':false,'isHide':false,required:false},
             'functionID':{prop:'functionID','name':'功能ID','type':'text','readOnly':false,'isHide':false},
             'formFunctionId':{prop:'formFunctionId','name':'绑定页面','type':'custom','readOnly':false,'isHide':false,required:false, customMethod:'wof.customWindow.PageFormSelector', customParam:''},
             'bindComponents':{prop:'bindComponents','name':'绑定构件','type':'custom','readOnly':false,'isHide':false,required:false, customMethod:'wof.customWindow.ComponentTreeSelector', customParam:'gridComponent,voucherGridComponent'},
@@ -141,6 +142,7 @@ wof.functionWidget.spanner.AddRecordComponentSpanner.prototype = {
         if(addRecordComponent!=null){
             parameters.id = this.getPropertys().id;
             parameters.componentId = this.getPropertys().componentId;
+            parameters.componentName = this.getPropertys().componentName;
             parameters.className = this.getPropertys().className;
             parameters.onReceiveMessage = this.getPropertys().onReceiveMessage;
             parameters.onSendMessage = this.getPropertys().onSendMessage;
@@ -256,6 +258,7 @@ wof.functionWidget.spanner.AddRecordComponentSpanner.prototype = {
 
         var json = {};
         if(node.getClassName()=='wof.functionWidget.AddRecordComponent'){
+            json.componentName = node.getComponentName();
             json.commandItemID = node.getComponentId();
             json.className = node.getClassName();
             json.callStr = node.getCallStr();

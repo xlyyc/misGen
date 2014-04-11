@@ -8,17 +8,17 @@ wof.bizWidget.PageParamWindow.prototype = {
 
     _inputParam : null,
 
-    contextParams : null,
+    _contextParams : null,
 
     getContextParams: function(){
-        if(this.contextParams==null){
-            this.contextParams = [];
+        if(this._contextParams==null){
+            this._contextParams = [];
         }
-        return this.contextParams;
+        return this._contextParams;
     },
 
     setContextParams: function(contextParams){
-        this.contextParams = contextParams;
+        this._contextParams = contextParams;
     },
 
     getInputParam: function(){

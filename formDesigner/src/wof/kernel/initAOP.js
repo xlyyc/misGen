@@ -27,6 +27,24 @@ var wof$_aop = (function(){
                             })(obj[o]['prototype'],p);
                         }
                     }
+                    obj[o].prototype._componentName = null;
+                    obj[o].prototype.getComponentName = function() {
+                        return this._componentName || '';
+                    };
+                    obj[o].prototype.setComponentName = function(componentName) {
+                        this._componentName = componentName;
+                    };
+                    obj[o].prototype._componentId = null;
+                    obj[o].prototype.getComponentId = function() {
+                        if(this._componentId==null){
+                            this._componentId=this.getId();
+                        }
+                        return this._componentId;
+                    };
+                    obj[o].prototype.setComponentId = function(componentId) {
+                        this._componentId = componentId;
+                    };
+
                     obj[o].prototype._version = null;
                     obj[o].prototype.getVersion = function(){
                         if(this._version==null){
@@ -433,8 +451,10 @@ var wof$_aop = (function(){
                         obj[o].prototype._getData = obj[o].prototype.getData;
                         obj[o].prototype.getData = function(){
                             var data=this._getData();
-                            data.isInside = this.getIsInside();
+                            data.componentId=this.getComponentId();
+                            data.componentName=this.getComponentName();
                             data.id=this.getId();
+                            data.isInside = this.getIsInside();
                             data.className=this.getClassName();
                             data.hiden=this.getHiden();
                             data.position = this.getPosition();
@@ -478,6 +498,8 @@ var wof$_aop = (function(){
                             if(data.left!=null){
                                 this.setLeft(data.left);
                             }
+                            this.setComponentId(data.componentId);
+                            this.setComponentName(data.componentName);
                             this.setIsInside(data.isInside);
                             this.setCss(data.css);
                             this.setHiden(data.hiden);
@@ -644,3 +666,21 @@ wof$_aop('wof.functionWidget');
 var wof$ = {};
 wof$.find = wof.util.Selector.find;
 wof$.create = wof.util.ObjectManager.create;
+wof$.getComponentIdByName = function(componentName){
+    try{
+        var componentId = '';
+        var objs = wof$.find('*');
+        for(var i=0;i<objs.size();i++){
+            var obj = objs.get(i);
+            if(obj.getComponentName!=null && obj.getComponentId!=null){
+                if(obj.getComponentName()==componentName){
+                    componentId = obj.getComponentId();
+                    break;
+                }
+            }
+        }
+        return componentId;
+    }catch(e){
+    }
+
+};

@@ -7,10 +7,10 @@ wis.widget.Tab = function () {
     this._version = '1.0';
 
     //this.getDomInstance().css('overflow','hidden');
-    this.setPosition('static');
 };
 wis.widget.Tab.prototype = {
 
+    _cid:null,         //构件id
     _name:null,   //构件名称
     _items:null,  //标签项数据 [{name:'name1',width:100,label:'label1',closeable:true,icon:'add',iconPosition:'left'}]
     _activeItemIndex:null, //当前激活的标签项index
@@ -19,6 +19,17 @@ wis.widget.Tab.prototype = {
     _tab:null,
 
     _renderFlag:null,
+
+    getCid: function () {
+        if(this._cid==null){
+            this._cid = this.getId();
+        }
+        return this._cid;
+    },
+
+    setCid: function (cid) {
+        this._cid = cid;
+    },
 
     getName: function () {
         return this._name || '';
@@ -116,6 +127,7 @@ wis.widget.Tab.prototype = {
     //----------必须实现----------
     getData: function () {
         return {
+            cid: this.getCid(),
             name:this.getName(),
             items:this.getItems(),
             activeItemIndex:this.getActiveItemIndex()
@@ -124,6 +136,7 @@ wis.widget.Tab.prototype = {
 
     //----------必须实现----------
     setData: function (data) {
+        this.setCid(data.cid);
         this.setName(data.name);
         this.setItems(data.items);
         this.setActiveItemIndex(data.activeItemIndex);

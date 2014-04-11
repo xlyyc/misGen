@@ -14,6 +14,7 @@ wof.bizWidget.spanner.VoucherGridComponentSpanner = function () {
     this._meta.sendMessages = {'wof.bizWidget.VoucherGridComponent_mousedown':'单击','wof.bizWidget.VoucherGridComponent_render':'重绘'};
     this._meta.propertys = {
         'VoucherGridComponent':{
+            'componentName':{prop:'componentName','name':'构件名称','type':'text','readOnly':false,'isHide':false,required:false},
             'name':{prop:'name','name':'列表名称','type':'text','readOnly':false,'isHide':false,required:false},
             'bindEntityID':{prop:'bindEntityID','name':'实体ID','type':'custom','readOnly':false,'isHide':false,required:false, customMethod:'wof.customWindow.MetaTreeSelector', customParam:'childEntity'},
             'voucherHeadComponent':{prop:'voucherHeadComponent','name':'关联构件','type':'custom','readOnly':false,'isHide':false,required:false, customMethod:'wof.customWindow.ComponentTreeSelector', customParam:'voucherComponent,gridComponent'},
@@ -289,6 +290,7 @@ wof.bizWidget.spanner.VoucherGridComponentSpanner.prototype = {
         if(voucherGridComponent!=null){
             parameters.id = this.getPropertys().id;
             parameters.componentId = this.getPropertys().componentId;
+            parameters.componentName = this.getPropertys().componentName;
             parameters.className = this.getPropertys().className;
             parameters.onReceiveMessage = this.getPropertys().onReceiveMessage;
             parameters.onSendMessage = this.getPropertys().onSendMessage;
@@ -427,6 +429,7 @@ wof.bizWidget.spanner.VoucherGridComponentSpanner.prototype = {
             var tool = wof.util.Tool;
             var root = tool.stringToXml("<voucherGridComponent></voucherGridComponent>");
             var rootElement = root.documentElement;
+            tool.setAttribute(rootElement,"componentName",node.getComponentName());
             tool.setAttribute(rootElement,"rowsCount",node.getRowsCount());
             tool.setAttribute(rootElement,"useMutiplePage",node.getUseMutiplePage());
             tool.setAttribute(rootElement,"voucherHeadComponent",node.getVoucherHeadComponent());

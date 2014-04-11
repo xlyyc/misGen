@@ -35,23 +35,9 @@ wof.functionWidget.DeleteRecordComponent.prototype = {
 
     _paramMaps:null,
 
-
-    _componentId:null,
-
     /**
      * get/set 属性方法定义
      */
-
-    getComponentId: function(){
-        if(this._componentId==null){
-            this._componentId=this.getId();
-        }
-        return this._componentId;
-    },
-
-    setComponentId: function(componentId){
-        this._componentId = componentId;
-    },
 
     getParamMaps: function(){
         if(this._paramMaps==null){
@@ -166,7 +152,6 @@ wof.functionWidget.DeleteRecordComponent.prototype = {
     //----------必须实现----------
     getData: function () {
         return {
-            componentId: this.getComponentId(),
             paramMaps: this.getParamMaps(),
             bindComponents: this.getBindComponents(),
             callStr: this.getCallStr(),
@@ -180,7 +165,6 @@ wof.functionWidget.DeleteRecordComponent.prototype = {
     },
     //----------必须实现----------
     setData: function (data) {
-        this.setComponentId(data.componentId);
         this.setParamMaps(data.paramMaps);
         this.setBindComponents(data.bindComponents);
         this.setCallStr(data.callStr);
@@ -208,6 +192,9 @@ wof.functionWidget.DeleteRecordComponent.prototype = {
 
     updateDeleteRecordComponent: function(data){
         if(!jQuery.isEmptyObject(data)){
+            if(data.componentName!=null){
+                this.setComponentName(data.componentName);
+            }
             if(data.bindComponents!=null){
                 this.setBindComponents(data.bindComponents);
             }

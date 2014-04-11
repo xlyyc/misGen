@@ -39,24 +39,11 @@ wof.functionWidget.AddRecordComponent.prototype = {
 
     _formFunctionId:null,
 
-    _componentId:null,
-
     _fkIdName: null,      //外键id名称
 
     /**
      * get/set 属性方法定义
      */
-
-    getComponentId: function(){
-        if(this._componentId==null){
-            this._componentId=this.getId();
-        }
-        return this._componentId;
-    },
-
-    setComponentId: function(componentId){
-        this._componentId = componentId;
-    },
 
     getFormFunctionId : function (){
         return this._formFunctionId;
@@ -195,7 +182,6 @@ wof.functionWidget.AddRecordComponent.prototype = {
     //----------必须实现----------
     getData: function () {
         return {
-            componentId: this.getComponentId(),
             formFunctionId: this.getFormFunctionId(),
             paramMaps: this.getParamMaps(),
             bindComponents: this.getBindComponents(),
@@ -212,7 +198,6 @@ wof.functionWidget.AddRecordComponent.prototype = {
     },
     //----------必须实现----------
     setData: function (data) {
-        this.setComponentId(data.componentId);
         this.setFormFunctionId(data.formFunctionId);
         this.setParamMaps(data.paramMaps);
         this.setBindComponents(data.bindComponents);
@@ -243,6 +228,9 @@ wof.functionWidget.AddRecordComponent.prototype = {
 
     updateAddRecordComponent: function(data){
         if(!jQuery.isEmptyObject(data)){
+            if(data.componentName!=null){
+                this.setComponentName(data.componentName);
+            }
             if(data.bindComponents!=null){
                 this.setBindComponents(data.bindComponents);
             }

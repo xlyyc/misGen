@@ -51,25 +51,11 @@ wof.bizWidget.SearchComponent.prototype = {
 
     _paramMaps:null,
 
-
-    _componentId:null,
-
     _button:null, //搜索按钮
 
     /**
      * get/set 属性方法定义
      */
-
-    getComponentId: function(){
-        if(this._componentId==null){
-            this._componentId=this.getId();
-        }
-        return this._componentId;
-    },
-
-    setComponentId: function(componentId){
-        this._componentId = componentId;
-    },
 
     getParamMaps: function(){
         if(this._paramMaps==null){
@@ -256,7 +242,6 @@ wof.bizWidget.SearchComponent.prototype = {
     //----------必须实现----------
     getData: function () {
         return {
-            componentId: this.getComponentId(),
             paramMaps: this.getParamMaps(),
             initActionName:this.getInitActionName(),
             itemHeight:this.getItemHeight(),
@@ -276,7 +261,6 @@ wof.bizWidget.SearchComponent.prototype = {
     },
     //----------必须实现----------
     setData: function (data) {
-        this.setComponentId(data.componentId);
         this.setParamMaps(data.paramMaps);
         this.setInitActionName(data.initActionName);
         this.setName(data.name);
@@ -342,6 +326,9 @@ wof.bizWidget.SearchComponent.prototype = {
      */
     updateSearchComponent: function(searchComponentDataData){
         if(!jQuery.isEmptyObject(searchComponentDataData)){
+            if(searchComponentDataData.componentName!=null){
+                this.setComponentName(searchComponentDataData.componentName);
+            }
             if(searchComponentDataData.itemHeight!=null){
                 this.setItemHeight(Number(searchComponentDataData.itemHeight));
             }

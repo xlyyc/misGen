@@ -14,13 +14,13 @@
         stringToXml: function(xmlString){
             var xmlDoc;
             if(typeof xmlString == "string"){
-                if (document.implementation.createDocument) { //FF
-                    var parser = new DOMParser();
-                    xmlDoc = parser.parseFromString(xmlString, "application/xml");
-                } else if (window.ActiveXObject) { //IE
-                    xmlDoc = new ActiveXObject("Microsoft.XMLDOM");
+                if (window.ActiveXObject) { //IE
+                    xmlDoc = new ActiveXObject("Msxml2.DOMDocument");
                     xmlDoc.async="false";
                     xmlDoc.loadXML(xmlString);
+                }else if (document.implementation.createDocument) { //FF
+                    var parser = new DOMParser();
+                    xmlDoc = parser.parseFromString(xmlString, "application/xml");
                 }
             } else {
                 xmlDoc = xmlString;

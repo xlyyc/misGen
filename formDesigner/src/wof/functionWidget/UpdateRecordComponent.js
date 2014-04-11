@@ -40,22 +40,10 @@ wof.functionWidget.UpdateRecordComponent.prototype = {
 
     _formFunctionId:null,
 
-    _componentId:null,
-
     /**
      * get/set 属性方法定义
      */
 
-    getComponentId: function(){
-        if(this._componentId==null){
-            this._componentId=this.getId();
-        }
-        return this._componentId;
-    },
-
-    setComponentId: function(componentId){
-        this._componentId = componentId;
-    },
 
     getFormFunctionId : function (){
         return this._formFunctionId;
@@ -178,7 +166,6 @@ wof.functionWidget.UpdateRecordComponent.prototype = {
     //----------必须实现----------
     getData: function () {
         return {
-            componentId: this.getComponentId(),
             paramMaps: this.getParamMaps(),
             formFunctionId: this.getFormFunctionId(),
             bindComponents: this.getBindComponents(),
@@ -193,7 +180,6 @@ wof.functionWidget.UpdateRecordComponent.prototype = {
     },
     //----------必须实现----------
     setData: function (data) {
-        this.setComponentId(data.componentId);
         this.setParamMaps(data.paramMaps);
         this.setFormFunctionId(data.formFunctionId);
         this.setBindComponents(data.bindComponents);
@@ -222,6 +208,9 @@ wof.functionWidget.UpdateRecordComponent.prototype = {
 
     updateUpdateRecordComponent: function(data){
         if(!jQuery.isEmptyObject(data)){
+            if(data.componentName!=null){
+                this.setComponentName(data.componentName);
+            }
             if(data.bindComponents!=null){
                 this.setBindComponents(data.bindComponents);
             }

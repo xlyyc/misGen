@@ -14,6 +14,7 @@ wof.bizWidget.spanner.VoucherComponentSpanner = function () {
     this._meta.sendMessages = {'wof.bizWidget.VoucherComponent_mousedown':'单击','wof.bizWidget.VoucherComponent_render':'重绘'};
     this._meta.propertys = {
         'VoucherComponent':{
+            'componentName':{prop:'componentName','name':'构件名称','type':'text','readOnly':false,'isHide':false,required:false},
             'caption':{prop:'caption','name':'标题','type':'text','readOnly':false,'isHide':false,required:false},
             'itemHeight':{prop:'itemHeight','name':'默认行高','type':'naturalNumber','readOnly':false,'isHide':false,required:true},
             'width':{prop:'width','name':'宽度','type':'naturalNumber','readOnly':false,'isHide':false,required:false},
@@ -408,6 +409,7 @@ wof.bizWidget.spanner.VoucherComponentSpanner.prototype = {
         if(voucherComponent!=null){
             parameters.id = this.getPropertys().id;
             parameters.componentId = this.getPropertys().componentId;
+            parameters.componentName = this.getPropertys().componentName;
             parameters.className = this.getPropertys().className;
             parameters.onReceiveMessage = this.getPropertys().onReceiveMessage;
             parameters.onSendMessage = this.getPropertys().onSendMessage;
@@ -626,6 +628,7 @@ wof.bizWidget.spanner.VoucherComponentSpanner.prototype = {
             var tool = wof.util.Tool;
             var root = tool.stringToXml("<voucherComponent></voucherComponent>");
             var rootElement = root.documentElement;
+            tool.setAttribute(rootElement,"componentName",node.getComponentName());
             tool.setAttribute(rootElement,'callStr',node.getCallStr());
             tool.setAttribute(rootElement,'bindEntityID',node.getBindEntityID());
             tool.setAttribute(rootElement,'fkField',node.getFkField());

@@ -14,6 +14,7 @@ wof.functionWidget.spanner.CommitComponentSpanner = function () {
     this._meta.sendMessages = {'wof.functionWidget.CommitComponent_mousedown':'单击'};
     this._meta.propertys = {
         'CommitComponent':{
+            'componentName':{prop:'componentName','name':'构件名称','type':'text','readOnly':false,'isHide':false,required:false},
             'functionID':{prop:'functionID','name':'功能ID','type':'text','readOnly':false,'isHide':false},
             'isAutoCommit':{prop:'isAutoCommit','name':'是否自动提交','type':'yesOrNo','readOnly':false,'isHide':false},
             'bindComponents':{prop:'bindComponents','name':'绑定构件','type':'custom','readOnly':false,'isHide':false,required:false, customMethod:'wof.customWindow.ComponentTreeSelector', customParam:'voucherComponent,gridComponent,voucherGridComponent'},
@@ -141,6 +142,7 @@ wof.functionWidget.spanner.CommitComponentSpanner.prototype = {
         if(commitComponent!=null){
             parameters.id = this.getPropertys().id;
             parameters.componentId = this.getPropertys().componentId;
+            parameters.componentName = this.getPropertys().componentName;
             parameters.className = this.getPropertys().className;
             parameters.onReceiveMessage = this.getPropertys().onReceiveMessage;
             parameters.onSendMessage = this.getPropertys().onSendMessage;
@@ -259,6 +261,7 @@ wof.functionWidget.spanner.CommitComponentSpanner.prototype = {
 
        var json = {};
         if(node.getClassName()=='wof.functionWidget.CommitComponent'){
+            json.componentName = node.getComponentName();
             json.commandItemID = node.getComponentId();
             json.className = node.getClassName();
             json.callStr = node.getCallStr();

@@ -14,6 +14,7 @@ wof.functionWidget.spanner.DeleteRecordComponentSpanner = function () {
     this._meta.sendMessages = {'wof.functionWidget.DeleteRecordComponent_mousedown':'单击'};
     this._meta.propertys = {
         'DeleteRecordComponent':{
+            'componentName':{prop:'componentName','name':'构件名称','type':'text','readOnly':false,'isHide':false,required:false},
             'functionID':{prop:'functionID','name':'功能ID','type':'text','readOnly':false,'isHide':false},
             'bindComponents':{prop:'bindComponents','name':'绑定构件','type':'custom','readOnly':false,'isHide':false,required:false, customMethod:'wof.customWindow.ComponentTreeSelector', customParam:'gridComponent,voucherGridComponent'},
             'commandItemID':{prop:'commandItemID','name':'功能构件ID','type':'text','readOnly':false,'isHide':false},
@@ -142,6 +143,7 @@ wof.functionWidget.spanner.DeleteRecordComponentSpanner.prototype = {
         if(deleteRecordComponent!=null){
             parameters.id = this.getPropertys().id;
             parameters.componentId = this.getPropertys().componentId;
+            parameters.componentName = this.getPropertys().componentName;
             parameters.className = this.getPropertys().className;
             parameters.onReceiveMessage = this.getPropertys().onReceiveMessage;
             parameters.onSendMessage = this.getPropertys().onSendMessage;
@@ -244,6 +246,7 @@ wof.functionWidget.spanner.DeleteRecordComponentSpanner.prototype = {
 
         var json = {};
         if(node.getClassName()=='wof.functionWidget.DeleteRecordComponent'){
+            json.componentName = node.getComponentName();
             json.commandItemID = node.getComponentId();
             json.className = node.getClassName();
             json.callStr = node.getCallStr();

@@ -14,6 +14,7 @@ wof.bizWidget.spanner.FlowLayoutSpanner = function () {
     this._meta.sendMessages = {'wof.bizWidget.FlowLayout_mousedown':'单击','wof.bizWidget.FlowLayout_render':'重绘'};
     this._meta.propertys = {
         'FlowLayout':{
+            'componentName':{prop:'componentName','name':'构件名称','type':'text','readOnly':false,'isHide':false,required:false},
             'cols':{prop:'cols','name':'默认列数','type':'naturalNumber','readOnly':false,'isHide':false,required:true},
             'itemHeight':{prop:'itemHeight','name':'默认行高','type':'naturalNumber','readOnly':false,'isHide':false,required:true},
             'width':{prop:'width','name':'宽度','type':'naturalNumber','readOnly':false,'isHide':false,required:true},
@@ -509,6 +510,7 @@ wof.bizWidget.spanner.FlowLayoutSpanner.prototype = {
                 }
             }else{
                 parameters.activeClass = 'FlowLayout';
+                parameters.componentName = flowLayout.getComponentName();
                 parameters.cols = flowLayout.getCols();
                 parameters.itemHeight = flowLayout.getItemHeight();
                 parameters.width = flowLayout.getWidth();

@@ -14,6 +14,7 @@ wof.functionWidget.spanner.ViewRecordComponentSpanner = function () {
     this._meta.sendMessages = {'wof.functionWidget.ViewRecordComponent_mousedown':'单击'};
     this._meta.propertys = {
         'ViewRecordComponent':{
+            'componentName':{prop:'componentName','name':'构件名称','type':'text','readOnly':false,'isHide':false,required:false},
             'functionID':{prop:'functionID','name':'功能ID','type':'text','readOnly':false,'isHide':false},
             'commandItemID':{prop:'commandItemID','name':'功能构件ID','type':'text','readOnly':false,'isHide':false},
             'iSPermissionControl':{prop:'iSPermissionControl','name':'是否权限控制','type':'yesOrNo','readOnly':false,'isHide':false},
@@ -142,6 +143,7 @@ wof.functionWidget.spanner.ViewRecordComponentSpanner.prototype = {
         if(viewRecordComponent!=null){
             parameters.id = this.getPropertys().id;
             parameters.componentId = this.getPropertys().componentId;
+            parameters.componentName = this.getPropertys().componentName;
             parameters.className = this.getPropertys().className;
             parameters.onReceiveMessage = this.getPropertys().onReceiveMessage;
             parameters.onSendMessage = this.getPropertys().onSendMessage;
@@ -256,6 +258,7 @@ wof.functionWidget.spanner.ViewRecordComponentSpanner.prototype = {
 
         var json = {};
         if(node.getClassName()=='wof.functionWidget.ViewRecordComponent'){
+            json.componentName = node.getComponentName();
             json.commandItemID = node.getComponentId();
             json.className = node.getClassName();
             json.callStr = node.getCallStr();

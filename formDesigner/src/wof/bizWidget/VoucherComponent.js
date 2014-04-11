@@ -41,24 +41,11 @@ wof.bizWidget.VoucherComponent.prototype = {
 
     _paramMaps:null,
 
-    _componentId:null,
-
     _fkField: null, //外键对应字段
 
     /**
      * get/set 属性方法定义
      */
-
-    getComponentId: function(){
-        if(this._componentId==null){
-            this._componentId=this.getId();
-        }
-        return this._componentId;
-    },
-
-    setComponentId: function(componentId){
-        this._componentId = componentId;
-    },
 
     getParamMaps: function(){
         if(this._paramMaps==null){
@@ -220,7 +207,6 @@ wof.bizWidget.VoucherComponent.prototype = {
     //----------必须实现----------
     getData: function () {
         return {
-            componentId: this.getComponentId(),
             paramMaps: this.getParamMaps(),
             callStr:this.getCallStr(),
             initActionName:this.getInitActionName(),
@@ -239,7 +225,6 @@ wof.bizWidget.VoucherComponent.prototype = {
     },
     //----------必须实现----------
     setData: function (data) {
-        this.setComponentId(data.componentId);
         this.setParamMaps(data.paramMaps);
         this.setInitActionName(data.initActionName);
         this.setState(data.state);
@@ -547,6 +532,9 @@ wof.bizWidget.VoucherComponent.prototype = {
      */
     updateVoucherComponent: function(voucherComponentData){
         if(!jQuery.isEmptyObject(voucherComponentData)){
+            if(voucherComponentData.componentName!=null){
+                this.setComponentName(voucherComponentData.componentName);
+            }
             if(voucherComponentData.itemHeight!=null){
                 this.setItemHeight(Number(voucherComponentData.itemHeight));
             }

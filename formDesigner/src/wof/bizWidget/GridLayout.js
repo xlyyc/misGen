@@ -21,6 +21,7 @@ wof.bizWidget.GridLayout.prototype = {
     /**
      * get/set 属性方法定义
      */
+
     getOverflow: function(){
         return this._overflow;
     },

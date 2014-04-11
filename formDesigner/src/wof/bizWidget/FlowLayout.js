@@ -401,6 +401,9 @@ wof.bizWidget.FlowLayout.prototype = {
      */
     updateFlowLayout: function(flowLayoutData){
         if(!jQuery.isEmptyObject(flowLayoutData)){
+            if(flowLayoutData.componentName!=null){
+                this.setComponentName(flowLayoutData.componentName);
+            }
             if(flowLayoutData.cols!=null){
                 this.setCols(Number(flowLayoutData.cols));
             }

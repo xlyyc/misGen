@@ -43,9 +43,75 @@
 <script src="src/wof/util/GlobalObject.js"></script>
 <script src="src/wof/util/Tool.js"></script>
 
+<script src="src/wof/widget/Mediator.js"></script>
 
-<script src="componentList.js"></script>
+<script src="src/wof/customWindow/MetaTreeSelector.js"></script>
+<script src="src/wof/customWindow/ComponentTreeSelector.js"></script>
+<script src="src/wof/customWindow/ParamMapsWindow.js"></script>
+<script src="src/wof/customWindow/PageParamWindow.js"></script>
+<script src="src/wof/customWindow/PageFormSelector.js"></script>
 
+<script src="src/wof/widget/Tab.js"></script>
+<script src="src/wof/widget/TabItem.js"></script>
+<script src="src/wof/widget/Toolbar.js"></script>
+<script src="src/wof/widget/ToolbarItem.js"></script>
+<script src="src/wof/widget/Grid.js"></script>
+<script src="src/wof/widget/Button.js"></script>
+<script src="src/wof/widget/DateBox.js"></script>
+<script src="src/wof/widget/Label.js"></script>
+<script src="src/wof/widget/RadioGroupItem.js"></script>
+<script src="src/wof/widget/RadioGroup.js"></script>
+<script src="src/wof/widget/ComboBox.js"></script>
+<script src="src/wof/widget/Tree.js"></script>
+<script src="src/wof/widget/spanner/ButtonSpanner.js"></script>
+<script src="src/wof/widget/spanner/TabSpanner.js"></script>
+
+<script src="src/wof/bizWidget/FlowLayout.js"></script>
+<script src="src/wof/bizWidget/FlowLayoutSection.js"></script>
+<script src="src/wof/bizWidget/FlowLayoutItem.js"></script>
+<script src="src/wof/bizWidget/FlowLayoutHelper.js"></script>
+<script src="src/wof/bizWidget/GridLayout.js"></script>
+<script src="src/wof/bizWidget/PageComponent.js"></script>
+<script src="src/wof/bizWidget/PropertyBar.js"></script>
+<script src="src/wof/bizWidget/ObjectBar.js"></script>
+<script src="src/wof/bizWidget/OnSendMessageBar.js"></script>
+<script src="src/wof/bizWidget/OnReceiveMessageBar.js"></script>
+<script src="src/wof/bizWidget/VoucherComponent.js"></script>
+<script src="src/wof/bizWidget/VoucherItemGroup.js"></script>
+<script src="src/wof/bizWidget/VoucherItem.js"></script>
+<script src="src/wof/bizWidget/VoucherGridComponent.js"></script>
+<script src="src/wof/bizWidget/VoucherGridComponentColumn.js"></script>
+<script src="src/wof/bizWidget/GridComponent.js"></script>
+<script src="src/wof/bizWidget/GridComponentColumn.js"></script>
+<script src="src/wof/bizWidget/VoucherGridComponent.js"></script>
+<script src="src/wof/bizWidget/SearchComponent.js"></script>
+<script src="src/wof/bizWidget/SearchItem.js"></script>
+<script src="src/wof/bizWidget/BizEntityTree.js"></script>
+<script src="src/wof/bizWidget/PageFormTree.js"></script>
+<script src="src/wof/bizWidget/ComponentsTree.js"></script>
+<script src="src/wof/bizWidget/ParamWindow.js"></script>
+<script src="src/wof/bizWidget/PageParamWindow.js"></script>
+
+<script src="src/wof/bizWidget/spanner/GridLayoutSpanner.js"></script>
+<script src="src/wof/bizWidget/spanner/PageComponentSpanner.js"></script>
+<script src="src/wof/bizWidget/spanner/FlowLayoutSpanner.js"></script>
+<script src="src/wof/bizWidget/spanner/VoucherComponentSpanner.js"></script>
+<script src="src/wof/bizWidget/spanner/SearchComponentSpanner.js"></script>
+<script src="src/wof/bizWidget/spanner/VoucherGridComponentSpanner.js"></script>
+<script src="src/wof/bizWidget/spanner/GridComponentSpanner.js"></script>
+<script src="src/wof/bizWidget/ObjectInspector.js"></script>
+
+<script src="src/wof/functionWidget/CommitComponent.js"></script>
+<script src="src/wof/functionWidget/ViewRecordComponent.js"></script>
+<script src="src/wof/functionWidget/UpdateRecordComponent.js"></script>
+<script src="src/wof/functionWidget/DeleteRecordComponent.js"></script>
+<script src="src/wof/functionWidget/AddRecordComponent.js"></script>
+
+<script src="src/wof/functionWidget/spanner/CommitComponentSpanner.js"></script>
+<script src="src/wof/functionWidget/spanner/ViewRecordComponentSpanner.js"></script>
+<script src="src/wof/functionWidget/spanner/UpdateRecordComponentSpanner.js"></script>
+<script src="src/wof/functionWidget/spanner/DeleteRecordComponentSpanner.js"></script>
+<script src="src/wof/functionWidget/spanner/AddRecordComponentSpanner.js"></script>
 
 <script src="src/wof/kernel/initAOP.js"></script>
 
@@ -77,8 +143,6 @@ jQuery(function(){
 	var sidebar1 = jQuery('#sidebar1');
 	var sidebar2 = jQuery('#sidebar2');
 	var content = jQuery('#content');
-    var components = [];
-
 	//设置布局
 	function layout(){
 		var windowWidth = jQuery(window).width();
@@ -126,34 +190,86 @@ jQuery(function(){
         gridLayout1.setHeight(tab.getHeight()-108);
         gridLayout1.setTop(0);
         gridLayout1.setLeft(0);
+        //gridLayout1.setCss('ui-widget-content');
         gridLayout1.setOverflow('y');
 
         tab.insertNode(gridLayout1,1);
 
+        var components = [];
         var layoutComponents = [];
         var bizWidgetComponents = [];
         var widgetComponents = [];
 
-        for(var i=0;i<wof$_layoutComponents.length;i++){
-            var layoutComponentSpanner = wof$.create(wof$_layoutComponents[i]);
-            layoutComponentSpanner.appendTo(gridLayout1);
-            layoutComponents.push(layoutComponentSpanner);
-            components.push(layoutComponentSpanner);
-        }
+        var flowLayoutSpanner = wof$.create('FlowLayoutSpanner');
+        flowLayoutSpanner.appendTo(gridLayout1);
+        layoutComponents.push(flowLayoutSpanner);
+        components.push(flowLayoutSpanner);
 
-        for(var i=0;i<wof$_bizWidgetComponents.length;i++){
-            var bizWidgetComponentSpanner = wof$.create(wof$_bizWidgetComponents[i]);
-            bizWidgetComponentSpanner.appendTo(gridLayout1);
-            bizWidgetComponents.push(bizWidgetComponentSpanner);
-            components.push(bizWidgetComponentSpanner);
-        }
+        var gridLayoutSpanner = wof$.create('GridLayoutSpanner');
+        gridLayoutSpanner.appendTo(gridLayout1);
+        layoutComponents.push(gridLayoutSpanner);
+        components.push(gridLayoutSpanner);
 
-        for(var i=0;i<wof$_widgetComponents.length;i++){
-            var widgetComponentSpanner = wof$.create(wof$_widgetComponents[i]);
-            widgetComponentSpanner.appendTo(gridLayout1);
-            widgetComponents.push(widgetComponentSpanner);
-            components.push(widgetComponentSpanner);
-        }
+        var voucherComponentSpanner = wof$.create('VoucherComponentSpanner');
+        voucherComponentSpanner.appendTo(gridLayout1);
+        bizWidgetComponents.push(voucherComponentSpanner);
+        components.push(voucherComponentSpanner);
+
+        var searchComponentSpanner = wof$.create('SearchComponentSpanner');
+        searchComponentSpanner.appendTo(gridLayout1);
+        bizWidgetComponents.push(searchComponentSpanner);
+        components.push(searchComponentSpanner);
+
+        var gridComponentSpanner = wof$.create('GridComponentSpanner');
+        gridComponentSpanner.appendTo(gridLayout1);
+        bizWidgetComponents.push(gridComponentSpanner);
+        components.push(gridComponentSpanner);
+
+        var voucherGridComponentSpanner = wof$.create('VoucherGridComponentSpanner');
+        voucherGridComponentSpanner.appendTo(gridLayout1);
+        bizWidgetComponents.push(voucherGridComponentSpanner);
+        components.push(voucherGridComponentSpanner);
+
+        var pageComponentSpanner = wof$.create('PageComponentSpanner');
+        pageComponentSpanner.appendTo(gridLayout1);
+        bizWidgetComponents.push(pageComponentSpanner);
+        components.push(pageComponentSpanner);
+
+    /*    var buttonSpanner = wof$.create('ButtonSpanner');
+        buttonSpanner.appendTo(gridLayout1);
+        widgetComponents.push(buttonSpanner);
+        components.push(buttonSpanner);
+
+        var tabSpanner = wof$.create('TabSpanner');
+        tabSpanner.appendTo(gridLayout1);
+        widgetComponents.push(tabSpanner);
+        components.push(tabSpanner);*/
+
+        var commitComponentSpanner = wof$.create('CommitComponentSpanner');
+        commitComponentSpanner.appendTo(gridLayout1);
+        widgetComponents.push(commitComponentSpanner);
+        components.push(commitComponentSpanner);
+
+        var viewRecordComponentSpanner = wof$.create('ViewRecordComponentSpanner');
+        viewRecordComponentSpanner.appendTo(gridLayout1);
+        widgetComponents.push(viewRecordComponentSpanner);
+        components.push(viewRecordComponentSpanner);
+
+        var updateRecordComponentSpanner = wof$.create('UpdateRecordComponentSpanner');
+        updateRecordComponentSpanner.appendTo(gridLayout1);
+        widgetComponents.push(updateRecordComponentSpanner);
+        components.push(updateRecordComponentSpanner);
+
+        var addRecordComponentSpanner = wof$.create('AddRecordComponentSpanner');
+        addRecordComponentSpanner.appendTo(gridLayout1);
+        widgetComponents.push(addRecordComponentSpanner);
+        components.push(addRecordComponentSpanner);
+
+
+        var deleteRecordComponentSpanner = wof$.create('DeleteRecordComponentSpanner');
+        deleteRecordComponentSpanner.appendTo(gridLayout1);
+        widgetComponents.push(deleteRecordComponentSpanner);
+        components.push(deleteRecordComponentSpanner);
 
 
         for(var i=0;i<components.length;i++){
@@ -197,16 +313,17 @@ jQuery(function(){
 
         tab.insertNode(gridLayout2,2);
 
-        tab.render();
 
-        var objectInspector = wof$.create('ObjectInspector');
+       /* var objectInspector = wof$.create('ObjectInspector');
         objectInspector.setHeight(tab.getHeight()-108);
         objectInspector.setWidth(sidebar1Width-35);
         objectInspector.setTop(0);
         objectInspector.setLeft(0);
-        objectInspector.appendTo(gridLayout2);
+        objectInspector.appendTo(gridLayout2);*/
 
-        objectInspector.render();     //由于树与tab样式冲突 所以需要在tab render后再添加树 并且直接渲染树
+
+
+        tab.render();
 	}
     //重设左侧边栏
     function resizeSidebar1(){
@@ -228,11 +345,21 @@ jQuery(function(){
 		var windowWidth = jQuery(window).width();
 		var windowHeight = jQuery(window).height();
 
-        var messageIds = [];
-        for(var i=0;i<components.length;i++){
-            var componentSpanner = components[i];
-            messageIds.push(componentSpanner.getClassName()+'_render');
-        }
+        var messageIds = [
+            'wof.bizWidget.spanner.FlowLayoutSpanner_render',
+            'wof.widget.spanner.ButtonSpanner_render',
+            'wof.bizWidget.spanner.GridLayoutSpanner_render',
+            'wof.bizWidget.spanner.VoucherComponentSpanner_render',
+            'wof.bizWidget.spanner.SearchComponentSpanner_render',
+            'wof.bizWidget.spanner.VoucherGridComponentSpanner_render',
+            'wof.bizWidget.spanner.GridComponentSpanner_render',
+            'wof.bizWidget.spanner.PageComponentSpanner_render',
+            'wof.functionWidget.spanner.CommitComponentSpanner_render',
+            'wof.functionWidget.spanner.ViewRecordComponentSpanner_render',
+            'wof.functionWidget.spanner.UpdateRecordComponentSpanner_render',
+            'wof.functionWidget.spanner.DeleteRecordComponentSpanner_render',
+            'wof.functionWidget.spanner.AddRecordComponentSpanner_render'
+        ];
 
         var tab = wof$.create('Tab');
         tab.setOnSendMessage([{id:'wof.widget.Tab_active',method:'return false;'}]);
@@ -440,16 +567,16 @@ jQuery(function(){
 		}catch(e){}
 	}
 	jQuery(window).load(function(){
-        layout();
-        initSidebar1();
-        initContent();
+		layout();
 		initSidebar2();
+        initContent();
+        initSidebar1();
 	});
 	jQuery(window).resize(function(){
 		layout();
 		resizeSidebar1();
-        resizeContent();
 		resizeSidebar2();
+        resizeContent();
 	});
 	jQuery("#pageParamBtn,#saveBtn,#saveToCompositeComponentBtn").button().click(function(event){
 		event.preventDefault();
@@ -470,20 +597,19 @@ jQuery(function(){
                 var package =  clz.substring(0,clz.lastIndexOf(shortName)-1);
                 var spann = eval(package+'.spanner.'+shortName+'Spanner');
                 if(spann!=null){
-				 
-						if(spann.prototype.exportData!=null){
-                            if(clz.indexOf('wof.bizWidget')>=0){
-                                var componentData = {};
-                                componentData['ID'] = node.getComponentId();
-                                componentData['CallStr'] = node.getCallStr();
-                                componentData['ControlType'] = shortName;
-                                componentData['ControlContext'] = spann.prototype.exportData(node);
-                                _components.push(componentData);
-                            }else{
-                                _commandComponents.push(spann.prototype.exportData(node));
-                            }
-						}
-
+                    if(spann.prototype.exportData!=null){
+                        if(clz.indexOf('wof.bizWidget')>=0){
+                            var componentData = {};
+                            componentData['ID'] = node.getComponentId();
+                            componentData['ComponentName'] = node.getComponentName();
+                            componentData['CallStr'] = node.getCallStr();
+                            componentData['ControlType'] = shortName;
+                            componentData['ControlContext'] = spann.prototype.exportData(node);
+                            _components.push(componentData);
+                        }else{
+                            _commandComponents.push(spann.prototype.exportData(node));
+                        }
+                    }
                 }
                 var childNodes = node.childNodes();
                 if(childNodes.length>0){

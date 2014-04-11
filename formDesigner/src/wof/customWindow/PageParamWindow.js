@@ -11,7 +11,10 @@
             if(wof.customWindow.PageParamWindow._initFlag==null){
                 var pageParamWindow = new wof.bizWidget.PageParamWindow();
                 pageParamWindow.setIsInside(true);
-                pageParamWindow.setContextParams(wof.customWindow.PageParamWindow.getContextParams());
+                //pageParamWindow.setContextParams(wof.customWindow.PageParamWindow.getContextParams());
+                if(jQuery.isEmptyObject(pageInputParam)){
+                    pageInputParam = wof.customWindow.PageParamWindow.getContextParams();
+                }
                 pageParamWindow.setTop(0);
                 pageParamWindow.setLeft(0);
                 pageParamWindow.setWidth(420);
@@ -21,11 +24,11 @@
                 wof.customWindow.PageParamWindow._dialogDiv.append(pageParamWindow.getDomInstance());
                 wof.util.ObjectManager.add(pageParamWindow.getId(), pageParamWindow);
 
-                wof.customWindow.ComponentTreeSelector._pageParamWindow = pageParamWindow;
+                wof.customWindow.PageParamWindow._pageParamWindow = pageParamWindow;
                 wof.customWindow.PageParamWindow._initFlag = true;
             }
-            wof.customWindow.ComponentTreeSelector._pageParamWindow.setInputParam(pageInputParam);
-            wof.customWindow.ComponentTreeSelector._pageParamWindow.render();
+            wof.customWindow.PageParamWindow._pageParamWindow.setInputParam(pageInputParam);
+            wof.customWindow.PageParamWindow._pageParamWindow.render();
             wof.customWindow.PageParamWindow._dialogDiv.dialog({
                 resizable:false,
                 width:450,
@@ -36,7 +39,7 @@
                 },
                 buttons:{
                     '确定':function(){
-                        pageInputParam = wof.customWindow.ComponentTreeSelector._pageParamWindow.receiveCompParamValue();
+                        pageInputParam = wof.customWindow.PageParamWindow._pageParamWindow.receiveCompParamValue();
                         jQuery(this).dialog('close');
                     },
                     '关闭':function(){
@@ -51,8 +54,8 @@
 
         getContextParams: function(){
             var json = [];
-            json.push({"dataType":"char","name":"pagestate","caption":"页面状态"});
-            json.push({"dataType":"char","name":"dataId","caption":"主记录ID"});
+            json.push({"dataType":"char","name":"pageState","caption":"页面状态","value":""});
+            json.push({"dataType":"char","name":"dataId","caption":"主记录ID","value":""});
             return json;
         }
 		

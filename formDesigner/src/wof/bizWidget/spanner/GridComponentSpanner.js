@@ -15,6 +15,7 @@ wof.bizWidget.spanner.GridComponentSpanner = function () {
     this._meta.propertys = {
         'GridComponent':{
             'name':{prop:'name','name':'列表名称','type':'text','readOnly':false,'isHide':false,required:false},
+            'componentName':{prop:'componentName','name':'构件名称','type':'text','readOnly':false,'isHide':false,required:false},
             'bindEntityID':{prop:'bindEntityID','name':'实体ID','type':'custom','readOnly':false,'isHide':false,required:false, customMethod:'wof.customWindow.MetaTreeSelector', customParam:'mainEntity'},
             'headerHeight':{prop:'headerHeight','name':'表头高度','type':'naturalNumber','readOnly':false,'isHide':false,required:false},
             'rowHeight':{prop:'rowHeight','name':'行高','type':'naturalNumber','readOnly':false,'isHide':false,required:false},
@@ -289,6 +290,7 @@ wof.bizWidget.spanner.GridComponentSpanner.prototype = {
         if(gridComponent!=null){
             parameters.id = this.getPropertys().id;
             parameters.componentId = this.getPropertys().componentId;
+            parameters.componentName = this.getPropertys().componentName;
             parameters.className = this.getPropertys().className;
             parameters.onReceiveMessage = this.getPropertys().onReceiveMessage;
             parameters.onSendMessage = this.getPropertys().onSendMessage;
@@ -367,6 +369,7 @@ wof.bizWidget.spanner.GridComponentSpanner.prototype = {
             }else{
                 parameters.activeClass = 'GridComponent';
                 parameters.name = gridComponent.getName();
+                parameters.componentName = gridComponent.getComponentName();
                 parameters.bindEntityID = gridComponent.getBindEntityID();
                 parameters.headerHeight = gridComponent.getHeaderHeight();
                 parameters.rowHeight = gridComponent.getRowHeight();
@@ -428,6 +431,7 @@ wof.bizWidget.spanner.GridComponentSpanner.prototype = {
             var root = tool.stringToXml("<gridComponent></gridComponent>");
             var rootElement = root.documentElement;
             tool.setAttribute(rootElement,'rowsCount',node.getRowsCount());
+            tool.setAttribute(rootElement,'componentName',node.getComponentName());
             tool.setAttribute(rootElement,'useMutiplePage',node.getUseMutiplePage());
             tool.setAttribute(rootElement,'rowHeight',node.getRowHeight());
             tool.setAttribute(rootElement,'headerHeight',node.getHeaderHeight());
