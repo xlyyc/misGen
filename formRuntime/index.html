@@ -13,6 +13,30 @@
 <link href="lib/lovey/style/css/ui_btn.css" rel="stylesheet" type="text/css"/>
 <link href="lib/lovey/style/css/ui_icon.css" rel="stylesheet" type="text/css"/>
 
+<link href="lib/ligerUI/skins/Aqua/css/ligerui-all.css" rel="stylesheet" type="text/css" />
+
+
+<style>
+    .custom-combobox {
+        position: relative;
+        display: inline-block;
+    }
+    .custom-combobox-toggle {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        margin-left: -1px;
+        padding: 0;
+        /* support: IE7 */
+        *height: 1.7em;
+        *top: 0.1em;
+    }
+    .custom-combobox-input {
+        margin: 0;
+        padding: 0.3em;
+    }
+</style>
+
 
 <style type="text/css">
 <!--
@@ -86,10 +110,18 @@
 
 
 
-<link href="lib/lovey/style/css/lovey.css" rel="stylesheet" type="text/css"/>
+<!--<link href="lib/lovey/style/css/lovey.css" rel="stylesheet" type="text/css"/>
 <link href="lib/lovey/js/plugins/combobox/default/combobox.css" rel="stylesheet" type="text/css"/>
 <script src="lib/lovey/js/lovey_common.js"></script>
-<script src="lib/lovey/js/plugins/combobox/ligercombobox.js"></script>
+<script src="lib/lovey/js/plugins/combobox/ligercombobox.js"></script>-->
+
+
+<script src="lib/ligerUI/js/core/base.js" type="text/javascript"></script>
+<script src="lib/ligerUI/js/plugins/ligerCheckBox.js" type="text/javascript"></script>
+<script src="lib/ligerUI/js/plugins/ligerResizable.js" type="text/javascript"></script>
+<script src="lib/ligerUI/js/plugins/ligerComboBox.js" type="text/javascript"></script>
+
+
 
 <script src="lib/wis/src/wis/kernel/initNamespace.js"></script>
 
@@ -106,6 +138,7 @@
 <script src="lib/wis/src/wis/widget/Input.js"></script>
 <script src="lib/wis/src/wis/widget/Tab.js"></script>
 <script src="lib/wis/src/wis/widget/Select.js"></script>
+<script src="lib/wis/src/wis/widget/Combobox.js"></script>
 
 <script src="lib/wis/src/wis/kernel/initSystem.js"></script>
 
@@ -124,6 +157,23 @@ jQuery(function(){
 	function initContent(){
 		var windowWidth = jQuery(window).width();
 		var windowHeight = jQuery(window).height();
+
+/*        var selectData = [
+            { value: '', name: ""},
+            { value: 1, name: "金智科技"},
+            { value: 2, name: "金智教育"},
+            { value: 3, name: "金智投资"},
+            { value: 4, name: "金智智能"}
+        ];
+        var combobox = wis$.create('Combobox');
+        combobox.setSelectData(selectData);
+        combobox.setValue(2);
+
+        combobox.appendTo(container);
+        combobox.render();
+
+        combobox.render();*/
+
 
         //创建数据对象
         var dataObjectInstance = wof$.create('DataObject', {'pageId':'pageId1'});

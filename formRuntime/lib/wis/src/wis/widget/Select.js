@@ -114,7 +114,8 @@ wis.widget.Select.prototype = {
             // selectBoxHeight: this.getHeight(),
             width: this.getWidth(),
             // initValue: this.getInitValue(), 
-            isNotShowClear: true,
+            //isNotShowClear: false,
+            emptyText: '',
             onBeforeSelect:function (val, txt) {
                 var flag = false;
                 if(_this._renderFlag==false){ //如果不是在render过程中触发
@@ -143,6 +144,8 @@ wis.widget.Select.prototype = {
             options.textField = "name";
             options.valueField = "value";
         }
+
+
 
         this._comboBox = this._select.ligerComboBox(options);
     },

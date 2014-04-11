@@ -469,6 +469,7 @@ wof.bizWidget.SearchItem.prototype = {
             var refData = this.getOriginNode().getDataSource().getRefData();
             var ref = refData[this.getDataField()];
             if(!jQuery.isEmptyObject(ref)){ //并且参照字段有值
+                //var data = [{'name':'','value':''}];
                 var data = [];
                 for(var i=0;ref['data']!=null&&i<ref['data'].length;i++){
                     var row = ref['data'][i];
