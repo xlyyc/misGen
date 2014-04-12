@@ -8,7 +8,10 @@
     },
     "zzjgref.zzmc":{
         "totalCount":"1",
-        "data":[{"name":"计算机学院","value":"001"}]
+        "data":[
+            {"name":"计算机学院q","value":"001"},
+            {"name":"经济管理学院","value":"002"}
+        ]
     }
 
 }

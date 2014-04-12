@@ -1202,6 +1202,7 @@
             }
             else
             {
+                var textHeight = g.wrapper.height(); //xuliyu 修复此bug
                 var topheight = g.wrapper.offset().top - $(window).scrollTop();
                 var selfheight = g.selectBox.height() + textHeight + 4;
                 if (topheight + selfheight > $(window).height() && topheight > selfheight)

@@ -8,7 +8,7 @@ wof.bizWidget.VoucherItem = function () {
     this._version = '1.0';
 
     this.setIsInside(true);
-    this.getDomInstance().css('overflow','hidden');
+   // this.getDomInstance().css('overflow','hidden');
 
 
 };

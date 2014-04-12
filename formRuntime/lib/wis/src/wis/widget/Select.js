@@ -12,8 +12,6 @@ wis.widget.Select.prototype = {
     _selectName: null,
     _isMultSelect: false,
     _mode: null,
-    // _initValue: null,
-    // _isAsync: false,
     _select: false,
     _comboBox: false,
     
@@ -61,14 +59,6 @@ wis.widget.Select.prototype = {
         this._mode = mode;
     },
 
-    // getInitValue: function () {
-    //     return this._initValue;
-    // },
-
-    // setInitValue: function (initValue) {
-    //     this._initValue = initValue;
-    // },
-
     setValue: function(v) {
         this._value = v;
     },
@@ -81,15 +71,13 @@ wis.widget.Select.prototype = {
         return this._gridColumn;
     },
     setGridColumn: function (gridColumn) {
-        this._gridColumn = gridColumn || [];
+       /* this._gridColumn = gridColumn || [
+            { header: 'ID', name: 'value', width: 30 },
+            { header: '名字', name: 'name' },
+            { header: '性别', name: 'sex' }
+        ];*/
+        this._gridColumn = gridColumn;
     },
-
-    // getIsAsync: function () {
-    //     return this._isAsync;
-    // },
-    // setIsAsync: function (isAsync) {
-    //     this._isAsync = isAsync;
-    // },
 
     /**
 	 * 初始化方法
@@ -109,12 +97,11 @@ wis.widget.Select.prototype = {
 
         var _this = this;
         var options = {
+            absolute: false,
+            //selectBoxWidth: 230,
             data: this.getSelectData(),
             isMultiSelect: this.getIsMultSelect(),
-            // selectBoxHeight: this.getHeight(),
             width: this.getWidth(),
-            // initValue: this.getInitValue(), 
-            //isNotShowClear: false,
             emptyText: '',
             onBeforeSelect:function (val, txt) {
                 var flag = false;
@@ -139,6 +126,7 @@ wis.widget.Select.prototype = {
             // 下拉表格
             options.textField = 'name';
             options.columns = this.getGridColumn();
+            options.valueField = "value";
         } else {
             // 普通下拉框
             options.textField = "name";
@@ -171,6 +159,7 @@ wis.widget.Select.prototype = {
         //     console.log(this.getSelectData());
         //     jQuery('table', this.getDomInstance()).remove();
         // };
+        //jQuery('table', this.getDomInstance()).remove();
     },
 
     // ----------必须实现----------
