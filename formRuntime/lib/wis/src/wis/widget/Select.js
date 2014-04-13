@@ -160,6 +160,7 @@ wis.widget.Select.prototype = {
         //     jQuery('table', this.getDomInstance()).remove();
         // };
         //jQuery('table', this.getDomInstance()).remove();
+        //jQuery('table', this.getDomInstance()).hide();
     },
 
     // ----------必须实现----------
