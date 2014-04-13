@@ -71,6 +71,10 @@ wof.widget.ComboBox.prototype = {
         this._name = selectName;
     },
 
+    getValue: function () {
+        return this._value;
+    },
+
     setValue: function (val) {
         this._value = val;
     },

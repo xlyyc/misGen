@@ -531,8 +531,6 @@ wof.bizWidget.VoucherItem.prototype = {
             var fname = this.getDataField();
             if (refdata && refdata[fname]) {
                 this._component.setValue(this.getValue());
-                //var data = [{'name':'<br>','value':''}];
-                //data = data.concat(refdata[fname]['data']);
                 var data = refdata[fname]['data'];
                 this._component.setComboboxData(data);
             }
