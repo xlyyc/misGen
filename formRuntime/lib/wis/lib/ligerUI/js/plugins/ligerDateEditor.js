@@ -602,7 +602,6 @@
             }
             else
             {
-                var textHeight = g.text.height();
                 if (g.text.offset().top + 4 > g.dateeditor.height() && g.text.offset().top + g.dateeditor.height() + textHeight + 4 - $(window).scrollTop() > $(window).height())
                 {
                     g.dateeditor.css("marginTop", -1 * (g.dateeditor.height() + textHeight + 5));
@@ -805,11 +804,6 @@
                 d.setSeconds(tt.s);
             }
             return d;
-        },
-         _setFormat: function (value)
-        {
-            var g = this,p = this.options;
-            p.format = value;
         },
         updateStyle: function ()
         {
