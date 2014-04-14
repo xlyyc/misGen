@@ -1160,10 +1160,12 @@ wof.bizWidget.VoucherComponent.prototype = {
                         newVoucherItem.afterTo(voucherItem);
                     }
                     this._insertVoucherItem(voucherItemsData[0], newVoucherItem, voucherItemGroup);
+                    var preItem = newVoucherItem;
                     for(var i=1;i<voucherItemsData.length;i++){
                         var voucherItemData = voucherItemsData[i];
                         var item = wof$.create('VoucherItem');
-                        item.afterTo(newVoucherItem);
+                        item.afterTo(preItem);
+                        preItem = item;
                         this._insertVoucherItem(voucherItemData, item, voucherItemGroup)
                     }
                     voucherItemGroup.calcLayout();

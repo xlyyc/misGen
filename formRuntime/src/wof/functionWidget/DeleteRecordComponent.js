@@ -197,13 +197,15 @@ wof.functionWidget.DeleteRecordComponent.prototype = {
             				// TODO 调用对话框，确认删除操作
             				var dialog = wof$.create('Dialog');
             				dialog.setType("confirm");
+            				dialog.setIsInside(true);
             				dialog.setTextContent("确定要删除所选记录吗!");
-            				var callback_ = function(rs){
-            					if(rs){
-            						this.sendMessage('wof.functionWidget.DeleteRecordComponent_click');
-            					}
-            				}
-            				dialog.onClickTypeButton(callback_);
+            				//var callback_ = function(rs){
+            				//	if(rs){
+            				//		this.sendMessage('wof.functionWidget.DeleteRecordComponent_click');
+            				//	}
+            				//}
+            				//dialog.onClickTypeButton(callback_);
+            				dialog.appendTo(this);
             				dialog.render();
             				
             			}else{
@@ -220,7 +222,10 @@ wof.functionWidget.DeleteRecordComponent.prototype = {
     				dialog.render();
         		}	
         	}
-        }
+        },
+       'wof.widget.Dialog_clicktypebutton_yes':function(message){
+    	   this.sendMessage('wof.functionWidget.DeleteRecordComponent_click');
+       }
     },
     _getObjByComponentId: function (compId) {
     	var objs = wof$.find('*');

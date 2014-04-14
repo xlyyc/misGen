@@ -565,10 +565,12 @@ wof.bizWidget.SearchComponent.prototype = {
                     newSearchItem.afterTo(searchItem);
                 }
                 this._insertSearchItem(searchItemsData[0], newSearchItem);
+                var preItem = newSearchItem;
                 for(var i=1;i<searchItemsData.length;i++){
                     var searchItemData = searchItemsData[i];
                     var item = wof$.create('SearchItem');
-                    item.afterTo(newSearchItem);
+                    item.afterTo(preItem);
+                    preItem = item;
                     this._insertSearchItem(searchItemData, item)
                 }
                 this.calcLayout();

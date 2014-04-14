@@ -256,9 +256,9 @@ wof.functionWidget.UpdateRecordComponent.prototype = {
                 	        		this._dialog = dialog;
             					}
             	        		if(this.getOpenUrl().indexOf("?")>-1){
-            	        			this._dialog.setUrl(this.getOpenUrl()+"&pagestate=Edit&dataId="+selectMainId);
+            	        			this._dialog.setUrl(this.getOpenUrl()+"&pageState=Edit&dataId="+selectMainId);
             	           		}else{
-            	           			this._dialog.setUrl(this.getOpenUrl()+"?pagestate=Edit&dataId="+selectMainId);
+            	           			this._dialog.setUrl(this.getOpenUrl()+"?pageState=Edit&dataId="+selectMainId);
             	           		}
             	        		this._dialog.render();
                     		}else{

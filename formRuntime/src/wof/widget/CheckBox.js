@@ -71,12 +71,6 @@ wof.widget.CheckBox.prototype = {
         this._checked = checked;
     },
     /**
-     * 初始化方法
-     */
-    _init: function (data) {
-    	this.setOptions(data);
-    },
-    /**
      * Render 方法定义
      */
 

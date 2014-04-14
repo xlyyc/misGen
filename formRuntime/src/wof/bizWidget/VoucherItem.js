@@ -461,8 +461,7 @@ wof.bizWidget.VoucherItem.prototype = {
         'wof.widget.ComboBox_selected': function (message) {
             console.log(message.id+'   '+this.getClassName());
             var cb = wof.util.ObjectManager.get(message.sender.id);
-            // console.log('selected: %s -> %s', cb.getSelectedText(), cb.getSelectedValue());
-            this.setValue(cb.getSelectedValue());
+            this.setValue(cb.getValue());
             this.sendMessage('wof.bizWidget.VoucherItem_change');
         }
     },
@@ -532,7 +531,7 @@ wof.bizWidget.VoucherItem.prototype = {
             if (refdata && refdata[fname]) {
                 this._component.setValue(this.getValue());
                 var data = refdata[fname]['data'];
-                this._component.setComboboxData(data);
+                this._component.setComboBoxData(data);
             }
             break;
         

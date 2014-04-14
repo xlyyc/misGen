@@ -397,7 +397,6 @@ wof.bizWidget.SearchItem.prototype = {
         'wof.widget.ComboBox_selected': function (message) {
             console.log(message.id+'   '+this.getClassName());
             var cb = wof.util.ObjectManager.get(message.sender.id);
-            // console.log('selected: %s -> %s', cb.getSelectedText(), cb.getSelectedValue());
             if(this.getFromTo()==false){
                 this.setValues(cb.getValue());
             }else{ //todo 范围搜索
@@ -476,7 +475,7 @@ wof.bizWidget.SearchItem.prototype = {
                     data.push({'name':row['name'],'value':row['value']});
                 }
                 this._component.setValue(this.getValues());
-                this._component.setComboboxData(data);
+                this._component.setComboBoxData(data);
             }
             break;
         

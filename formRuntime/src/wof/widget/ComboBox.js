@@ -7,48 +7,47 @@
 
 wof.widget.ComboBox = function () {
     this._version = '1.0';
-    // this._selectBoxWidth = 200;
-    // this._multiSelectSplit = ',';
+
 };
 
 wof.widget.ComboBox.prototype = {
 
-    _url: null, // 加载数据url
-
-    _comboBoxData: null, // 下拉框时数据格式： [{'name':'男',value:'1'},{'name':'女',value:2}]
-    _tree: null, // 下拉树
-
-    // 下拉表格时数据格式:
-    // setComboboxData([
-    //     { id: 1, name: '李三', sex: '男' },
-    //     { id: 2, name: '李四', sex: '女' },
-    //     { id: 3, name: '赵武', sex: '女' },
-    //     { id: 4, name: '陈留', sex: '女' }
-    // ]);
-    // setGridColumn([
-    //     { header: 'ID', name: 'id', width: 20 },
-    //     { header: '名字', name: 'name' },
-    //     { header: '性别', name: 'sex' }
-    // ]);
+    _comboBoxData: null, // 下拉框时数据格式
     _gridColumn: null, // 下拉表格
-
-    _isMultiSelect: false, // 是否可多选
-    _multiSelectSplit: ',', // 多选后显示、值分隔符
-
-    _selectedValue: null, // 当前选中的值
-    _selectedText: null, //  当前选中的文本
-
-    // _selectBoxHeight: null, //  下拉框的高度
-    // _selectBoxWidth: null, //  下拉框的宽度
-
+    _isMultiSelect: null, // 是否可多选
+    _multiSelectSplit: null, // 多选后显示、值分隔符
     _name: null,
-    _value: null,
-    _readonly: false,
-    _isMultSelect: false,
-    // _mode: null,
-    _initValue: null,
-    // _isAsync: false,
+    _readonly: null,
+    _value: null,    // 当前选中的值
+    _text: null,
+    _mode: null,
 
+
+    _comboBox:null,
+
+    setText: function(text) {
+        this._text = text;
+    },
+
+    getText: function() {
+        return this._text || '';
+    },
+
+    setValue: function(value) {
+        this._value = value;
+    },
+
+    getValue: function() {
+        return this._value || '';
+    },
+
+    /**
+     [
+        { header: 'ID', name: 'id', width: 20 },
+        { header: '名字', name: 'name' },
+        { header: '性别', name: 'sex' }
+      ]
+     */
     getGridColumn: function () {
         return this._gridColumn;
     },
@@ -71,90 +70,44 @@ wof.widget.ComboBox.prototype = {
         this._name = selectName;
     },
 
-    getValue: function () {
-        return this._value;
-    },
-
-    setValue: function (val) {
-        this._value = val;
-    },
-
     getReadonly: function () {
-        return this._readonly;
+        return this._readonly || false;
     },
 
-    setReadonly: function (ro) {
-        this._readonly = ro;
+    setReadonly: function (readonly) {
+        this._readonly = readonly;
     },
 
-    getSelectedText: function () {
-        return this._selectedText;
-    }, 
-
-    getSelectedValue: function () {
-        return this._selectedValue;
+    getIsMultiSelect: function () {
+        return this._isMultiSelect || false;
     },
 
-    getIsMultSelect: function () {
-        return this._isMultSelect;
+    setIsMultiSelect: function (isMultiSelect) {
+        this._isMultiSelect = isMultiSelect;
     },
 
-    setIsMultSelect: function (isMultSelect) {
-        this._isMultSelect = isMultSelect;
+    getMode: function () {
+        return this._mode || false;
     },
 
-    // getMode: function () {
-    //     return this._mode;
-    // },
-
-    // setMode: function (mode) {
-    //     this._mode = mode;
-    // },
-
-    // setWidth: function (w) {
-    //     if (w > 0) {
-    //         this._width = w;
-    //         if (this._select) {
-    //             this._select.setWidth(w);
-    //         };
-    //     };
-    // },
-
-    // setHeight: function (h) {
-    //     if (h > 0) {
-    //         this._height = h;
-    //         if (this._select) {
-    //             this._select.setHeight(h);
-    //         };
-    //     };
-    // },
-
-    // getInitValue: function () {
-    //     return this._initValue;
-    // },
-
-    // setInitValue: function (initValue) {
-    //     this._initValue = initValue;
-    // },
-
-    // getIsAsync: function () {
-    //     return this._isAsync;
-    // },
-
-    // setIsAsync: function (isAsync) {
-    //     this._isAsync = isAsync;
-    // },
-
-    // getSelectBoxWidth: function () {
-    //     return this._getSelectBoxWidth;
-    // },
-
-    getComboboxData: function () {
-        return this._comboBoxData;
+    setMode: function (mode) {
+        this._mode = mode;
     },
 
-    setComboboxData: function (comboboxData) {
-        this._comboBoxData = comboboxData || [];
+    /**
+     [
+        { id: 1, name: '李三', sex: '男' },
+        { id: 2, name: '李四', sex: '女' },
+        { id: 3, name: '赵武', sex: '女' },
+        { id: 4, name: '陈留', sex: '女' }
+     ]
+     */
+    getComboBoxData: function () {
+        return this._comboBoxData || [];
+    },
+
+    setComboBoxData: function (comboBoxData) {
+        this._comboBoxData = comboBoxData;
     },
 
     onBeforeSelect: function (callBack) {
@@ -171,28 +124,15 @@ wof.widget.ComboBox.prototype = {
 
     initRender: function () {
         var _this = this;
-        // using("combobox", function () {
-        //     _this.ligerComboboxInput = jQuery('<input type="text">');
-        //     _this.getDomInstance().append(_this.ligerComboboxInput);
-        //     _this.ligerComboboxInput.ligerComboBox({
-        //         width: _this.getSelectBoxWidth(),
-        //         textField: "text",
-        //         data: _this.getComboboxData()
-        //     });
-        // })
+        var comboBox = wis$.create('ComboBox');
+        comboBox.setReadonly(this.getReadonly());
+        comboBox.setComboBoxName(this.getName());
+        comboBox.setIsMultiSelect(this.getIsMultiSelect());
+        comboBox.setMode(this.getMode());
+        comboBox.setSelectData(this.getComboBoxData());
+        comboBox.setGridColumn(this.getGridColumn());
 
-        this._select = wis$.create('Select');
-
-        this._select.setSelectName(this.getName());
-        this._select.setIsMultSelect(this.getIsMultSelect());
-        // this._select.setMode(this.getMode());
-        // this._select.setInitValue(this.getInitValue());
-        // this._select.setIsAsync(this.getIsAsync());
-        this._select.setSelectData(this.getComboboxData());
-
-        this._select.setGridColumn(this.getGridColumn());
-
-        this._select.onBeforeSelect(function (val, text) {
+        comboBox.onBeforeSelect(function (val, text) {
             var ret = true;
             if (_this._onBeforeSelect) {
                 ret = _this._onBeforeSelect(val, text);
@@ -201,39 +141,58 @@ wof.widget.ComboBox.prototype = {
             return ret;
         });
 
-        this._select.onSelected(
+        comboBox.onSelected(
             function (val, text) {
+                _this.setText(text);
+                _this.setValue(val);
                 _this._onSelected && _this._onSelected(val, text);
-                _this._selectedText = text;
-                _this._selectedValue = val;
                 _this.sendMessage('wof.widget.ComboBox_selected');
             }
         );
 
-        this._select.appendTo(this.getDomInstance());
+        comboBox.appendTo(this.getDomInstance());
+
+        this._comboBox = comboBox;
     },
     
     render: function () {
-        //TODO lovey中如何改变已实例化的属性?
+        this._comboBox.setWidth(this.getWidth());
+        this._comboBox.setHeight(this.getHeight());
 
-        this._select.setWidth(this.getWidth());
-        this._select.setHeight(this.getHeight());
-        console.log('this._value==='+this._value);
-        this._select.setValue(this._value);
+        console.log('this._value==='+this.getValue());
+        this._comboBox.setValue(this._value);
 
-        this._select.render();
+        this._comboBox.render();
     },
 
     afterRender: function () {
+
         this.sendMessage('wof.widget.ComboBox_render');
     },
 
     getData: function () {
         return {
-
+            comboBoxData: this.getComboBoxData(),
+            gridColumn: this.getGridColumn(),
+            isMultiSelect: this.getIsMultiSelect(),
+            multiSelectSplit: this.getMultiSelectSplit(),
+            name: this.getName(),
+            readonly: this.getReadonly(),
+            value: this.getValue(),
+            text: this.getText(),
+            mode: this.getMode()
         };
     },
 
     setData: function (data) {
+        this.setComboBoxData(data.comboBoxData);
+        this.setGridColumn(data.gridColumn);
+        this.setIsMultiSelect(data.isMultiSelect);
+        this.setMultiSelectSplit(data.multiSelectSplit);
+        this.setName(data.name);
+        this.setReadonly(data.readonly);
+        this.setValue(data.value);
+        this.setText(data.text);
+        this.setMode(data.mode);
     }
 };

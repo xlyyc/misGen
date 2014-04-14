@@ -219,9 +219,9 @@ wof.functionWidget.ViewRecordComponent.prototype = {
                    	        		this._dialog = dialog;
                					}
                	        		if(this.getOpenUrl().indexOf("?")>-1){
-               	        			this._dialog.setUrl(this.getOpenUrl()+"&pagestate=View&dataId="+selectMainId);
+               	        			this._dialog.setUrl(this.getOpenUrl()+"&pageState=View&dataId="+selectMainId);
                	           		}else{
-               	           			this._dialog.setUrl(this.getOpenUrl()+"?pagestate=View&dataId="+selectMainId);
+               	           			this._dialog.setUrl(this.getOpenUrl()+"?pageState=View&dataId="+selectMainId);
                	           		}
                	        		this._dialog.render();
                	        		

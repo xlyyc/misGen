@@ -4,9 +4,6 @@ wof.widget.Dialog = function () {
 };
 
 wof.widget.Dialog.prototype = {
-
-    _dialog: null,
-
     _name: null,
     _type: null,
     _title: null,
@@ -225,7 +222,11 @@ wof.widget.Dialog.prototype = {
         });
         this._dialog.onClickTypeButton(function (answer) {
             self._onClickTypeButton && self._onClickTypeButton(answer);
-            self.sendMessage('wof.widget.Dialog_clicktypebutton');
+            if(answer){
+            	self.sendMessage('wof.widget.Dialog_clicktypebutton_yes');
+            }else{
+            	self.sendMessage('wof.widget.Dialog_clicktypebutton_no');
+            }
         });
         this._dialog.appendTo(this.getDomInstance());
     },
@@ -241,33 +242,47 @@ wof.widget.Dialog.prototype = {
     //----------必须实现----------
     getData: function () {
         return {
-            cid:  this.getCid(),
             name: this.getName(),
             type: this.getType(),
             title: this.getTitle(),
+            scroll: this.getScroll(),
             canMax: this.getCanMax(),
             canDrag: this.getCanDrag(),
             defaultFullScreen: this.getDefaultFullScreen(),
+            refreshFlag: this.getRefreshFlag(),
             url: this.getUrl(),
-            buttons: this.getButtons(),
+            target: this.getTarget(),
             textContent: this.getTextContent(),
-            modal: this.getModal()
+            modal: this.getModal(),
+            buttons: this.getButtons(),
+
+            onMax: this.onMax(),
+            onClose: this.onClose(),
+            onRestore: this.onRestore(),
+            onClickTypeButton: this.onClickTypeButton()
         };
     },
 
     //----------必须实现----------
     setData: function (data) {
-        this.setCid(data.cid);
         this.setName(data.name);
         this.setType(data.type);
         this.setTitle(data.title);
+        this.setScroll(data.scroll);
         this.setCanMax(data.canMax);
         this.setCanDrag(data.canDrag);
         this.setDefaultFullScreen(data.defaultFullScreen);
-        this.setModal(data.modal);
+        this.setRefreshFlag(data.refreshFlag);
         this.setUrl(data.url);
-        this.setButtons(data.buttons);
+        this.setTarget(data.target);
         this.setTextContent(data.textContent);
+        this.setModal(data.modal);
+        this.setButtons(data.buttons);
+
+        this.onMax(data.onMax);
+        this.onClose(data.onClose);
+        this.onRestore(data.onRestore);
+        this.onClickTypeButton(data.onClickTypeButton);
     }
 
 

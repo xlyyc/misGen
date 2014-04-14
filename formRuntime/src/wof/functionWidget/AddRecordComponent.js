@@ -324,9 +324,9 @@ wof.functionWidget.AddRecordComponent.prototype = {
 		    					}
 							}
 							if(this.getOpenUrl().indexOf("?")>-1){
-	    	        			this._dialog.setUrl(this.getOpenUrl()+"&pagestate=Add"+linkMainParamStr);
+	    	        			this._dialog.setUrl(this.getOpenUrl()+"&pageState=Add"+linkMainParamStr);
 	    	           		}else{
-	    	           			this._dialog.setUrl(this.getOpenUrl()+"?pagestate=Add"+linkMainParamStr);
+	    	           			this._dialog.setUrl(this.getOpenUrl()+"?pageState=Add"+linkMainParamStr);
 	    	           		}
 	    	        		this._dialog.render();
 						}else{

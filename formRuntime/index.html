@@ -115,7 +115,7 @@
 <script src="lib/wis/src/wis/widget/Button.js"></script>
 <script src="lib/wis/src/wis/widget/Input.js"></script>
 <script src="lib/wis/src/wis/widget/Tab.js"></script>
-<script src="lib/wis/src/wis/widget/Select.js"></script>
+<script src="lib/wis/src/wis/widget/ComboBox.js"></script>
 
 <script src="lib/wis/src/wis/kernel/initSystem.js"></script>
 
@@ -199,7 +199,7 @@ jQuery(function(){
 
         var voucherItemGroupData1 = {groupCaption:'表头分组1',width:500,titleHeight:50,colsNum:3,itemHeight:150,isHead:false};
         voucherComponent.insertVoucherItemGroup(voucherItemGroupData1);
-        var voucherItemGroupData2 = {groupCaption:'表头分组2',width:500,titleHeight:25,colsNum:2,itemHeight:45};
+        var voucherItemGroupData2 = {groupCaption:'表头分组2',width:500,titleHeight:25,colsNum:4,itemHeight:45};
         voucherComponent.insertVoucherItemGroup(voucherItemGroupData2);
 
         var voucherItemsData = [];
@@ -229,6 +229,32 @@ jQuery(function(){
             tipValue:''
         };
         voucherItemsData.push(voucherItemData1);
+     /*   var test = {
+            "checkErrorInfo":"",
+            "colspan":1,
+            "dataField":"zzjgref.zzmc",
+            "dateTimeBoxFormat":"yyyy-MM-dd",
+            "inputHeight":20,
+            "inputWidth":100,
+            "itemLabel":"工号",
+            "itemName":"",
+            "labelWidth":160,
+            "length":0,
+            "linkageItem":"",
+            "max":0,
+            "min":0,
+            "regExp":"",
+            "rowspan":1,
+            "selectPattern":"normal",
+            "tipValue":"",
+            "useMultiSelect":"0",
+            "visbleType":"text",
+            "isFixItem":false,
+            "readOnly":false,
+            "required":false,
+            "visiable":false
+        };
+        voucherItemsData.push(test);*/
         var voucherItemData2 = {
             colspan:'1',
             rowspan:'1',
@@ -255,6 +281,61 @@ jQuery(function(){
             tipValue:''
         };
         voucherItemsData.push(voucherItemData2);
+
+        var voucherItemData3 = {
+            colspan:'1',
+            rowspan:'1',
+            isFixItem:'true',
+            itemName:'zzjgref.zzmc',
+            visiable:'true',
+            itemLabel:'院11系',
+            dataField:'zzjgref.zzmc',
+            dateTimeBoxFormat:'',
+            readOnly:'false',
+            required:'false',
+            length:'',
+            min:'',
+            max:'',
+            regExp:'',
+            checkErrorInfo:'',
+            visbleType:'select',
+            selectPattern:'',
+            useMultiSelect:'',
+            labelWidth:'50',
+            inputWidth:'70',
+            inputHeight:'20',
+            linkageItem:'',
+            tipValue:''
+        };
+        voucherItemsData.push(voucherItemData3);
+
+        var voucherItemData4 = {
+            colspan:'1',
+            rowspan:'1',
+            isFixItem:'true',
+            itemName:'zzjgref.zzmc',
+            visiable:'true',
+            itemLabel:'院22系',
+            dataField:'zzjgref.zzmc',
+            dateTimeBoxFormat:'',
+            readOnly:'false',
+            required:'false',
+            length:'',
+            min:'',
+            max:'',
+            regExp:'',
+            checkErrorInfo:'',
+            visbleType:'select',
+            selectPattern:'',
+            useMultiSelect:'',
+            labelWidth:'50',
+            inputWidth:'70',
+            inputHeight:'20',
+            linkageItem:'',
+            tipValue:''
+        };
+        voucherItemsData.push(voucherItemData4);
+
         voucherComponent.insertVoucherItems(voucherItemsData,{rowNum:1,colNum:1}, 2);
 
 
