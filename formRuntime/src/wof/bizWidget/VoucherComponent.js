@@ -486,7 +486,7 @@ wof.bizWidget.VoucherComponent.prototype = {
     _insideOnReceiveMessage:{
         'wof.bizWidget.VoucherItem_change':function(message){
             console.log(message.id+'   '+this.getClassName());
-            var voucherItem = wof.util.ObjectManager.get(message.sender.id);
+            var item = wof.util.ObjectManager.get(message.sender.id);
             var row = this.getDataSource().getLocalData(this.getBindEntityID())['rows'][0]['data'];
             var rowData = {};
             for(var n in row){
@@ -499,10 +499,8 @@ wof.bizWidget.VoucherComponent.prototype = {
                 for(var t=0;t<voucherItems.length;t++){
                     var voucherItem = voucherItems[t];
                     var alias = voucherItem.getDataField();
-                    if(alias.length>0){
-                        //alert(alias+' == '+voucherItem.getValue());
-                        //todo  当有有多个item绑定同个字段时候    存在bug
-                        rowData[alias] = voucherItem.getValue();
+                    if(alias==item.getDataField()){
+                        rowData[alias] = item.getValue();
                     }
                 }
             }
