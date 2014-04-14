@@ -500,6 +500,8 @@ wof.bizWidget.VoucherComponent.prototype = {
                     var voucherItem = voucherItems[t];
                     var alias = voucherItem.getDataField();
                     if(alias.length>0){
+                        //alert(alias+' == '+voucherItem.getValue());
+                        //todo  当有有多个item绑定同个字段时候    存在bug
                         rowData[alias] = voucherItem.getValue();
                     }
                 }

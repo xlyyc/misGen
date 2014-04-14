@@ -133,19 +133,16 @@ wof.widget.ComboBox.prototype = {
         comboBox.setGridColumn(this.getGridColumn());
 
         comboBox.onBeforeSelect(function (val, text) {
-            var ret = true;
-            if (_this._onBeforeSelect) {
-                ret = _this._onBeforeSelect(val, text);
-            }
+            _this.setText(text);
+            _this.setValue(val);
             _this.sendMessage('wof.widget.ComboBox_beforeselect');
-            return ret;
+            return true;
         });
 
         comboBox.onSelected(
             function (val, text) {
                 _this.setText(text);
                 _this.setValue(val);
-                _this._onSelected && _this._onSelected(val, text);
                 _this.sendMessage('wof.widget.ComboBox_selected');
             }
         );
