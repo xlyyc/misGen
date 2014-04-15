@@ -679,6 +679,7 @@ wof.bizWidget.VoucherItemGroup.prototype = {
         this.getDomInstance().css('height', (this.getHeight()*this.getScale())+'px');
         this.getDomInstance().css('width', (this.getWidth()*this.getScale())+'px');
 
+
         var voucherItems = this.findVoucherItems();
         for(var i=0;i<voucherItems.length;i++){
             voucherItems[i].getDomInstance().css('backgroundColor','#fff');

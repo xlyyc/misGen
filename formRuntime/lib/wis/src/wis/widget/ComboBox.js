@@ -19,8 +19,10 @@ wis.widget.ComboBox.prototype = {
     _readonly: null,
     _value: null,
 
-    _textDom: null,
-    _comboBox: null,
+    _input: null,
+    _table: null,
+    _select: null,
+    _domSelect: null,
     _renderFlag:null,
 
     getReadonly: function () {
@@ -39,7 +41,7 @@ wis.widget.ComboBox.prototype = {
      ]
      */
     getSelectData:function (){
-        return this._selectData;
+        return this._selectData || [];
     },
     setSelectData:function (selectData){
         this._selectData = selectData;
@@ -130,82 +132,73 @@ wis.widget.ComboBox.prototype = {
      * 初始化渲染方法 仅在第一次调用render时执行
      */
     initRender: function () {
-        this._textDom = jQuery('<input type="text">');
-        this._textDom.attr('id',this.getCid());
-        this._textDom.attr('name',this.getComboBoxName());
-
-        this.getDomInstance().append(this._textDom);
-
         var _this = this;
-        var options = {
-            readonly: this.getReadonly(),
-            absolute: false,
-            selectBoxWidth: 100,
-            data: this.getSelectData(),
-            isMultiSelect: this.getIsMultiSelect(),
-            width: this.getWidth(),
-            emptyText: '',
-            onBeforeSelect:function (val, txt) {
-                var flag = false;
-                if(_this._renderFlag==false){ //如果不是在render过程中触发
-                    if (_this._onBeforeSelect) {
-                        flag = _this._onBeforeSelect(val, txt);
-                    }
-                }
-                return flag;
-            },
-            onSelected: function (val, txt) {
-                if(_this._renderFlag==false){ //如果不是在render过程中触发
-                    _this.setValue(val);
-                    if (_this._onSelected) {
-                        _this._onSelected(val, txt);
-                    }
-                }
-            }
-        };
+        this._domInput = jQuery('<div class="l-text l-text-combobox" style="width: 70px;">'
+            +'<input type="text" class="l-text-field" style="width: 50px;">'
+            +'<div class="l-trigger">'
+            +'<div class="l-trigger-icon"></div>'
+            +'</div>'
+            +'<div class="l-trigger l-trigger-cancel" style="display: none;">'
+            +'<div class="l-trigger-icon"></div>'
+            +'</div>'
+            +'</div>');
+        this._domSelect = jQuery('<div class="l-box-select" style="width: 100px; display: none;">'
+            +'<div class="l-box-select-inner" style="height: auto;"></div>'
+            +'<div class="l-btn-nw-drop"></div>'
+            +'</div>');
 
-        if(this.getMode()=='normal'){ // 普通下拉框
-            options.textField = "name";
-            options.valueField = "value";
-        }else if(this.getMode()=='grid'){ // 下拉表格
-            options.textField = 'name';
-            options.valueField = "value";
-            options.columns = this.getGridColumn();
-        }else if(this.getMode()=='tree'){ // 树
-            options.textField = "name";
-            options.valueField = "value";
-            options.getTreeData = this.getTreeData();
-        }
 
-        this._comboBox = this._textDom.ligerComboBox(options);
+        this._input = jQuery('input:first',this._domInput);
+
+        var divBtn = jQuery('div[class=l-trigger]:first',this._domInput);
+        divBtn.mousedown(function(event){
+            event.stopPropagation();
+            _this._domSelect.css('display','block');
+        });
+        this._domSelect.hover(null, function (e){
+            event.stopPropagation();
+            console.log('blur');
+            _this._domSelect.css('display','none');
+        });
+        this._select = jQuery('div[class=l-box-select-inner]:first',this._domSelect);
+        this.getDomInstance().append(this._domInput).append(this._domSelect);
     },
 
     // 渲染前处理方法
     beforeRender: function () {
+        this._select.empty();
+
+        if(this.getMode()=='normal'){
+            var table = jQuery('<table cellpadding="0" cellspacing="0" border="0" class="l-box-select-table l-table-nocheckbox"><tbody></tbody></table>');
+            var data = this.getSelectData();
+            var tbody = jQuery('tbody:first',table);
+            for(var i=0;i<data.length;i++){
+                var index = i;
+                var value = data[i]['value'];
+                var name = data[i]['name'];
+                var tr = jQuery('<tr value="'+value+'"><td index="'+index+'" value="'+value+'" text="'+name+'" align="left">'+name+'</td></tr>');
+                tbody.append(tr);
+            }
+            this._select.append(table);
+        }else if(this.getMode()=='tree'){
+            //todo
+        }else if(this.getMode()=='grid'){
+            //todo
+        }
+
         this._renderFlag = true;
     },
 
     // 渲染方法
     render: function () {
-        this.getCid() && this._textDom.attr('id',this.getCid());
-        this.getComboBoxName() && this._textDom.attr('name',this.getComboBoxName());
-        this._comboBox.selectValue(this._value);
+        //this._comboBox.selectValue(this._value);
 
     },
 
     // 渲染后处理方法
     afterRender: function () {
         this._renderFlag = false;
-        // 替换掉ligerui的列表和树
-        if(this.getMode()=='grid'){ // 下拉表格
-            console.log(this.getGridColumn());
-            console.log(this.getSelectData());
-            jQuery('<div style="width:120px;height:20px;">我的测试</div>').replaceAll(jQuery('table', this.getDomInstance()));
-        }else if(this.getMode()=='tree'){ // 树
-            console.log(this.getGridColumn());
-            console.log(this.getTreeData());
-            jQuery('<div style="width:120px;height:20px;">我的测试</div>').replaceAll(jQuery('table', this.getDomInstance()));
-        }
+
     },
 
     // ----------必须实现----------

@@ -72,7 +72,7 @@ wof.widget.Tab.prototype = {
             child.childNodes()[0].getDomInstance().css('height',(this.getWidth()-52)+'px');
             this._tab.insertNode(child.getDomInstance(),i+1);
         }
-        this._tab.setWidth(this.getWidth()-8);
+        this._tab.setWidth(this.getWidth());
         this._tab.setHeight(this.getHeight()-52);
         this._tab.setActiveItemIndex(this.getActiveItemIndex());
     },

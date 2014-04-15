@@ -1342,7 +1342,7 @@ wof.bizWidget.VoucherComponent.prototype = {
                 }
                 this._tab.setHiden(false);
                 this._tab.setTop(height);
-                this._tab.setWidth(this.getWidth()-12);
+                this._tab.setWidth(this.getWidth());
                 this._tab.setHeight(maxGroupHeight);
                 //创建页签item 并将页签分组加入依次加入到页签item下
                 for(var i=0;i<tabGroups.length;i++){
@@ -1407,6 +1407,7 @@ wof.bizWidget.VoucherComponent.prototype = {
 
         this.getDomInstance().css('height',(this.getHeight()*this.getScale())+'px');
         this.getDomInstance().css('width', (this.getWidth()*this.getScale())+'px');
+
 
         //根据activeVoucherItemGroupIndex设置当前激活的VoucherItemGroup
         var activeVoucherItemGroup = this.findVoucherItemGroupByIndex(this.getActiveVoucherItemGroupIndex());
