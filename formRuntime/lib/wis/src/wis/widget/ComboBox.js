@@ -149,16 +149,18 @@ wis.widget.ComboBox.prototype = {
 
 
         this._input = jQuery('input:first',this._domInput);
-
+        this._input.mousedown(function(event){
+            event.stopPropagation();
+            _this._domSelect.show();
+        });
         var divBtn = jQuery('div[class=l-trigger]:first',this._domInput);
         divBtn.mousedown(function(event){
             event.stopPropagation();
-            _this._domSelect.css('display','block');
+            _this._domSelect.show();
         });
         this._domSelect.hover(null, function (e){
             event.stopPropagation();
-            console.log('blur');
-            _this._domSelect.css('display','none');
+            _this._domSelect.hide();
         });
         this._select = jQuery('div[class=l-box-select-inner]:first',this._domSelect);
         this.getDomInstance().append(this._domInput).append(this._domSelect);
