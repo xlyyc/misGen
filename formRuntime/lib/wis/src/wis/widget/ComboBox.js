@@ -151,12 +151,20 @@ wis.widget.ComboBox.prototype = {
         this._input = jQuery('input:first',this._domInput);
         this._input.mousedown(function(event){
             event.stopPropagation();
-            _this._domSelect.show();
+            if(_this._domSelect.is(":hidden")==true){
+                _this._domSelect.show();
+            }else{
+                _this._domSelect.hide();
+            }
         });
         var divBtn = jQuery('div[class=l-trigger]:first',this._domInput);
         divBtn.mousedown(function(event){
             event.stopPropagation();
-            _this._domSelect.show();
+            if(_this._domSelect.is(":hidden")==true){
+                _this._domSelect.show();
+            }else{
+                _this._domSelect.hide();
+            }
         });
         this._domSelect.hover(null, function (e){
             event.stopPropagation();
