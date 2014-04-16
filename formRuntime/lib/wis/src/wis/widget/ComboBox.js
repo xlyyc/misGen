@@ -6,7 +6,6 @@
 wis.widget.ComboBox = function () {
     this._version = '1.0';
 
-    this._currentIndexs = [];
 };
 
 wis.widget.ComboBox.prototype = {
@@ -18,9 +17,9 @@ wis.widget.ComboBox.prototype = {
     _gridColumn : null, //如果mode是grid 需要设置该属性
     _treeData: null,  //如果mode是tree 需要设置该属性
     _readonly: null,
-    _value: null,
+    _values: null,
+    _split: null, //分隔符
 
-    _currentIndexs: null, //当前选中的项index(支持多选)
     _input: null,
     _table: null,
     _select: null,
@@ -73,12 +72,20 @@ wis.widget.ComboBox.prototype = {
         this._mode = mode;
     },
 
-    setValue: function(value) {
-        this._value = value;
+    setValues: function(values) {
+        this._values = values;
     },
 
-    getValue: function() {
-        return this._value || '';
+    getValues: function() {
+        return this._values || [];
+    },
+
+    setSplit: function(split) {
+        this._split = split;
+    },
+
+    getSplit: function() {
+        return this._split || ',';
     },
 
     setTreeData: function(treeData) {
@@ -189,31 +196,35 @@ wis.widget.ComboBox.prototype = {
 
         this._select.empty();
         if(this.getMode()=='normal'){
+            this._input.val(this._getTexts());
             var table = jQuery('<table cellpadding="0" cellspacing="0" border="0" class="l-box-select-table l-table-nocheckbox"><tbody></tbody></table>');
             var data = this.getSelectData();
             var tbody = jQuery('tbody:first',table);
             for(var i=0;i<data.length;i++){
-                var index = i;
                 var value = data[i]['value'];
                 var name = data[i]['name'];
                 var tr = jQuery('<tr align="left"><td></td></tr>');
                 var td = jQuery('td:first',tr);
-
-                td.attr('index',index).attr('value',value).attr('text',name).html(name);
+                td.attr('value',value).html(name);
                 tbody.append(tr);
             }
             jQuery("td", tbody).click(function(){
-                var index = jQuery(this).attr("index");
-                /*var index = parseInt(jQuery(this).attr('index'));
-                var text = jQuery(this).attr("text");*/
-                _this._currentIndexs.push(index);
-                _this._arrayUnique(_this._currentIndexs);
+                //todo 需要考虑多选的情况
+                var value = jQuery(this).attr("value");
+                var values = _this.getValues();
+                var idx = jQuery.inArray(value,values);
+                if(idx>-1){
+                    values.splice(idx,1);
+                }else{
+                    values.push(value);
+                }
+                _this.setValues(_this._arrayUnique(values));
                 _this._domSelect.hide();
                 _this.render();
             });
             jQuery("td", tbody).removeClass("l-selected");
-            for(var i=0;i<this._currentIndexs.length;i++){
-                jQuery('td:eq('+this._currentIndexs[i]+')', tbody).addClass("l-selected");
+            for(var i=0;i<this.getValues().length;i++){
+                jQuery('td[value='+this.getValues()[i]+']', tbody).addClass("l-selected");
             }
             this._select.append(table);
         }else if(this.getMode()=='tree'){
@@ -239,7 +250,8 @@ wis.widget.ComboBox.prototype = {
     // ----------必须实现----------
     getData: function () {
         return {
-            value: this.getValue(),
+            values: this.getValues(),
+            split: this.getSplit(),
             comboBoxName: this.getComboBoxName(),
             isMultiSelect: this.getIsMultiSelect(),
             mode: this.getMode(),
@@ -252,7 +264,8 @@ wis.widget.ComboBox.prototype = {
 
     // ----------必须实现----------
     setData: function (data) {
-        this.setValue(data.value);
+        this.setValues(data.values);
+        this.setSplit(data.split);
         this.setSelectData(data.comboBoxName);
         this.setIsMultiSelect(data.isMultiSelect);
         this.setMode(data.mode);
@@ -279,5 +292,25 @@ wis.widget.ComboBox.prototype = {
             }
         }
         return res;
+    },
+
+    /**
+     * 获得选中文本
+     */
+    _getTexts: function(){
+        var texts = '';
+        var data = this.getSelectData();
+        var len = data.length;
+        for(var i=0;i<len;i++){
+            var item = data[i];
+            if(jQuery.inArray(item['value'],this.getValues())>-1){
+                texts += item['name'];
+                if(len>1 && i<(len-1)){
+                    texts += this.getSplit();
+                }
+            }
+        }
+        return texts;
     }
+
 };

@@ -156,9 +156,9 @@ wof.widget.ComboBox.prototype = {
         this._comboBox.setWidth(this.getWidth());
         this._comboBox.setHeight(this.getHeight());
 
-        console.log('this._value==='+this.getValue());
-        this._comboBox.setValue(this._value);
-
+        if(this._value.length>0){        //todo 需要考虑多选的情况
+            this._comboBox.setValues([this._value]);
+        }
         this._comboBox.render();
     },
 
