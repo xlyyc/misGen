@@ -6,6 +6,7 @@
 wis.widget.ComboBox = function () {
     this._version = '1.0';
 
+    this._currentIndexs = [];
 };
 
 wis.widget.ComboBox.prototype = {
@@ -19,6 +20,7 @@ wis.widget.ComboBox.prototype = {
     _readonly: null,
     _value: null,
 
+    _currentIndexs: null, //当前选中的项index(支持多选)
     _input: null,
     _table: null,
     _select: null,
@@ -146,8 +148,6 @@ wis.widget.ComboBox.prototype = {
             +'<div class="l-box-select-inner" style="height: auto;"></div>'
             +'<div class="l-btn-nw-drop"></div>'
             +'</div>');
-
-
         this._input = jQuery('input:first',this._domInput);
         this._input.mousedown(function(event){
             event.stopPropagation();
@@ -158,6 +158,13 @@ wis.widget.ComboBox.prototype = {
             }
         });
         var divBtn = jQuery('div[class=l-trigger]:first',this._domInput);
+        divBtn.hover(function (e){
+            event.stopPropagation();
+            this.className = 'l-trigger-hover';
+        }, function (e){
+            event.stopPropagation();
+            this.className = 'l-trigger';
+        });
         divBtn.mousedown(function(event){
             event.stopPropagation();
             if(_this._domSelect.is(":hidden")==true){
@@ -176,8 +183,11 @@ wis.widget.ComboBox.prototype = {
 
     // 渲染前处理方法
     beforeRender: function () {
-        this._select.empty();
+        this._renderFlag = true;
 
+        var _this = this;
+
+        this._select.empty();
         if(this.getMode()=='normal'){
             var table = jQuery('<table cellpadding="0" cellspacing="0" border="0" class="l-box-select-table l-table-nocheckbox"><tbody></tbody></table>');
             var data = this.getSelectData();
@@ -186,8 +196,24 @@ wis.widget.ComboBox.prototype = {
                 var index = i;
                 var value = data[i]['value'];
                 var name = data[i]['name'];
-                var tr = jQuery('<tr value="'+value+'"><td index="'+index+'" value="'+value+'" text="'+name+'" align="left">'+name+'</td></tr>');
+                var tr = jQuery('<tr align="left"><td></td></tr>');
+                var td = jQuery('td:first',tr);
+
+                td.attr('index',index).attr('value',value).attr('text',name).html(name);
                 tbody.append(tr);
+            }
+            jQuery("td", tbody).click(function(){
+                var index = jQuery(this).attr("index");
+                /*var index = parseInt(jQuery(this).attr('index'));
+                var text = jQuery(this).attr("text");*/
+                _this._currentIndexs.push(index);
+                _this._arrayUnique(_this._currentIndexs);
+                _this._domSelect.hide();
+                _this.render();
+            });
+            jQuery("td", tbody).removeClass("l-selected");
+            for(var i=0;i<this._currentIndexs.length;i++){
+                jQuery('td:eq('+this._currentIndexs[i]+')', tbody).addClass("l-selected");
             }
             this._select.append(table);
         }else if(this.getMode()=='tree'){
@@ -196,7 +222,6 @@ wis.widget.ComboBox.prototype = {
             //todo
         }
 
-        this._renderFlag = true;
     },
 
     // 渲染方法
@@ -241,5 +266,18 @@ wis.widget.ComboBox.prototype = {
     },
     onSelected:function(callBack){
         this._onSelected = callBack;
+    },
+
+    //数组去重
+    _arrayUnique: function(arr){
+        var res = [];
+        var json = {};
+        for(var i = 0; arr!=null&&i < arr.length; i++){
+            if(!json[arr[i]]){
+                res.push(arr[i]);
+                json[arr[i]] = 1;
+            }
+        }
+        return res;
     }
 };
