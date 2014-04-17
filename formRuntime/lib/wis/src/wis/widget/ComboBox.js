@@ -229,12 +229,19 @@ wis.widget.ComboBox.prototype = {
             }
             jQuery("td", tbody).click(function(){
                 if(_this.getReadonly()==false){
-                    var value = jQuery(this).attr("value");
                     var values = _this.getValues();
+                    var value = jQuery(this).attr("value");
                     var idx = jQuery.inArray(value,values);
                     if(idx>-1){
-                        values.splice(idx,1);
+                        if(_this.getIsMultiSelect()==false){
+                            values = [];
+                        }else{
+                            values.splice(idx,1);
+                        }
                     }else{
+                        if(_this.getIsMultiSelect()==false){
+                            values = [];
+                        }
                         values.push(value);
                     }
                     _this.setValues(_this._arrayUnique(values));
