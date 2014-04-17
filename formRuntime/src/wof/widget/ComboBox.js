@@ -134,7 +134,7 @@ wof.widget.ComboBox.prototype = {
 
         comboBox.onBeforeSelect(function (val, text) {
             _this.setValues(val);
-            _this.sendMessage('wof.widget.ComboBox_beforeselect');
+            _this.sendMessage('wof.widget.ComboBox_beforeSelect');
             return true;
         });
 

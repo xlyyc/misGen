@@ -20,6 +20,8 @@ wis.widget.ComboBox.prototype = {
     _values: null,
     _split: null, //分隔符
     _selectExt: null,   //是否展开下拉框
+    _onBeforeSelect:null,
+    _onSelected:null,
 
     _input: null,
     _table: null,
@@ -74,6 +76,9 @@ wis.widget.ComboBox.prototype = {
     },
 
     setValues: function(values) {
+        if(values.constructor!==Array){
+            values = [values];
+        }
         this._values = values;
     },
 
@@ -231,22 +236,32 @@ wis.widget.ComboBox.prototype = {
                 if(_this.getReadonly()==false){
                     var values = _this.getValues();
                     var value = jQuery(this).attr("value");
-                    var idx = jQuery.inArray(value,values);
-                    if(idx>-1){
-                        if(_this.getIsMultiSelect()==false){
-                            values = [];
-                        }else{
-                            values.splice(idx,1);
-                        }
-                    }else{
-                        if(_this.getIsMultiSelect()==false){
-                            values = [];
-                        }
-                        values.push(value);
+                    var flag = true;
+                    if(_this._onBeforeSelect){
+                        flag = _this._onBeforeSelect(values);
                     }
-                    _this.setValues(_this._arrayUnique(values));
-                    _this.setSelectExt(false);
-                    _this.render();
+                    if(flag){  //如果返回值为true 则继续执行
+                        var idx = jQuery.inArray(value,values);
+                        if(idx>-1){
+                            if(_this.getIsMultiSelect()==false){
+                                values = [];
+                            }else{
+                                values.splice(idx,1);
+                            }
+                        }else{
+                            if(_this.getIsMultiSelect()==false){
+                                values = [];
+                            }
+                            console.log(JSON.stringify(values));
+                            values.push(value);
+                        }
+                        _this.setValues(_this._arrayUnique(values));
+                        _this.setSelectExt(false);
+                        _this.render();
+                        if(_this._onSelected){
+                            _this._onSelected(values);
+                        }
+                    }
                 }
             });
             jQuery("td", tbody).removeClass("l-selected");
@@ -308,12 +323,12 @@ wis.widget.ComboBox.prototype = {
         this.setReadonly(data.readonly)
     },
 
-    onBeforeSelect: function (callBack) {
-        this._onBeforeSelect = callBack;
+    onBeforeSelect: function (callback) {
+        this._onBeforeSelect = callback;
     },
 
-    onSelected:function(callBack){
-        this._onSelected = callBack;
+    onSelected:function(callback){
+        this._onSelected = callback;
     },
 
     //数组去重

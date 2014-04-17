@@ -453,7 +453,7 @@ wof.bizWidget.VoucherItem.prototype = {
         'wof.widget.Input_blur': function(message) {
             console.log(message.id+'   '+this.getClassName());
             var input = wof.util.ObjectManager.get(message.sender.id);
-            this.setValues(input.getValues());
+            this.setValues([input.getValue()]);
             this.sendMessage('wof.bizWidget.VoucherItem_change');
             return false;
         },
@@ -522,6 +522,7 @@ wof.bizWidget.VoucherItem.prototype = {
         
         case 'select':
             this._initComponent('wof.widget.ComboBox');
+            this._component.setIsMultiSelect(this.getUseMultiSelect());
             var refdata = this.getOriginNode().getRefData();
             var fname = this.getDataField();
             if (refdata && refdata[fname]) {

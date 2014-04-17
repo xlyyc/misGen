@@ -329,9 +329,9 @@ wof.bizWidget.VoucherComponent.prototype = {
                         if(alias.length>0){
                             if(this.getRowData()['data']!=null&&this.getRowData()['data'][alias]!=null){
                                 var value = this.getRowData()['data'][alias]['value'];
-                                voucherItem.setValue(value);
+                                voucherItem.setValues(value);
                             }else{
-                                voucherItem.setValue('');
+                                voucherItem.setValues([]);
                             }
                             voucherItem.render();
                         }
@@ -356,9 +356,9 @@ wof.bizWidget.VoucherComponent.prototype = {
                         if(alias.length>0){
                             if(this.getRowData()['data']!=null&&this.getRowData()['data'][alias]!=null){
                                 var value = this.getRowData()['data'][alias]['value'];
-                                voucherItem.setValue(value);
+                                voucherItem.setValues(value);
                             }else{
-                                voucherItem.setValue('');
+                                voucherItem.setValues([]);
                             }
                             voucherItem.render();
                         }
@@ -500,7 +500,8 @@ wof.bizWidget.VoucherComponent.prototype = {
                     var voucherItem = voucherItems[t];
                     var alias = voucherItem.getDataField();
                     if(alias==item.getDataField()){
-                        rowData[alias] = item.getValue();
+                        rowData[alias] = item.getValues();
+                        console.log(JSON.stringify(item.getValues()));
                     }
                 }
             }
