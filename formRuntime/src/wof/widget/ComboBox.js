@@ -18,27 +18,27 @@ wof.widget.ComboBox.prototype = {
     _multiSelectSplit: null, // 多选后显示、值分隔符
     _name: null,
     _readonly: null,
-    _value: null,    // 当前选中的值
-    _text: null,
-    _mode: null,
+    _values: null,    // 当前选中的值
+    _split: null, //分隔符
+    _mode: null,    //normal 普通 tree 树 grid 列表
 
 
     _comboBox:null,
 
-    setText: function(text) {
-        this._text = text;
+    setValues: function(values) {
+        this._values = values;
     },
 
-    getText: function() {
-        return this._text || '';
+    getValues: function() {
+        return this._values || [];
     },
 
-    setValue: function(value) {
-        this._value = value;
+    setSplit: function(split) {
+        this._split = split;
     },
 
-    getValue: function() {
-        return this._value || '';
+    getSplit: function() {
+        return this._split || ',';
     },
 
     /**
@@ -87,7 +87,7 @@ wof.widget.ComboBox.prototype = {
     },
 
     getMode: function () {
-        return this._mode || false;
+        return this._mode || 'normal';
     },
 
     setMode: function (mode) {
@@ -133,16 +133,14 @@ wof.widget.ComboBox.prototype = {
         comboBox.setGridColumn(this.getGridColumn());
 
         comboBox.onBeforeSelect(function (val, text) {
-            _this.setText(text);
-            _this.setValue(val);
+            _this.setValues(val);
             _this.sendMessage('wof.widget.ComboBox_beforeselect');
             return true;
         });
 
         comboBox.onSelected(
             function (val, text) {
-                _this.setText(text);
-                _this.setValue(val);
+                _this.setValues(val);
                 _this.sendMessage('wof.widget.ComboBox_selected');
             }
         );
@@ -155,10 +153,8 @@ wof.widget.ComboBox.prototype = {
     render: function () {
         this._comboBox.setWidth(this.getWidth());
         this._comboBox.setHeight(this.getHeight());
+        this._comboBox.setValues(this.getValues());
 
-        if(this._value.length>0){        //todo 需要考虑多选的情况
-            this._comboBox.setValues([this._value]);
-        }
         this._comboBox.render();
     },
 
@@ -169,27 +165,42 @@ wof.widget.ComboBox.prototype = {
 
     getData: function () {
         return {
+            split: this.getSplit(),
             comboBoxData: this.getComboBoxData(),
             gridColumn: this.getGridColumn(),
             isMultiSelect: this.getIsMultiSelect(),
             multiSelectSplit: this.getMultiSelectSplit(),
             name: this.getName(),
             readonly: this.getReadonly(),
-            value: this.getValue(),
-            text: this.getText(),
+            values: this.getValues(),
             mode: this.getMode()
         };
     },
 
     setData: function (data) {
+        this.setSplit(data.split);
         this.setComboBoxData(data.comboBoxData);
         this.setGridColumn(data.gridColumn);
         this.setIsMultiSelect(data.isMultiSelect);
         this.setMultiSelectSplit(data.multiSelectSplit);
         this.setName(data.name);
         this.setReadonly(data.readonly);
-        this.setValue(data.value);
-        this.setText(data.text);
+        this.setValues(data.values);
         this.setMode(data.mode);
+    },
+
+    getTexts: function(){
+        var texts = [];
+        var data = this.getComboBoxData();
+        var len = data.length;
+        for(var i=0;i<len;i++){
+            var item = data[i];
+            if(jQuery.inArray(item['value'],this.getValues())>-1){
+                texts.push(item['name']);
+            }
+        }
+        return texts.join(this.getSplit());
     }
+
+
 };

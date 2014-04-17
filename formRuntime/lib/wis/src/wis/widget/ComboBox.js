@@ -19,6 +19,7 @@ wis.widget.ComboBox.prototype = {
     _readonly: null,
     _values: null,
     _split: null, //分隔符
+    _selectExt: null,   //是否展开下拉框
 
     _input: null,
     _table: null,
@@ -88,6 +89,14 @@ wis.widget.ComboBox.prototype = {
         return this._split || ',';
     },
 
+    setSelectExt: function(selectExt) {
+        this._selectExt = selectExt;
+    },
+
+    getSelectExt: function() {
+        return this._selectExt || false;
+    },
+
     setTreeData: function(treeData) {
         this._treeData = treeData;
     },
@@ -135,6 +144,7 @@ wis.widget.ComboBox.prototype = {
      * 初始化方法
      */
     _init: function (data) {
+
     },
 
     /**
@@ -158,11 +168,16 @@ wis.widget.ComboBox.prototype = {
         this._input = jQuery('input:first',this._domInput);
         this._input.mousedown(function(event){
             event.stopPropagation();
-            if(_this._domSelect.is(":hidden")==true){
-                _this._domSelect.show();
+            if(_this.getReadonly()==false){
+                if(_this.getSelectExt()==true){
+                    _this.setSelectExt(false);
+                }else{
+                    _this.setSelectExt(true);
+                }
             }else{
-                _this._domSelect.hide();
+                _this.setSelectExt(false);
             }
+            _this.render();
         });
         var divBtn = jQuery('div[class=l-trigger]:first',this._domInput);
         divBtn.hover(function (e){
@@ -174,15 +189,19 @@ wis.widget.ComboBox.prototype = {
         });
         divBtn.mousedown(function(event){
             event.stopPropagation();
-            if(_this._domSelect.is(":hidden")==true){
-                _this._domSelect.show();
-            }else{
-                _this._domSelect.hide();
+            if(_this.getReadonly()==false){
+                if(_this.getSelectExt()==true){
+                    _this.setSelectExt(false);
+                }else{
+                    _this.setSelectExt(true);
+                }
+                _this.render();
             }
         });
         this._domSelect.hover(null, function (e){
             event.stopPropagation();
-            _this._domSelect.hide();
+            _this.setSelectExt(false);
+            _this.render();
         });
         this._select = jQuery('div[class=l-box-select-inner]:first',this._domSelect);
         this.getDomInstance().append(this._domInput).append(this._domSelect);
@@ -209,18 +228,19 @@ wis.widget.ComboBox.prototype = {
                 tbody.append(tr);
             }
             jQuery("td", tbody).click(function(){
-                //todo 需要考虑多选的情况
-                var value = jQuery(this).attr("value");
-                var values = _this.getValues();
-                var idx = jQuery.inArray(value,values);
-                if(idx>-1){
-                    values.splice(idx,1);
-                }else{
-                    values.push(value);
+                if(_this.getReadonly()==false){
+                    var value = jQuery(this).attr("value");
+                    var values = _this.getValues();
+                    var idx = jQuery.inArray(value,values);
+                    if(idx>-1){
+                        values.splice(idx,1);
+                    }else{
+                        values.push(value);
+                    }
+                    _this.setValues(_this._arrayUnique(values));
+                    _this.setSelectExt(false);
+                    _this.render();
                 }
-                _this.setValues(_this._arrayUnique(values));
-                _this._domSelect.hide();
-                _this.render();
             });
             jQuery("td", tbody).removeClass("l-selected");
             for(var i=0;i<this.getValues().length;i++){
@@ -232,7 +252,11 @@ wis.widget.ComboBox.prototype = {
         }else if(this.getMode()=='grid'){
             //todo
         }
-
+        if(this.getSelectExt()==true){
+            this._domSelect.show();
+        }else{
+            this._domSelect.hide();
+        }
     },
 
     // 渲染方法
@@ -250,6 +274,7 @@ wis.widget.ComboBox.prototype = {
     // ----------必须实现----------
     getData: function () {
         return {
+            selectExt: this.getSelectExt(),
             values: this.getValues(),
             split: this.getSplit(),
             comboBoxName: this.getComboBoxName(),
@@ -264,6 +289,7 @@ wis.widget.ComboBox.prototype = {
 
     // ----------必须实现----------
     setData: function (data) {
+        this.setSelectExt(data.selectExt);
         this.setValues(data.values);
         this.setSplit(data.split);
         this.setSelectData(data.comboBoxName);
@@ -274,9 +300,11 @@ wis.widget.ComboBox.prototype = {
         this.setTreeData(data.treeData);
         this.setReadonly(data.readonly)
     },
+
     onBeforeSelect: function (callBack) {
         this._onBeforeSelect = callBack;
     },
+
     onSelected:function(callBack){
         this._onSelected = callBack;
     },
@@ -298,19 +326,16 @@ wis.widget.ComboBox.prototype = {
      * 获得选中文本
      */
     _getTexts: function(){
-        var texts = '';
+        var texts = [];
         var data = this.getSelectData();
         var len = data.length;
         for(var i=0;i<len;i++){
             var item = data[i];
             if(jQuery.inArray(item['value'],this.getValues())>-1){
-                texts += item['name'];
-                if(len>1 && i<(len-1)){
-                    texts += this.getSplit();
-                }
+                texts.push(item['name']);
             }
         }
-        return texts;
+        return texts.join(this.getSplit());
     }
 
 };

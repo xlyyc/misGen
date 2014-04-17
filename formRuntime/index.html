@@ -186,7 +186,7 @@ jQuery(function(){
 
         flowLayout3.render();
 
-        var voucherComponent = wof$.create('VoucherComponent',{'state':'Add'});       //Edit View
+        var voucherComponent = wof$.create('VoucherComponent',{'state':'Edit'});       //Edit View
         voucherComponent.setDataSource(dataObjectInstance);
         voucherComponent.setBindEntityID('JZGJBXXB');
         voucherComponent.setLeft(0);
@@ -264,7 +264,7 @@ jQuery(function(){
             itemLabel:'院系',
             dataField:'zzjgref.zzmc',
             dateTimeBoxFormat:'',
-            readOnly:'false',
+            readOnly:'true',
             required:'false',
             length:'',
             min:'',

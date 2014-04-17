@@ -344,12 +344,12 @@ wof.bizWidget.VoucherItem.prototype = {
         this._colspan = colspan;
     },
 
-    getValue : function (){
-        return this._value || '';
+    getValues : function (){
+        return this._values || [];
     },
 
-    setValue : function (value){
-        this._value = value;
+    setValues : function (values){
+        this._values = values;
     },
 
     /**
@@ -416,7 +416,7 @@ wof.bizWidget.VoucherItem.prototype = {
             colspan: this.getColspan(),
             tipValue: this.getTipValue(),
             linkageItem: this.getLinkageItem(),
-            value : this.getValue()
+            values : this.getValues()
         };
     },
     //----------必须实现----------
@@ -446,14 +446,14 @@ wof.bizWidget.VoucherItem.prototype = {
         this.setColspan(data.colspan);
         this.setTipValue(data.tipValue);
         this.setLinkageItem(data.linkageItem);
-        this.setValue(data.value);
+        this.setValues(data.values);
     },
 
     _insideOnReceiveMessage:{
         'wof.widget.Input_blur': function(message) {
             console.log(message.id+'   '+this.getClassName());
             var input = wof.util.ObjectManager.get(message.sender.id);
-            this.setValue(input.getValue());
+            this.setValues(input.getValues());
             this.sendMessage('wof.bizWidget.VoucherItem_change');
             return false;
         },
@@ -461,41 +461,37 @@ wof.bizWidget.VoucherItem.prototype = {
         'wof.widget.ComboBox_selected': function (message) {
             console.log(message.id+'   '+this.getClassName());
             var cb = wof.util.ObjectManager.get(message.sender.id);
-            this.setValue(cb.getValue());
+            this.setValues(cb.getValues());
             this.sendMessage('wof.bizWidget.VoucherItem_change');
         }
     },
 
     _initComponent: function(clzName, readonlyMethod) {
-        if (this._component && 
-                this._component.getClassName() !== clzName) {
+        if (this._component && this._component.getClassName() !== clzName) {
             this._component.removeChildren(true);
             this._component.remove(true);
             this._component = null;
         }
-
         if (this._component == null) {
             this._component = wof$.create(clzName);
             this._component.setIsInside(true);
             this._component.appendTo(this);
         }
-
         this._component.setLeft(this.getLabelWidth());
         this._component.setWidth(this.getInputWidth());
         this._component.setHeight(this.getInputHeight());
-
         if (!readonlyMethod) {
             readonlyMethod = 'setReadonly';
         }
         switch (this.getOriginNode().getState()) {
-        case 'Add':
-            this._component[readonlyMethod](false);
-            break;
-        case 'View':
-            this._component[readonlyMethod](true);
-            break;
-        default:
-            this._component[readonlyMethod](this.getReadOnly() ? true : false);
+            case 'Add':
+                this._component[readonlyMethod](false);
+                break;
+            case 'View':
+                this._component[readonlyMethod](false);
+                break;
+            default:
+                this._component[readonlyMethod](this.getReadOnly() ? true : false);
         }
     },
 
@@ -513,7 +509,7 @@ wof.bizWidget.VoucherItem.prototype = {
         switch (visbleType) {
         case 'text':
             this._initComponent('wof.widget.Input');
-            this._component.setValue(this.getValue());
+            this._component.setValue(this.getValues());
             break;
 
         case 'textArea':
@@ -529,7 +525,7 @@ wof.bizWidget.VoucherItem.prototype = {
             var refdata = this.getOriginNode().getRefData();
             var fname = this.getDataField();
             if (refdata && refdata[fname]) {
-                this._component.setValue(this.getValue());
+                this._component.setValues(this.getValues());
                 var data = refdata[fname]['data'];
                 this._component.setComboBoxData(data);
             }
@@ -605,7 +601,7 @@ wof.bizWidget.VoucherItem.prototype = {
             // component.setHeight(this.getInputHeight());
 
 
-            // var displayVal = this.getValue();
+            // var displayVal = this.getValues();
             // component[setValMethod](displayVal); //todo 需要结合当前的格式化配置来进行显示
 
             // //根据编辑状态和只读属性设置控件只读
