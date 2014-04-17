@@ -76,7 +76,7 @@ wis.widget.ComboBox.prototype = {
     },
 
     setValues: function(values) {
-        if(values.constructor!==Array){
+        if(values.constructor!==Array){      //todo 需要考虑多选下的保存问题
             values = [values];
         }
         this._values = values;
