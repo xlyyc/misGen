@@ -412,9 +412,9 @@ wof.bizWidget.SearchComponent.prototype = {
         var items = this.findSearchItems();
         for(var i=0;i<items.length;i++){
             var item = items[i];
-            if(item.getDataField().length>0 && !jQuery.isEmptyObject(item.getValues())){
+            if(item.getDataField().length>0 && !jQuery.isEmptyObject(item.getValue())){
                 if(item.getFromTo()==false){
-                    var val = String(item.getValues());
+                    var val = item.getValue();   //todo 查询需要考虑下拉框多选的情况
                     var fieldQuery = {type:'fieldQuery',field:item.getDataField(),operation:'equals',value1:val};
                     queryParam.items.push(fieldQuery);
                 }else{ //todo 范围搜索

@@ -76,9 +76,6 @@ wis.widget.ComboBox.prototype = {
     },
 
     setValues: function(values) {
-        if(values.constructor!==Array){      //todo 需要考虑多选下的保存问题
-            values = [values];
-        }
         this._values = values;
     },
 
@@ -220,7 +217,7 @@ wis.widget.ComboBox.prototype = {
 
         this._select.empty();
         if(this.getMode()=='normal'){
-            this._input.val(this._getTexts());
+            this._input.val(this.getTexts());
             var table = jQuery('<table cellpadding="0" cellspacing="0" border="0" class="l-box-select-table l-table-nocheckbox"><tbody></tbody></table>');
             var data = this.getSelectData();
             var tbody = jQuery('tbody:first',table);
@@ -347,15 +344,19 @@ wis.widget.ComboBox.prototype = {
     /**
      * 获得选中文本
      */
-    _getTexts: function(){
+    getTexts: function(){
         var texts = [];
-        var data = this.getSelectData();
-        var len = data.length;
-        for(var i=0;i<len;i++){
-            var item = data[i];
-            if(jQuery.inArray(item['value'],this.getValues())>-1){
-                texts.push(item['name']);
+        if(this.getMode()=='normal' || this.getMode()=='grid'){
+            var data = this.getSelectData();
+            var len = data.length;
+            for(var i=0;i<len;i++){
+                var item = data[i];
+                if(jQuery.inArray(item['value'],this.getValues())>-1){
+                    texts.push(item['name']);
+                }
             }
+        }else if(this.getMode()=='tree'){
+            //todo
         }
         return texts.join(this.getSplit());
     }

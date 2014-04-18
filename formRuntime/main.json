@@ -8,7 +8,7 @@
                     "XMPYDX": {"value": "ZHANGSANFENG","status": "NotModified"},
                     "zzjg": {"value": "1001","status": "NotModified"},
                     "zzmmref.zzmmbm": {"value": "1","status": "NotModified"},
-                    "xb": {"value": "1","status": "NotModified"},
+                    "xb": {"value": "@start@1@end@","status": "NotModified"},
                     "zzmmref.zzmmbz": {"value": "32岁以下","status": "NotModified"},
                     "xmpy": {"value": "zhangsanfeng","status": "NotModified"},
                     "zglbref.lbbz": {"value": "全职员工","status": "NotModified"},
@@ -25,7 +25,7 @@
                     "lbbm": {"value": "1","status": "NotModified"},
                     "gh": {"value": "20153021422","status": "NotModified"},
                     "csrq": {"value": "1990-08-20","status": "NotModified"},
-                    "zzjgref.zzmc": {"value": "001","status": "NotModified"},
+                    "zzjgref.zzmc": {"value": "@start@001@end@@start@002@end@","status": "NotModified"},
                     "zzjgref.zzbm": {"value": "1001","status": "NotModified"},
                     "zgid": {"value": "1","status": "NotModified"}
                 },

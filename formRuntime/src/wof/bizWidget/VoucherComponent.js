@@ -302,9 +302,9 @@ wof.bizWidget.VoucherComponent.prototype = {
                         if(alias.length>0){
                             if(this.getRowData()['data']!=null&&this.getRowData()['data'][alias]!=null){
                                 var value = this.getRowData()['data'][alias]['value'];
-                                voucherItem.setValues([value]);
+                                voucherItem.setValue(value);
                             }else{
-                                voucherItem.setValues([]);
+                                voucherItem.setValue('');
                             }
                             voucherItem.render();
                         }
@@ -329,9 +329,9 @@ wof.bizWidget.VoucherComponent.prototype = {
                         if(alias.length>0){
                             if(this.getRowData()['data']!=null&&this.getRowData()['data'][alias]!=null){
                                 var value = this.getRowData()['data'][alias]['value'];
-                                voucherItem.setValues(value);
+                                voucherItem.setValue(value);
                             }else{
-                                voucherItem.setValues([]);
+                                voucherItem.setValue('');
                             }
                             voucherItem.render();
                         }
@@ -356,9 +356,9 @@ wof.bizWidget.VoucherComponent.prototype = {
                         if(alias.length>0){
                             if(this.getRowData()['data']!=null&&this.getRowData()['data'][alias]!=null){
                                 var value = this.getRowData()['data'][alias]['value'];
-                                voucherItem.setValues(value);
+                                voucherItem.setValue(value);
                             }else{
-                                voucherItem.setValues([]);
+                                voucherItem.setValue('');
                             }
                             voucherItem.render();
                         }
@@ -500,8 +500,8 @@ wof.bizWidget.VoucherComponent.prototype = {
                     var voucherItem = voucherItems[t];
                     var alias = voucherItem.getDataField();
                     if(alias==item.getDataField()){
-                        rowData[alias] = item.getValues();
-                        console.log(JSON.stringify(item.getValues()));
+                        rowData[alias] = item.getValue();
+                        console.log('111====='+JSON.stringify(item.getValue()));
                     }
                 }
             }

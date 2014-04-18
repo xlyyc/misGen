@@ -344,12 +344,12 @@ wof.bizWidget.VoucherItem.prototype = {
         this._colspan = colspan;
     },
 
-    getValues : function (){
-        return this._values || [];
+    getValue : function (){
+        return this._value || '';
     },
 
-    setValues : function (values){
-        this._values = values;
+    setValue : function (value){
+        this._value = value;
     },
 
     /**
@@ -416,7 +416,7 @@ wof.bizWidget.VoucherItem.prototype = {
             colspan: this.getColspan(),
             tipValue: this.getTipValue(),
             linkageItem: this.getLinkageItem(),
-            values : this.getValues()
+            value : this.getValue()
         };
     },
     //----------必须实现----------
@@ -446,14 +446,14 @@ wof.bizWidget.VoucherItem.prototype = {
         this.setColspan(data.colspan);
         this.setTipValue(data.tipValue);
         this.setLinkageItem(data.linkageItem);
-        this.setValues(data.values);
+        this.setValue(data.value);
     },
 
     _insideOnReceiveMessage:{
         'wof.widget.Input_blur': function(message) {
             console.log(message.id+'   '+this.getClassName());
             var input = wof.util.ObjectManager.get(message.sender.id);
-            this.setValues([input.getValue()]);
+            this.setValue(input.getValue());
             this.sendMessage('wof.bizWidget.VoucherItem_change');
             return false;
         },
@@ -461,7 +461,12 @@ wof.bizWidget.VoucherItem.prototype = {
         'wof.widget.ComboBox_selected': function (message) {
             console.log(message.id+'   '+this.getClassName());
             var cb = wof.util.ObjectManager.get(message.sender.id);
-            this.setValues(cb.getValues());
+            var vals = cb.getValues();
+            var vstr = '';
+            for(var i=0;i<vals.length;i++){
+                vstr+='@start@'+vals[i]+'@end@';
+            }
+            this.setValue(vstr);
             this.sendMessage('wof.bizWidget.VoucherItem_change');
         }
     },
@@ -509,7 +514,7 @@ wof.bizWidget.VoucherItem.prototype = {
         switch (visbleType) {
         case 'text':
             this._initComponent('wof.widget.Input');
-            this._component.setValue(this.getValues());
+            this._component.setValue(this.getValue());
             break;
 
         case 'textArea':
@@ -526,7 +531,16 @@ wof.bizWidget.VoucherItem.prototype = {
             var refdata = this.getOriginNode().getRefData();
             var fname = this.getDataField();
             if (refdata && refdata[fname]) {
-                this._component.setValues(this.getValues());
+
+                var vals = [];
+                var val = this.getValue();
+                var re = /(@start@)(.*?)(@end@)/g;
+                var matches = val.match(re);
+                for (var i=0;matches!=null&&i<matches.length;i++){
+                    var v = matches[i].substring(7,matches[i].length-5);
+                    vals.push(v);
+                }
+                this._component.setValues(vals);
                 var data = refdata[fname]['data'];
                 this._component.setComboBoxData(data);
             }

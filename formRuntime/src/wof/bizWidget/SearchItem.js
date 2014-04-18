@@ -57,17 +57,17 @@ wof.bizWidget.SearchItem.prototype = {
     _rowspan: null,   //纵跨行数
 
 
-    _values:null, //当前选中值 如果是范围搜索 该值多于一个
+    _value:null, //当前选中值 如果是范围搜索 该值多于一个
 
     /**
      * get/set 属性方法定义
      */
-    getValues: function(){
-        return this._values;
+    getValue: function(){
+        return this._value || '';
     },
 
-    setValues: function(values){
-        this._values = values;
+    setValue: function(value){
+        this._value = value;
     },
 
     getName: function(){
@@ -388,7 +388,7 @@ wof.bizWidget.SearchItem.prototype = {
             console.log(message.id+'   '+this.getClassName());
             var input = wof.util.ObjectManager.get(message.sender.id);
             if(this.getFromTo()==false){
-                this.setValues(input.getValue());
+                this.setValue(input.getValue());
             }else{ //todo 范围搜索
 
             }
@@ -398,7 +398,12 @@ wof.bizWidget.SearchItem.prototype = {
             console.log(message.id+'   '+this.getClassName());
             var cb = wof.util.ObjectManager.get(message.sender.id);
             if(this.getFromTo()==false){
-                this.setValues(cb.getValue());
+                var vals = cb.getValues();
+                var vstr = '';
+                for(var i=0;i<vals.length;i++){
+                    vstr+='@start@'+vals[i]+'@end@';
+                }
+                this.setValue(vstr);
             }else{ //todo 范围搜索
 
             }
@@ -452,7 +457,7 @@ wof.bizWidget.SearchItem.prototype = {
         switch (visbleType) {
         case 'text':
             this._initComponent('wof.widget.Input');
-            this._component.setValue(this.getValues());
+            this._component.setValue(this.getValue());
             break;
 
         case 'textArea':
@@ -474,7 +479,15 @@ wof.bizWidget.SearchItem.prototype = {
                     var row = ref['data'][i];
                     data.push({'name':row['name'],'value':row['value']});
                 }
-                this._component.setValue(this.getValues());
+                var vals = [];
+                var val = this.getValue();
+                var re = /(@start@)(.*?)(@end@)/g;
+                var matches = val.match(re);
+                for (var i=0;matches!=null&&i<matches.length;i++){
+                    var v = matches[i].substring(7,matches[i].length-5);
+                    vals.push(v);
+                }
+                this._component.setValues(vals);
                 this._component.setComboBoxData(data);
             }
             break;
