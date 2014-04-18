@@ -414,8 +414,20 @@ wof.bizWidget.SearchComponent.prototype = {
             var item = items[i];
             if(item.getDataField().length>0 && !jQuery.isEmptyObject(item.getValue())){
                 if(item.getFromTo()==false){
-                    var val = item.getValue();   //todo 查询需要考虑下拉框多选的情况
-                    var fieldQuery = {type:'fieldQuery',field:item.getDataField(),operation:'equals',value1:val};
+                    var fieldQuery = null;
+                    var val = item.getValue();
+                    if(item.getVisbleType()=='select'){ //如果是下拉框类型 则查询条件需要特殊处理
+                        var vals = [];
+                        var re = /(@start@)(.*?)(@end@)/g;
+                        var matches = val.match(re);
+                        for (var i=0;matches!=null&&i<matches.length;i++){
+                            var v = matches[i].substring(7,matches[i].length-5);
+                            vals.push(v);
+                        }
+                        fieldQuery = {type:'fieldQuery',field:item.getDataField(),operation:'equals',value1:vals};
+                    }else{
+                        fieldQuery = {type:'fieldQuery',field:item.getDataField(),operation:'equals',value1:val};
+                    }
                     queryParam.items.push(fieldQuery);
                 }else{ //todo 范围搜索
                     console.log('范围搜索todo');
