@@ -249,7 +249,6 @@ wis.widget.ComboBox.prototype = {
                             if(_this.getIsMultiSelect()==false){
                                 values = [];
                             }
-                            console.log(JSON.stringify(values));
                             values.push(value);
                         }
                         _this.setValues(_this._arrayUnique(values));
@@ -261,6 +260,7 @@ wis.widget.ComboBox.prototype = {
                     }
                 }
             });
+            //设置选中项高亮
             jQuery("td", tbody).removeClass("l-selected");
             for(var i=0;i<this.getValues().length;i++){
                 jQuery('td[value='+this.getValues()[i]+']', tbody).addClass("l-selected");
