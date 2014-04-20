@@ -528,6 +528,7 @@ wof.bizWidget.VoucherItem.prototype = {
         case 'select':
             this._initComponent('wof.widget.ComboBox');
             this._component.setIsMultiSelect(this.getUseMultiSelect());
+            this._component.setMode(this.getSelectPattern());
             var refdata = this.getOriginNode().getRefData();
             var fname = this.getDataField();
             if (refdata && refdata[fname]) {

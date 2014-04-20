@@ -270,6 +270,14 @@ wis.widget.ComboBox.prototype = {
             //todo
         }else if(this.getMode()=='grid'){
             //todo
+            var button = wis$.create('Button');   //todo 有bug 需要清理上次render可能遗留的button
+            button.setData({
+                name:  'test',
+                label: '测试'
+            });
+
+            button.appendTo(this._select);
+            button.render();
         }
         if(this.getSelectExt()==true){
             this._domSelect.show();
