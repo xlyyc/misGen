@@ -36,7 +36,8 @@ wof.functionWidget.DeleteRecordComponent.prototype = {
     _paramMaps: null,
 
     _bindComp:null,
-
+    
+    _state: null,  //状态  View Edit Add
     /**
      * get/set 属性方法定义
      */
@@ -123,7 +124,13 @@ wof.functionWidget.DeleteRecordComponent.prototype = {
     setBindComp : function (bindComp){
         this._bindComp = bindComp;
     },
-    
+    getState: function(){
+        return this._state;
+    },
+
+    setState: function(state){
+        this._state = state;
+    },
     _init: function (data) {
         this.setWidth(110);
         this.setHeight(30);
@@ -152,17 +159,13 @@ wof.functionWidget.DeleteRecordComponent.prototype = {
      */
 
     initRender: function () {
-    	var that = this;
         var button = wof$.create('Button');
 		button.setLabel(this.getCallItemCaption());
 		button.setIsInside(true);
-		//var clickFunc = function (){
-        // 	 that.sendMessage('wof.functionWidget.DeleteRecordComponent_click');
-        // };
-        // button.onClick(clickFunc);
-        // button.render();
+		if(this.getState()!=null&&this.getState()=='View'){
+        	button.setDisabled(true);// 只读
+        }
         button.appendTo(this);
-      
         this._btn = button;
     },
 

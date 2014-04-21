@@ -26,6 +26,7 @@ wis.widget.ComboBox.prototype = {
     _input: null,
     _table: null,
     _select: null,
+    _grid:null,
     _domSelect: null,
     _renderFlag:null,
 
@@ -163,7 +164,7 @@ wis.widget.ComboBox.prototype = {
             +'<div class="l-trigger-icon"></div>'
             +'</div>'
             +'</div>');
-        this._domSelect = jQuery('<div class="l-box-select" style="width: 100px; display: none;">'
+        this._domSelect = jQuery('<div class="l-box-select" style="width: 300px; display: none;">'
             +'<div class="l-box-select-inner" style="height: auto;"></div>'
             +'<div class="l-btn-nw-drop"></div>'
             +'</div>');
@@ -270,14 +271,18 @@ wis.widget.ComboBox.prototype = {
             //todo
         }else if(this.getMode()=='grid'){
             //todo
-            var button = wis$.create('Button');   //todo 有bug 需要清理上次render可能遗留的button
-            button.setData({
-                name:  'test',
-                label: '测试'
-            });
-
-            button.appendTo(this._select);
-            button.render();
+            if(this._grid!=null){
+                this._grid.remove(true);
+                this._grid = null;
+            }
+            var data = {"title":null,"checkbox":true,"columns":[
+                {"bindDataField":"JBXX.zgh","width":"120","colNo":0,"name":"","caption":"职工号","sortable":true,"align":"center","bold":"true","underline":"true","bgColor":"#efefef","font":"宋体","fontSize":"max","fontColor":"black","style":"","adjustContent":"true","format":{"param":"short","functionName":null},"display":false,"type":"integer","visbleType":"text","selectPattern":null,"required":false,"verifyFunctionName":null,"verifyErrorInfo":""},{"bindDataField":"JBXX.xm","width":"70","colNo":1,"name":"","caption":"姓名","sortable":true,"align":"center","bold":"true","underline":"true","bgColor":"#efefef","font":"宋体","fontSize":"max","fontColor":"black","style":"","adjustContent":"true","format":{"param":"short","functionName":null},"display":false,"type":"","visbleType":"text","selectPattern":null,"required":false,"verifyFunctionName":null,"verifyErrorInfo":""},{"bindDataField":"JBXX.xb","width":"70","colNo":2,"name":"","caption":"性别","sortable":true,"align":"center","bold":"true","underline":"true","bgColor":"#efefef","font":"宋体","fontSize":"max","fontColor":"black","style":"","adjustContent":"true","format":{"param":"short","functionName":null},"display":false,"type":"","visbleType":"text","selectPattern":null,"required":false,"verifyFunctionName":null,"verifyErrorInfo":""}],"data":[{"data":{"JBXX.zgh":{"value":"11","status":"NotModified"},"JBXX.xm":{"value":"张三","status":"NotModified"},"JBXX.xb":{"value":"2","status":"NotModified"}},"status":"NotModified","childData":{}},{"data":{"JBXX.zgh":{"value":"12","status":"NotModified"},"JBXX.xm":{"value":"李四","status":"NotModified"},"JBXX.xb":{"value":"2","status":"NotModified"}},"status":"NotModified","childData":{}},{"data":{"JBXX.zgh":{"value":"232957F7C7A3436880F8A0FE77E24E24","status":"NotModified"},"JBXX.xm":{"value":"测试徐","status":"NotModified"},"JBXX.xb":{"value":"1","status":"NotModified"}},"status":"NotModified","childData":{}},{"data":{"JBXX.zgh":{"value":"CDB8D1A4122E4F2EBFB91FBCC16AB190","status":"NotModified"},"JBXX.xm":{"value":"李四三","status":"NotModified"},"JBXX.xb":{"value":"2","status":"NotModified"}},"status":"NotModified","childData":{}}],"useClientPage":true,"width":210,"height":200,"isScroll":false,"enabledEdit":true,"dblClickToEdit":true,"pageSize":10,"page":1,"refData":{},"total":4};
+            var grid = wis$.create('Grid');
+            grid.setPosition('static');
+            grid.setOptions(data);
+            grid.appendTo(this._select);
+            grid.render();
+            this._grid = grid;
         }
         if(this.getSelectExt()==true){
             this._domSelect.show();

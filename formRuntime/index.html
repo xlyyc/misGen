@@ -29,6 +29,7 @@
 </style>
 <script src="lib/jquery/jquery.min.js"></script>
 <script src="lib/jquery.ui/jquery-ui-1.10.1.custom.min.js"></script>
+<script src="lib/jquery.ui.plugin/jquery.ui.grid.js"></script>
 <script src="lib/jquery.ui.multiselect/js/jquery.multiselect.min.js"></script>
 <script src="lib/jquery.ui.multiselect/js/jquery.multiselect.filter.min.js"></script>
 <script src="lib/jquery.ztree/js/jquery.ztree.all-3.5.js"></script>
@@ -116,6 +117,7 @@
 <script src="lib/wis/src/wis/widget/Input.js"></script>
 <script src="lib/wis/src/wis/widget/Tab.js"></script>
 <script src="lib/wis/src/wis/widget/ComboBox.js"></script>
+<script src="lib/wis/src/wis/widget/Grid.js"></script>
 
 <script src="lib/wis/src/wis/kernel/initSystem.js"></script>
 
@@ -165,7 +167,7 @@ jQuery(function(){
 
         flowLayout.insertSection({title:'默认分组1',titleHeight:30,cols:3});
 
-        flowLayout.insertSection({title:'默认分组2',titleHeight:30,cols:2,itemHeight:200,isAutoExt:true});
+        flowLayout.insertSection({title:'默认分组2',titleHeight:30,cols:2,itemHeight:250,isAutoExt:false});
 
         flowLayout.appendTo(container);
 
@@ -197,7 +199,7 @@ jQuery(function(){
         voucherComponent.setFkFieldValue('aaaaaaaaaaaaaaaaaaaaaa');*/
         voucherComponent.setViewType('tab');
 
-        var voucherItemGroupData1 = {groupCaption:'表头分组1',width:500,titleHeight:50,colsNum:4,itemHeight:150,isHead:false};
+        var voucherItemGroupData1 = {groupCaption:'表头分组1',width:500,titleHeight:25,colsNum:4,itemHeight:100,isHead:false};
         voucherComponent.insertVoucherItemGroup(voucherItemGroupData1);
         var voucherItemGroupData2 = {groupCaption:'表头分组2',width:500,titleHeight:25,colsNum:4,itemHeight:45};
         voucherComponent.insertVoucherItemGroup(voucherItemGroupData2);

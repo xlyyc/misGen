@@ -49,7 +49,8 @@ wof.functionWidget.AddRecordComponent.prototype = {
     _formFunctionId:null,
     
     _openUrl:null,
-
+    
+    _state: null,  //状态  View Edit Add
     /**
      * get/set 属性方法定义
      */
@@ -158,6 +159,13 @@ wof.functionWidget.AddRecordComponent.prototype = {
     setBindComponents : function (bindComponents){
         this._bindComponents = bindComponents;
     },
+    getState: function(){
+        return this._state;
+    },
+
+    setState: function(state){
+        this._state = state;
+    },
     /**
      * 运行时参数
      */
@@ -214,6 +222,9 @@ wof.functionWidget.AddRecordComponent.prototype = {
         var button = wof$.create('Button');
         button.setLabel(this.getCallItemCaption());
         button.setIsInside(true);
+        if(this.getState()!=null&&this.getState()=='View'){
+        	button.setDisabled(true);// 只读
+        }
         button.appendTo(this);
         that._btn = button;
     },

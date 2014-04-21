@@ -412,7 +412,6 @@ wof.bizWidget.VoucherComponent.prototype = {
                     var newData = {};
                     if(this.getFkField().length>0){ //如果绑定外键不为空 则增加记录时需要加入外键值
                         newData[this.getFkField()] = this.getFkFieldValue();
-                        alert(JSON.stringify(newData));
                     }
                     this.getDataSource().addData([newData]);
                     var idPro = this.getDataSource().getLocalData()['idPro'];
@@ -1317,6 +1316,14 @@ wof.bizWidget.VoucherComponent.prototype = {
                     tabGroups.push(voucherItemGroup);
                 }
             }
+            if(this.getWidth()!=null && this._tabWidth==null){
+                this._tabWidth = this.getWidth();
+                this.setWidth(this._tabWidth-12);
+                for(var i=0;i<voucherItemGroups.length;i++){
+                    var voucherItemGroup = voucherItemGroups[i];
+                    voucherItemGroup.calcLayout();
+                }
+            }
             //计算头分组位置
             for(var i=0;i<headerGroups.length;i++){
                 var headerGroup = headerGroups[i];
@@ -1334,7 +1341,7 @@ wof.bizWidget.VoucherComponent.prototype = {
             //计算页签分组位置
             if(tabGroups.length>0){
                 //计算最大分组高度
-                var maxGroupHeight = 200;
+                var maxGroupHeight = 100;
                 for(var i=0;i<tabGroups.length;i++){
                     var voucherItemGroup = tabGroups[i];
                     if(maxGroupHeight < voucherItemGroup.getHeight()){
@@ -1389,8 +1396,11 @@ wof.bizWidget.VoucherComponent.prototype = {
                     height += voucherItemGroup.getHeight();
                 }
             }
+            if(this._tabWidth!=null){
+                this.setWidth(this._tabWidth);
+                this._tabWidth = null;
+            }
         }
-
         this.setHeight(height);
     },
 

@@ -43,6 +43,7 @@ wof.functionWidget.ViewRecordComponent.prototype = {
     
     _bindComp: null,
 
+    _state: null,  //状态  View Edit Add
     /**
      * get/set 属性方法定义
      */
@@ -142,6 +143,13 @@ wof.functionWidget.ViewRecordComponent.prototype = {
 
     setBindComp : function (bindComp){
         this._bindComp = bindComp;
+    },
+    getState: function(){
+        return this._state;
+    },
+
+    setState: function(state){
+        this._state = state;
     },
     _init: function(data){
     	if(!data){
