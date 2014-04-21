@@ -9,7 +9,7 @@ wof.bizWidget.FlowLayoutSection = function () {
 
     this.setIsInside(true);
 
-   // this.getDomInstance().css('overflow','hidden');
+    this.getDomInstance().css('overflow','hidden');
 
     this._backgroundImg = jQuery('<img src="src/img/backgroud.gif" style="position:absolute;cursor:pointer;opacity:0;filter:alpha(opacity=0);width:100%;height:100%;">');
 

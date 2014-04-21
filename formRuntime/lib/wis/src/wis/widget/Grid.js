@@ -4,7 +4,6 @@ wis.widget.Grid = function() {
 };
 
 wis.widget.Grid.prototype = {
-	_cid : null,
 	_title : null,
 	_checkbox : false,
 	_headerRowHeight : null,
@@ -49,13 +48,6 @@ wis.widget.Grid.prototype = {
 	_refData : null,
 	_grid : null,
 
-	getCid : function() {
-		return this._cid;
-	},
-
-	setCid : function(cid) {
-		this._cid = cid;
-	},
 	getRefData : function() {
 		return this._refData;
 	},
@@ -207,57 +199,58 @@ wis.widget.Grid.prototype = {
 		return this._columns;
 	},
 
-	setColumns : function(columns) {
-		this._columns = columns;
-	},
-
 	/**
 	 * 初始化方法
 	 */
 	_init : function(data) {
-		if (data.name) {
-			this.setTitle(data.name);
-		}
-		if (data.checkbox) {
-			this.setCheckbox(data.checkbox);
-		}
-		if (data.data) {
-			this.setGridData(data.data);
-		}
-		if (data.columns) {
-			this.setColumns(data.columns);
-		}
-		if (data.total) {
-			this.setTotal(data.total);
-		}
-		if (data.pageNo) {
-			this.setPage(data.pageNo)
-		}
-		if (data.pageSize) {
-			this.setPageSize(data.pageSize);
-		}
-		if (data.onToNext) {
-			this.onToNext = data.onToNext;
-		}
-		if (data.onToPrev) {
-			this.onToPrev = data.onToPrev;
-		}
-		if (data.onToFirst) {
-			this.onToFirst = data.onToFirst;
-		}
-		if (data.onToLast) {
-			this.onToLast = data.onToLast;
-		}
-		if (data.onReload) {
-			this.onReload = data.onReload;
-		}
-		if (data.refData) {
-			this.setRefData(data.refData);
-		}
-		if (data.onSelectRow) {
-			this.onSelectRow = data.onSelectRow;
-		}
+        this.setOptions(data);
 	},
+
+    setOptions: function(data){
+        if (data.name) {
+            this.setTitle(data.name);
+        }
+        if (data.checkbox) {
+            this.setCheckbox(data.checkbox);
+        }
+        if (data.data) {
+            this.setGridData(data.data);
+        }
+        if (data.columns) {
+            this.setColumns(data.columns);
+        }
+        if (data.total) {
+            this.setTotal(data.total);
+        }
+        if (data.pageNo) {
+            this.setPage(data.pageNo)
+        }
+        if (data.pageSize) {
+            this.setPageSize(data.pageSize);
+        }
+        if (data.onToNext) {
+            this.onToNext = data.onToNext;
+        }
+        if (data.onToPrev) {
+            this.onToPrev = data.onToPrev;
+        }
+        if (data.onToFirst) {
+            this.onToFirst = data.onToFirst;
+        }
+        if (data.onToLast) {
+            this.onToLast = data.onToLast;
+        }
+        if (data.onReload) {
+            this.onReload = data.onReload;
+        }
+        if (data.refData) {
+            this.setRefData(data.refData);
+        }
+        if (data.onSelectRow) {
+            this.onSelectRow = data.onSelectRow;
+        }
+    },
+
 	addRow : function() {
 		$(this.getDomInstance()).grid('addRow');
 	},
@@ -376,13 +369,13 @@ wis.widget.Grid.prototype = {
 	// ----------必须实现----------
 	getData : function() {
 		return {
-			cid : this.getCid()
+
 		};
 	},
 
 	// ----------必须实现----------
 	setData : function(data) {
-		this.setCid(data.cid);
+
 	}
 
 };
