@@ -43,6 +43,8 @@ wof.bizWidget.VoucherComponent.prototype = {
 
     _fkField: null, //外键对应字段
 
+    _tabWidth: null,
+
     /**
      * get/set 属性方法定义
      */
@@ -1054,6 +1056,15 @@ wof.bizWidget.VoucherComponent.prototype = {
                     tabGroups.push(voucherItemGroup);
                 }
             }
+            if(this.getWidth()!=null && this._tabWidth==null){
+                this._tabWidth = this.getWidth();
+                this.setWidth(this._tabWidth-12);
+                for(var i=0;i<voucherItemGroups.length;i++){
+                    var voucherItemGroup = voucherItemGroups[i];
+                    voucherItemGroup.calcLayout();
+                }
+            }
+
             //计算头分组位置
             for(var i=0;i<headerGroups.length;i++){
                 var headerGroup = headerGroups[i];
@@ -1071,7 +1082,7 @@ wof.bizWidget.VoucherComponent.prototype = {
             //计算页签分组位置
             if(tabGroups.length>0){
                 //计算最大分组高度
-                var maxGroupHeight = 200;
+                var maxGroupHeight = 100;
                 for(var i=0;i<tabGroups.length;i++){
                     var voucherItemGroup = tabGroups[i];
                     if(maxGroupHeight < voucherItemGroup.getHeight()){
@@ -1080,7 +1091,7 @@ wof.bizWidget.VoucherComponent.prototype = {
                 }
                 this._tab.setHiden(false);
                 this._tab.setTop(height);
-                this._tab.setWidth(this.getWidth()-12);
+                this._tab.setWidth(this.getWidth());
                 this._tab.setHeight(maxGroupHeight);
 
                 //创建页签item 并将页签分组加入依次加入到页签item下
@@ -1126,6 +1137,10 @@ wof.bizWidget.VoucherComponent.prototype = {
                     voucherItemGroup.setLeft(0);
                     height += voucherItemGroup.getHeight();
                 }
+            }
+            if(this._tabWidth!=null){
+                this.setWidth(this._tabWidth);
+                this._tabWidth = null;
             }
         }
 
@@ -1178,7 +1193,7 @@ wof.bizWidget.VoucherComponent.prototype = {
         var node = wof$.create('VoucherComponent');
         node.setLeft(0);
         node.setTop(0);
-        node.setWidth(width-4);
+        node.setWidth(width);
         node.setItemHeight(60);
         var voucherItemGroupData = {groupCaption:'表头分组1',width:width,titleHeight:25,colsNum:4,itemHeight:45};
         node.insertVoucherItemGroup(voucherItemGroupData);

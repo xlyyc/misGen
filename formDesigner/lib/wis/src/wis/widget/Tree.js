@@ -8,6 +8,8 @@ wis.widget.Tree.prototype = {
 
 	_name : null, //名称
 
+	_themes : null, //主题
+
 	_mode : null, //模式 TODO
 
 	_setting : null, // 内部对象
@@ -77,6 +79,12 @@ wis.widget.Tree.prototype = {
 
 	setName : function(name) {
 		this._name = name;
+	},
+	getThemes : function() {
+		return this._themes;
+	},
+	setThemes : function(themes) {
+		this._themes = themes;
 	},
 
 	setChkStyle : function(chkStyle) {
@@ -611,29 +619,55 @@ wis.widget.Tree.prototype = {
 	//----------自定义实现----------
 	getOptions : function() {
 		return {
+			
 			name:this.getName(),
+			
+			themes:this.getThemes(),
+
 			chkStyle:this.getChkStyle(),
+
 			radioType:this.getRadioType(),
+
 			url:this.getUrl(),
+
 			asynctype:this.getAsynctype(),
+
 			dataType:this.getDataType(),
+			
 			dataChecked:this.getDatachecked(),
+
 			checkFlag:this.getCheckFlag(),
+			
 			datachildren:this.getDatachildren(),
+
 			dataname:this.getDataname(),
+
 			datatitle:this.getDatatitle(),
+			
 			dataurl:this.getDataurl(),
+
 			datasimpledata:this.getDatasimpledata(),
+
 			dataidKey:this.getDataidKey(),
+			
 			datapIdKey:this.getDatapIdKey(),
+			
 			datarootPId:this.getDatarootPId(),
+
 			isSelLeafOnly:this.getIsSelLeafOnly(),
+
 			isMultSelect:this.getIsMultSelect(),
+			
 			dblClickExpand:this.getDblClickExpand(),
+			
 			items:this.getItems(),
+
 			beforeExpand:this._beforeExpand,
+			
 			onExpand:this._onExpand,
+			
 			onClick: this._onClick,
+			
 			onCheck: this._onCheck
 		}
 	},
@@ -643,29 +677,53 @@ wis.widget.Tree.prototype = {
 		if (!data) {
 			return;
 		}
+		
 		if(data.name) this.setName(data.name);
+		
 		if(data.themes) this.setThemes(data.themes );
+
 		if(data.chkStyle) this.setChkStyle(data.chkStyle);
+
 		if(data.radioType) this.setRadioType(data.radioType);
+
 		if(data.url) this.setUrl(data.url);
+
 		if(data.asynctype) this.setAsynctype(data.asynctype);
+
 		if(data.dataType) this.setDataType(data.dataType);
+		
 		if(data.dataChecked) this.setDatachecked(data.dataChecked);
+
 		if(data.checkFlag!=null) this.setCheckFlag(data.checkFlag);
+		
 		if(data.datachildren) this.setDatachildren(data.datachildren);
+
 		if(data.dataname) this.setDataname(data.dataname);
+
 		if(data.datatitle) this.setDatatitle(data.datatitle);
+		
 		if(data.dataurl) this.setDataurl(data.dataurl);
+
 		if(data.datasimpledata!=null) this.setDatasimpledata(data.datasimpledata);
+
 		if(data.dataidKey) this.setDataidKey(data.dataidKey);
+		
 		if(data.datapIdKey) this.setDatapIdKey(data.datapIdKey);
+		
 		if(data.datarootPId) this.setDatarootPId(data.datarootPId);
+
 		if(data.isSelLeafOnly!=null) this.setIsSelLeafOnly(data.isSelLeafOnly);
+
 		if(data.isMultSelect!=null) this.setIsMultSelect(data.isMultSelect);
+		
 		if(data.dblClickExpand!=null) this.setDblClickExpand(data.dblClickExpand);
+		
 		if(data.items) this.setItems(data.items);
+
 		if(data.beforeExpand) this.beforeExpand(data.beforeExpand);
+		
 		if(data.onExpand) this.onExpand(data.onExpand);
+		
 		if(data.onClick){
 			this.onClick(data.onClick);
 		}else{

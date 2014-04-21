@@ -66,14 +66,14 @@ wof.widget.Tab.prototype = {
         for(var i=0; i<childs.length; i++){
             var child = childs[i];
             this._tab.insertItem({name:child.getId(),width:100,label:child.getTitle(),closeable:true,icon:'add',iconPosition:'left'});
-            child.childNodes()[0].setWidth(this.getWidth()-4);
+            child.childNodes()[0].setWidth(this.getWidth());
             child.childNodes()[0].setHeight(this.getHeight()-52);
-            child.childNodes()[0].getDomInstance().css('width',(this.getWidth()-8)+'px');
-            child.childNodes()[0].getDomInstance().css('height',(this.getWidth()-52)+'px');
+            child.childNodes()[0].getDomInstance().css('width',(this.getWidth())+'px');
+            child.childNodes()[0].getDomInstance().css('height',(this.getWidth())+'px');
             this._tab.insertNode(child.getDomInstance(),i+1);
         }
-        this._tab.setWidth(this.getWidth()-8);
-        this._tab.setHeight(this.getHeight()-52);
+        this._tab.setWidth(this.getWidth());
+        this._tab.setHeight(this.getHeight());
         this._tab.setActiveItemIndex(this.getActiveItemIndex());
     },
 
@@ -228,8 +228,8 @@ wof.widget.Tab.prototype = {
         }
         var gridLayout = wof$.create('GridLayout');
         gridLayout.setIsInside(true);
-        gridLayout.setOverflow('auto');
-        gridLayout.setWidth(this.getWidth()-8);
+        //gridLayout.setOverflow('auto');
+        gridLayout.setWidth(this.getWidth());
         gridLayout.setHeight(this.getHeight()-52);
         gridLayout.setTop(50);
         gridLayout.setLeft(4);
