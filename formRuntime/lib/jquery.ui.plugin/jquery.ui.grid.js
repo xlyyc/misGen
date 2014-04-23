@@ -9,7 +9,7 @@
             displayTitle: true,  // 是否显示标题
             url: null,
             gridData: null,
-            mode: 'view',  // view 显示模式，edit 编辑模式
+            mode: 'edit',  // view 显示模式，edit 编辑模式
             pageSize: 10,
             totalRecord: null,
             pageNo: 1,
@@ -22,25 +22,23 @@
             usePage: true,  // 是否显示分页
             useCheckColumn: true, //  是否显示选择列
             activeRowIndex: null,   // 选中的行索引。
-            checkedRowIndex: null,    // 选中的checkbox列索引。
+            checkedRowIndex: [],    // 选中的checkbox列索引。
             addedRow: [],
             deletedRow: [],
             updatedRow: [],
             onNextPage: null,
             onPrevPage: null,
-            onFirstPage: null,
-            onLastPage: null,
+            onFirstPage: null,  // TODO
+            onLastPage: null, // TODO
             onSelectRow: null,
             onCheckRow: null,
-            onReload: null,
+            onReload: null, //TODO
             onChangeCellValue: null,
             onClickCell: null,
-            afterAddColumn: null,
-            afterDeleteColumn: null,
-            onRowSelect: null,
-            onRowChecked: null,
+            afterAddColumn: null, //TODO
+            afterDeleteColumn: null, //TODO
             afterRender: null,
-            onSortColumn: null
+            onSortColumn: null //TODO
         },
         getData: function () {
             return {
@@ -70,6 +68,7 @@
                 var fixColumn = $('.grid_fix_column', this.element).find('tr').not(':first');
                 $(fixColumn[rowIndex]).addClass('grid_selectRow');
                 this.options.activeRowIndex = rowIndex;
+                this._trigger('onSelectRow', null, this.getSelectedRowData());
             }
         },
         unselectRow: function () {
@@ -78,27 +77,38 @@
                 $('.grid_selectRow', this.element).removeClass('grid_selectRow');
             }
         },
-        checkAllRow: function () {
-            this.checkRow(null, true);
-        },
-        uncheckAllRow: function () {
-            this.checkRow(null, false);
-        },
-        checkRow: function (rowIndexs, isCheck) {
+        _checkRow: function (rowIndexArray, isCheck) {
             if (this.options.useCheckColumn) {
-                var check = $('.grid_fix_column', this.element).find('.grid_checkColumn');
-                if (rowIndexs) {
-                    for (var i = 0; i < rowIndexs.length; i++) {
-                        var rowIndex = rowIndexs[i];
-                        $('input', check[rowIndex]).prop('checked', isCheck ? true : false);
+                var check = $('.grid_fix_column', this.element).find('.grid_checkColumn').find('input');
+                if (rowIndexArray) {
+                    for (var i = 0; i < rowIndexArray.length; i++) {
+                        var rowIndex = rowIndexArray[i];
+                        $(check[rowIndex]).prop('checked', isCheck ? true : false);
                     }
                 } else {
-                    check.find('input').prop('checked', isCheck ? true : false);
+                    check.prop('checked', isCheck ? true : false);
                 }
+                var that = this;
+                this.options.checkedRowIndex = [];
+                $('.grid_fix_column', this.element).find('.grid_checkColumn').find('input:checked').each(function () {
+                    var index = $(this).closest('tr').data('_index');
+                    that.options.checkedRowIndex.push(index);
+                });
+
+                that._trigger('onCheckRow', null, {data: that.getCheckedRowData()});
             }
         },
-        uncheckRow: function (rowIndexs) {
-
+        checkRow: function (index) {
+            this._checkRow([index], true);
+        },
+        uncheckRow: function (index) {
+            this._checkRow([index], false);
+        },
+        checkAllRow: function () {
+            this._checkRow(null, true);
+        },
+        uncheckAllRow: function () {
+            this._checkRow(null, false);
         },
         getSelectedRowData: function () {
             var data = null;
@@ -110,7 +120,7 @@
         getCheckedRowData: function () {
             var data = [];
             if (this.options.checkedRowIndex != null) {
-                for (var i = 0; i < this.options.checkedRowIndex.length(); i++) {
+                for (var i = 0; i < this.options.checkedRowIndex.length; i++) {
                     data.push(this.options.gridData[this.options.checkedRowIndex[i]]);
                 }
             }
@@ -367,46 +377,37 @@
                     that.selectRow($(this).data('_index'));
                 });
             if (this.options.useCheckColumn) {
-                (function (index, tr) {
+                (function (tr) {
                     var checkbox = $('<input>', {
                         type: 'checkbox'
-                    }).click(function () {
-                        if (that.options.checkedRowData == null) {
-                            that.options.checkedRowData = [];
-                        }
-                        var checkbox = $(this);
+                    }).click(function (e) {
+                        var checkbox = $(this),
+                            index = tr.data('_index'),
+                            eventData = {event: e, data: null};
                         if (checkbox.prop('checked')) {
-                            that.options.checkedRowData.push(index);
+                            that.checkRow(index);
                         } else {
-                            var checkedRowData = that.options.checkedRowData;
-                            for (var i = 0; i < checkedRowData.length; i++) {
-                                var checkedIndex = checkedRowData[i];
-                                if (checkedIndex === index) {
-                                    var front = checkedRowData.slice(0, i);
-                                    var end = checkedRowData.slice(i + 1);
-                                    that.options.checkedRowData = front.concat(end);
-                                    break;
-                                }
-                            }
+                            that.uncheckRow(index);
                         }
                     });
                     var content = $('<div>').width(30).addClass('grid_checkColumn');
                     content.append(checkbox);
                     var th = $('<td></td>').append(content);
                     tr.append(th);
-                })(index, tr);
+                })(tr);
             }
             for (var j = 0; j < columns.length; j++) {
                 var column = columns[j],
                     columnName = column.name,
                     value = rowData[columnName] || '',
-                    cell = new $.ui.cell({type: 'text', value: value, width: column.width});
+                    cell = new $.ui.cell({type: 'text', value: value, width: column.width, onClick: function () {
+                        that._trigger('onClickCell');
+                    }, onValueChange: function () {
+                        console.log(rowData);
+                        that.options.updatedRow.push(rowData);
+                        that._trigger('onChangeCellValue');
+                    }});
                 (function (c) {
-                    c._on(cell.widget(), {
-                        'onValueChange': function () {
-                            that.options.updatedRow.push(rowData);
-                        }
-                    });
                     tr.append($('<td>').append(cell.widget()).data('cell', c).click(function () {
                         if (that.options.mode == 'edit') {
                             c.editMode();
@@ -474,7 +475,7 @@
         },
         _rendered: function () {
             this.selectRow(this.options.activeRowIndex);
-            this.checkRow(this.options.checkedRowIndex);
+            this._checkRow(this.options.checkedRowIndex, true);
             this._trigger('afterRender');
         },
         _useFixLayout: function () {
@@ -487,33 +488,67 @@
             pageNo: 1,
             pageSize: 10,
             totalRecord: null,
-            height: 50,
-            pageDisplay: "当前{from}-{to}记录,共{totalPage}页",
+            height: 20,
+            pageDisplay: "{from}-{to}记录，共{totalRecord}条,{currentPage}/{totalPage}页",
             onNextPage: null,
             onPrevPage: null
         },
+        isLastPage: function () {
+            return this.options.pageNo === this.totalPage;
+        },
         _create: function () {
-            var from = (this.options.pageNo - 1) * this.options.pageSize,
-                to = from + this.options.pageSize,
-                totalPage = this.options.totalRecord % this.options.pageSize == 0 ?
-                    this.options.totalRecord / this.options.pageSize : this.options.totalRecord / this.options.pageSize + 1,
+            this.element.append($('<span>').addClass('page_display'));
+            this.render();
+            var firstButton = $('<button>', {
+                    text: '首'
+                }).click(function (e) {
+                    that._trigger('onFirstPage', e);
+                }), lastButton = $('<button>', {
+                    text: '末'
+                }).click(function (e) {
+                    that._trigger('onLastPage', e);
+                }), prevButton = $('<button>', {
+                    text: '上'
+                }).click(function (e) {
+                    that._trigger('onPrevPage', e);
+                }), nextButton = $('<button>', {
+                    text: '下'
+                }).click(function (e) {
+                    that._trigger('onNextPage', e);
+                }), pageSize = [5, 10, 20],
                 that = this,
-                display = this.options.pageDisplay.replace('{from}',
-                        (from + 1) + '').replace('{to}', to + '').replace('{totalPage}', totalPage + '');
-            var prevButton = $('<button>', {
-                text: '上一页'
-            }).click(function (e) {
-                that._trigger('onPrevPage', e);
-            });
-            var nextButton = $('<button>', {
-                text: '下一页'
-            }).click(function (e) {
-                that._trigger('onNextPage', e);
-            });
-            this.element.addClass('grid_page').append(display)
+                select = $('<select>').change(function () {
+                    that.options.pageSize = $(this).val();
+                    that.render();
+                });
+            for (var i = 0; i < pageSize.length; i++) {
+                var option = $('<option>', {
+                    text: pageSize[i],
+                    value: pageSize[i]
+                });
+                if (pageSize[i] == this.options.pageSize) {
+                    option.prop('selected', true);
+                }
+                select.append(option);
+            }
+            this.element.addClass('grid_page')
                 .css({position: 'absolute', bottom: 0, height: this.options.height, overflow: 'hidden'})
+                .append(firstButton)
                 .append(prevButton)
-                .append(nextButton);
+                .append(nextButton)
+                .append(lastButton)
+                .append(select);
+        },
+        render: function () {
+            this._renderPageDisplay();
+        },
+        _renderPageDisplay: function () {
+            var from = (this.options.pageNo - 1) * this.options.pageSize,
+                totalPage = this.totalPage = parseInt(this.options.totalRecord % this.options.pageSize == 0 ? this.options.totalRecord / this.options.pageSize : this.options.totalRecord / this.options.pageSize + 1),
+                to = this.isLastPage() ? parseInt(this.options.totalRecord % this.options.pageSize == 0 ? from + this.options.pageSize : from + this.options.totalRecord % this.options.pageSize) : from + this.options.pageSize,
+                display = this.options.pageDisplay.replace('{from}', (from + 1) + '').replace('{to}', parseInt(to) + '')
+                    .replace('{totalPage}', totalPage + '').replace('{totalRecord}', this.options.totalRecord + '').replace('{currentPage}', this.options.pageNo + '');
+            $('.page_display', this.element).text(display);
         }
     });
 
@@ -524,23 +559,28 @@
             width: null,
             mode: 'view',
             onValueChange: null,
-            onSwitchMode: null
+            onSwitchMode: null,
+            onClick: null
         },
         _create: function () {
-            this.element.width(this.options.width).text(this.options.value);
+            var that = this;
+            this.element.width(this.options.width).text(this.options.value).click(function (e) {
+                that._trigger('onClick', e);
+            });
         },
         editMode: function () {
             if (this.options.mode != 'edit') {
                 this.options.mode = 'edit';
                 var that = this;
                 this.element.empty();
-                this.element.append($('<input type="text"/>')
-                    .width(this.options.width - 5).val(this.options.value).blur(function () {
-                        that.options.value = $(this).val();
-                        var eventData = {value: $(this).val()};
-                        that._trigger('onValueChange', eventData);
-                        that.viewMode()
-                    }));
+                this.element.append($('<input>', {
+                    type: 'text'
+                }).width(this.options.width - 5).val(this.options.value).blur(function () {
+                    that.options.value = $(this).val();
+                    var eventData = {value: $(this).val()};
+                    that._trigger('onValueChange', eventData);
+                    that.viewMode()
+                }));
                 this._delay(function () {
                     this.element.find('input').focus();
                 }, 100);

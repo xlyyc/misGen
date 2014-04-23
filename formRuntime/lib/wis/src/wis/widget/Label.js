@@ -9,33 +9,24 @@ wis.widget.Label = function () {
 };
 
 wis.widget.Label.prototype = {
-    _cid: null,         //页面唯一编号
-    _labelName: null,         //label的名称
-    _labelTitle: null,        //显示名称
+    _name: null,         //label的名称
+    _title: null,        //显示名称
     _label: null,
 
-    getCid: function () {
-        return this._cid;
+    getName: function () {
+        return this._name;
     },
 
-    setCid: function (cid) {
-        this._cid = cid;
+    setName: function (name) {
+        this._name = name;
     },
 
-    getLabelName: function () {
-        return this._labelName;
+    getTitle: function () {
+        return this._title;
     },
 
-    setLabelName: function (labelName) {
-        this._labelName = labelName;
-    },
-
-    getLabelTitle: function () {
-        return this._labelTitle;
-    },
-
-    setLabelTitle: function (labelTitle) {
-        this._labelTitle = labelTitle;
+    setTitle: function (title) {
+        this._title = title;
     },
 
     /**
@@ -75,16 +66,14 @@ wis.widget.Label.prototype = {
     //----------必须实现----------
     getData: function () {
         return {
-            cid: this.getCid(),
-            labelName: this.getLabelName(),
-            labelTitle: this.getLabelTitle()
+            name: this.getName(),
+            title: this.getTitle()
         };
     },
 
     //----------必须实现----------
     setData: function (data) {
-        this.setCid(data.cid);
-        this.setLabelName(data.labelName);
-        this.setLabelTitle(data.labelTitle);
+        this.setName(data.name);
+        this.setTitle(data.title);
     }
 };

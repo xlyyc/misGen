@@ -126,7 +126,7 @@ wof.widget.ComboBox.prototype = {
         var _this = this;
         var comboBox = wis$.create('ComboBox');
         comboBox.setReadonly(this.getReadonly());
-        comboBox.setComboBoxName(this.getName());
+        comboBox.setName(this.getName());
         comboBox.setIsMultiSelect(this.getIsMultiSelect());
         comboBox.setMode(this.getMode());
         comboBox.setSelectData(this.getComboBoxData());

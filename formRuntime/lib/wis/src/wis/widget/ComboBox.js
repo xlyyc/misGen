@@ -10,7 +10,7 @@ wis.widget.ComboBox = function () {
 
 wis.widget.ComboBox.prototype = {
 
-    _comboBoxName: null,
+    _name: null,
     _isMultiSelect: null,
     _mode: null,      //normal 普通 tree 树 grid 列表
     _selectData : null,
@@ -52,12 +52,12 @@ wis.widget.ComboBox.prototype = {
         this._selectData = selectData;
     },
 
-    getComboBoxName: function () {
-        return this._comboBoxName;
+    getName: function () {
+        return this._name;
     },
 
-    setComboBoxName: function (comboBoxName) {
-        this._comboBoxName = comboBoxName;
+    setName: function (name) {
+        this._name = name;
     },
 
     getIsMultiSelect: function () {
@@ -164,10 +164,7 @@ wis.widget.ComboBox.prototype = {
             +'<div class="l-trigger-icon"></div>'
             +'</div>'
             +'</div>');
-        this._domSelect = jQuery('<div class="l-box-select" style="width: 300px; display: none;">'
-            +'<div class="l-box-select-inner" style="height: auto;"></div>'
-            +'<div class="l-btn-nw-drop"></div>'
-            +'</div>');
+
         this._input = jQuery('input:first',this._domInput);
         this._input.mousedown(function(event){
             event.stopPropagation();
@@ -201,13 +198,7 @@ wis.widget.ComboBox.prototype = {
                 _this.render();
             }
         });
-        this._domSelect.hover(null, function (e){
-            event.stopPropagation();
-            _this.setSelectExt(false);
-            _this.render();
-        });
-        this._select = jQuery('div[class=l-box-select-inner]:first',this._domSelect);
-        this.getDomInstance().append(this._domInput).append(this._domSelect);
+        this.getDomInstance().append(this._domInput);
     },
 
     // 渲染前处理方法
@@ -216,9 +207,28 @@ wis.widget.ComboBox.prototype = {
 
         var _this = this;
 
-        this._select.empty();
+        //如果下拉框不为空 则清空下拉框
+        if(this._select!=null){
+            this._select.empty();
+        }
         if(this.getMode()=='normal'){
+            //初始化下拉框div
+            if(this._domSelect==null){
+                this._domSelect = jQuery('<div class="l-box-select" style="width: 300px; display: none;">'
+                    +'<div class="l-box-select-inner" style="height: auto;"></div>'
+                    +'<div class="l-btn-nw-drop"></div>'
+                    +'</div>');
+                this._domSelect.hover(null, function (e){
+                    event.stopPropagation();
+                    _this.setSelectExt(false);
+                    _this.render();
+                });
+                this._select = jQuery('div[class=l-box-select-inner]:first',this._domSelect);
+                this.getDomInstance().append(this._domSelect);
+            }
+            //文本框显示选中值
             this._input.val(this.getTexts());
+            //初始化表格
             var table = jQuery('<table cellpadding="0" cellspacing="0" border="0" class="l-box-select-table l-table-nocheckbox"><tbody></tbody></table>');
             var data = this.getSelectData();
             var tbody = jQuery('tbody:first',table);
@@ -267,20 +277,16 @@ wis.widget.ComboBox.prototype = {
                 jQuery('td[value='+this.getValues()[i]+']', tbody).addClass("l-selected");
             }
             this._select.append(table);
+            //显示或隐藏下拉框
+            if(this.getSelectExt()==true){
+                this._domSelect.show();
+            }else{
+                this._domSelect.hide();
+            }
         }else if(this.getMode()=='tree'){
             //todo
         }else if(this.getMode()=='grid'){
             //todo
-
-            function getPoint(obj) {
-                var t = obj.offsetTop || 0;
-                var l = obj.offsetLeft || 0;
-                while (obj = obj.offsetParent) {
-                    t += obj.offsetTop || 0;
-                    l += obj.offsetLeft || 0;
-                }
-                return {top:t,left:l};
-            }
 
             if(this._grid!=null){
                 this._grid.remove(true);
@@ -291,19 +297,17 @@ wis.widget.ComboBox.prototype = {
                     {"bindDataField":"JBXX.zgh","width":"120","colNo":0,"name":"","caption":"职工号","sortable":true,"align":"center","bold":"true","underline":"true","bgColor":"#efefef","font":"宋体","fontSize":"max","fontColor":"black","style":"","adjustContent":"true","format":{"param":"short","functionName":null},"display":false,"type":"integer","visbleType":"text","selectPattern":null,"required":false,"verifyFunctionName":null,"verifyErrorInfo":""},{"bindDataField":"JBXX.xm","width":"70","colNo":1,"name":"","caption":"姓名","sortable":true,"align":"center","bold":"true","underline":"true","bgColor":"#efefef","font":"宋体","fontSize":"max","fontColor":"black","style":"","adjustContent":"true","format":{"param":"short","functionName":null},"display":false,"type":"","visbleType":"text","selectPattern":null,"required":false,"verifyFunctionName":null,"verifyErrorInfo":""},{"bindDataField":"JBXX.xb","width":"70","colNo":2,"name":"","caption":"性别","sortable":true,"align":"center","bold":"true","underline":"true","bgColor":"#efefef","font":"宋体","fontSize":"max","fontColor":"black","style":"","adjustContent":"true","format":{"param":"short","functionName":null},"display":false,"type":"","visbleType":"text","selectPattern":null,"required":false,"verifyFunctionName":null,"verifyErrorInfo":""}],"data":[{"data":{"JBXX.zgh":{"value":"11","status":"NotModified"},"JBXX.xm":{"value":"张三","status":"NotModified"},"JBXX.xb":{"value":"2","status":"NotModified"}},"status":"NotModified","childData":{}},{"data":{"JBXX.zgh":{"value":"12","status":"NotModified"},"JBXX.xm":{"value":"李四","status":"NotModified"},"JBXX.xb":{"value":"2","status":"NotModified"}},"status":"NotModified","childData":{}},{"data":{"JBXX.zgh":{"value":"232957F7C7A3436880F8A0FE77E24E24","status":"NotModified"},"JBXX.xm":{"value":"测试徐","status":"NotModified"},"JBXX.xb":{"value":"1","status":"NotModified"}},"status":"NotModified","childData":{}},{"data":{"JBXX.zgh":{"value":"CDB8D1A4122E4F2EBFB91FBCC16AB190","status":"NotModified"},"JBXX.xm":{"value":"李四三","status":"NotModified"},"JBXX.xb":{"value":"2","status":"NotModified"}},"status":"NotModified","childData":{}}],"useClientPage":true,"width":210,"height":200,"isScroll":false,"enabledEdit":true,"dblClickToEdit":true,"pageSize":10,"page":1,"refData":{},"total":4};
                 var grid = wis$.create('Grid');
                 grid.setOptions(data);
+                grid.onSelectRow(function(data){console.log(JSON.stringify(data));});
+                grid.onCheckRow(function(data){console.log(JSON.stringify(data));});
                 grid.setWidth(300);
-                var point = getPoint(this.getDomInstance().get(0));   //todo 需要考虑输入框本身的高度
+                var point = this._getPoint(this.getDomInstance().get(0));
                 grid.setLeft(point.left);
-                grid.setTop(point.top);
+                grid.setTop(point.top+(this._input.height()+10));
                 grid.appendTo(jQuery('body'));
                 grid.render();
                 this._grid = grid;
             }
-        }
-        if(this.getSelectExt()==true){
-            this._domSelect.show();
-        }else{
-            this._domSelect.hide();
+
         }
     },
 
@@ -322,6 +326,7 @@ wis.widget.ComboBox.prototype = {
     // ----------必须实现----------
     getData: function () {
         return {
+            name: this.getName(),
             selectExt: this.getSelectExt(),
             values: this.getValues(),
             split: this.getSplit(),
@@ -337,6 +342,7 @@ wis.widget.ComboBox.prototype = {
 
     // ----------必须实现----------
     setData: function (data) {
+        this.setName(name);
         this.setSelectExt(data.selectExt);
         this.setValues(data.values);
         this.setSplit(data.split);
@@ -388,6 +394,17 @@ wis.widget.ComboBox.prototype = {
             //todo
         }
         return texts.join(this.getSplit());
+    },
+
+    //获得对象相对于body的位置
+    _getPoint: function(obj) {
+        var t = obj.offsetTop || 0;
+        var l = obj.offsetLeft || 0;
+        while (obj = obj.offsetParent) {
+            t += obj.offsetTop || 0;
+            l += obj.offsetLeft || 0;
+        }
+        return {top:t,left:l};
     }
 
 };

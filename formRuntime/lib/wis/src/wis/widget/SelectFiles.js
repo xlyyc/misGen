@@ -9,24 +9,16 @@ wis.widget.SelectFiles = function () {
 };
 
 wis.widget.SelectFiles.prototype = {
-    _cid: null,                     //唯一索引
     _name: null,                    //上传控件的名称
-    _isMultUpload: null,            //是否批量上传
-    _fileTypes: null,               //文件类型限制，多个用半角分号隔开，如*.doc;*.jpg
-    _fileSizeLimit: null,           //单个文件大小上限，默认100M
+    _isMultUpload: null,            //是否批量上传  todo
+    _fileTypes: null,               //文件类型限制，多个用半角分号隔开，如*.doc;*.jpg       todo
+    _fileSizeLimit: null,           //单个文件大小上限，默认100M         todo
     _uploadUrl: null,               //上传接收地址
-    _fileSaveName: null,            //文件保存名
+    _fileSaveName: null,            //文件保存名 todo
 
-    getCid: function () {
-        return this._cid;
-    },
-
-    setCid: function (cid) {
-        this._cid = cid;
-    },
 
     getName: function () {
-        return this._name;
+        return this._name || '';
     },
 
     setName: function (name) {
@@ -55,7 +47,7 @@ wis.widget.SelectFiles.prototype = {
 
 
     getUploadUrl: function () {
-        return this._uploadUrl;
+        return this._uploadUrl || '';
     },
 
     setUploadUrl: function (uploadUrl) {
@@ -73,6 +65,7 @@ wis.widget.SelectFiles.prototype = {
      * 初始化方法
      */
     _init: function (data) {
+
     },
 
     /**
@@ -80,8 +73,8 @@ wis.widget.SelectFiles.prototype = {
      * 仅在第一次调用render时执行
      */
     initRender: function () {
-        this._input = jQuery('<input type="text">');
-        this.getDomInstance().append(this._input);
+        this._file = jQuery('<input type="file" name="'+this.getName()+'">');
+        this.getDomInstance().append(this._file);
     },
 
     //渲染前处理方法
@@ -103,12 +96,12 @@ wis.widget.SelectFiles.prototype = {
     //----------必须实现----------
     getData: function () {
         return {
-            cid: this.getCid()
+
         };
     },
 
     //----------必须实现----------
     setData: function (data) {
-        this.setCid(data.cid);
+
     }
 };

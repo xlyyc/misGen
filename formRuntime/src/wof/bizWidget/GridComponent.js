@@ -344,6 +344,7 @@ wof.bizWidget.GridComponent.prototype = {
 	_activeColumnIndex : null,
 	_callStr : null,
 	_initActionName : null,
+	_state : null,
 	/**
 	 * 运行时属性
 	 */
@@ -384,6 +385,13 @@ wof.bizWidget.GridComponent.prototype = {
 			break;
 		}
 	},
+	getState : function() {
+		return this._state;
+	},
+	setState : function(state) {
+		this._state = state;
+	},
+
 	getCurrentRowId : function() {
 		return this._currentRowId;
 	},
@@ -495,6 +503,7 @@ wof.bizWidget.GridComponent.prototype = {
 		grid.setPageSize(this.getPageSize());
 		grid.setGridData(this.getGridData());
 		grid.setTotal(this.getPageBar().total);
+		grid.setState(this.getState());
 		grid.render();
 		grid.appendTo(this);
 	},
