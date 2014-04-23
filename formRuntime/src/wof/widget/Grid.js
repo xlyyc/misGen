@@ -3,60 +3,55 @@ wof.widget.Grid = function() {
 };
 
 wof.widget.Grid.prototype = {
-	_cid : null,
-	_title : null,
-	_checkbox : false,
-	_headerRowHeight : null,
-	_rowHeight : null,
-	_columnWidth : null,
-	_gridUrl : null,
-	_gridData : null,
-	_usePage : true,
-	_page : 1,
-	_pageSize : 20,
-	_total : null,
-	_pageSizeOptions : [ 10, 20, 30, 40, 50 ],
-	_pageMsg : "显示记录从{from}到{to}，总数 {total} 条 。每页显示记录数：{pagesize}",
-	_params : [],
-	_loadingMsg : "正在加载数据，请稍候…",
-	_emptyMsg : "没有数据",
-	_errorMsg : "取数出错",
-	_columns : [],
-	_onAfterEdit : null,
-	_onBeforeEdit : null,
-	_onReload : null,
-	_onToFirst : null,
-	_onToPrev : null,
-	_onToNext : null,
-	_onToLast : null,
-	_onCurPageEnter : null,
-	_onSelectChange : null,
-	_onSelectRow : null,
-	_onUnSelectRow : null,
-	_onBeforeCheckRow : null,
-	_onCheckRow : null,
-	_onDblClickRow : null,
-	_onBeforeCheckAllRow : null,
-	_onCheckAllRow : null,
-	_addRow : null,
-	_deleteRow : null,
-	_getGridData : null,
-	_setGridData : null,
-	_getChange : null,
-	_getSelectedRow : null,
-	_getSelectedRowObj : null,
-	_refData : null,
-	_grid : null,
+	_title : null,  //标题
+	_checkbox : false,  // 是否显示checkbox列
+	_headerRowHeight : null,  // 表头高度
+	_rowHeight : null,// 行高
+	_columnWidth : null,// 列宽
+	_gridUrl : null,  //TODO 没实现
+	_gridData : null,// 数据
+	_usePage : true, // 是否显示分页
+	_page : 1,   //当前页
+	_pageSize : 20,//每页显示几条
+	_total : null,// 共几条
+	_pageSizeOptions : [ 10, 20, 30, 40, 50 ],//没页显示几条选项
+	_pageMsg : "显示记录从{from}到{to}，总数 {total} 条 。每页显示记录数：{pagesize}",// 分页条模板
+	_params : [],  // URL中的参数
+	_loadingMsg : "正在加载数据，请稍候…", // 加载时tip
+	_emptyMsg : "没有数据",// 没数据时显示的信息
+	_errorMsg : "出错",  // 加载出错显示的信息
+	_columns : [], // 列定义
+	_onAfterEdit : null,  // 编辑之后
+	_onBeforeEdit : null,  // 编辑之前
+	_onReload : null,  // 重新加载数据
+	_onToFirst : null,  // 第一页
+	_onToPrev : null,  // 上一页
+	_onToNext : null,  // 下一页
+	_onToLast : null, // 最后一页
+	_onSelectRow : null, // 选择一行
+	_onUnSelectRow : null, // 取消选择一行
+	_onBeforeCheckRow : null,//选中一行之前
+	_onCheckRow : null,//选中一行
+	_onDblClickRow : null,//双击一行
+	_onBeforeCheckAllRow : null,// 全部选中之前
+	_onCheckAllRow : null,// 全部选中
+	_addRow : null,  // 添加一行
+	_deleteRow : null,//删除一行
+	_getGridData : null,//获取数据
+	_setGridData : null,// 设计数据
+	_getSelectedRow : null, // 获取选择的行
+	_getSelectedRowObj : null,// 获取选择的行对象
+	_refData : null,// 参照数据
+	_grid : null, //  内部 grid对象
 	
 	_currentSelectedRowIndex:null,
 	_currentSelectedRowData:null,
-
-	getCid : function() {
-		return this._cid;
+	_state:null,
+	getState : function() {
+		return this._state;
 	},
-
-	setCid : function(cid) {
-		this._cid = cid;
+	setState : function(state) {
+		this._state = state;
 	},
 	getRefData : function() {
 		return this._refData;
@@ -299,6 +294,44 @@ wof.widget.Grid.prototype = {
 		if (this._grid) {
 			this._grid.remove(true);
 		}
+		
+		 var ss = {
+					title : this.getTitle(),
+					checkbox : this.getCheckbox(),
+					columns : this.getColumns(),
+					data : this.getGridData(),
+					useClientPage : true,
+					width : this.getWidth(),
+					height : this.getHeight(),
+					isScroll : false,
+					onCheckRow : this.onCheckRow,
+					enabledEdit : true,
+					dblClickToEdit : true,
+					pageSize : this.getPageSize(),
+					page : this.getPage(),
+					refData : this.getRefData(),
+					total : this.getTotal(),
+					onToNext : function() {
+						that.sendMessage('wof.widget.Grid_onToNext');
+					},
+					onToPrev : function() {
+						that.sendMessage('wof.widget.Grid_onToPrev');
+					},
+					onToFirst : function() {
+						that.sendMessage('wof.widget.Grid_onToFirst');
+					},
+					onToLast : function() {
+						that.sendMessage('wof.widget.Grid_onToLast');
+					},
+					onSelectRow : function (data,index){
+						that._currentSelectedRowIndex = index;
+						that._currentSelectedRowData = data;
+						that.sendMessage('wof.widget.Grid_onSelectRow');
+					},
+					onReload : function (){
+						that.sendMessage('wof.widget.Grid_reload');
+					}
+				};
 		this._grid = wis$.create('Grid', {
 			title : this.getTitle(),
 			checkbox : this.getCheckbox(),
