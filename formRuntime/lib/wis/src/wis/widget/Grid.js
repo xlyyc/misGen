@@ -4,7 +4,6 @@ wis.widget.Grid = function() {
 };
 
 wis.widget.Grid.prototype = {
-	_cid : null,
 	_title : null,
 	_checkbox : false,
 	_headerRowHeight : null,
@@ -48,14 +47,16 @@ wis.widget.Grid.prototype = {
 	_getSelectedRowObj : null,
 	_refData : null,
 	_grid : null,
-
-	getCid : function() {
-		return this._cid;
+	_state:null,
+	
+	getState : function() {
+		return this._state;
 	},
 
-	setCid : function(cid) {
-		this._cid = cid;
+	setState : function(state) {
+		this._state = state;
 	},
+
 	getRefData : function() {
 		return this._refData;
 	},
@@ -199,10 +200,6 @@ wis.widget.Grid.prototype = {
 		return this._errorMsg;
 	},
 
-	setColumns : function(columns) {
-		this._columns = columns;
-	},
-
 	getColumns : function() {
 		return this._columns;
 	},
@@ -215,64 +212,78 @@ wis.widget.Grid.prototype = {
 	 * 初始化方法
 	 */
 	_init : function(data) {
-		if (data.name) {
-			this.setTitle(data.name);
-		}
-		if (data.checkbox) {
-			this.setCheckbox(data.checkbox);
-		}
-		if (data.data) {
-			this.setGridData(data.data);
-		}
-		if (data.columns) {
-			this.setColumns(data.columns);
-		}
-		if (data.total) {
-			this.setTotal(data.total);
-		}
-		if (data.pageNo) {
-			this.setPage(data.pageNo)
-		}
-		if (data.pageSize) {
-			this.setPageSize(data.pageSize);
-		}
-		if (data.onToNext) {
-			this.onToNext = data.onToNext;
-		}
-		if (data.onToPrev) {
-			this.onToPrev = data.onToPrev;
-		}
-		if (data.onToFirst) {
-			this.onToFirst = data.onToFirst;
-		}
-		if (data.onToLast) {
-			this.onToLast = data.onToLast;
-		}
-		if (data.onReload) {
-			this.onReload = data.onReload;
-		}
-		if (data.refData) {
-			this.setRefData(data.refData);
-		}
-		if (data.onSelectRow) {
-			this.onSelectRow = data.onSelectRow;
-		}
+		this.setOptions(data);
 	},
+
+    setOptions: function(data){
+        if (data.name) {
+            this.setTitle(data.name);
+        }
+        if (data.checkbox) {
+            this.setCheckbox(data.checkbox);
+        }
+        if (data.data) {
+            this.setGridData(data.data);
+        }
+        if (data.columns) {
+            this.setColumns(data.columns);
+        }
+        if (data.total) {
+            this.setTotal(data.total);
+        }
+        if (data.pageNo) {
+            this.setPage(data.pageNo)
+        }
+        if (data.pageSize) {
+            this.setPageSize(data.pageSize);
+        }
+        if (data.onToNext) {
+            this.onToNext = data.onToNext;
+        }
+        if (data.onToPrev) {
+            this.onToPrev = data.onToPrev;
+        }
+        if (data.onToFirst) {
+            this.onToFirst = data.onToFirst;
+        }
+        if (data.onToLast) {
+            this.onToLast = data.onToLast;
+        }
+        if (data.onReload) {
+            this.onReload = data.onReload;
+        }
+        if (data.refData) {
+            this.setRefData(data.refData);
+        }
+        if(data.state){
+        	this.setState(data.state);
+        }
+    },
+
 	addRow : function() {
-		$(this.getDomInstance()).grid('addRow');
+		jQuery(this.getDomInstance()).grid('addRow');
 	},
 	getCurrentData : function() {
-		return $(this.getDomInstance()).grid('getSelectedRowData');
+		return jQuery(this.getDomInstance()).grid('getSelectedRowData');
 	},
 	getCurrentAddData : function() {
-		return $(this.getDomInstance()).grid('option').addedRow;
+		return jQuery(this.getDomInstance()).grid('option').addedRow;
 	},
 	getSelectedRows : function() {
-		return $(this.getDomInstance()).grid('getCheckedRowData');
+		return jQuery(this.getDomInstance()).grid('getCheckedRowData');
 	},
 	updateRow : function() {
-		$(this.getDomInstance()).grid('updateRow', 1);
+        jQuery(this.getDomInstance()).grid('updateRow', 1);
 	},
+
+    onSelectRow: function(callback){
+        this._onSelectRow = callback;
+    },
+    onCheckRow:function (callback){
+    	this._onCheckRow = callback;
+    	
+    },
+
 	/**
 	 * 初始化渲染方法 仅在第一次调用render时执行
 	 */
@@ -333,23 +344,37 @@ wis.widget.Grid.prototype = {
 				}
 			}
 		}
+		
+		var that = this;
 		jQuery(this.getDomInstance()).grid({
 			title : this.getTitle(),
 			width : this.getWidth(),
 			//activeRowIndex : 2,
 			//checkedRowIndex : [ 1, 2 ],
 			totalRecord : this.getTitle(),
-			headHeight : this.getHeaderRowHeight(),
-			rowHeight : this.getRowHeight(),
+			headHeight : this.getHeaderRowHeight() || 20,
+			rowHeight : this.getRowHeight() || 20,
 			usePage : this.getUsePage(),
-			useCheckColumn : true,
-			mode : 'edit',
+			useCheckColumn : this.getCheckbox() ||  true,
+			mode : this.getState(),
 			onNextPage : function(data) {
 				console.log(data);
 			},
 			gridData : formateData,
-			columns : this.getGridColumnDefine(columns)
-		})
+			columns : this.getGridColumnDefine(columns),
+			onSelectRow : function (e,data){
+                if(that._onSelectRow!=null){
+                    that._onSelectRow(data);
+                }
+			},
+			onCheckRow:function (e,data){
+			    if(that._onCheckRow!=null){
+                    that._onCheckRow(data);
+                }
+			}
+		});
+		
+	
 	},
 
 	getGridColumnDefine : function(columns) {
@@ -376,13 +401,13 @@ wis.widget.Grid.prototype = {
 	// ----------必须实现----------
 	getData : function() {
 		return {
-			cid : this.getCid()
+
 		};
 	},
 
 	// ----------必须实现----------
 	setData : function(data) {
-		this.setCid(data.cid);
+
 	}
 
 };
