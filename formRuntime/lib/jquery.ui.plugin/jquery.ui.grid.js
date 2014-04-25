@@ -2,7 +2,6 @@
  * author : qsyan01@wisedu.com
  */
 (function ($) {
-
     $.widget("ui.grid", {
         options: {
             title: null,   // 标题
@@ -28,9 +27,11 @@
             updatedRow: [],
             onNextPage: null,
             onPrevPage: null,
-            onFirstPage: null,  // TODO
-            onLastPage: null, // TODO
+            onFirstPage: null,
+            onLastPage: null,
+            onPageSizeChange: null,
             onSelectRow: null,
+            onUnselectRow: null,
             onCheckRow: null,
             onReload: null, //TODO
             onChangeCellValue: null,
@@ -63,16 +64,20 @@
         selectRow: function (rowIndex) {
             if (rowIndex != null) {
                 this.unselectRow();
-                var tr = $('.grid_main', this.element).find('tr').not(':first');
+                var tr = $('.grid_main', this.element).find('tr')
+                if (this._useLockColumnLayout()) {
+                    tr = tr.not(':first');
+                    var fixColumn = $('.grid_fix_column', this.element).find('tr').not(':first');
+                    $(fixColumn[rowIndex]).addClass('grid_selectRow');
+                }
                 $(tr[rowIndex]).addClass('grid_selectRow');
-                var fixColumn = $('.grid_fix_column', this.element).find('tr').not(':first');
-                $(fixColumn[rowIndex]).addClass('grid_selectRow');
                 this.options.activeRowIndex = rowIndex;
                 this._trigger('onSelectRow', null, this.getSelectedRowData());
             }
         },
         unselectRow: function () {
             if (this.options.activeRowIndex != null) {
+                this._trigger('onUnselectRow', null, {data: this.getSelectedRowData()});
                 this.options.activeRowIndex = null;
                 $('.grid_selectRow', this.element).removeClass('grid_selectRow');
             }
@@ -132,39 +137,52 @@
                 index = 0;
             }
             var row = this._renderRow(0, rowData, false),
-                fixRow = this._renderRow(0, rowData, true),
                 allRow = $('.grid_main', this.element).find('tr'),
-                firstRow = allRow.get(index),
-                firstFixColumnRow = $('.grid_fix_column', this.element).find('tr').get(index);
-            $(firstRow).after(row);
-            $(firstFixColumnRow).after(fixRow);
-            row.data('_new', true);
+                firstRow = allRow.get(index);
+            if (this._useLockColumnLayout()) {
+                var fixRow = this._renderRow(0, rowData, true),
+                    firstFixColumnRow = $('.grid_fix_column', this.element).find('tr').get(index);
+                $(firstFixColumnRow).before(fixRow);
+            }
+            $(firstRow).before(row);
+            row.data('_newIndex', index);
             this.options.addedRow.push(rowData);
             this._recomputeIndex();
         },
         deleteRow: function (index) {
+            var allTr = $('.grid_main', this.element).find('tr').not(':first');
+            var needRemove = allTr.get(index);
+            var isNew = $(needRemove).data('_newIndex');
             var addedRow = this.options.addedRow,
                 gridData = this.options.gridData,
-                rowData = addedRow[index],
-                count = addedRow.length + gridData.length,
-                mainDom = $('.grid_main', this.element).find('tr').get(index + 1),
-                fixDom = $('.grid_fix_column', this.element).find('tr').get(index + 1);
+                count = addedRow.length + gridData.length;
             if (index > count) {
                 return;
             }
             var removeData = null;
-            if ($(mainDom).data('_new')) {
-                removeData = rowData;
-                this.options.addedRow = addedRow.slice(0, index).concat(addedRow.slice(index + 1))
-            } else {
-                if (addedRow.length) {
-                    index -= addedRow.length;
-                }
-                removeData = this.options.gridData[index];
-                this.options.gridData = gridData.slice(0, index).concat(gridData.slice(index + 1));
+            if (!needRemove) {
+                return;
             }
-            mainDom.remove();
-            fixDom.remove();
+            if (isNew) {
+                removeData = this.options.addedRow[isNew];
+                this.options.addedRow = addedRow.slice(0, isNew).concat(addedRow.slice(isNew + 1))
+            } else {
+                var total = 0;
+                for (var i = 0; i < index; i++) {
+                    var tr = $(allTr[i]);
+                    if (tr.data('_newIndex')) {
+                        total++;
+                    }
+                }
+                var position = index - total;
+                removeData = this.options.gridData[position];
+                this.options.gridData = gridData.slice(0, position).concat(gridData.slice(position + 1));
+            }
+            needRemove.remove();
+            if (this._useLockColumnLayout()) {
+                var fixDom = $('.grid_fix_column', this.element).find('tr').get(index + 1);
+                fixDom.remove();
+            }
             this.options.deletedRow.push(removeData);
             this._recomputeIndex();
         },
@@ -176,13 +194,20 @@
             this.addRow(index, rowData);
         },
         editRow: function (index) {
-            var row = $('.grid_main', this.element).find('tr').get(index + 1),
-                fixRow = $('.grid_fix_column', this.element).find('tr').get(index + 1);
-            if (this.options.useCheckColumn && this.lockColumns.length > 0) {
-                $($(fixRow).find('td').get(1)).data('cell').editMode()
+            var cell = null;
+            if (this._useLockColumnLayout()) {
+                var firstLockColumn = null;
+                if (this.lockColumns.length > 0) {
+                    firstLockColumn = $('.grid_fix_column', this.element).find('tr').get(index + 1);
+                } else {
+                    firstLockColumn = $('.grid_main', this.element).find('tr').get(index + 1);
+                }
+                cell = $($(firstLockColumn).find('td').get(1)).data('cell');
             } else {
-                $($(row).find('td').get(1)).data('cell').editMode();
+                var row = $('.grid_main', this.element).find('tr').get(index);
+                cell = $($(row).find('td')).data('cell');
             }
+            cell.editMode();
         },
         _recomputeIndex: function () {
             var index = -1;
@@ -266,7 +291,7 @@
                 this.title = $('<div>').height(titleHeight).css({position: 'absolute'}).addClass('grid_title').text(this.options.title);
                 container.append(this.title);
             }
-            if (this._useFixLayout()) {
+            if (this._useLockColumnLayout()) {
                 var height = this.options.height;
                 var top = 0;
                 if (this.options.usePage) {
@@ -283,8 +308,8 @@
                 this._renderHead();
                 container.append(table);
             } else {
-                var height = this.options.height;
-                var top = 0;
+                height = this.options.height;
+                top = 0;
                 if (this.options.usePage) {
                     height -= this.options.pageBarHeight;
                 }
@@ -296,7 +321,7 @@
                 var head = $('<div><table><tr></tr></table></div>').addClass('grid_head')
                         .css({top: top, overflow: 'hidden', position: 'absolute'}).width(this.options.width).height(this.options.headHeight),
                     body = $('<div><table></table></div>').width(this.options.width)
-                        .addClass('grid_body').css({position: 'absolute', top: top + this.options.headHeight, height: height, overflow: 'auto'});
+                        .addClass('grid_main').css({position: 'absolute', top: top + this.options.headHeight, height: height, overflow: 'auto'});
                 this.head = head.find('tr');
                 this.body = body.find('table');
                 this._renderHead();
@@ -323,7 +348,7 @@
             } else {
                 that._renderBody();
                 that._renderPage();
-                if (that._useFixLayout()) {
+                if (that._useLockColumnLayout()) {
                     $('.grid_fix_head', that.element).remove();
                     $('.grid_fix_column', that.element).remove();
                     $('.grid_fix', that.element).remove();
@@ -338,9 +363,13 @@
                     }).find('.grid_lock_column').each(function () {
                         width += $(this).outerWidth();
                     });
+                    var offset = 0;
+                    if (body.height() > body[0].clientHeight) {
+                        offset = 17;
+                    }
                     var table = $('<div class="grid_fix_column"><table><tr></tr></table></div>')
                         .css({background: 'white', overflow: 'hidden', position: 'absolute',
-                            top: body.css('top'), width: width, height: body.height() - 17});
+                            top: body.css('top'), width: width, height: body.height() - offset});
                     var lockColumnsBody = table.find('table');
                     var tr = table.find('tr').height(that.options.headHeight);
                     that._renderHead(tr, true);
@@ -380,10 +409,9 @@
                 (function (tr) {
                     var checkbox = $('<input>', {
                         type: 'checkbox'
-                    }).click(function (e) {
+                    }).click(function () {
                         var checkbox = $(this),
-                            index = tr.data('_index'),
-                            eventData = {event: e, data: null};
+                            index = tr.data('_index');
                         if (checkbox.prop('checked')) {
                             that.checkRow(index);
                         } else {
@@ -400,13 +428,13 @@
                 var column = columns[j],
                     columnName = column.name,
                     value = rowData[columnName] || '',
-                    cell = new $.ui.cell({type: 'text', value: value, width: column.width, onClick: function () {
-                        that._trigger('onClickCell');
-                    }, onValueChange: function () {
-                        console.log(rowData);
-                        that.options.updatedRow.push(rowData);
-                        that._trigger('onChangeCellValue');
-                    }});
+                    cell = null;
+                cell = new $.ui.cell({type: 'text', value: value, width: column.width, onClick: function () {
+                    that._trigger('onClickCell');
+                }, onValueChange: function () {
+                    that.options.updatedRow.push(rowData);
+                    that._trigger('onChangeCellValue');
+                }});
                 (function (c) {
                     tr.append($('<td>').append(cell.widget()).data('cell', c).click(function () {
                         if (that.options.mode == 'edit') {
@@ -419,17 +447,19 @@
             return tr;
         },
         _renderHead: function (head, lockOnly) {
-            var head = (head || this.head);
+            head = (head || this.head);
+            var content = null,
+                th = null;
             if (this.options.useCheckColumn) {
-                var content = $('<div>').width(30);
-                var th = $('<td></td>').addClass('grid_lock_column').append(content);
+                content = $('<div>').width(30);
+                th = $('<td></td>').addClass('grid_lock_column').append(content);
                 head.append(th);
             }
             var columns = lockOnly ? this.lockColumns : this.options.columns;
             for (var i = 0; i < columns.length; i++) {
-                var column = columns[i],
-                    content = $('<div>').text(column.title).width(column.width),
-                    th = $('<td></td>').html(content);
+                var column = columns[i];
+                content = $('<div>').text(column.title).width(column.width);
+                th = $('<td></td>').html(content);
                 if (column.lock == true) {
                     th.addClass('grid_lock_column');
                 }
@@ -442,17 +472,22 @@
                 this.body.empty();
                 return;
             }
-            var body = (body || this.body);
-            body.find('tr').not(':first').remove();
+            body = (body || this.body);
+            if (this._useLockColumnLayout()) {
+                body.find('tr').not(':first').remove();
+            } else {
+                body.find('tr').remove();
+            }
             var count = 0,
-                addedRow = this.options.addedRow;
+                addedRow = this.options.addedRow,
+                i = 0;
             if (addedRow) {
-                for (var i = 0; i < addedRow.length; i++) {
+                for (; i < addedRow.length; i++) {
                     body.append(this._renderRow(count, addedRow[i], lockOnly));
                     count++;
                 }
             }
-            for (var i = 0; i < data.length; i++) {
+            for (i = 0; i < data.length; i++) {
                 body.append(this._renderRow(i, this.options.gridData[i], lockOnly));
                 count++;
             }
@@ -463,11 +498,17 @@
                 if (this.page) {
                     this.page.destroy();
                 } else {
-                    this.page = new $.ui.page({totalRecord: this.options.totalRecord,
-                        pageNo: 1, height: this.options.pageBarHeight, onNextPage: function (e) {
+                    this.page = new $.ui.page({width: this.options.width, totalRecord: this.options.totalRecord,
+                        pageNo: this.options.pageNo, pageSize: this.options.pageSize, height: this.options.pageBarHeight, onNextPage: function (e) {
                             that._trigger('onNextPage', e);
                         }, onPrevPage: function (e) {
                             that._trigger('onPrevPage', e);
+                        }, onPageSizeChange: function (e, data) {
+                            that._trigger('onPageSizeChange', e, data)
+                        }, onLastPage: function (e) {
+                            that._trigger('onLastPage', e)
+                        }, onFirstPage: function (e) {
+                            that._trigger('onFirstPage', e)
                         }});
                     this.container.append(this.page.widget());
                 }
@@ -478,20 +519,21 @@
             this._checkRow(this.options.checkedRowIndex, true);
             this._trigger('afterRender');
         },
-        _useFixLayout: function () {
+        _useLockColumnLayout: function () {
             return this.lockColumns.length > 0 || this.options.useCheckColumn;
         }
     });
-
     $.widget('ui.page', {
         options: {
             pageNo: 1,
             pageSize: 10,
             totalRecord: null,
             height: 20,
+            width: 50,
             pageDisplay: "{from}-{to}记录，共{totalRecord}条,{currentPage}/{totalPage}页",
             onNextPage: null,
-            onPrevPage: null
+            onPrevPage: null,
+            onPageSizeChange: null
         },
         isLastPage: function () {
             return this.options.pageNo === this.totalPage;
@@ -517,9 +559,9 @@
                     that._trigger('onNextPage', e);
                 }), pageSize = [5, 10, 20],
                 that = this,
-                select = $('<select>').change(function () {
+                select = $('<select>').change(function (e) {
                     that.options.pageSize = $(this).val();
-                    that.render();
+                    that._trigger('onPageSizeChange', e, {pageSize: $(this).val()})
                 });
             for (var i = 0; i < pageSize.length; i++) {
                 var option = $('<option>', {
@@ -532,7 +574,7 @@
                 select.append(option);
             }
             this.element.addClass('grid_page')
-                .css({position: 'absolute', bottom: 0, height: this.options.height, overflow: 'hidden'})
+                .css({position: 'absolute', bottom: 0, height: this.options.height, overflow: 'hidden', width: this.options.width})
                 .append(firstButton)
                 .append(prevButton)
                 .append(nextButton)
@@ -543,15 +585,15 @@
             this._renderPageDisplay();
         },
         _renderPageDisplay: function () {
+            this.options.pageSize = parseInt(this.options.pageSize);
             var from = (this.options.pageNo - 1) * this.options.pageSize,
                 totalPage = this.totalPage = parseInt(this.options.totalRecord % this.options.pageSize == 0 ? this.options.totalRecord / this.options.pageSize : this.options.totalRecord / this.options.pageSize + 1),
-                to = this.isLastPage() ? parseInt(this.options.totalRecord % this.options.pageSize == 0 ? from + this.options.pageSize : from + this.options.totalRecord % this.options.pageSize) : from + this.options.pageSize,
+                to = this.isLastPage() ? parseInt(this.options.totalRecord % this.options.pageSize == 0 ? from + this.options.pageSize : from + this.options.totalRecord % this.options.pageSize) : from + parseInt(this.options.pageSize),
                 display = this.options.pageDisplay.replace('{from}', (from + 1) + '').replace('{to}', parseInt(to) + '')
                     .replace('{totalPage}', totalPage + '').replace('{totalRecord}', this.options.totalRecord + '').replace('{currentPage}', this.options.pageNo + '');
             $('.page_display', this.element).text(display);
         }
     });
-
     $.widget('ui.cell', {
         options: {
             type: null,

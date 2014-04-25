@@ -54,10 +54,9 @@
 <script src="src/wof/widget/ToolbarItem.js"></script>
 <script src="src/wof/widget/Grid.js"></script>
 <script src="src/wof/widget/Button.js"></script>
-<script src="src/wof/widget/DateBox.js"></script>
+<script src="src/wof/widget/DateEditor.js"></script>
 <script src="src/wof/widget/Label.js"></script>
 <script src="src/wof/widget/Input.js"></script>
-<script src="src/wof/widget/Text.js"></script>
 <script src="src/wof/widget/RadioGroupItem.js"></script>
 <script src="src/wof/widget/RadioGroup.js"></script>
 <script src="src/wof/widget/ComboBox.js"></script>
@@ -99,6 +98,7 @@
 <script src="lib/wis/lib/ligerUI/js/plugins/ligerCheckBox.js" type="text/javascript"></script>
 <script src="lib/wis/lib/ligerUI/js/plugins/ligerResizable.js" type="text/javascript"></script>
 <script src="lib/wis/lib/ligerUI/js/plugins/ligerComboBox.js" type="text/javascript"></script>
+<script src="lib/wis/lib/ligerUI/js/plugins/ligerDateEditor.js" type="text/javascript"></script>
 
 
 
@@ -114,9 +114,11 @@
 <script src="lib/wis/src/wis/util/Tool.js"></script>
 
 <script src="lib/wis/src/wis/widget/Button.js"></script>
+<script src="lib/wis/src/wis/widget/DateEditor.js"></script>
 <script src="lib/wis/src/wis/widget/Input.js"></script>
 <script src="lib/wis/src/wis/widget/Tab.js"></script>
 <script src="lib/wis/src/wis/widget/ComboBox.js"></script>
+<script src="lib/wis/src/wis/widget/Label.js"></script>
 <script src="lib/wis/src/wis/widget/Grid1.js"></script>
 
 <script src="lib/wis/src/wis/kernel/initSystem.js"></script>
@@ -163,7 +165,7 @@ jQuery(function(){
         flowLayout.setTop(0);
         flowLayout.setWidth(windowWidth-10);
         flowLayout.setCols(4);
-        flowLayout.setItemHeight(300);
+        flowLayout.setItemHeight(100);
 
         flowLayout.insertSection({title:'默认分组1',titleHeight:30,cols:3});
 
@@ -183,10 +185,10 @@ jQuery(function(){
 
         flowLayout.render();
 
-        var flowLayout3 = flowLayout2.clone();
+      /*  var flowLayout3 = flowLayout2.clone();
         flowLayout.insertNode(flowLayout3,{row:1,col:3},1);
 
-        flowLayout3.render();
+        flowLayout3.render();*/
 
         var voucherComponent = wof$.create('VoucherComponent',{'state':'Edit'});       //Edit View
         voucherComponent.setDataSource(dataObjectInstance);
@@ -523,6 +525,12 @@ jQuery(function(){
         flowLayout.insertNode(searchComponent,{row:1,col:1},1);
 
         searchComponent.render();
+
+
+        var dateEditor = wof$.create('DateEditor');
+
+        flowLayout.insertNode(dateEditor,{row:1,col:3},1);
+        dateEditor.render();
 
     }
 	//重设工作区

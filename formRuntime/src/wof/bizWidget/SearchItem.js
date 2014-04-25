@@ -497,7 +497,7 @@ wof.bizWidget.SearchItem.prototype = {
             break;
         
         case 'date':
-            this._initComponent('wof.widget.DateBox');
+            this._initComponent('wof.widget.DateEditor');
             break;
         
         case 'radio':
@@ -530,7 +530,7 @@ wof.bizWidget.SearchItem.prototype = {
     //     }else if(visbleType=='checkBox'){
     //         clzName = 'wof.widget.CheckBox';
     //     }else if(visbleType=='date'){
-    //         clzName = 'wof.widget.DateBox';
+    //         clzName = 'wof.widget.DateEditor';
     //     }else if(visbleType=='radio'){
     //         clzName = 'wof.widget.RadioGroup';
     //     }else if(visbleType=='file'){

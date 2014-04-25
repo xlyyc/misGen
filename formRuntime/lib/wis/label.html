@@ -24,15 +24,18 @@
 
     var text = null;
     function create(){
-        text = wis$.create('Label');
-        text.setCid("123");
-        text.setLabelName("text");
-        text.setThemes("456");
-        text.setLabelTitle("123");
-
         var container = jQuery('#container');
-        text.appendTo(container);
 
+        text = wis$.create('Label');
+        text.setTop(0);
+        text.setLeft(0);
+        text.setWidth(200);
+        text.setIsUnderline(true);
+        text.setText('标题111');
+        text.setIsBold(false);
+        text.setIsHighlight(false);
+
+        text.appendTo(container);
         text.render();
     }
 

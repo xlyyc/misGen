@@ -1,5 +1,5 @@
 /**
- * @widgetClass Text class
+ * @widgetClass Input class
  * @package wof.widget
  * @copyright author
  * @Time: 13-8-5 下午2:07

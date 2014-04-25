@@ -583,7 +583,7 @@ wof.bizWidget.VoucherItem.prototype = {
             // }else if(visbleType=='checkBox'){
             //     clzName = 'wof.widget.CheckBox';
             // }else if(visbleType=='date'){
-            //     clzName = 'wof.widget.DateBox';
+            //     clzName = 'wof.widget.DateEditor';
             // }else if(visbleType=='radio'){
             //     clzName = 'wof.widget.RadioGroup';
             // }else if(visbleType=='file'){
