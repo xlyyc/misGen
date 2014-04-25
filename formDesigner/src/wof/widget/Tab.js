@@ -8,7 +8,7 @@
 wof.widget.Tab = function () {
     this._version = '1.0';
 
-   // this.getDomInstance().css('overflow','hidden');
+    // this.getDomInstance().css('overflow','hidden');
 
 };
 
@@ -228,7 +228,7 @@ wof.widget.Tab.prototype = {
         }
         var gridLayout = wof$.create('GridLayout');
         gridLayout.setIsInside(true);
-        //gridLayout.setOverflow('auto');
+       // gridLayout.setOverflow('auto');
         gridLayout.setWidth(this.getWidth());
         gridLayout.setHeight(this.getHeight()-52);
         gridLayout.setTop(50);

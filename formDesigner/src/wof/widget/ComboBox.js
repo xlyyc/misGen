@@ -11,78 +11,196 @@ wof.widget.ComboBox = function () {
 };
 
 wof.widget.ComboBox.prototype = {
-    /**
-     * 属性声明 （private ，用"_"标识）
-     */
-    _options: [],
 
-    _select: null,
+    _comboBoxData: null, // 下拉框时数据格式
+    _gridColumn: null, // 下拉表格
+    _isMultiSelect: null, // 是否可多选
+    _multiSelectSplit: null, // 多选后显示、值分隔符
+    _name: null,
+    _readonly: null,
+    _values: null,    // 当前选中的值
+    _split: null, //分隔符
+    _mode: null,    //normal 普通 tree 树 grid 列表
 
-    _selectedOption: null,
 
-    /**
-     * get/set 属性方法定义
-     */
-    setOptions: function (options) {
-        this._options = options;
+    _comboBox:null,
+
+    setValues: function(values) {
+        this._values = values;
     },
-    getOptions: function (options) {
-        return this._options;
+
+    getValues: function() {
+        return this._values || [];
+    },
+
+    setSplit: function(split) {
+        this._split = split;
+    },
+
+    getSplit: function() {
+        return this._split || ',';
     },
 
     /**
-     * Render 方法定义
+     [
+        { header: 'ID', name: 'id', width: 20 },
+        { header: '名字', name: 'name' },
+        { header: '性别', name: 'sex' }
+      ]
      */
+    getGridColumn: function () {
+        return this._gridColumn;
+    },
+    setGridColumn: function (gridColumn) {
+        this._gridColumn = gridColumn || [];
+    },
 
-    //选择实现
+    setMultiSelectSplit: function (split) {
+        this._multiSelectSplit = split || ',';
+    },
+    getMultiSelectSplit: function () {
+        return this._multiSelectSplit;
+    },
+
+    getName: function () {
+        return this._name;
+    },
+
+    setName: function (selectName) {
+        this._name = selectName;
+    },
+
+    getReadonly: function () {
+        return this._readonly || false;
+    },
+
+    setReadonly: function (readonly) {
+        this._readonly = readonly;
+    },
+
+    getIsMultiSelect: function () {
+        return this._isMultiSelect || false;
+    },
+
+    setIsMultiSelect: function (isMultiSelect) {
+        this._isMultiSelect = isMultiSelect;
+    },
+
+    getMode: function () {
+        return this._mode || 'normal';
+    },
+
+    setMode: function (mode) {
+        this._mode = mode;
+    },
+
+    /**
+     [
+        { id: 1, name: '李三', sex: '男' },
+        { id: 2, name: '李四', sex: '女' },
+        { id: 3, name: '赵武', sex: '女' },
+        { id: 4, name: '陈留', sex: '女' }
+     ]
+     */
+    getComboBoxData: function () {
+        return this._comboBoxData || [];
+    },
+
+    setComboBoxData: function (comboBoxData) {
+        this._comboBoxData = comboBoxData;
+    },
+
+    onBeforeSelect: function (callBack) {
+        this._onBeforeSelect = callBack;
+    },
+    onSelected:function(callBack){
+        this._onSelected = callBack;
+    },
+
     beforeRender: function () {
-        if (this._select != null) {
-            this._select.remove();
-        }
+
     },
 
-    //----------必须实现----------
+
+    initRender: function () {
+        var _this = this;
+        var comboBox = wis$.create('ComboBox');
+        comboBox.setReadonly(this.getReadonly());
+        comboBox.setName(this.getName());
+        comboBox.setIsMultiSelect(this.getIsMultiSelect());
+        comboBox.setMode(this.getMode());
+        comboBox.setSelectData(this.getComboBoxData());
+        comboBox.setGridColumn(this.getGridColumn());
+
+        comboBox.onBeforeSelect(function (val, text) {
+            _this.setValues(val);
+            _this.sendMessage('wof.widget.ComboBox_beforeSelect');
+            return true;
+        });
+
+        comboBox.onSelected(
+            function (val, text) {
+                _this.setValues(val);
+                _this.sendMessage('wof.widget.ComboBox_selected');
+            }
+        );
+
+        comboBox.appendTo(this.getDomInstance());
+
+        this._comboBox = comboBox;
+    },
+    
     render: function () {
-        this._select = jQuery('<select>');
-        if (this._options) {
-            for (var i = 0; i < this._options.length; i++) {
-                var option = this._options[i];
-                var optionDom = jQuery('<option>').val(option.value).text(option.text)
-                    .appendTo(this._select);
-                if (this._selectedOption && this._selectedOption.value === option.value) {
-                    optionDom.attr('selected', 'selected');
-                }
-            }
-        }
+        this._comboBox.setWidth(this.getWidth());
+        this._comboBox.setHeight(this.getHeight());
+        this._comboBox.setValues(this.getValues());
 
-        this.getDomInstance().append(this._select);
+        this._comboBox.render();
     },
 
-    //选择实现
     afterRender: function () {
-        var that = this;
-        this._select.multiselect({selectedList: 1, multiple: false, click: function (event, ui) {
-            if (ui.checked === true) {
-                that._selectedOption = {text: ui.text, value: ui.value};
-            } else {
-                that._selectedOption = null;
-            }
-        }});
+
+        this.sendMessage('wof.widget.ComboBox_render');
     },
 
-    /**
-     * getData/setData 方法定义
-     */
-
-    //----------必须实现----------
     getData: function () {
         return {
-            options: this.getOptions()
+            split: this.getSplit(),
+            comboBoxData: this.getComboBoxData(),
+            gridColumn: this.getGridColumn(),
+            isMultiSelect: this.getIsMultiSelect(),
+            multiSelectSplit: this.getMultiSelectSplit(),
+            name: this.getName(),
+            readonly: this.getReadonly(),
+            values: this.getValues(),
+            mode: this.getMode()
         };
     },
-    //----------必须实现----------
+
     setData: function (data) {
-        this.setOptions(data.options);
+        this.setSplit(data.split);
+        this.setComboBoxData(data.comboBoxData);
+        this.setGridColumn(data.gridColumn);
+        this.setIsMultiSelect(data.isMultiSelect);
+        this.setMultiSelectSplit(data.multiSelectSplit);
+        this.setName(data.name);
+        this.setReadonly(data.readonly);
+        this.setValues(data.values);
+        this.setMode(data.mode);
+    },
+
+    getTexts: function(){
+        var texts = [];
+        var data = this.getComboBoxData();
+        var len = data.length;
+        for(var i=0;i<len;i++){
+            var item = data[i];
+            if(jQuery.inArray(item['value'],this.getValues())>-1){
+                texts.push(item['name']);
+            }
+        }
+        return texts.join(this.getSplit());
     }
+
 
 };

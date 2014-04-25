@@ -6,11 +6,11 @@ wof.widget.Tree = function () {
 
 wof.widget.Tree.prototype = {
 
-    _ztree: null,
-
     _radioType: null,  //radio 的分组范围  level 在每一级节点范围内当做一个分组  all 在整棵树范围内当做一个分组
 
     _chkStyle: null,    // 勾选框类型 checkbox 复选框   radio 单选框
+
+    _tree: null,
 
     setChkStyle: function(chkStyle){
         this._chkStyle = chkStyle;
@@ -32,18 +32,6 @@ wof.widget.Tree.prototype = {
             this._radioType = 'all';
         }
         return this._radioType;
-    },
-
-    /**
-     * type string or object
-     */
-    param: null,
-
-    setParam: function (param) {
-        this.url = url;
-    },
-    getParam: function () {
-        return this.param;
     },
 
     /**
@@ -69,38 +57,26 @@ wof.widget.Tree.prototype = {
 
     //选择实现
     initRender: function () {
-
+        var tree = wis$.create('Tree');
+        tree.appendTo(this.getDomInstance());
+        this._tree = tree;
     },
 
     beforeRender: function(){
         var _this = this;
-        this._ztree = jQuery.fn.zTree.init(this.getDomInstance().addClass('ztree'),
-            {
-                treeId: this.getId(),
-                callback: {
-                    onClick: function(event, treeId, treeNode){
-                        event.stopPropagation();
-                        var nodes = _this._ztree.getSelectedNodes();
-                        for(var i=0, l=nodes.length; i<l; i++){
-                            _this._ztree.checkNode(nodes[i], true, false);
-                            break;
-                        }
-                    }
-                },
-                check: {
-                    enable: true,
-                    chkStyle: this.getChkStyle(),
-                    radioType: this.getRadioType()
-                }
-            }
-        );
-
-        this._ztree.addNodes(null, this.getNodes());
-
-        var nodes = this._ztree.getNodes();
-        if(nodes.length>0){
-            this._ztree.expandNode(nodes[0], true, true, true);
-        }
+        this._tree.setRadioType(this.getRadioType());
+        this._tree.setChkStyle(this.getChkStyle());
+        this._tree.setNodes(this.getNodes());
+        this._tree.onClick(function(obj){
+            _this.sendMessage('wof.widget.Tree_click');
+        });
+        this._tree.onCheck(function(obj){
+            _this.sendMessage('wof.widget.Tree_check');
+        });
+        this._tree.onUnCheck(function(obj){
+            _this.sendMessage('wof.widget.Tree_unCheck');
+        });
+        this._tree.render();
     },
 
     //----------必须实现----------
@@ -120,7 +96,6 @@ wof.widget.Tree.prototype = {
     //----------必须实现----------
     getData: function () {
         return {
-            param: this.getParam(),
             nodes: this.getNodes(),
             radioType: this.getRadioType(),
             chkStyle: this.getChkStyle()
@@ -129,25 +104,18 @@ wof.widget.Tree.prototype = {
 
     //----------必须实现----------
     setData: function (data) {
-        this.setUrl(data.url);
-        this.setParam(data.param);
         this.setNodes(data.nodes);
         this.setRadioType(data.radioType);
         this.setChkStyle(data.chkStyle);
     },
 
     checkNodeByParam: function(key, value){
-        var node = this._ztree.getNodeByParam(key, value);
-        if(node!=null){
-            this._ztree.checkNode(node, true, false);
-            this._ztree.selectNode(node, false);
-        }
+        this._tree.checkNodeByParam(key,value);
     },
 
     //zTree 当前被选中的节点数据集合
     getSelectedNodes: function(){
-        var nodes = this._ztree.getSelectedNodes();
-        return nodes;
+        return this._tree.getSelectedNodes();
     },
 
     /**
@@ -159,8 +127,7 @@ wof.widget.Tree.prototype = {
         if(checked==null){
             checked = true;
         }
-        var nodes = this._ztree.getCheckedNodes(checked);
-        return nodes;
+        return this._tree.getCheckedNodes(checked);
     },
 
     /**
@@ -172,7 +139,7 @@ wof.widget.Tree.prototype = {
         if(checked==null){
             checked = true;
         }
-        this._ztree.checkAllNodes(checked);
+        this._tree.checkAllNodes(checked);
     },
 
     /**
@@ -184,8 +151,7 @@ wof.widget.Tree.prototype = {
      * 如无结果，返回 []
      */
     getNodesByParam: function(key,name,parentNode){
-        var nodes = this._ztree.getNodesByParam(key,name,parentNode);
-        return nodes;
+        return this._tree.getNodesByParam(key,name,parentNode);
     },
 
     /**
@@ -196,7 +162,7 @@ wof.widget.Tree.prototype = {
      * inheritChildren = true 表示全部子节点进行同样的操作 inheritChildren = false 表示不影响子节点
      */
     setChkDisabled: function(node,disable,inheritParent,inheritChildren){
-        this._ztree.setChkDisabled(node,disable,inheritParent,inheritChildren);
+        this._tree.setChkDisabled(node,disable,inheritParent,inheritChildren);
     },
 
     /**
@@ -205,8 +171,7 @@ wof.widget.Tree.prototype = {
      * isSingle = true 表示只查找单个节点 isSingle = false 表示查找节点集合
      */
     getNodesByFilter: function(filter,isSingle){
-        var nodes = this._ztree.getNodesByFilter(filter,isSingle);
-        return nodes;
+        return this._tree.getNodesByFilter(filter,isSingle);
     }
 
 

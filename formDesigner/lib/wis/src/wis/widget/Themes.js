@@ -8,16 +8,7 @@ wis.widget.Themes = function () {
 };
 
 wis.widget.Themes.prototype = {
-    _cid: null,  //id
     _themesName: null,  //主题名称
-
-    getCid: function () {
-        return this._cid;
-    },
-
-    setCid: function (cid) {
-        this._cid = cid;
-    },
 
     getThemesName: function () {
         return this._themesName || "default" ;

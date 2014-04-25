@@ -11,7 +11,7 @@ document.write(
         +'<script src="src/wof/widget/ToolbarItem.js"></script>'
         +'<script src="src/wof/widget/Grid.js"></script>'
         +'<script src="src/wof/widget/Button.js"></script>'
-        +'<script src="src/wof/widget/DateBox.js"></script>'
+        +'<script src="src/wof/widget/DateEditor.js"></script>'
         +'<script src="src/wof/widget/Label.js"></script>'
         +'<script src="src/wof/widget/RadioGroupItem.js"></script>'
         +'<script src="src/wof/widget/RadioGroup.js"></script>'

@@ -9,21 +9,11 @@ wis.widget.Button = function () {
 };
 wis.widget.Button.prototype = {
 
-    _cid: null,             //id
     _name: null,            //名称
     _label: null,           //文字
     _icon: null,            //语义层面的ICON标识，对应图标的类型(add/edit)、颜色(white/black)、位置属性(position:left/right/top/bottom)
-    _themes: null,          //对应主题里面的样式名
     _disabled: null,        //禁用
     _onClick: null,
-
-    getCid: function () {
-        return this._cid ;
-    },
-
-    setCid: function (cid) {
-        this._cid = cid;
-    },
 
     getName: function () {
         return this._name;
@@ -82,21 +72,15 @@ wis.widget.Button.prototype = {
         //单击事件
         var that = this;
         this._linkObj.on("click", function (e) {
-
             //disabled状态不处理
-            if(that.getDisabled())
-            {
+            if(that.getDisabled()){
                 return;
             }
-
             //自定义onClick事件
-            if ((typeof that._onClick == "function") && that._onClick() == false) 
-            {
+            if ((typeof that._onClick == "function") && that._onClick() == false){
                 return; 
             }
-
         });
-
     },
 
     //渲染前处理方法
@@ -106,49 +90,30 @@ wis.widget.Button.prototype = {
 
     //渲染方法
     render: function () {
-        if( this.getCid() )
-        {
-            this._linkObj.attr('id', this.getCid());
-        }
-        
-        if( this.getName() )
-        {
+        if( this.getName() ){
             this._linkObj.attr('name', this.getName());
         }
-         
-        if( this.getIcon() )
-        {
+        if( this.getIcon() ){
             this._iObj.addClass(this.getIcon());
         }
-        
-        if( this.getLabel() )
-        {
-            if( this._linkObj[0].lastChild.nodeType === 1 )
-            {
+        if( this.getLabel() ){
+            if( this._linkObj[0].lastChild.nodeType === 1 ){
                 this._linkObj.append(this.getLabel());
-            }
-            else
-            {
+            }else{
                 // nodeType === 3
                 this._linkObj[0].lastChild.nodeValue  = this.getLabel();
             }
-            
         }
-
         //disabled状态
-         if (this.getDisabled()) 
-         {
+         if (this.getDisabled()) {
             this._linkObj.addClass("disabled");
-         }
-         else
-         {
+         }else{
             this._linkObj.removeClass("disabled");
          }
     },
 
     //渲染后处理方法
     afterRender: function () {
-
 
     },
 
@@ -159,7 +124,6 @@ wis.widget.Button.prototype = {
     //----------必须实现----------
     getData: function () {
         return {
-            cid: this.getCid(),
             name: this.getName(),
             label: this.getLabel(),
             icon: this.getIcon(),
@@ -169,10 +133,9 @@ wis.widget.Button.prototype = {
 
     //----------必须实现----------
     setData: function (data) {
-        this.setCid(data.cid);
         this.setName(data.name);
         this.setLabel(data.label);
-        this.setIcon(data.icon)
+        this.setIcon(data.icon);
         this.setDisabled(data.disabled);
     }
 

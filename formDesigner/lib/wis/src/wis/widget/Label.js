@@ -7,84 +7,169 @@ wis.widget.Label = function () {
     this._version = '1.0';
 
 };
-
 wis.widget.Label.prototype = {
-    _cid: null,         //页面唯一编号
-    _labelName: null,         //label的名称
-    _labelTitle: null,        //显示名称
-    _label: null,
+    /**
+     * 属性声明 （private ，用"_"标识）
+     */
+    _text:null,
 
-    getCid: function () {
-        return this._cid;
-    },
+    _label:null,
 
-    setCid: function (cid) {
-        this._cid = cid;
-    },
+    _isUnderline:null, //是否包括下划线
 
-    getLabelName: function () {
-        return this._labelName;
-    },
+    _isBold:null, //是否需要加粗
 
-    setLabelName: function (labelName) {
-        this._labelName = labelName;
-    },
+    _isHighlight:null, //是否需要高亮
 
-    getLabelTitle: function () {
-        return this._labelTitle;
-    },
+    _value: null,
 
-    setLabelTitle: function (labelTitle) {
-        this._labelTitle = labelTitle;
-    },
+    _type: null,
+
+    _tip: null,
+
+    _ico: null,
 
     /**
-     * 初始化方法
+     * get/set 属性方法定义
      */
-    _init: function (data) {
+    getTip : function (){
+        return this._tip || '';
     },
 
+    setTip : function (tip){
+        this._tip = tip;
+    },
+
+    getIco : function (){
+        return this._ico || '';
+    },
+
+    setIco : function (ico){
+        this._ico = ico;
+    },
+
+
+    getValue : function (){
+        return this._value || '';
+    },
+
+    setValue : function (value){
+        this._value = value;
+    },
+
+    getType : function (){
+        return this._type || '';
+    },
+
+    setType : function (type){
+        this._type = type;
+    },
+
+    getText: function(){
+        return this._text || '';
+    },
+
+    setText: function(text){
+        this._text = text;
+    },
+
+    getIsUnderline: function(){
+        return this._isUnderline || false;
+    },
+
+    setIsUnderline: function(isUnderline){
+        this._isUnderline = isUnderline;
+    },
+
+    getIsBold: function(){
+        return this._isBold || false;
+    },
+
+    setIsBold: function(isBold){
+        this._isBold = isBold;
+    },
+
+    getIsHighlight: function(){
+        return this._isHighlight || false;
+    },
+
+    setIsHighlight: function(isHighlight){
+        this._isHighlight = isHighlight;
+    },
+
+
     /**
-     * 初始化渲染方法
-     * 仅在第一次调用render时执行
+     * Render 方法定义
      */
-    initRender: function () {
-        this._label = jQuery('<label></label>');
-        this._label.attr("id",this.getCid());
-        this._label.append(this.getLabelTitle());
-        this._label.attr("name",this.getLabelName());
+    initRender: function(){
+        this._label = jQuery('<span style="position:absolute;top:4px;cursor:pointer;">'+this.getText()+'</span>');
         this.getDomInstance().append(this._label);
     },
 
-    //渲染前处理方法
+    //选择实现
     beforeRender: function () {
 
+        this.getDomInstance().children('hr').remove();
+        this.getDomInstance().children('img').remove();
     },
 
-    //渲染方法
+    //----------必须实现----------
     render: function () {
-
+        if(this.getIco().length>0){
+            var img = jQuery('<img src="'+this.getIco()+'">');
+            this._label.before(img);
+        }
+        this._label.html(this.getText());
+        if(this.getIsBold()==true){
+            this._label.css('fontWeight','900');
+        }else{
+            this._label.css('fontWeight','');
+        }
+        if(this.getIsHighlight()==true){
+            this._label.addClass('ui-state-hover');
+        }else{
+            this._label.removeClass('ui-state-hover');
+        }
+        this._label.attr('value',this.getValue());
+        this._label.attr('type',this.getType());
+        if(this.getIsUnderline()==true){
+            var hr = jQuery('<hr style="position:absolute;top:24px;width:100%;border-top:1px solid black;">');
+            this.getDomInstance().append(hr);
+        }
     },
 
-    //渲染后处理方法
+    //选择实现
     afterRender: function () {
 
-
     },
+
+    /**
+     * getData/setData 方法定义
+     */
 
     //----------必须实现----------
     getData: function () {
         return {
-            cid: this.getCid(),
-            labelName: this.getLabelName(),
-            labelTitle: this.getLabelTitle()
+            ico: this.getIco(),
+            value : this.getValue(),
+            text: this.getText(),
+            isUnderline: this.getIsUnderline(),
+            isBold: this.getIsBold(),
+            isHighlight: this.getIsHighlight(),
+            type: this.getType(),
+            tip: this.getTip()
         };
     },
-
     //----------必须实现----------
     setData: function (data) {
-        this.setCid(data.cid);
-        this.setLabelName(data.labelName);
-        this.setLabelTitle(data.labelTitle);
+        this.setIco(data.ico);
+        this.setValue(data.value);
+        this.setText(data.text);
+        this.setIsUnderline(data.isUnderline);
+        this.setIsBold(data.isBold);
+        this.setIsHighlight(data.isHighlight);
+        this.setType(data.type);
+        this.setTip(data.tip);
     }
+
 };
