@@ -424,7 +424,7 @@ wof.bizWidget.SearchComponent.prototype = {
                             var v = matches[i].substring(7,matches[i].length-5);
                             vals.push(v);
                         }
-                        fieldQuery = {type:'fieldQuery',field:item.getDataField(),operation:'equals',value1:vals};
+                        fieldQuery = {type:'fieldQuery',field:item.getDataField(),operation:'refEquals',value1:vals};
                     }else{
                         fieldQuery = {type:'fieldQuery',field:item.getDataField(),operation:'equals',value1:val};
                     }
