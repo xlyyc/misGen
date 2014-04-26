@@ -67,7 +67,7 @@ wof.bizWidget.VoucherComponent.prototype = {
 
     _fkField: null, //外键对应字段
 
-    _fkFieldValue: null, //外键值
+    _fkFieldValue: null, //外键值   此属性多余
 
     _queryFlag: null, //是否需要发起查询标识 true需要 false不需要  搜索条件发生变化或者数据发生变化的情况下会修改此标识状态
 
@@ -221,14 +221,6 @@ wof.bizWidget.VoucherComponent.prototype = {
 
     setFkField: function(fkField){
         this._fkField = fkField;
-    },
-
-    getFkFieldValue: function(){
-        return this._fkFieldValue;
-    },
-
-    setFkFieldValue: function(fkFieldValue){
-        this._fkFieldValue = fkFieldValue;
     },
 
     _init: function(data){
@@ -385,6 +377,36 @@ wof.bizWidget.VoucherComponent.prototype = {
 
     initRender: function(){
         this._queryFlag = true;
+        var urlParams = wof.util.Tool.getURLParams();
+        var paramMaps = this.getParamMaps();
+
+        //todo 测试使用数据
+        paramMaps = {
+            "dataId":{"mapType":"value","compParamName":"dataId","compParamValue":"dataId固定值","pageParamName":"","changeExpt":""},
+            "fkId":{"mapType":"value","compParamName":"fkId","compParamValue":"fkId固定值","pageParamName":"","changeExpt":""}
+        };
+
+        if(this.getState()=='Add'){    //状态为Add
+            var fkIdMap = paramMaps['fkId'];
+            var mapType = fkIdMap['mapType'];
+            if(mapType=='value'){  //固定值
+                this._fkFieldValue = fkIdMap['compParamValue'];
+            }else if(mapType=='page'){ //从页面取值
+                this._fkFieldValue = urlParams[fkIdMap['compParamValue']];
+            }
+            console.log('状态为Add 外键值为:'+this._fkFieldValue);
+        }else{  //状态为Edit/View
+            var dataIdMap = paramMaps['dataId'];
+            var mapType = dataIdMap['mapType'];
+            if(mapType=='value'){  //固定值
+                this.setCurrentRowId(dataIdMap['compParamValue']);
+            }else if(mapType=='page'){ //从页面取值
+                this.setCurrentRowId(urlParams[dataIdMap['compParamValue']]);
+            }
+            console.log('状态为Edit/View currentRowId值为:'+this.getCurrentRowId());
+        }
+
+
     },
 
     //选择实现
@@ -411,7 +433,7 @@ wof.bizWidget.VoucherComponent.prototype = {
                 if(data['rows'].length==0){ //如果当前do中没有缓存数据 则增加一条数据
                     var newData = {};
                     if(this.getFkField().length>0){ //如果绑定外键不为空 则增加记录时需要加入外键值
-                        newData[this.getFkField()] = this.getFkFieldValue();
+                        newData[this.getFkField()] = this._fkFieldValue;     //构件直接从页面参数中获取
                     }
                     this.getDataSource().addData([newData]);
                     var idPro = this.getDataSource().getLocalData()['idPro'];
@@ -456,8 +478,7 @@ wof.bizWidget.VoucherComponent.prototype = {
             activeVoucherItemGroupIndex: this.getActiveVoucherItemGroupIndex(),
             activeVoucherItemRank: this.getActiveVoucherItemRank(),
 
-            fkField: this.getFkField(),
-            fkFieldValue: this.getFkFieldValue()
+            fkField: this.getFkField()
         };
     },
     //----------必须实现----------
@@ -477,7 +498,6 @@ wof.bizWidget.VoucherComponent.prototype = {
         this.setActiveVoucherItemRank(data.activeVoucherItemRank);
 
         this.setFkField(data.fkField);
-        this.setFkFieldValue(data.fkFieldValue);
 
         this._setInternalVariables();
     },
@@ -845,9 +865,6 @@ wof.bizWidget.VoucherComponent.prototype = {
             }
             if(voucherComponentData.fkField!=null){
                 this.setFkField(voucherComponentData.fkField);
-            }
-            if(voucherComponentData.fkFieldValue!=null){
-                this.setFkFieldValue(voucherComponentData.fkFieldValue);
             }
             for(var i=0;i<this._voucherItemGroups.length;i++){
                 var group = this._voucherItemGroups[i];

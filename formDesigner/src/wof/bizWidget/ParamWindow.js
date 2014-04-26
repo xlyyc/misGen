@@ -52,7 +52,7 @@ wof.bizWidget.ParamWindow.prototype = {
             if(param!=null){
                 trs.push(this._createTr(param.mapType,param.compParamName,param.compParamValue,param.pageParamName,param.changeExpt));
             }else{
-                trs.push(this._createTr('value',compParamName,'','',''));
+                trs.push(this._createTr('page',compParamName,'','',''));
             }
         }
         var table = this._createTable(trs);
@@ -141,10 +141,10 @@ wof.bizWidget.ParamWindow.prototype = {
     //创建行
     _createTr: function(mapType, compParamName, compParamValue, pageParamName, changeExpt){
         if(mapType==null){
-            mapType = 'value';
+            mapType = 'page';
         }
         var tr = jQuery('<tr style="height:30px;border:1px inset #a1a1a1;">');
-        var sel = this._createSelect({'name':'mapType','value':mapType,options:[{'name':'固定值','value':'value'},{'name':'页面值','value':'page'},{'name':'表达式','value':'expression'}]});
+        var sel = this._createSelect({'name':'mapType','value':mapType,options:[{'name':'页面值','value':'page'},{'name':'固定值','value':'value'},{'name':'表达式','value':'expression'}]});
         var td1 = jQuery('<td style="width:30%;">');
         td1.append(sel);
         tr.append(td1);
