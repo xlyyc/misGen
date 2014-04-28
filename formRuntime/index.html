@@ -200,6 +200,12 @@ jQuery(function(){
         /*voucherComponent.setFkField('zzmmbm');
         voucherComponent.setFkFieldValue('aaaaaaaaaaaaaaaaaaaaaa');*/
         voucherComponent.setViewType('tab');
+        voucherComponent.setParamMaps({
+            "dataId":{"mapType":"value","compParamName":"dataId","compParamValue":"dataId固定值","pageParamName":"","changeExpt":""},
+            "fkId":{"mapType":"value","compParamName":"fkId","compParamValue":"fkId固定值","pageParamName":"","changeExpt":""},
+            "pageState":{"mapType":"value","compParamName":"pageState","compParamValue":"Edit","pageParamName":"","changeExpt":""}
+        });
+
 
         var voucherItemGroupData1 = {groupCaption:'表头分组1',width:500,titleHeight:25,colsNum:4,itemHeight:100,isHead:false};
         voucherComponent.insertVoucherItemGroup(voucherItemGroupData1);

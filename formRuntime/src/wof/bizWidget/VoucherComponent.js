@@ -71,6 +71,7 @@ wof.bizWidget.VoucherComponent.prototype = {
 
     _queryFlag: null, //是否需要发起查询标识 true需要 false不需要  搜索条件发生变化或者数据发生变化的情况下会修改此标识状态
 
+    _pageState: null, //页面状态 内部变量
 
     /**
      * get/set 属性方法定义
@@ -99,14 +100,6 @@ wof.bizWidget.VoucherComponent.prototype = {
 
     setInitActionName: function(initActionName){
         this._initActionName = initActionName;
-    },
-
-    getState: function(){
-        return this._state;
-    },
-
-    setState: function(state){
-        this._state = state;
     },
 
     getCaption: function(){
@@ -224,9 +217,6 @@ wof.bizWidget.VoucherComponent.prototype = {
     },
 
     _init: function(data){
-        if(data.state!=null){
-            this.setState(data.state);
-        }
         if(data.itemHeight!=null){
             this.setItemHeight(Number(data.itemHeight));
         }
@@ -271,6 +261,63 @@ wof.bizWidget.VoucherComponent.prototype = {
         }
         if(data.paramMaps!=null){
             this.setParamMaps(data.paramMaps);
+        }
+    },
+
+    /**
+     * 根据paramMaps设置设置参数
+     */
+    _buildParams: function(){
+        var urlParams = wof.util.Tool.getURLParams();
+        var paramMaps = this.getParamMaps();
+
+      /*  //todo 测试使用数据
+        paramMaps = {
+            "dataId":{"mapType":"value","compParamName":"dataId","compParamValue":"dataId固定值","pageParamName":"","changeExpt":""},
+            "fkId":{"mapType":"value","compParamName":"fkId","compParamValue":"fkId固定值","pageParamName":"","changeExpt":""},
+            "pageState":{"mapType":"value","compParamName":"pageState","compParamValue":"Add","pageParamName":"","changeExpt":""}
+        };*/
+
+        var pageStateMap = paramMaps['pageState'];
+        var mapType = pageStateMap['mapType'];
+        if(mapType=='value'){
+            this._pageState = pageStateMap['compParamValue'];
+        }else if(mapType=='page'){ //从页面取值
+            if(pageStateMap['compParamValue']!=null&&pageStateMap['compParamValue'].length>0){
+                this._pageState = urlParams[pageStateMap['compParamValue']];
+            }else{ //如果没有设置值 则默认值pageState
+                this._pageState = urlParams[pageStateMap['pageState']];
+            }
+        }
+
+        console.log('从url获得状态值为:'+this._pageState);
+
+        if(this._pageState=='Add'){    //状态为Add
+            var fkIdMap = paramMaps['fkId'];
+            var mapType = fkIdMap['mapType'];
+            if(mapType=='value'){  //固定值
+                this._fkFieldValue = fkIdMap['compParamValue'];
+            }else if(mapType=='page'){ //从页面取值
+                if(fkIdMap['compParamValue']!=null&&fkIdMap['compParamValue'].length>0){
+                    this._fkFieldValue = urlParams[fkIdMap['compParamValue']];
+                }else{ //如果没有设置值 则默认值fkId
+                    this._fkFieldValue = urlParams[fkIdMap['fkId']];
+                }
+            }
+            console.log('状态为Add 外键值为:'+this._fkFieldValue);
+        }else{  //状态为Edit/View
+            var dataIdMap = paramMaps['dataId'];
+            var mapType = dataIdMap['mapType'];
+            if(mapType=='value'){  //固定值
+                this.setCurrentRowId(dataIdMap['compParamValue']);
+            }else if(mapType=='page'){ //从页面取值
+                if(dataIdMap['compParamValue']!=null&&dataIdMap['compParamValue'].length>0){
+                    this.setCurrentRowId(urlParams[dataIdMap['compParamValue']]);
+                }else{ //如果没有设置值 则默认值fkId
+                    this.setCurrentRowId(urlParams[dataIdMap['dataId']]);
+                }
+            }
+            console.log('状态为Edit/View currentRowId值为:'+this.getCurrentRowId());
         }
     },
 
@@ -377,36 +424,7 @@ wof.bizWidget.VoucherComponent.prototype = {
 
     initRender: function(){
         this._queryFlag = true;
-        var urlParams = wof.util.Tool.getURLParams();
-        var paramMaps = this.getParamMaps();
-
-        //todo 测试使用数据
-        paramMaps = {
-            "dataId":{"mapType":"value","compParamName":"dataId","compParamValue":"dataId固定值","pageParamName":"","changeExpt":""},
-            "fkId":{"mapType":"value","compParamName":"fkId","compParamValue":"fkId固定值","pageParamName":"","changeExpt":""}
-        };
-
-        if(this.getState()=='Add'){    //状态为Add
-            var fkIdMap = paramMaps['fkId'];
-            var mapType = fkIdMap['mapType'];
-            if(mapType=='value'){  //固定值
-                this._fkFieldValue = fkIdMap['compParamValue'];
-            }else if(mapType=='page'){ //从页面取值
-                this._fkFieldValue = urlParams[fkIdMap['compParamValue']];
-            }
-            console.log('状态为Add 外键值为:'+this._fkFieldValue);
-        }else{  //状态为Edit/View
-            var dataIdMap = paramMaps['dataId'];
-            var mapType = dataIdMap['mapType'];
-            if(mapType=='value'){  //固定值
-                this.setCurrentRowId(dataIdMap['compParamValue']);
-            }else if(mapType=='page'){ //从页面取值
-                this.setCurrentRowId(urlParams[dataIdMap['compParamValue']]);
-            }
-            console.log('状态为Edit/View currentRowId值为:'+this.getCurrentRowId());
-        }
-
-
+        this._buildParams();
     },
 
     //选择实现
@@ -428,7 +446,7 @@ wof.bizWidget.VoucherComponent.prototype = {
         if(this._queryFlag==true){
             this._queryFlag = false;
 
-            if(this.getState()=='Add'){ //如果是Add状态 需要插入一条空白数据
+            if(this._pageState=='Add'){ //如果是Add状态 需要插入一条空白数据
                 var data = this.getDataSource().getLocalData();
                 if(data['rows'].length==0){ //如果当前do中没有缓存数据 则增加一条数据
                     var newData = {};
@@ -468,7 +486,6 @@ wof.bizWidget.VoucherComponent.prototype = {
             paramMaps: this.getParamMaps(),
             callStr:this.getCallStr(),
             initActionName:this.getInitActionName(),
-            state:this.getState(),
             caption:this.getCaption(),
             bindEntityID:this.getBindEntityID(),
             index:this.getIndex(),
@@ -487,7 +504,6 @@ wof.bizWidget.VoucherComponent.prototype = {
         this.setComponentId(data.componentId);
         this.setParamMaps(data.paramMaps);
         this.setInitActionName(data.initActionName);
-        this.setState(data.state);
         this.setCaption(data.caption);
         this.setBindEntityID(data.bindEntityID);
         this.setIndex(data.index);
@@ -814,9 +830,6 @@ wof.bizWidget.VoucherComponent.prototype = {
         if(!jQuery.isEmptyObject(voucherComponentData)){
             if(voucherComponentData.componentName!=null){
                 this.setComponentName(voucherComponentData.componentName);
-            }
-            if(voucherComponentData.state!=null){
-                this.setState(voucherComponentData.state);
             }
             if(voucherComponentData.itemHeight!=null){
                 this.setItemHeight(Number(voucherComponentData.itemHeight));

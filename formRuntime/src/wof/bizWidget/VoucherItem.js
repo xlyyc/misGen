@@ -488,7 +488,7 @@ wof.bizWidget.VoucherItem.prototype = {
         if (!readonlyMethod) {
             readonlyMethod = 'setReadonly';
         }
-        switch (this.getOriginNode().getState()) {
+        switch (this.getOriginNode()._pageState) {
             case 'Add':
                 this._component[readonlyMethod](false);
                 break;
