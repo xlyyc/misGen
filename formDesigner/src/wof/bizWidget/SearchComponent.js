@@ -215,12 +215,12 @@ wof.bizWidget.SearchComponent.prototype = {
     /**
      * Render 方法定义
      */
-    initRender: function(){
+    _initRender: function(){
 
     },
 
     //选择实现
-    beforeRender: function () {
+    _beforeRender: function () {
         this._flowLayout();
     },
 
@@ -230,7 +230,7 @@ wof.bizWidget.SearchComponent.prototype = {
     },
 
     //选择实现
-    afterRender: function () {
+    _afterRender: function () {
 
         this.sendMessage('wof.bizWidget.SearchComponent_render');
     },

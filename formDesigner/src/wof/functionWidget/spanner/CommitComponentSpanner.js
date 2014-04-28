@@ -88,7 +88,7 @@ wof.functionWidget.spanner.CommitComponentSpanner.prototype = {
      */
 
     //选择实现
-    beforeRender: function () {
+    _beforeRender: function () {
         this._selectObjectIco.remove();
         this._deleteObjectIco.remove();
         this._cutObjectIco.remove();
@@ -136,7 +136,7 @@ wof.functionWidget.spanner.CommitComponentSpanner.prototype = {
     },
 
     //选择实现
-    afterRender: function () {
+    _afterRender: function () {
         var parameters = {};
         var commitComponent = wof.util.ObjectManager.get(this.getPropertys().id);
         if(commitComponent!=null){

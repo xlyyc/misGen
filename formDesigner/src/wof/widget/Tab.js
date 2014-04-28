@@ -38,7 +38,7 @@ wof.widget.Tab.prototype = {
      * Render 方法定义
      */
 
-    initRender: function(){
+    _initRender: function(){
         var _this = this;
         var tab = wis$.create('Tab');
         tab.onClick(function(_tab){
@@ -53,7 +53,7 @@ wof.widget.Tab.prototype = {
     },
 
     //选择实现
-    beforeRender: function (){
+    _beforeRender: function (){
         var childs = [];
         //首先移除item 并且将内部对象暂存到childs
         for(var i=0; i<this.childNodes().length; i++){
@@ -83,7 +83,7 @@ wof.widget.Tab.prototype = {
     },
 
     //选择实现
-    afterRender: function(){
+    _afterRender: function(){
         this._tab.render();
         this.sendMessage('wof.widget.Tab_render');
     },

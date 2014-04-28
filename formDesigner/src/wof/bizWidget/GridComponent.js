@@ -221,12 +221,12 @@ wof.bizWidget.GridComponent.prototype = {
 
     },
 
-    initRender: function(){
+    _initRender: function(){
 
     },
 
     //选择实现
-    beforeRender: function () {
+    _beforeRender: function () {
 
         this.getDomInstance().children('div:not([oid])').remove();
 
@@ -284,7 +284,7 @@ wof.bizWidget.GridComponent.prototype = {
         return null;
     },
     //选择实现
-    afterRender: function () {
+    _afterRender: function () {
         this.sendMessage('wof.bizWidget.GridComponent_render');
     },
 

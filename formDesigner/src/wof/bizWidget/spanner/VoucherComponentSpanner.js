@@ -207,7 +207,7 @@ wof.bizWidget.spanner.VoucherComponentSpanner.prototype = {
      */
 
     //选择实现
-    beforeRender: function () {
+    _beforeRender: function () {
         this._selectVoucherComponentIco.remove();
         this._deleteVoucherComponentIco.remove();
         this._cutVoucherComponentIco.remove();
@@ -544,7 +544,7 @@ wof.bizWidget.spanner.VoucherComponentSpanner.prototype = {
     },
 
     //选择实现
-    afterRender: function () {
+    _afterRender: function () {
 
     },
 

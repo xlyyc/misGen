@@ -80,7 +80,7 @@ wof.bizWidget.FlowLayoutItem.prototype = {
     /**
      * Render 方法定义
      */
-    initRender: function(){
+    _initRender: function(){
         var _this = this;
         this.getDomInstance().droppable({
             snap:true,
@@ -176,7 +176,7 @@ wof.bizWidget.FlowLayoutItem.prototype = {
     },
 
     //选择实现
-    beforeRender: function () {
+    _beforeRender: function () {
 
         var childNodes = this.childNodes();
         if(childNodes.length>0){
@@ -197,7 +197,7 @@ wof.bizWidget.FlowLayoutItem.prototype = {
     },
 
     //选择实现
-    afterRender: function () {
+    _afterRender: function () {
         if(this.getIsFixItem()==true){
             this.getDomInstance().draggable('disable');
         }else{

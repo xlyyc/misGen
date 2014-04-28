@@ -64,7 +64,7 @@ wis.widget.Editor.prototype = {
      * 初始化渲染方法
      * 仅在第一次调用render时执行
      */
-    initRender: function () {
+    _initRender: function () {
         var input = $.loveyInput.create({
             cid: this.getCid(),
             name: this.getName(),
@@ -81,7 +81,7 @@ wis.widget.Editor.prototype = {
     },
 
 //渲染前处理方法
-    beforeRender: function () {
+    _beforeRender: function () {
 
     },
 
@@ -98,7 +98,7 @@ wis.widget.Editor.prototype = {
     },
 
 //渲染后处理方法
-    afterRender: function () {
+    _afterRender: function () {
 
 
     },

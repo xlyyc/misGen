@@ -11,7 +11,7 @@ wof.bizWidget.ObjectInspector.prototype = {
 
     _tree: null,
 
-    initRender: function(){
+    _initRender: function(){
         var tree = wof$.create('Tree');
         tree.setIsInside(true);
         tree.setTop(0);
@@ -36,7 +36,7 @@ wof.bizWidget.ObjectInspector.prototype = {
     },
 
     //选择实现
-    beforeRender: function () {
+    _beforeRender: function () {
 
     },
 
@@ -46,7 +46,7 @@ wof.bizWidget.ObjectInspector.prototype = {
     },
 
     //选择实现
-    afterRender: function () {
+    _afterRender: function () {
 
     },
 

@@ -187,7 +187,7 @@ wof.widget.Dialog.prototype = {
     },
 
 
-    initRender: function() {
+    _initRender: function() {
         var self = this;
         this._dialog = wis$.create('Dialog');
         this._dialog.setName(this.getName())
@@ -231,11 +231,11 @@ wof.widget.Dialog.prototype = {
         this._dialog.appendTo(this.getDomInstance());
     },
 
-    beforeRender: function() { },
+    _beforeRender: function() { },
     render: function() {
         this._dialog.render();
     },
-    afterRender: function() {
+    _afterRender: function() {
         this.sendMessage('wof.widget.Dialog_render');
     },
 

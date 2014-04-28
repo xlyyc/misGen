@@ -25,7 +25,7 @@ wof.widget.Mediator.prototype = {
      */
 
     //选择实现
-    beforeRender: function () {
+    _beforeRender: function () {
 
 
     },
@@ -37,7 +37,7 @@ wof.widget.Mediator.prototype = {
     },
 
     //选择实现
-    afterRender: function () {
+    _afterRender: function () {
         var table = jQuery('<table style="background-color:#fff9e5;border-collapse:collapse;text-align:left;width:160px;">');
         var tr = jQuery('<tr style="height:30px;border:1px inset #a1a1a1;">');
         tr.append(jQuery('<td style="width:15%;">&nbsp;<img src="src/img/logic.ico" style="width:16px;height:16px;"></td>'));

@@ -69,7 +69,7 @@ wof.widget.Button.prototype = {
      * Render 方法定义
      */
 
-    initRender: function(){
+    _initRender: function(){
         this._btn = wis$.create('Button');
         
         //setDate
@@ -93,7 +93,7 @@ wof.widget.Button.prototype = {
     },
 
     //选择实现
-    beforeRender: function () {
+    _beforeRender: function () {
         
     },
 
@@ -111,7 +111,7 @@ wof.widget.Button.prototype = {
     },
 
     //选择实现
-    afterRender: function () {
+    _afterRender: function () {
 
         this.sendMessage('wof.widget.Button_render');
     },

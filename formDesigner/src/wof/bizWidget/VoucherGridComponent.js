@@ -267,7 +267,7 @@ wof.bizWidget.VoucherGridComponent.prototype = {
      */
 
     //选择实现
-    beforeRender: function () {
+    _beforeRender: function () {
         this.getDomInstance().children('div:not([oid])').remove();
     },
 
@@ -313,7 +313,7 @@ wof.bizWidget.VoucherGridComponent.prototype = {
     },
 
     //选择实现
-    afterRender: function () {
+    _afterRender: function () {
         this.sendMessage('wof.bizWidget.VoucherGridComponent_render');
     },
 

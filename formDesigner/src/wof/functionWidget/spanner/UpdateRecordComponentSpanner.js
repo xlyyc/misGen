@@ -87,7 +87,7 @@ wof.functionWidget.spanner.UpdateRecordComponentSpanner.prototype = {
      */
 
     //选择实现
-    beforeRender: function () {
+    _beforeRender: function () {
         this._selectObjectIco.remove();
         this._deleteObjectIco.remove();
         this._cutObjectIco.remove();
@@ -135,7 +135,7 @@ wof.functionWidget.spanner.UpdateRecordComponentSpanner.prototype = {
     },
 
     //选择实现
-    afterRender: function () {
+    _afterRender: function () {
         var parameters = {};
         var updateRecordComponent = wof.util.ObjectManager.get(this.getPropertys().id);
         if(updateRecordComponent!=null){

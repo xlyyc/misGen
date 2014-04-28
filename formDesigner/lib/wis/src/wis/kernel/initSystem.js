@@ -210,10 +210,10 @@ var wis$_aop = (function(){
                         obj[o].prototype.render = function(){
                             if(this._initRenderFlag == false){
                                 this._initRenderFlag = true;
-                                this.initRender();
+                                this._initRender();
                             }
-                            if(this.beforeRender!=null){
-                                this.beforeRender();
+                            if(this._beforeRender!=null){
+                                this._beforeRender();
                             }
                             if(this._left!=null){
                                 this.getDomInstance().css('left', (this._left*this.getScale())+'px');
@@ -230,8 +230,8 @@ var wis$_aop = (function(){
                             this.getDomInstance().css('position', this.getPosition());
                             this.getDomInstance().css('zIndex', this.getZIndex());
                             this._render();
-                            if(this.afterRender!=null){
-                                this.afterRender();
+                            if(this._afterRender!=null){
+                                this._afterRender();
                             }
                         };
                     }

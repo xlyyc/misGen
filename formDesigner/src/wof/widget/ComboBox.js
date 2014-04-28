@@ -117,12 +117,12 @@ wof.widget.ComboBox.prototype = {
         this._onSelected = callBack;
     },
 
-    beforeRender: function () {
+    _beforeRender: function () {
 
     },
 
 
-    initRender: function () {
+    _initRender: function () {
         var _this = this;
         var comboBox = wis$.create('ComboBox');
         comboBox.setReadonly(this.getReadonly());
@@ -158,7 +158,7 @@ wof.widget.ComboBox.prototype = {
         this._comboBox.render();
     },
 
-    afterRender: function () {
+    _afterRender: function () {
 
         this.sendMessage('wof.widget.ComboBox_render');
     },

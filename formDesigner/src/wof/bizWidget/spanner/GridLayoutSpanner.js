@@ -70,7 +70,7 @@ wof.bizWidget.spanner.GridLayoutSpanner.prototype = {
      */
 
     //选择实现
-    beforeRender: function () {
+    _beforeRender: function () {
 
     },
 
@@ -80,7 +80,7 @@ wof.bizWidget.spanner.GridLayoutSpanner.prototype = {
     },
 
     //选择实现
-    afterRender: function () {
+    _afterRender: function () {
         if(!jQuery.isEmptyObject(this.getPropertys())){
             this.getPropertys().activeClass = 'GridLayout';
         }

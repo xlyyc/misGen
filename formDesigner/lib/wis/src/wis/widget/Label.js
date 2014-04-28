@@ -101,13 +101,13 @@ wis.widget.Label.prototype = {
     /**
      * Render 方法定义
      */
-    initRender: function(){
+    _initRender: function(){
         this._label = jQuery('<span style="position:absolute;top:4px;cursor:pointer;">'+this.getText()+'</span>');
         this.getDomInstance().append(this._label);
     },
 
     //选择实现
-    beforeRender: function () {
+    _beforeRender: function () {
 
         this.getDomInstance().children('hr').remove();
         this.getDomInstance().children('img').remove();
@@ -139,7 +139,7 @@ wis.widget.Label.prototype = {
     },
 
     //选择实现
-    afterRender: function () {
+    _afterRender: function () {
 
     },
 

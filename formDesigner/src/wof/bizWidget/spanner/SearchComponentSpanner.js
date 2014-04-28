@@ -151,7 +151,7 @@ wof.bizWidget.spanner.SearchComponentSpanner.prototype = {
      */
 
     //选择实现
-    beforeRender: function () {
+    _beforeRender: function () {
         this._selectSearchComponentIco.remove();
         this._deleteSearchComponentIco.remove();
         this._cutSearchComponentIco.remove();
@@ -367,7 +367,7 @@ wof.bizWidget.spanner.SearchComponentSpanner.prototype = {
     },
 
     //选择实现
-    afterRender: function () {
+    _afterRender: function () {
     },
 
     /**

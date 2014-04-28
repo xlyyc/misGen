@@ -344,7 +344,7 @@ wof.bizWidget.VoucherItem.prototype = {
      * Render 方法定义
      */
 
-    initRender: function(){
+    _initRender: function(){
         var _this = this;
         this.getDomInstance().droppable({
             snap:true,
@@ -399,7 +399,7 @@ wof.bizWidget.VoucherItem.prototype = {
 
     },
     //选择实现
-    beforeRender: function () {
+    _beforeRender: function () {
 
         this.getDomInstance().children().remove();
         if(this.getItemLabel()!=''&&this.getVisbleType()!=''){
@@ -420,7 +420,7 @@ wof.bizWidget.VoucherItem.prototype = {
     },
 
     //选择实现
-    afterRender: function () {
+    _afterRender: function () {
         if(this.getIsFixItem()==true){
             this.getDomInstance().draggable('disable');
         }else{

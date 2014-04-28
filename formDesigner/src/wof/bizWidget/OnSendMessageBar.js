@@ -83,7 +83,7 @@ wof.bizWidget.OnSendMessageBar.prototype={
         return tr;
     },
 	//选择实现
-	beforeRender: function(){
+	_beforeRender: function(){
 		this.getDomInstance().children().remove();
 	},
 	//必须实现

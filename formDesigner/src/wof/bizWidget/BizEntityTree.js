@@ -33,7 +33,7 @@ wof.bizWidget.BizEntityTree.prototype = {
         this._value = value;
     },
 
-    initRender: function(){
+    _initRender: function(){
         this._tree = wof$.create('Tree');
         this._tree.setIsInside(true);
         this._tree.setNodes(this.getNodes());
@@ -47,7 +47,7 @@ wof.bizWidget.BizEntityTree.prototype = {
     },
 
     //选择实现
-    beforeRender: function () {
+    _beforeRender: function () {
 
     },
 
@@ -57,7 +57,7 @@ wof.bizWidget.BizEntityTree.prototype = {
     },
 
     //选择实现
-    afterRender: function () {
+    _afterRender: function () {
 
     },
 

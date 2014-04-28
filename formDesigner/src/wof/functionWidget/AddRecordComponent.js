@@ -148,7 +148,7 @@ wof.functionWidget.AddRecordComponent.prototype = {
     /**
      * Render 方法定义
      */
-    initRender: function(){
+    _initRender: function(){
         var button = wof$.create('Button');
         button.setIsInside(true);
         button.setLeft(0);
@@ -160,7 +160,7 @@ wof.functionWidget.AddRecordComponent.prototype = {
     },
 
     //选择实现
-    beforeRender: function () {
+    _beforeRender: function () {
 
         this._btn.setLabel(this.getCallItemCaption());
     },
@@ -171,7 +171,7 @@ wof.functionWidget.AddRecordComponent.prototype = {
     },
 
     //选择实现
-    afterRender: function () {
+    _afterRender: function () {
 
     },
 

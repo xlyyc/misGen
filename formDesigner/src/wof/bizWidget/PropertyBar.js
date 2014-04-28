@@ -207,7 +207,7 @@ wof.bizWidget.PropertyBar.prototype={
 	},
 
 	//选择实现
-	beforeRender: function(){
+	_beforeRender: function(){
 
 		this.getDomInstance().children().remove();
 	},

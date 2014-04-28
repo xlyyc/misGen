@@ -33,7 +33,7 @@ wof.bizWidget.ParamWindow.prototype = {
     },
 
     //选择实现
-    beforeRender: function () {
+    _beforeRender: function () {
 
         this.getDomInstance().children('table').remove();
     },
@@ -60,7 +60,7 @@ wof.bizWidget.ParamWindow.prototype = {
     },
 
     //选择实现
-    afterRender: function () {
+    _afterRender: function () {
 
     },
 

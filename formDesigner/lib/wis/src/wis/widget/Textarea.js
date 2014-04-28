@@ -136,7 +136,7 @@ wis.widget.Textarea.prototype = {
      * 初始化渲染方法
      * 仅在第一次调用render时执行
      */
-    initRender: function () {
+    _initRender: function () {
     	this._root = $('<textarea  class="wis_textarea_style_default"/>');
 		this._root.val(this.getPlaceholder());
 		this.getDomInstance().append(this._root);
@@ -144,7 +144,7 @@ wis.widget.Textarea.prototype = {
 		this._bindEvents();
     },
     //渲染前处理方法
-    beforeRender: function (){},
+    _beforeRender: function (){},
 
     //渲染方法
     render: function () {
@@ -162,7 +162,7 @@ wis.widget.Textarea.prototype = {
     },
 
     //渲染后处理方法
-    afterRender: function (){},
+    _afterRender: function (){},
 
     /**
      * getData/setData 方法定义

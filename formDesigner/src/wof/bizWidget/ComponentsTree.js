@@ -35,7 +35,7 @@ wof.bizWidget.ComponentsTree.prototype = {
         this._value = value;
     },
 
-    initRender: function(){
+    _initRender: function(){
         this._tree = wof$.create('Tree');
         this._tree.setTop(0);
         this._tree.setChkStyle('checkbox');
@@ -46,7 +46,7 @@ wof.bizWidget.ComponentsTree.prototype = {
     },
 
     //选择实现
-    beforeRender: function () {
+    _beforeRender: function () {
 
         this._tree.setNodes(this.getNodes());
     },
@@ -57,7 +57,7 @@ wof.bizWidget.ComponentsTree.prototype = {
     },
 
     //选择实现
-    afterRender: function () {
+    _afterRender: function () {
 
     },
 

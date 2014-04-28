@@ -34,7 +34,7 @@ wof.bizWidget.PageComponent.prototype = {
      */
 
     //选择实现
-    beforeRender: function () {
+    _beforeRender: function () {
 
         this.getDomInstance().css('overflow', '');
         this.getDomInstance().css('overflow-x', '');
@@ -55,7 +55,7 @@ wof.bizWidget.PageComponent.prototype = {
     },
 
     //选择实现
-    afterRender: function () {
+    _afterRender: function () {
         this.sendMessage('wof.bizWidget.PageComponent_render');
     },
 

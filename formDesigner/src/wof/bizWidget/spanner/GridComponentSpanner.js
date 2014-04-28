@@ -179,7 +179,7 @@ wof.bizWidget.spanner.GridComponentSpanner.prototype = {
      */
 
     //选择实现
-    beforeRender: function () {
+    _beforeRender: function () {
         this._pinColumnIco.remove();
         this._unPinColumnIco.remove();
         this._deleteGridColumnIco.remove();
@@ -385,7 +385,7 @@ wof.bizWidget.spanner.GridComponentSpanner.prototype = {
     },
 
     //选择实现
-    afterRender: function () {
+    _afterRender: function () {
 
     },
 

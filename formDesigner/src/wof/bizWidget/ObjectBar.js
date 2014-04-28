@@ -57,7 +57,7 @@ wof.bizWidget.ObjectBar.prototype={
     },
 
 
-    initRender: function(){
+    _initRender: function(){
             var toolbar = wof$.create('Toolbar');
             toolbar.setIsInside(true);
             toolbar.setWidth(this.getWidth());
@@ -223,7 +223,7 @@ wof.bizWidget.ObjectBar.prototype={
     },
 
 	//选择实现
-	beforeRender: function(){
+	_beforeRender: function(){
 
 	},
 	//必须实现
@@ -231,7 +231,7 @@ wof.bizWidget.ObjectBar.prototype={
 
 	},
     //选择实现
-    afterRender: function(){
+    _afterRender: function(){
 
     },
 	//必须实现

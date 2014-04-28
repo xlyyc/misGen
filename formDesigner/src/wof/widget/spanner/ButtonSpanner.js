@@ -77,7 +77,7 @@ wof.widget.spanner.ButtonSpanner.prototype = {
      */
 
     //选择实现
-    beforeRender: function () {
+    _beforeRender: function () {
 
     },
 
@@ -87,7 +87,7 @@ wof.widget.spanner.ButtonSpanner.prototype = {
     },
 
     //选择实现
-    afterRender: function () {
+    _afterRender: function () {
         if(!jQuery.isEmptyObject(this.getPropertys())){
             this.getPropertys().activeClass = 'Button';
         }

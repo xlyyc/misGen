@@ -72,11 +72,11 @@ wis.widget.Tree.prototype = {
     },
 
     //选择实现
-    initRender: function () {
+    _initRender: function () {
 
     },
 
-    beforeRender: function(){
+    _beforeRender: function(){
         var _this = this;
         this._ztree = jQuery.fn.zTree.init(this.getDomInstance().addClass('ztree'),
             {
@@ -129,7 +129,7 @@ wis.widget.Tree.prototype = {
     },
 
     //选择实现
-    afterRender: function () {
+    _afterRender: function () {
 
     },
 

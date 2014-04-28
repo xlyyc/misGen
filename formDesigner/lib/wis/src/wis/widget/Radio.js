@@ -115,7 +115,7 @@ wis.widget.Radio.prototype = {
      * 初始化渲染方法
      * 仅在第一次调用render时执行
      */
-    initRender: function () {
+    _initRender: function () {
     	this._rootObj = $('<div></div>'); //1. 根节点
         this._labelObj = $('<label></label>');// 2. Label节点   TODO  class="ui_radio"
         this._inputObj = $('<input type="radio"/>');// 3. 复选框节点
@@ -133,7 +133,7 @@ wis.widget.Radio.prototype = {
     },
 
     //渲染前处理方法
-    beforeRender: function () {},
+    _beforeRender: function () {},
 
     //渲染方法
     render: function () {
@@ -171,7 +171,7 @@ wis.widget.Radio.prototype = {
     },
 
     //渲染后处理方法
-    afterRender: function () {},
+    _afterRender: function () {},
 
     /**
      * getData/setData 方法定义

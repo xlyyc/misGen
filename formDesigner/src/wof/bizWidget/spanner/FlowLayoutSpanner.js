@@ -144,7 +144,7 @@ wof.bizWidget.spanner.FlowLayoutSpanner.prototype = {
      */
 
     //选择实现
-    beforeRender: function () {
+    _beforeRender: function () {
         this._selectFlowLayoutIco.remove();
         this._deleteFlowLayoutIco.remove();
         this._cutFlowLayoutIco.remove();
@@ -537,7 +537,7 @@ wof.bizWidget.spanner.FlowLayoutSpanner.prototype = {
     },
 
     //选择实现
-    afterRender: function () {
+    _afterRender: function () {
 
     },
 

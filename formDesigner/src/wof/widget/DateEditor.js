@@ -95,7 +95,7 @@ wof.widget.DateEditor.prototype = {
      * 初始化渲染方法
      * 仅在第一次调用render时执行
      */
-    initRender: function () {
+    _initRender: function () {
         var _this = this;
 
         var dateBox = wis$.create('DateEditor');
@@ -115,7 +115,7 @@ wof.widget.DateEditor.prototype = {
     },
 
     //选择实现
-    beforeRender: function () {
+    _beforeRender: function () {
 
     },
 
@@ -125,7 +125,7 @@ wof.widget.DateEditor.prototype = {
     },
 
     //选择实现
-    afterRender: function () {
+    _afterRender: function () {
 
         this.sendMessage('wof.widget.DateBox_render');
     },
