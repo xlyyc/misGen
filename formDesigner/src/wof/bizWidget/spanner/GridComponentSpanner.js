@@ -22,7 +22,7 @@ wof.bizWidget.spanner.GridComponentSpanner = function () {
             'numberDisplay':{prop:'numberDisplay','name':'是否显示序号','type':'yesOrNo','readOnly':false,'isHide':false,required:false},
             'useMutiplePage':{prop:'useMutiplePage','name':'是否使用分页','type':'yesOrNo','readOnly':false,'isHide':false,required:false},
             'rowsCount':{prop:'rowsCount','name':'每页行数','type':'naturalNumber','readOnly':false,'isHide':false,required:false},
-            'paramMaps':{prop:'paramMaps','name':'参数','type':'custom','readOnly':false,'isHide':false,required:false, customMethod:'wof.customWindow.ParamMapsWindow', customParam:'dataId'}
+            'paramMaps':{prop:'paramMaps','name':'参数','type':'custom','readOnly':false,'isHide':false,required:false, customMethod:'wof.customWindow.ParamMapsWindow', customParam:'dataId,pageState'}
         },
         'GridComponentColumn':{
             'name':{prop:'name','name':'列名','type':'text','readOnly':false,'isHide':false,required:false},
@@ -482,18 +482,16 @@ wof.bizWidget.spanner.GridComponentSpanner.prototype = {
             tool.appendChild(rootElement,columnsElement);
 
             var paramMapsElement = tool.createElement(root,'paramMaps');
-            var paramMapElement = tool.createElement(root,'paramMap');
-
             for(var k in node.getParamMaps()){
+                var paramMapElement = tool.createElement(root,'paramMap');
                 var param = node.getParamMaps()[k];
                 tool.setAttribute(paramMapElement,'mapType',param['mapType']);
                 tool.setAttribute(paramMapElement,'compParamName',param['compParamName']);
                 tool.setAttribute(paramMapElement,'compParamValue',param['compParamValue']);
                 tool.setAttribute(paramMapElement,'pageParamName',param['pageParamName']);
                 tool.setAttribute(paramMapElement,'changeExpt',param['changeExpt']);
+                tool.appendChild(paramMapsElement,paramMapElement);
             }
-
-            tool.appendChild(paramMapsElement,paramMapElement);
             tool.appendChild(rootElement,paramMapsElement);
 
             /*var mutiplePageInfo = tool.createElement(root,'mutiplePageInfo');

@@ -25,7 +25,7 @@ wof.bizWidget.spanner.VoucherComponentSpanner = function () {
             'viewType':{prop:'viewType','name':'展现方式','type':'enum','readOnly':false,'isHide':false, 'enumData':{'group':'分组','tab':'标签页'},required:false},
             'bindEntityID':{prop:'bindEntityID','name':'绑定实体','type':'custom','readOnly':false,'isHide':false,required:false, customMethod:'wof.customWindow.MetaTreeSelector', customParam:'mainEntity'},
             'fkField':{prop:'fkField','name':'绑定外键','type':'custom','readOnly':false,'isHide':false,required:false, customMethod:'wof.customWindow.MetaTreeSelector', customParam:'field'},
-            'paramMaps':{prop:'paramMaps','name':'参数','type':'custom','readOnly':false,'isHide':false,required:false, customMethod:'wof.customWindow.ParamMapsWindow', customParam:'dataId,fkId'}
+            'paramMaps':{prop:'paramMaps','name':'参数','type':'custom','readOnly':false,'isHide':false,required:false, customMethod:'wof.customWindow.ParamMapsWindow', customParam:'dataId,fkId,pageState'}
         },
         'VoucherItemGroup':{
             'groupCaption':{prop:'groupCaption','name':'标题','type':'text','readOnly':false,'isHide':false,required:false},
@@ -693,20 +693,16 @@ wof.bizWidget.spanner.VoucherComponentSpanner.prototype = {
             }
 
             var paramMaps = tool.createElement(root,"paramMaps");
-
-            var paramMap = tool.createElement(root,"paramMap");
-
             for(var k in node.getParamMaps()){
+                var paramMap = tool.createElement(root,"paramMap");
                 var param = node.getParamMaps()[k];
                 tool.setAttribute(paramMap,'mapType',param['mapType']);
                 tool.setAttribute(paramMap,'compParamName',param['compParamName']);
                 tool.setAttribute(paramMap,'compParamValue',param['compParamValue']);
                 tool.setAttribute(paramMap,'pageParamName',param['pageParamName']);
                 tool.setAttribute(paramMap,'changeExpt',param['changeExpt']);
+                tool.appendChild(paramMaps,paramMap);
             }
-
-            tool.appendChild(paramMaps,paramMap);
-
             tool.appendChild(rootElement,paramMaps);
 
             console.log(tool.xmlToString(root));

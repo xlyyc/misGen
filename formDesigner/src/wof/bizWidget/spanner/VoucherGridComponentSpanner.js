@@ -23,7 +23,7 @@ wof.bizWidget.spanner.VoucherGridComponentSpanner = function () {
             'numberDisplay':{prop:'numberDisplay','name':'是否显示序号','type':'yesOrNo','readOnly':false,'isHide':false,required:false},
             'useMutiplePage':{prop:'useMutiplePage','name':'是否使用分页','type':'yesOrNo','readOnly':false,'isHide':false,required:false},
             'rowsCount':{prop:'rowsCount','name':'每页行数','type':'naturalNumber','readOnly':false,'isHide':false,required:false},
-            'paramMaps':{prop:'paramMaps','name':'参数','type':'custom','readOnly':false,'isHide':false,required:false, customMethod:'wof.customWindow.ParamMapsWindow', customParam:'dataId'}
+            'paramMaps':{prop:'paramMaps','name':'参数','type':'custom','readOnly':false,'isHide':false,required:false, customMethod:'wof.customWindow.ParamMapsWindow', customParam:'dataId,pageState'}
         },
         'VoucherGridComponentColumn':{
             'name':{prop:'name','name':'列名','type':'text','readOnly':false,'isHide':false,required:false},
@@ -476,18 +476,16 @@ wof.bizWidget.spanner.VoucherGridComponentSpanner.prototype = {
             }
             tool.appendChild(rootElement,Columns);
             var paramMapsElement = tool.createElement(root,'paramMaps');
-            var paramMapElement = tool.createElement(root,'pramMap');
-
             for(var k in node.getParamMaps()){
+                var paramMapElement = tool.createElement(root,'pramMap');
                 var param = node.getParamMaps()[k];
                 tool.setAttribute(paramMapElement,'mapType',param['mapType']);
                 tool.setAttribute(paramMapElement,'compParamName',param['compParamName']);
                 tool.setAttribute(paramMapElement,'compParamValue',param['compParamValue']);
                 tool.setAttribute(paramMapElement,'pageParamName',param['pageParamName']);
                 tool.setAttribute(paramMapElement,'changeExpt',param['changeExpt']);
+                tool.appendChild(paramMapsElement,paramMapElement);
             }
-
-            tool.appendChild(paramMapsElement,paramMapElement);
             tool.appendChild(rootElement,paramMapsElement);
             console.log(tool.xmlToString(root));
             return tool.xmlToString(root);
