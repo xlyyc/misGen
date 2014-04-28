@@ -1,0 +1,119 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>javascript-tab</title>
+    <!--lovey ui-->
+    <link href="../../../../lovey/style/css/lovey.css" rel="stylesheet" type="text/css"/>
+    <!--文档自定义样式-->
+    <link href="../../../../docs/assets/css/docs.css" rel="stylesheet" type="text/css"/>
+</head>
+
+<body>
+<div class="ui_container w1000 m10">
+   <div class="thumbnail w200">
+        <div class="show">
+            <div id="tab01">
+                <div title="tab1" tabid="01"> tab1内容</div>
+                <div title="tab2" tabid="02"> tab2内容</div>
+                <div title="tab3" tabid="03"> tab3内容</div>
+            </div>
+        </div>
+        <h4>tab_style01</h4>
+        <p></p>
+    </div>
+    <div class="thumbnail w200">
+        <div class="show">
+            <div id="tab02">
+                <div title="tab1" tabid="01"> tab1内容</div>
+                <div title="tab2" tabid="02"> tab2内容</div>
+                <div title="tab3" tabid="03"> tab3内容</div>
+            </div>
+        </div>
+        <h4>tab_style02</h4>
+        <p></p>
+    </div>
+    <div class="thumbnail w200">
+        <div class="show">
+            <div id="tab03">
+                <div title="tab1" tabid="01"> tab1内容</div>
+                <div title="tab2" tabid="02"> tab2内容</div>
+                <div title="tab3" tabid="03"> tab3内容</div>
+            </div>
+        </div>
+        <h4>tab_style03</h4>
+        <p></p>
+    </div>
+    <div class="thumbnail w200">
+        <div class="show">
+            <div id="tab04">
+                <div title="tab1" tabid="01"> tab1内容</div>
+                <div title="tab2" tabid="02"> tab2内容</div>
+                <div title="tab3" tabid="03"> tab3内容</div>
+            </div>
+        </div>
+        <h4>tab_style04</h4>
+        <p></p>
+    </div>
+    <div class="thumbnail w200">
+        <div class="show">
+            <div id="tab05">
+                <div title="tab1" tabid="01"> tab1内容</div>
+                <div title="tab2" tabid="02"> tab2内容</div>
+                <div title="tab3" tabid="03"> tab3内容</div>
+            </div>
+        </div>
+        <h4>tab_style05</h4>
+        <p></p>
+    </div>
+    <div class="thumbnail w200">
+        <div class="show">
+            <div id="tab06">
+                <div title="tab1" tabid="01"> tab1内容</div>
+                <div title="tab2" tabid="02"> tab2内容</div>
+                <div title="tab3" tabid="03"> tab3内容</div>
+            </div>
+        </div>
+        <h4>tab_style06</h4>
+        <p></p>
+    </div>
+
+</div>
+<!--jquery核心文件-->
+<script src="../../../../lovey/js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+<!--懒加载核心js文件-->
+<script src="../../../../lovey/js/easyloader.js" type="text/javascript"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        using("tab", function () {
+            $("#tab01").ligerTab({
+                className:"tab_style01"
+            });
+            $("#tab02").ligerTab({
+                className:"tab_style02"
+            });
+            $("#tab03").ligerTab({
+                className:"tab_style03"
+            });
+            $("#tab04").ligerTab({
+                className:"tab_style04"
+            });
+            $("#tab05").ligerTab({
+                className:"tab_style05"
+            });
+            $("#tab06").ligerTab({
+                className:"tab_style06"
+            });
+            $("#tab07").ligerTab({
+                className:"tab_style07"
+            });
+            $("#tab08").ligerTab({
+                className:"tab_style08"
+            });
+        })
+    })
+
+</script>
+</body>
+</html>

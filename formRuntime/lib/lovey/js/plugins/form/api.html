@@ -1,0 +1,413 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="generator" content="JsDoc Toolkit" />
+
+<script src="/docs/LigerUI/api/syntaxhighlighter/scripts/shCore.js" type="text/javascript"></script>
+<script type="text/javascript" src="/docs/LigerUI/api/syntaxhighlighter/scripts/shBrushCss.js"></script>
+<script type="text/javascript" src="/docs/LigerUI/api/syntaxhighlighter/scripts/shBrushJScript.js"></script>
+<script type="text/javascript" src="/docs/LigerUI/api/syntaxhighlighter/scripts/shBrushPhp.js"></script>
+<script src="/docs/LigerUI/api/syntaxhighlighter/helper.js" type="text/javascript"></script>
+<link type="text/css" rel="stylesheet" href="/docs/LigerUI/api/syntaxhighlighter/styles/shCore.css"/>
+<link type="text/css" rel="stylesheet" href="/docs/LigerUI/api/syntaxhighlighter/styles/shThemeDefault.css"/>
+<title>API for form</title>
+
+<style type="text/css">
+    /* default.css */
+body
+{
+    font: 12px "Lucida Grande", Tahoma, Arial, Helvetica, sans-serif;
+}
+
+.header
+{
+    clear: both;
+    background-color: #ccc;
+    padding: 8px;
+}
+li{ line-height:17px;}
+h1
+{
+    font-size: 150%;
+    font-weight: bold;
+    padding: 0;
+    margin: 1em 0 0 .3em;
+}
+
+hr
+{
+    border: none 0;
+    border-top: 1px solid #7F8FB1;
+    height: 1px;
+}
+
+pre.code
+{
+    display: block;
+    padding: 8px;
+    border: 1px dashed #ccc;
+}
+
+#index
+{
+    margin-top: 24px;
+    float: left;
+    width: 160px;
+    position: absolute;
+    left: 8px;
+    background-color: #F3F3F3;
+    padding: 8px;
+}
+
+#content
+{
+    margin-left: 5px;
+}
+
+.classList
+{
+    list-style-type: none;
+    padding: 0;
+    margin: 0 0 0 8px;
+    font-family: arial, sans-serif;
+    font-size: 1em;
+    overflow: auto;
+}
+
+.classList li
+{
+    padding: 0;
+    margin: 0 0 8px 0;
+}
+
+.summaryTable { width: 100%; }
+
+h1.classTitle
+{
+    font-size:170%;
+    line-height:130%;
+}
+
+h2 { font-size: 110%; }
+caption, div.sectionTitle
+{
+    background-color: #7F8FB1;
+    color: #fff;
+    font-size:130%;
+    text-align: left;
+    padding: 2px 6px 2px 6px;
+    border: 1px #7F8FB1 solid;
+}
+
+div.sectionTitle { margin-bottom: 8px; }
+.summaryTable thead { display: none; }
+
+.summaryTable td
+{
+    vertical-align: top;
+    padding: 4px;
+    border-bottom: 1px #7F8FB1 solid;
+    border-right: 1px #7F8FB1 solid;
+}
+
+    /*col#summaryAttributes {}*/
+.summaryTable td.attributes
+{
+    width: 140px;
+    text-align: right;
+}
+
+td.attributes, .fixedFont
+{
+    line-height: 15px;
+    color: #002EBE;
+    font-family: "Courier New",Courier,monospace;
+    font-size: 13px;
+}
+
+.summaryTable td.nameDescription
+{
+    text-align: left;
+    font-size: 13px;
+    line-height: 15px;
+}
+table.summaryTable
+{border-left: 1px #7F8FB1 solid;
+}
+.summaryTable td.nameDescription, .description
+{
+    line-height: 15px;
+    padding: 4px;
+    padding-left: 4px;
+}
+
+.summaryTable { margin-bottom: 8px; }
+
+ul.inheritsList
+{
+    list-style: square;
+    margin-left: 20px;
+    padding-left: 0;
+}
+
+.detailList {
+    margin-left: 20px;
+    line-height: 15px;
+}
+.detailList dt { margin-left: 20px; }
+
+.detailList .heading
+{
+    font-weight: bold;
+    padding-bottom: 6px;
+    margin-left: 0; font-size:13px;
+}
+
+.light, td.attributes, .light a:link, .light a:visited
+{
+    color: #777;
+    font-style: italic;
+}
+
+.fineprint
+{
+    text-align:center;
+    font-size: 10px;
+}
+.description ul,.l-params-row-cell ul
+{
+    list-style:none; padding:0; padding-left:14px; padding-right:5px;
+}
+.l-params-table
+{
+    border-bottom:1px solid #C1C1C1; border-right:1px solid #C1C1C1;
+}
+.l-params-table td
+{border-left:1px solid #C1C1C1; border-top:1px solid #C1C1C1;
+}
+.l-params-hd-cell
+{
+    background:#DBDBDB;padding:8px; line-height:23px;
+}
+.l-cell-Function-parms
+{
+    border:1px dashed #C1C1C1; background:white;
+}
+.l-params-row-cell
+{
+    padding:8px;line-height:23px;
+}
+.l-params-hd-cell-name
+{
+}
+.l-row-Function
+{
+    background:#f5f5f5;
+}
+
+.l-params-hd-cell-default
+{width:100px;
+}
+.l-params-hd-cell-type
+{
+
+}
+.l-params-hd-cell-desc
+{
+}
+</style>
+</head>
+
+<body>
+
+
+<div id="content">
+    <table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class _global_.">
+        <caption>插件方法列表</caption>
+        <tbody>
+
+        <tr>
+            <td class="nameDescription">
+                <div class="description">
+                    <ul>
+                        <li>异步无刷新提交表单,当异步提交和ckEditor同时使用，在表单体检前必须将编辑器的值回写回去。</li>
+                        <li>$("#desc").val(CKEDITOR.instances.desc.getData());</li>
+                    </ul>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <dl class="detailList">
+        <dt class="heading">接口列表:</dt>
+        <table class='l-params-table' cellpadding="0" cellspacing="0">
+            <tbody>
+            <tr>
+                <td class='l-params-hd-cell l-params-hd-cell-name'>接口名</td>
+                <td class='l-params-hd-cell l-params-hd-cell-desc'>描述</td>
+                <td class='l-params-hd-cell l-params-hd-cell-default'>示范</td>
+            </tr>
+
+            <tr class='l-row-String'>
+                <td class='l-params-row-cell'>ajaxForm </td>
+                <td class='l-params-row-cell'>增加所有需要的事件监听器，为AJAX提交表单做好准备，ajaxForm不能提交表单。</td>
+                <td class='l-params-row-cell'>$('#myFormId').ajaxForm();</td>
+            </tr>
+            <tr class='l-row-String'>
+                <td class='l-params-row-cell'>ajaxSubmit</td>
+                <td class='l-params-row-cell'>马上由AJAX来提交表单。大多数情况下，都是调用ajaxSubmit来对用户提交表单进行响应。ajaxSubmit接受0个或1个参数。这个单个的参数既可以是一个回调函数，也可以是一个Options对象。 </td>
+                <td class='l-params-row-cell'>// 绑定表单提交事件处理器
+                    $('#myFormId').submit(function() {
+                    // 提交表单
+                    $(this).ajaxSubmit();
+                    // 为了防止普通浏览器进行表单提交和产生页面导航（防止页面刷新？）返回false
+                    return false;
+                    });
+                </td>
+            </tr>
+            <tr class='l-row-String'>
+                <td class='l-params-row-cell'>formSerialize</td>
+                <td class='l-params-row-cell'>将表单串行化（或序列化）成一个查询字符串。</td>
+                <td class='l-params-row-cell'>var queryString = $('#myFormId').formSerialize();
+
+                    // 现在可以使用$.get、$.post、$.ajax等来提交数据
+                    $.post('myscript.php', queryString);
+
+                </td>
+            </tr>
+            <tr class='l-row-String'>
+                <td class='l-params-row-cell'>fieldSerialize </td>
+                <td class='l-params-row-cell'>将表单的字段元素串行化（或序列化）成一个查询字符串。</td>
+                <td class='l-params-row-cell'>
+                    var queryString = $('#myFormId .specialFields').fieldSerialize();
+                </td>
+            </tr>
+            <tr class='l-row-String'>
+                <td class='l-params-row-cell'>fieldValue  </td>
+                <td class='l-params-row-cell'>返回匹配插入数组中的表单元素值。从0.91版起，该方法将总是以数组的形式返回数据。如果元素值被判定可能无效，则数组为空，否则它将包含一个或多于一个的元素值。 </td>
+                <td class='l-params-row-cell'>
+                    // 取得密码输入值
+                    var value = $('#myFormId :password').fieldValue();
+                    alert('The password is: ' + value[0]);
+                </td>
+            </tr>
+            <tr class='l-row-String'>
+                <td class='l-params-row-cell'>resetForm   </td>
+                <td class='l-params-row-cell'>通过调用表单元素原有的DOM方法，将表单恢复到初始状态。 </td>
+                <td class='l-params-row-cell'>
+                    $('#myFormId').resetForm();
+                </td>
+            </tr>
+            <tr class='l-row-String'>
+                <td class='l-params-row-cell'>clearForm    </td>
+                <td class='l-params-row-cell'>清除表单元素。该方法将所有的文本（text）输入字段、密码（password）输入字段和文本区域（textarea）字段置空，清除任何select元素中的选定，以及将所有的单选（radio）按钮和多选（checkbox）按钮重置为非选定状态。 </td>
+                <td class='l-params-row-cell'>
+                    $('#myFormId').clearForm();
+                </td>
+            </tr>
+            <tr class='l-row-String'>
+                <td class='l-params-row-cell'>clearFields    </td>
+                <td class='l-params-row-cell'>清除字段元素。只有部分表单元素需要清除时才方便使用。  </td>
+                <td class='l-params-row-cell'>
+                    $('#myFormId .specialFields').clearFields();
+                </td>
+            </tr>
+            <tr class='l-row-String'>
+                <td class='l-params-row-cell'>resetForm   </td>
+                <td class='l-params-row-cell'>通过调用表单元素原有的DOM方法，将表单恢复到初始状态。 </td>
+                <td class='l-params-row-cell'>
+                    $('#myFormId').resetForm();
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </dl>
+
+    <dl class="detailList">
+        <dt class="heading">参数列表:</dt>
+        <table class='l-params-table' cellpadding="0" cellspacing="0">
+            <tr>
+                <td class='l-params-hd-cell l-params-hd-cell-name'>参数名</td>
+                <td class='l-params-hd-cell l-params-hd-cell-type'>类型</td>
+                <td class='l-params-hd-cell l-params-hd-cell-desc'>描述</td>
+                <td class='l-params-hd-cell l-params-hd-cell-default'>默认值</td>
+            </tr>
+            <tr class='l-row-String'>
+                <td class='l-params-row-cell'>Options</td>
+                <td class='l-params-row-cell'><span class="light fixedFont">{Object}</span></td>
+                <td class='l-params-row-cell'>ajaxForm和ajaxSubmit都支持众多的选项参数，这些选项参数可以使用一个Options对象来提供。Options只是一个JavaScript对象，它包含了如下一些属性与值的集合。</td>
+                <td class='l-params-row-cell'></td>
+            </tr>
+            <tr class='l-row-String'>
+                <td class='l-params-row-cell'>Options.target </td>
+                <td class='l-params-row-cell'><span class="light fixedFont">{Object}</span></td>
+                <td class='l-params-row-cell'>指明页面中由服务器响应进行更新的元素。元素的值可能被指定为一个jQuery选择器字符串，一个jQuery对象，或者一个DOM元素。</td>
+                <td class='l-params-row-cell'>null</td>
+            </tr>
+            <tr class='l-row-String'>
+                <td class='l-params-row-cell'>Options.url  </td>
+                <td class='l-params-row-cell'><span class="light fixedFont">{String}</span></td>
+                <td class='l-params-row-cell'>指明页面中由服务器响应进行更新的元素。元素的值可能被指定为一个jQuery选择器字符串，一个jQuery对象，或者一个DOM元素。</td>
+                <td class='l-params-row-cell'>表单的action属性值 </td>
+            </tr>
+            <tr class='l-row-String'>
+                <td class='l-params-row-cell'>Options.type  </td>
+                <td class='l-params-row-cell'><span class="light fixedFont">{String}</span></td>
+                <td class='l-params-row-cell'>指定提交表单数据的方法（method）：“GET”或“POST”。 </td>
+                <td class='l-params-row-cell'>表单的method属性值（如果没有找到默认为“GET”）</td>
+            </tr>
+            <tr class='l-row-String'>
+                <td class='l-params-row-cell'>Options.beforeSubmit   </td>
+                <td class='l-params-row-cell'><span class="light fixedFont">{Function}</span></td>
+                <td class='l-params-row-cell'>表单提交前被调用的回调函数。“beforeSubmit”回调函数作为一个钩子（hook），被提供来运行预提交逻辑或者校验表单数据。如果“beforeSubmit”回调函数返回false，那么表单将不被提交。“beforeSubmit”回调函数带三个调用参数：数组形式的表单数据，jQuery表单对象，以及传入ajaxForm/ajaxSubmit中的Options对象。</td>
+                <td class='l-params-row-cell'>null</td>
+            </tr>
+            <tr class='l-row-String'>
+                <td class='l-params-row-cell'>Options.success    </td>
+                <td class='l-params-row-cell'><span class="light fixedFont">{Function}</span></td>
+                <td class='l-params-row-cell'>表单成功提交后调用的回调函数。如果提供“success”回调函数，当从服务器返回响应后它被调用。然后由dataType选项值决定传回responseText还是responseXML的值。</td>
+                <td class='l-params-row-cell'>null</td>
+            </tr>
+            <tr class='l-row-String'>
+                <td class='l-params-row-cell'>Options.dataType    </td>
+                <td class='l-params-row-cell'><span class="light fixedFont">{String}</span></td>
+                <td class='l-params-row-cell'>期望返回的数据类型。null、“xml”、“script”或者“json”其中之一。dataType提供一种方法，它规定了怎样处理服务器的响应。</td>
+                <td class='l-params-row-cell'>null</td>
+            </tr>
+            <tr class='l-row-String'>
+                <td class='l-params-row-cell'>Options.resetForm    </td>
+                <td class='l-params-row-cell'><span class="light fixedFont">{Bool}</span></td>
+                <td class='l-params-row-cell'>表示如果表单提交成功是否进行重置。 </td>
+                <td class='l-params-row-cell'>null（服务器返回responseText值） </td>
+            </tr>
+            <tr class='l-row-String'>
+                <td class='l-params-row-cell'>Options.clearForm     </td>
+                <td class='l-params-row-cell'><span class="light fixedFont">{Bool}</span></td>
+                <td class='l-params-row-cell'>表示如果表单提交成功是否清除表单数据。。 </td>
+                <td class='l-params-row-cell'>null</td>
+            </tr>
+        </table>
+    </dl>
+
+    <dl class="detailList">
+        <dt class="heading">在线API:</dt>
+        <dd><a href="http://lichuhui.iteye.com/blog/295905" target="_top">传送门</a> </dd>
+
+        <dd><a href="demo.html" target="_top">演示</a> </dd>
+
+    </dl>
+
+    <dl class="detailList">
+        <dt class="heading">返回值:</dt>
+        <dd><span class="light fixedFont">{jQuery}</span> jQuery对象</dd>
+
+    </dl>
+</div>
+
+</body>
+</html>
+

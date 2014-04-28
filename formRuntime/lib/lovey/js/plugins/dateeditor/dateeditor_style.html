@@ -1,0 +1,79 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>javascript-dateeditor</title>
+    <!--lovey ui-->
+    <link href="../../../../lovey/style/css/lovey.css" rel="stylesheet" type="text/css"/>
+    <!--文档自定义样式-->
+    <link href="../../../../docs/assets/css/docs.css" rel="stylesheet" type="text/css"/>
+</head>
+
+<body>
+<div class="ui_container w1000 m10 example_dateeditor">
+    <div class="show">
+        <h4>dateeditor_style01</h4>
+        <input type="text" id="startTime"/>
+        <input type="text" id="startTime3"/>
+    </div>
+    <div class="show">
+        <h4>dateeditor_style02</h4>
+        <input type="text" id="startTime2" value="2013-09" placeholder="请输入内容"/>
+    </div>
+    <div class="show">
+        <h4>用户自定义时间跨度</h4>
+        <input type="text" id="startTime4" value="2013-09" placeholder="请输入内容"/>
+    </div>
+</div>
+<!--jquery核心文件-->
+<script src="../../../../lovey/js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+<!--懒加载核心js文件-->
+<script src="../../../../lovey/js/easyloader.js" type="text/javascript"></script>
+<script type="text/javascript">
+    //easyloader.minuteStep=5;
+    easyloader.showSecond=true;
+
+    $(document).ready(function () {
+        using("dateeditor", function () {
+            $("#startTime").ligerDateEditor({
+                format: "yyyy-MM-dd",
+                lessSysDate:true,
+                width:400,
+                editorWidth:300,
+                zindex:1001,
+                autoHide:true,
+                minuteStep:20,
+                secondStep:20,
+                showTime:true
+            });
+
+            $("#startTime3").ligerDateEditor({
+                lessSysDate:true,
+                width:400,
+                editorWidth:300,
+                minuteStep:10,
+                secondStep:5,
+                showTime:true
+            });
+
+            $("#startTime2").ligerDateEditor({
+                format: "yyyy/MM"
+                //lessSysDate:true,
+                //showTime:true,
+                //selectMode:false
+            });
+
+            $("#startTime4").ligerDateEditor({
+                width:400,
+                editorWidth:300,
+                minuteStep:10,
+                secondStep:5,
+                showTime:true,
+                yearStep:20//时间跨度
+            });
+        })
+    })
+</script>
+</body>
+</html>

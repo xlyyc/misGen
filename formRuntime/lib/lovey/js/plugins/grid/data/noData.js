@@ -1,0 +1,1 @@
+﻿var noData = {Rows:[],Total:0};

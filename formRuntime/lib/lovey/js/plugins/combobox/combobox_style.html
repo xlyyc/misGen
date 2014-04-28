@@ -1,0 +1,348 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>javascript-combobox</title>
+    <!--lovey ui-->
+    <link href="../../../../lovey/style/css/lovey.css" rel="stylesheet" type="text/css"/>
+    <!--文档自定义样式-->
+    <link href="../../../../docs/assets/css/docs.css" rel="stylesheet" type="text/css"/>
+</head>
+
+<body>
+<div class="ui_container w1000 m10 example_combobox">
+    <div class="show">
+        <h4>combobox_style01</h4>
+        <input type="text" id="selectSite"/>
+    </div>
+    <div class="show">
+        <h4>combobox_style02</h4>
+        <input type="text" id="selectSite2"/>
+    </div>
+    <div class="show">
+        <h4>单选+复选框</h4>
+        <input type="text" id="selectSite3"/>
+    </div>
+    <div class="show">
+        <h4>多选</h4>
+        <input type="text" id="selectSite4"/>
+    </div>
+    <div class="show">
+        <h4>表格</h4>
+        <input type="text" id="selectSite5"/>
+    </div>
+    <div class="show">
+        <h4>表格+多选</h4>
+        <input type="text" id="selectSite6"/>
+    </div>
+
+    <div class="show">
+        <h4>树</h4>
+        <input type="text" id="selectSite7"/>
+    </div>
+    <div class="show">
+        <h4>树(只选子节点)+多选</h4>
+        <input type="text" id="selectSite8"/>
+    </div>
+    <div class="show">
+        <h4>树+只选叶子节点</h4>
+        <input type="text" id="selectSite9"/>
+    </div>
+    <div class="show">
+        <h4>Grid 再次点击下拉图标，关闭选择</h4>
+        <input type="text" id="selectSite12"/>
+    </div>
+    <div class="show">
+        <h4>联动  主选择下拉框</h4>
+        <input type="text" id="selectSite10"/>
+    </div>
+
+    <div class="show">
+        <h4>联动  联动下拉框</h4>
+        <input type="text" id="selectSite11"/>
+    </div>
+
+    <div class="show">
+        <h4>点击时候加载</h4>
+        <input type="text" id="selectSite14"/>
+    </div>
+
+    <div class="show">
+        <h4>新页面</h4>
+        <input type="text" id="selectSite13"/>
+    </div>
+</div>
+<!--jquery核心文件-->
+<script src="../../../../lovey/js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+<!--懒加载核心js文件-->
+<script src="../../../../lovey/js/easyloader.js" type="text/javascript"></script>
+<script src="../../../../docs/LigerUI/demos/grid/CustomersData.js" type="text/javascript"></script>
+<script type="text/javascript">
+$(document).ready(function () {
+    using(["combobox", "tree", "grid", "dialog"], function () {
+        $("#selectSite").ligerComboBox({
+            height: 50,
+            width:"100%",
+            textField: "text",
+            valueField: "id",
+            scrollerHeight:120,
+            initValue:2,
+            hideOnLoseFocus: false,
+            data: [
+                { id: 1, text: "金智科技"},
+                { id: 2, text: "金智教育"},
+                { id: 3, text: "金智投资"},
+                { id: 4, text: "金智智能"},
+                { id: 5, text: "金智智能"},
+                { id: 6, text: "金智智能"},
+                { id: 7, text: "金智智能"},
+                { id: 8, text: "金智智能"},
+                { id: 9, text: "金智智能"},
+                { id: 10, text: "金智智能"}
+            ],
+            onStartResize: function () {
+                alert("AA");
+            },
+            onEndResize: function () {
+                alert("BB");
+            }
+        });
+        $("#selectSite2").ligerComboBox({
+            className: "combobox_style02",
+            width: 200,
+            textField: "text",
+            valueField: "id",
+            url: "combobox1.json",
+            isNotShowClear: true,
+            hideOnLoseFocus: false
+        });
+        $("#selectSite3").ligerComboBox({
+            width: 200,
+            textField: "text",
+            valueField: "id",
+            data: [
+                { id: 1, text: "金智科技"},
+                { id: 2, text: "金智教育"},
+                { id: 3, text: "金智投资"},
+                { id: 4, text: "金智智能"}
+            ],
+            isShowCheckBox: true,
+            isNotShowClear: true
+        });
+        $("#selectSite4").ligerComboBox({
+            width: 200,
+            textField: "text",
+            valueField: "id",
+            data: [
+                { id: 1, text: "金智科技"},
+                { id: 2, text: "金智教育"},
+                { id: 3, text: "金智投资"},
+                { id: 4, text: "金智智能"}
+            ],
+            isMultiSelect: true,
+            isNotShowClear: true
+        });
+        $("#selectSite5").ligerComboBox({
+            width: 200,
+            textField: "name",
+            valueField: "id",
+            data: [
+                { id: 1, name: '李三', sex: '男' },
+                { id: 2, name: '李四', sex: '女' },
+                { id: 3, name: '赵武', sex: '女' },
+                { id: 4, name: '陈留', sex: '女' }
+            ],
+            columns: [
+                { header: 'ID', name: 'id', width: 20 },
+                { header: '名字', name: 'name' },
+                { header: '性别', name: 'sex' }
+            ],
+            isNotShowClear: true
+        });
+        $("#selectSite6").ligerComboBox({
+            width: 200,
+            textField: "name",
+            valueField: "id",
+            data: [
+                { id: 1, name: '李三', sex: '男' },
+                { id: 2, name: '李四', sex: '女' },
+                { id: 3, name: '赵武', sex: '女' },
+                { id: 4, name: '陈留', sex: '女' }
+            ],
+            columns: [
+                { header: 'ID', name: 'id', width: 20 },
+                { header: '名字', name: 'name' },
+                { header: '性别', name: 'sex' }
+            ],
+            isMultiSelect: true,
+            isNotShowClear: true
+        });
+        $("#selectSite7").ligerComboBox({
+            width: 200,
+            textField: "treeNodeName",
+            valueField: 'pkId',
+            tree: {
+                url: "tree.json",
+                checkbox: false
+            },
+            isNotShowClear: true,
+            treeLeafOnly: false
+        });
+        $("#selectSite8").ligerComboBox({
+            width: 200,
+            textField: "treeNodeName",
+            split:";",
+            initValue:["969;970"],
+            valueField: 'pkId',
+            tree: {url: "tree.json"},
+            isMultiSelect: true,
+            isNotShowClear: true
+        });
+        $("#selectSite9").ligerComboBox({
+            width: 200,
+            textField: "treeNodeName",
+            valueField: 'pkId',
+            tree: {url: "tree.json", checkbox: false},
+            isNotShowClear: true
+        });
+
+        $("#selectSite12").ligerComboBox({
+            width: 200,
+            selectBoxHeight: 320,
+            selectBoxWidth: 800,
+            valueField: "CustomerID",
+            textField: "CustomerID",
+            grid: {
+                columns: [
+                    { display: '顾客', name: 'CustomerID', align: 'left', width: 100},
+                    { display: '公司名', name: 'CompanyName', minWidth: 200 },
+                    { display: '联系名', name: 'ContactName', minWidth: 140 },
+                    { display: '电话', name: 'Phone', minWidth: 140 },
+                    { display: '城市', name: 'City', minWidth: 120 },
+                    { display: '国家', name: 'Country', minWidth: 100 }
+                ],
+                data: CustomersData,
+                allowAdjustColWidth:true,
+                pageSize: 10,
+                checkbox: false
+            }
+        });
+
+        var cityData =
+                [
+                    { id: 1, text: "江苏"},
+                    { id: 2, text: "上海"},
+                    { id: 3, text: "北京"},
+                    { id: 4, text: "广州"}
+                ];
+
+        var cityData1 =
+                [
+                    { id: 1, text: "安徽"},
+                    { id: 2, text: "深圳"},
+                    { id: 3, text: "青岛"},
+                    { id: 4, text: "威海"}
+                ];
+        var cityData2 =
+                [
+                    { id: 1, text: "四川"},
+                    { id: 2, text: "重庆"},
+                    { id: 3, text: "山东"},
+                    { id: 4, text: "沈阳"}
+                ];
+        var selectElement10 = $("#selectSite10");
+        var selectElement11 = $("#selectSite11");
+
+        selectElement10.ligerComboBox({
+            width: 140,
+            initText: "请选择",
+            valueField: "id",
+            textField: "text",
+            data: [
+                { id: 1, text: "金智科技"},
+                { id: 2, text: "金智教育"},
+                { id: 3, text: "金智投资"},
+                { id: 4, text: "金智智能"}
+            ],
+            isMultiSelect: false,
+            isNotShowClear: true,
+            onSelected: function (value, text) {
+                if (selectElement11.ligerGetComboBoxManager() != undefined) {
+                    selectElement11.ligerGetComboBoxManager().valueField.val("1");
+                    //充值选中内容
+                    if (value == 1) {
+                        selectElement11.ligerGetComboBoxManager().setData(cityData1);
+                    } else if (value == 2) {
+                        selectElement11.ligerGetComboBoxManager().setData(cityData2);
+                    } else {
+                        selectElement11.ligerGetComboBoxManager().setData(cityData);
+                    }
+                }
+            }
+        });
+
+        selectElement11.ligerComboBox({
+            data: null,
+            valueField: "id",
+            textField: "text",
+            isMultiSelect: false,
+            isNotShowClear: true
+        });
+
+        $("#selectSite13").ligerComboBox({
+            width: 200,
+            isNotShowClear: true,
+            onBeforeOpen: function () {
+                {
+                    $.ligerDialog.open({ title: '选择联系人', width: 700, height: 300, url: '/docs/LigerUI/demos/comboBox/SelectContact.htm', buttons: [
+                        { text: '确定', onclick: function (item, dialog) {
+                            var data = dialog.frame.f_select();
+                            if (!data) {
+                                alert('请选择行!');
+                                return;
+                            }
+                            //$("#selectSite13").val(data.CompanyName + "," + data.ContactName);
+                            //$("#hidCustomerID").val(data.CustomerID);
+                            var tempName = "", tempId = "";
+                            for (var i = 0; i < data.length; i++) {
+                                tempName += data[i].CompanyName + ",";
+                                tempId += data[i].CustomerID + ",";
+                            }
+                            $("#selectSite13").val(tempName);
+                            $("#hidCustomerID").val(tempId);
+                            dialog.close();
+                        }
+                        },
+                        { text: '取消', onclick: function (item, dialog) {
+                            dialog.close();
+                        }
+                        }
+                    ]
+                    });
+                    return false;
+                }
+            },
+            valueFieldID: "hidCustomerID"
+        });
+
+        var selectElement14 = $("#selectSite14");
+
+        selectElement14.ligerComboBox({
+            width: 200,
+            valueField: "id",
+            textField: "text",
+            isNotShowClear: true,
+            onBeforeOpen: function () {
+                {
+                    selectElement14.ligerGetComboBoxManager().setData(cityData);
+                    //return false;
+                }
+            },
+            valueFieldID: "hidCustomerID"
+        });
+    });
+})
+</script>
+</body>
+</html>

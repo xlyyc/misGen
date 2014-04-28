@@ -1,0 +1,177 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta http-equiv="Content-Language" content="zh-CN"/>
+    <meta content="all" name="robots"/>
+    <meta name="author" content="ywwei@wisedu.com,魏言文"/>
+    <meta name="copyright" content="www.wiscom.com.cn,自由版权,任意转载"/>
+    <meta name="description" content="css框架"/>
+    <meta name="keywords" content="css框架,web2.0"/>
+    <title>dialog</title>
+    <!--lovey核心css-->
+    <link href="../../../../lovey/style/css/lovey.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<a href="javascript:openDialog();">弹出对话框</a>
+<div id="dialog" class="mb20">定位元素</div>
+<div id="selectFileT"></div>
+<div id="adminId"></div>
+<div onclick="openSelect()" class="hand">点击弹出选人</div>
+<div onclick="openWarning()" class="hand">点击弹出警告对话框</div>
+
+<textarea id="fileList" style="display:none">
+    {#foreach $T as file}
+    <li initId="{$T.file.id}" id="file_{$T.file.id}"><span><a href="{$T.file.downLoadUrl}" class="attach_name">{$T.file.name}</a></span><a href="javascript:void(0);" onclick="$.loveySelectFile.remove('{$T.file.id}','{$T.file.deleteUrl}')"></a></li>
+    {#/for}
+</textarea>
+<textarea id="fileGridList" style="display:none">
+    {#foreach $T as file}
+    <li initId="{$T.file.resId}" id="file_{$T.file.resId}"><span><a href="{$T.file.downLoadUrl}" class="attach_name">{$T.file.fileName}</a></span><a href="javascript:void(0);" onclick="$.loveySelectFile.remove('{$T.file.resId}','{$T.file.deleteUrl}')"></a></li>
+    {#/for}
+</textarea>
+<!--jquery1.7.1核心js文件-->
+<script src="../../jquery.min.js" type="text/javascript" charset="utf-8"></script>
+<!--懒加载核心js文件-->
+<script type="text/javascript" src="../../easyloader.js"></script>
+<script type="text/javascript">
+    easyloader.dialogCssName = "dialog_style03";
+    easyloader.dialogToTop=true;
+    //判断当前页面是否被Iframe集成
+    easyloader.isIframe = (window != top);
+
+    $(document).ready(function () {
+        using(["selectfiles", "iframe","select"], function () {
+            $.loveyIframe.auto();
+            //上传组件初始化
+            $("#selectFileT").loveySelectFile({
+                title: "请选择上传文件",
+                fileTypes: "*.jpg;*.gif;*.png",
+                fileTypeDescription: "图片选择(*.jpg;*.gif;*.png)",
+                checkbox: true,
+                serverTimeUrl: "/lovey/js/plugins/selectfiles/server.json",
+                getTempFilesUrl: "/lovey/js/plugins/selectfiles/getTempFiles.json",
+                save: false,
+                useTemplates: true,
+                //iframeId:"docs_main",
+                initJson: [
+                    {
+                        "downLoadUrl": "#",
+                        "filePath": "/opt/wiscom/abc.png",
+                        "deleteUrl": "server.json",
+                        "fileSuffix": "png",
+                        "size": 84384,
+                        "name": "bac.jpg",
+                        "created": 1366166371825,
+                        "creator": "赵云",
+                        "id": "69190"
+                    },
+                    {
+                        "downLoadUrl": "#",
+                        "filePath": "/opt/wiscom/abc.png",
+                        "deleteUrl": "server.json",
+                        "fileSuffix": "jpg",
+                        "size": 879394,
+                        "name": "bdafd.gif",
+                        "created": 1366166371825,
+                        "creator": "赵云",
+                        "id": "69191"
+                    }
+                ],
+                /*displayModel: true,
+                 readOnly: true,*/
+                items: [
+                    {
+                        //为了保证参数安全，文件上传的参数不要直接传递，全部通过params传递
+                        title: "上传",
+                        ctxUrl: "/lovey/js/plugins/selectfiles/addPhoto.json",
+                        flashUpload: true
+                    }/*,
+                     {
+                     title: "个人文件夹",
+                     ctxUrl: "/lovey/js/plugins/selectfiles/selectfiles.json",
+                     rootId:123,
+                     path:"123"
+                     }*/
+                ],
+                /*removeFun:function(elementId){
+                 alert("AA"+elementId);
+                 return false;
+                 },*/
+                params: {
+                    resourceId: 1,
+                    resourceType: 2,
+                    iPlanetDirectoryPro: "AQIC5wM2LY4SfczVYcnbQyM78cOkhSveqf2pQXsm+4ox8L0=@AAJTSQACMDE=#"
+                }/*,
+                 completeFunction:"endUpload"*/
+            });
+
+            $("#adminId").ligerDialogSelect({
+                rightItemName: "firstName",
+                rightItemValue: "id",
+                //selectType:"radio",
+                initJson: [
+                    { id: 1254305, firstName: '校办秘书一'},
+                    { id: 1254306, firstName: '校办秘书二'},
+                    { id: 1254308, firstName: '教务副处长'}
+                ],
+                items: [
+                    {
+                        title: "用户",
+                        leftUrl: "/lovey/js/plugins/select/org.json",
+                        rightUrl: "/lovey/js/plugins/select/user.json",
+                        roleUrl: "/lovey/js/plugins/select/role.json"
+                    },
+                    {
+                        title: "用户2",
+                        leftUrl: "/lovey/js/plugins/select/org.json",
+                        rightUrl: "/lovey/js/plugins/select/user.json"
+                    }
+                ],
+                inputName: "adminId",
+                roleUrl: "role.json",
+                moveSelect: true,
+                displayMode: true,
+                shortCutUrl: "/lovey/js/plugins/select/shortCutUrl.json",
+                submitFunction: function (callObject) {
+                    alert("支持回调函数");
+                },
+                callback:{
+                    selectAllClick0: function(clickObj,hasChecked,objData){
+                        alert("AA");
+                    }
+                }
+            });
+
+        })
+    });
+
+    function openDialog() {
+        using("dialog", function () {
+            $.ligerDialog.open({
+                content: "aa",
+                className:"dialog_style03",
+                completeFunction:function(dialog){
+                    //console.log(window.document);
+                },
+                buttons: [
+                    { text: $.ligerDialog.defaultProps.btnClose, onclick: function(){
+                        $.ligerDialog.close();
+                    }}
+                ]
+            });
+        });
+    }
+
+    //取得父节点的元素，并模拟点击动作
+    function openSelect() {
+        $("#adminId").parent().next().click();
+    }
+
+    function openWarning(){
+        $.ligerDialog.warning("这是一个警告对话框");
+    }
+</script>
+</body>
+</html>
