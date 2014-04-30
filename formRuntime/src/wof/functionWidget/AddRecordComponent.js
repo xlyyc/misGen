@@ -217,7 +217,7 @@ wof.functionWidget.AddRecordComponent.prototype = {
      * Render 方法定义
      */
 
-    initRender: function(){
+    _initRender: function(){
     	var that = this;
         var button = wof$.create('Button');
         button.setLabel(this.getCallItemCaption());
@@ -230,7 +230,7 @@ wof.functionWidget.AddRecordComponent.prototype = {
     },
 
     //选择实现
-    beforeRender: function () {},
+    _beforeRender: function () {},
 
     //----------必须实现----------
     render: function () {
@@ -240,7 +240,7 @@ wof.functionWidget.AddRecordComponent.prototype = {
     },
 
     //选择实现
-    afterRender: function () {},
+    _afterRender: function () {},
 
     /**
      * getData/setData 方法定义
@@ -331,7 +331,8 @@ wof.functionWidget.AddRecordComponent.prototype = {
 									&& this.getBindComp().getClassName()=="wof.bizWidget.VoucherGridComponent"){
 		    					var linkMainValue = this.getBindComp().getCurrentMainRowId();
 		    					if(linkMainValue!=null){
-		    						linkMainParamStr = '&'+this.getParamMaps()['linkMainFiledKey']+'='+linkMainValue;
+		    						//'+this.getParamMaps()['linkMainFiledKey']+'
+		    						linkMainParamStr = '&fkId='+linkMainValue;
 		    					}
 							}
 							if(this.getOpenUrl().indexOf("?")>-1){

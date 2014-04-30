@@ -80,7 +80,7 @@ wof.widget.CheckBox.prototype = {
     _init: function (data) {
     	this.setOptions(data);
     },
-    initRender: function () {
+    _initRender: function () {
         var _this = this;
         this._checkbox = wis$.create('Checkbox');
         this._checkbox.onClick(
@@ -104,7 +104,7 @@ wof.widget.CheckBox.prototype = {
         this.getDomInstance().append(this._checkbox.getDomInstance());
     },
     //选择实现
-    beforeRender: function () {
+    _beforeRender: function () {
 
     },
 
@@ -118,7 +118,7 @@ wof.widget.CheckBox.prototype = {
     },
 
     //选择实现
-    afterRender: function () {
+    _afterRender: function () {
         this._checkbox.render();
         this.sendMessage('wof.widget.Checkbox_render');
     },

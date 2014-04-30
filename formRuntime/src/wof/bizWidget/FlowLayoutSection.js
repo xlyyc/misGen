@@ -155,11 +155,11 @@ wof.bizWidget.FlowLayoutSection.prototype = {
      * Render 方法定义
      */
 
-    initRender: function(){
+    _initRender: function(){
 
     },
     //选择实现
-    beforeRender: function () {
+    _beforeRender: function () {
 
     },
 
@@ -169,7 +169,7 @@ wof.bizWidget.FlowLayoutSection.prototype = {
     },
 
     //选择实现
-    afterRender: function () {
+    _afterRender: function () {
 
 
     },

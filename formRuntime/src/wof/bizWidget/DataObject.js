@@ -196,7 +196,7 @@ wof.bizWidget.DataObject.prototype = {
      */
 
     //选择实现
-    beforeRender: function () {
+    _beforeRender: function () {
 
     },
 
@@ -206,7 +206,7 @@ wof.bizWidget.DataObject.prototype = {
     },
 
     //选择实现
-    afterRender: function () {
+    _afterRender: function () {
         /**
         this.queryData('main', null, null, 0, 100);
 
@@ -225,7 +225,7 @@ wof.bizWidget.DataObject.prototype = {
 
         //this.undeleteData();
  */
-        this.saveData('mainAndChild',{'childEntityAlias':'hjxxchild', 'mainRowId':'1'} );
+  //      this.saveData('mainAndChild',{'childEntityAlias':'hjxxchild', 'mainRowId':'1'} );
     },
 
     /**

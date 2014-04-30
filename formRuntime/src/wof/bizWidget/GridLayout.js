@@ -34,7 +34,7 @@ wof.bizWidget.GridLayout.prototype = {
      * Render 方法定义
      */
 
-    initRender: function(){
+    _initRender: function(){
         this.getDomInstance().droppable({
             snap:true,
             accept:function(draggable){
@@ -75,7 +75,7 @@ wof.bizWidget.GridLayout.prototype = {
     },
 
     //选择实现
-    beforeRender: function () {
+    _beforeRender: function () {
         this.getDomInstance().css('overflow', '');
         this.getDomInstance().css('overflow-x', '');
         this.getDomInstance().css('overflow-y', '');
@@ -95,7 +95,7 @@ wof.bizWidget.GridLayout.prototype = {
     },
 
     //选择实现
-    afterRender: function () {
+    _afterRender: function () {
         this.sendMessage('wof.bizWidget.GridLayout_render');
     },
 

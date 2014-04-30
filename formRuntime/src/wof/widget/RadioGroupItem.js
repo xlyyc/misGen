@@ -60,7 +60,7 @@ wof.widget.RadioGroupItem.prototype = {
      */
 
     //选择实现
-    beforeRender: function () {
+    _beforeRender: function () {
         //设置为内置对象
         this.getDomInstance().attr('isinside', 'true');
     },
@@ -92,7 +92,7 @@ wof.widget.RadioGroupItem.prototype = {
     },
 
     //选择实现
-    afterRender: function () {
+    _afterRender: function () {
 
     },
 

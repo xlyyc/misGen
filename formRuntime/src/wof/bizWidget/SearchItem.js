@@ -273,7 +273,7 @@ wof.bizWidget.SearchItem.prototype = {
     /**
      * Render 方法定义
      */
-    initRender:function(){
+    _initRender:function(){
         var label = wof$.create('Label');
         label.setIsInside(true);
         label.setLeft(0);
@@ -284,7 +284,7 @@ wof.bizWidget.SearchItem.prototype = {
     },
 
     //选择实现
-    beforeRender: function () {
+    _beforeRender: function () {
 
         this._label.setWidth(this.getLabelWidth());
         this._label.setText(this.getCaption());
@@ -302,7 +302,7 @@ wof.bizWidget.SearchItem.prototype = {
     },
 
     //选择实现
-    afterRender: function () {
+    _afterRender: function () {
 
     },
 

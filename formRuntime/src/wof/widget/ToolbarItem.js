@@ -65,7 +65,7 @@ wof.widget.ToolbarItem.prototype = {
      */
 
     //选择实现
-    beforeRender: function () {
+    _beforeRender: function () {
         if(this._divLabel==null){
             var _this = this;
             this._divLabel = jQuery('<div class="ui-widget-header ui-corner-all" style="text-align:center;height:24px;width:'+(this.parentNode().getWidth()-1)+'px;"><label style="line-height:24px;">'+this.getTitle()+'</label></div>');
@@ -96,7 +96,7 @@ wof.widget.ToolbarItem.prototype = {
     },
 
     //选择实现
-    afterRender: function () {
+    _afterRender: function () {
         if(this.getIsHide()==true){
             this._divChildNodes.hide();
         }else{

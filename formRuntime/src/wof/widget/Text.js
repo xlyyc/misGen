@@ -50,12 +50,12 @@ wof.widget.Text.prototype = {
         this._readonly = readonly;
     },
 
-    initRender: function () {
+    _initRender: function () {
         this._input = jQuery('<input type="text">');
         this.getDomInstance().append(this._input);
     },
     //选择实现
-    beforeRender: function () {
+    _beforeRender: function () {
 
     },
 
@@ -69,7 +69,7 @@ wof.widget.Text.prototype = {
     },
 
     //选择实现
-    afterRender: function () {
+    _afterRender: function () {
 
     },
 

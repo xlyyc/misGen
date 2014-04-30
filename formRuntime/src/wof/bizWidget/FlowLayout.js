@@ -76,7 +76,7 @@ wof.bizWidget.FlowLayout.prototype = {
      */
 
     //选择实现
-    beforeRender: function () {
+    _beforeRender: function () {
 
     },
 
@@ -86,7 +86,7 @@ wof.bizWidget.FlowLayout.prototype = {
     },
 
     //选择实现
-    afterRender: function () {
+    _afterRender: function () {
         this._layout();
         this.sendMessage('wof.bizWidget.FlowLayout_render');
     },

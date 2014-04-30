@@ -541,9 +541,9 @@ var wof$_aop = (function(){
                     }
                     obj[o].prototype._event = null;
                     obj[o].prototype._timeFn = null;
-                    if(obj[o].prototype.initRender!=null){
-                        obj[o].prototype._initRender = obj[o].prototype.initRender;
-                        obj[o].prototype.initRender = function(){
+                    if(obj[o].prototype._initRender!=null){
+                        obj[o].prototype.__initRender = obj[o].prototype._initRender;
+                        obj[o].prototype._initRender = function(){
                             var _this = this;
                             this.getDomInstance().mousedown(function(event){
                                 event.stopPropagation();
@@ -561,10 +561,10 @@ var wof$_aop = (function(){
                                 _this.sendMessage(_this.getClassName()+'_dblclick');
                                 _this.sendMessage(_this.getClassName()+'_active');
                             });
-                            this._initRender();
+                            this.__initRender();
                         };
                     }else{
-                        obj[o].prototype.initRender = function(){
+                        obj[o].prototype._initRender = function(){
                             var _this = this;
                             var timeFn = null;
                             this.getDomInstance().mousedown(function(event){
@@ -591,10 +591,10 @@ var wof$_aop = (function(){
                         obj[o].prototype.render = function(){
                             if(this._initRenderFlag == false){
                                 this._initRenderFlag = true;
-                                this.initRender();
+                                this._initRender();
                             }
-                            if(this.beforeRender!=null){
-                                this.beforeRender();
+                            if(this._beforeRender!=null){
+                                this._beforeRender();
                             }
                             for(var i=0; i<this.childNodes().length; i++){
                                 this.childNodes()[i].render();
@@ -615,8 +615,8 @@ var wof$_aop = (function(){
                             this.getDomInstance().css('zIndex', this.getZIndex());
                             this.getDomInstance().addClass(this.getCss());    //todo 有bug
                             this._render();
-                            if(this.afterRender!=null){
-                                this.afterRender();
+                            if(this._afterRender!=null){
+                                this._afterRender();
                             }
                         };
                     }

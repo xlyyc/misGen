@@ -86,7 +86,7 @@ wof.widget.DateBox.prototype = {
      */
 
     //选择实现
-    beforeRender: function () {
+    _beforeRender: function () {
         this._dateBox = wis$.create('DateEditor');
          //setDate
         this._dateBox.setData({
@@ -124,7 +124,7 @@ wof.widget.DateBox.prototype = {
     },
 
     //选择实现
-    afterRender: function () {
+    _afterRender: function () {
         this.sendMessage('wof.widget.DateBox_render');
     },
 

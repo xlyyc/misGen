@@ -64,7 +64,6 @@ wof.bizWidget.VoucherComponent.prototype = {
 
     _currentRowId: null,
 
-
     _fkField: null, //外键对应字段
 
     _fkFieldValue: null, //外键值   此属性多余
@@ -198,22 +197,16 @@ wof.bizWidget.VoucherComponent.prototype = {
         return this._rowData || {};
     },
 
-    //获得当前行号
-    getCurrentRowId: function(){
-        //return this.getRowData()['rowId'];
-        return this._currentRowId;
-    },
-
-    setCurrentRowId: function(rowId){
-        this._currentRowId = rowId;
-    },
-
     getFkField: function(){
         return this._fkField || '';
     },
 
     setFkField: function(fkField){
         this._fkField = fkField;
+    },
+    
+    getCurrentRowId: function(){
+    	return this._currentRowId;
     },
 
     _init: function(data){
@@ -282,11 +275,11 @@ wof.bizWidget.VoucherComponent.prototype = {
         var mapType = pageStateMap['mapType'];
         if(mapType=='value'){
             this._pageState = pageStateMap['compParamValue'];
-        }else if(mapType=='page'){ //从页面取值
+        }else if(mapType=='pageParam'){ //从页面取值
             if(pageStateMap['compParamValue']!=null&&pageStateMap['compParamValue'].length>0){
                 this._pageState = urlParams[pageStateMap['compParamValue']];
             }else{ //如果没有设置值 则默认值pageState
-                this._pageState = urlParams[pageStateMap['pageState']];
+                this._pageState = urlParams['pageState'];
             }
         }
 
@@ -297,11 +290,11 @@ wof.bizWidget.VoucherComponent.prototype = {
             var mapType = fkIdMap['mapType'];
             if(mapType=='value'){  //固定值
                 this._fkFieldValue = fkIdMap['compParamValue'];
-            }else if(mapType=='page'){ //从页面取值
+            }else if(mapType=='pageParam'){ //从页面取值
                 if(fkIdMap['compParamValue']!=null&&fkIdMap['compParamValue'].length>0){
                     this._fkFieldValue = urlParams[fkIdMap['compParamValue']];
                 }else{ //如果没有设置值 则默认值fkId
-                    this._fkFieldValue = urlParams[fkIdMap['fkId']];
+                    this._fkFieldValue = urlParams['fkId'];
                 }
             }
             console.log('状态为Add 外键值为:'+this._fkFieldValue);
@@ -309,15 +302,15 @@ wof.bizWidget.VoucherComponent.prototype = {
             var dataIdMap = paramMaps['dataId'];
             var mapType = dataIdMap['mapType'];
             if(mapType=='value'){  //固定值
-                this.setCurrentRowId(dataIdMap['compParamValue']);
-            }else if(mapType=='page'){ //从页面取值
+                this._currentRowId = dataIdMap['compParamValue'];
+            }else if(mapType=='pageParam'){ //从页面取值
                 if(dataIdMap['compParamValue']!=null&&dataIdMap['compParamValue'].length>0){
-                    this.setCurrentRowId(urlParams[dataIdMap['compParamValue']]);
+                    this._currentRowId = urlParams[dataIdMap['compParamValue']];
                 }else{ //如果没有设置值 则默认值fkId
-                    this.setCurrentRowId(urlParams[dataIdMap['dataId']]);
+                    this._currentRowId = urlParams['dataId'];
                 }
             }
-            console.log('状态为Edit/View currentRowId值为:'+this.getCurrentRowId());
+            console.log('状态为Edit/View currentRowId值为:'+this._currentRowId);
         }
     },
 
@@ -422,13 +415,13 @@ wof.bizWidget.VoucherComponent.prototype = {
      * Render 方法定义
      */
 
-    initRender: function(){
+    _initRender: function(){
         this._queryFlag = true;
         this._buildParams();
     },
 
     //选择实现
-    beforeRender: function () {
+    _beforeRender: function () {
         this.setRefData(this.getDataSource().getRefData());
     },
 
@@ -439,7 +432,7 @@ wof.bizWidget.VoucherComponent.prototype = {
     },
 
     //选择实现
-    afterRender: function () {
+    _afterRender: function () {
         this._layout();
 
         //如果缓存数据为空 则执行查询
@@ -455,19 +448,19 @@ wof.bizWidget.VoucherComponent.prototype = {
                     }
                     this.getDataSource().addData([newData]);
                     var idPro = this.getDataSource().getLocalData()['idPro'];
-                    this.setCurrentRowId(this.getRowData()['data'][idPro]['value']);
+                    this._currentRowId = this.getRowData()['data'][idPro]['value'];
                 }else{
                     //如果已经有了一条数据 则直接设置currentRowId 在克隆时会执行此分支
                     var localData = this.getDataSource().getLocalData();
                     var idPro = localData['idPro'];
                     this.setRowData(localData['rows'][0]);
-                    this.setCurrentRowId(this.getRowData()['data'][idPro]['value']);
+                    this._currentRowId = this.getRowData()['data'][idPro]['value'];
                 }
             }else{ //如果是View\Edit 则先发起查询
                 var idPro = this.getDataSource().getLocalData()['idPro'];
-                var queryParam = {'type':'fieldQuery','field':idPro,'operation':'equals','value1':this.getCurrentRowId()};
+                var queryParam = {'type':'fieldQuery','field':idPro,'operation':'equals','value1':this._currentRowId};
                 this.getDataSource().queryData('main',null,queryParam,0,1);
-                this.setCurrentRowId(this.getRowData()['data'][idPro]['value']);
+                this._currentRowId = this.getRowData()['data'][idPro]['value'];
             }
         }
 

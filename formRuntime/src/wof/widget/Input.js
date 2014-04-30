@@ -108,7 +108,7 @@ wof.widget.Input.prototype = {
     _init: function (data) {
     	this.setOptions(data);
     },
-    initRender: function () {
+    _initRender: function () {
         var _this = this;
         this._input = wis$.create('Input');
         this._input.onClick(
@@ -138,7 +138,7 @@ wof.widget.Input.prototype = {
         this.getDomInstance().append(this._input.getDomInstance());
     },
     //选择实现
-    beforeRender: function () {
+    _beforeRender: function () {
 
     },
 
@@ -162,7 +162,7 @@ wof.widget.Input.prototype = {
     },
     
     //选择实现
-    afterRender: function () {
+    _afterRender: function () {
         this._input.render();
         this.sendMessage('wof.widget.Input_render');
     },

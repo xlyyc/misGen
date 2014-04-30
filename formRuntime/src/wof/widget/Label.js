@@ -104,7 +104,7 @@ wof.widget.Label.prototype = {
     /**
      * Render 方法定义
      */
-    initRender: function(){
+    _initRender: function(){
         var label = wis$.create('Label');
         label.appendTo(this.getDomInstance());
 
@@ -112,7 +112,7 @@ wof.widget.Label.prototype = {
     },
 
     //选择实现
-    beforeRender: function () {
+    _beforeRender: function () {
 
     },
 
@@ -122,7 +122,7 @@ wof.widget.Label.prototype = {
     },
 
     //选择实现
-    afterRender: function () {
+    _afterRender: function () {
         if(this.getWidth()!=null){
             this._label.setWidth(this.getWidth());
         }

@@ -103,7 +103,7 @@ wof.widget.Radio.prototype = {
     _init: function (data) {
     	this.setOptions(data);
     },
-    initRender: function () {
+    _initRender: function () {
         var _this = this;
         this._radio = wis$.create('Radio');
         this._radio.onClick(
@@ -127,7 +127,7 @@ wof.widget.Radio.prototype = {
         this.getDomInstance().append(this._radio.getDomInstance());
     },
     //选择实现
-    beforeRender: function () {
+    _beforeRender: function () {
 
     },
 
@@ -141,7 +141,7 @@ wof.widget.Radio.prototype = {
     },
 
     //选择实现
-    afterRender: function () {
+    _afterRender: function () {
         this._radio.render();
         this.sendMessage('wof.widget.Radio_render');
     },

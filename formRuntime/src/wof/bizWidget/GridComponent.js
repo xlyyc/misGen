@@ -54,6 +54,12 @@ wof.bizWidget.GridComponent = function() {
 wof.bizWidget.GridComponent.prototype = {
 
 	_insideOnReceiveMessage : {
+		
+		"wof.widget.Grid_onPageSizeChange":function (message){
+			this.setPageNo(1);
+			this.setPageSize(parseInt(message.data.pageSize));
+			this.gotoPage(1);
+		},
 		"wof.widget.Grid_onToNext" : function(message) {
 			this.nextPage();
 			this.sendMessage('wof.bizWidget.GridComponent_ToNext');
@@ -461,10 +467,10 @@ wof.bizWidget.GridComponent.prototype = {
 		this.updateGridComponent(data);
 		this.setRefData(this.getDataSource().getRefData());
 	},
-	beforeRender : function() {
+	_beforeRender : function() {
 
 	},
-	initRender : function() {
+	_initRender : function() {
 		var that = this;
 		this.setRefData(this.getRefData());
 		this.gotoPage(this.getPageNo());
@@ -623,7 +629,7 @@ wof.bizWidget.GridComponent.prototype = {
 				alert('请选择一条记录修改!')
 				return;
 			}
-			this.grid.updateRow();
+			this.grid.updateRow(selectedRows[0]);
 		}
 	},
 	_onCommitRecordComponent_click : function(message) {
@@ -895,7 +901,7 @@ wof.bizWidget.GridComponent.prototype = {
 			}
 		}
 
-		var currentData = this.grid.getCurrentData();
+		var currentData = this.grid.getCurrentUpdateData();
 		var gridData = this.getGridData();
 		var updateData = [];
 		for (var i = 0; i < currentData.length; i++) {

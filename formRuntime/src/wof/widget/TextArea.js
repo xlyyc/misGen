@@ -123,7 +123,7 @@ wof.widget.TextArea.prototype = {
     /**
      * Render 方法定义
      */
-    initRender: function () {
+    _initRender: function () {
         var _this = this;
         this._textarea = wis$.create('Textarea');
         this._textarea.onClick(
@@ -153,7 +153,7 @@ wof.widget.TextArea.prototype = {
         this.getDomInstance().append(this._textarea.getDomInstance());
     },
     //选择实现
-    beforeRender: function () {
+    _beforeRender: function () {
 
     },
 
@@ -174,7 +174,7 @@ wof.widget.TextArea.prototype = {
     },
 
     //选择实现
-    afterRender: function () {
+    _afterRender: function () {
         this._textarea.render();
         this.sendMessage('wof.widget.Textarea_render');// TODO 消息名称？？
     },

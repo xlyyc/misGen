@@ -93,10 +93,7 @@ wof.bizWidget.VoucherItem.prototype = {
     },
 
     getItemName: function(){
-        if(this._itemName==null){
-            this._itemName = '';
-        }
-        return this._itemName;
+        return this._itemName || '';
     },
 
     setItemName: function(itemName){
@@ -115,10 +112,7 @@ wof.bizWidget.VoucherItem.prototype = {
     },
 
     getItemLabel: function(){
-        if(this._itemLabel==null){
-            this._itemLabel = '';
-        }
-        return this._itemLabel;
+        return this._itemLabel || '';
     },
 
     setItemLabel: function(itemLabel){
@@ -126,10 +120,7 @@ wof.bizWidget.VoucherItem.prototype = {
     },
 
     getDataField: function(){
-        if(this._dataField==null){
-            this._dataField = '';
-        }
-        return this._dataField;
+        return this._dataField || '';
     },
 
     setDataField: function(dataField){
@@ -137,10 +128,7 @@ wof.bizWidget.VoucherItem.prototype = {
     },
 
     getDateTimeBoxFormat: function(){
-        if(this._dateTimeBoxFormat==null){
-            this._dateTimeBoxFormat = 'yyyy-MM-dd';
-        }
-        return this._dateTimeBoxFormat;
+        return this._dateTimeBoxFormat || 'yyyy-MM-dd';
     },
 
     setDateTimeBoxFormat: function(dateTimeBoxFormat){
@@ -148,10 +136,7 @@ wof.bizWidget.VoucherItem.prototype = {
     },
 
     getReadOnly: function(){
-        if(this._readOnly==null){
-            this._readOnly = false;
-        }
-        return this._readOnly;
+        return this._readOnly || false;
     },
 
     setReadOnly: function(readOnly){
@@ -170,10 +155,7 @@ wof.bizWidget.VoucherItem.prototype = {
     },
 
     getLength: function(){
-        if(this._length==null){
-            this._length = '';
-        }
-        return this._length;
+        return this._length || '';
     },
 
     setLength: function(length){
@@ -181,10 +163,7 @@ wof.bizWidget.VoucherItem.prototype = {
     },
 
     getMin: function(){
-        if(this._min==null){
-            this._min = '';
-        }
-        return this._min;
+        return this._min || '';
     },
 
     setMin: function(min){
@@ -192,10 +171,7 @@ wof.bizWidget.VoucherItem.prototype = {
     },
 
     getMax: function(){
-        if(this._max==null){
-            this._max = '';
-        }
-        return this._max;
+        return this._max || '';
     },
 
     setMax: function(max){
@@ -203,10 +179,7 @@ wof.bizWidget.VoucherItem.prototype = {
     },
 
     getRegExp: function(){
-        if(this._regExp==null){
-            this._regExp = '';
-        }
-        return this._regExp;
+        return this._regExp || '';
     },
 
     setRegExp: function(regExp){
@@ -214,10 +187,7 @@ wof.bizWidget.VoucherItem.prototype = {
     },
 
     getCheckErrorInfo: function(){
-        if(this._checkErrorInfo==null){
-            this._checkErrorInfo = '';
-        }
-        return this._checkErrorInfo;
+        return this._checkErrorInfo || '';
     },
 
     setCheckErrorInfo: function(checkErrorInfo){
@@ -225,10 +195,7 @@ wof.bizWidget.VoucherItem.prototype = {
     },
 
     getSelectPattern: function(){
-        if(this._selectPattern==null){
-            this._selectPattern = 'normal';
-        }
-        return this._selectPattern;
+        return this._selectPattern || 'normal';
     },
 
     setSelectPattern: function(selectPattern){
@@ -236,10 +203,7 @@ wof.bizWidget.VoucherItem.prototype = {
     },
 
     getUseMultiSelect: function(){
-        if(this._useMultiSelect==null){
-            this._useMultiSelect = false;
-        }
-        return this._useMultiSelect;
+        return this._useMultiSelect || false;
     },
 
     setUseMultiSelect: function(useMultiSelect){
@@ -247,10 +211,7 @@ wof.bizWidget.VoucherItem.prototype = {
     },
 
     getVisbleType: function(){
-        if(this._visbleType==null){
-            this._visbleType = 'text';
-        }
-        return this._visbleType;
+        return this._visbleType || 'text';
     },
 
     setVisbleType: function(visbleType){
@@ -258,10 +219,7 @@ wof.bizWidget.VoucherItem.prototype = {
     },
 
     getLabelWidth: function(){
-        if(this._labelWidth==null){
-            this._labelWidth = 100;
-        }
-        return this._labelWidth;
+        return this._labelWidth || 100;
     },
 
     setLabelWidth: function(labelWidth){
@@ -269,10 +227,7 @@ wof.bizWidget.VoucherItem.prototype = {
     },
 
     getInputWidth: function(){
-        if(this._inputWidth==null){
-            this._inputWidth = 100;
-        }
-        return this._inputWidth;
+        return this._inputWidth || 100;
     },
 
     setInputWidth: function(inputWidth){
@@ -280,10 +235,7 @@ wof.bizWidget.VoucherItem.prototype = {
     },
 
     getInputHeight: function(){
-        if(this._inputHeight==null){
-            this._inputHeight = 20;
-        }
-        return this._inputHeight;
+        return this._inputHeight || 20;
     },
 
     setInputHeight: function(inputHeight){
@@ -291,10 +243,7 @@ wof.bizWidget.VoucherItem.prototype = {
     },
 
     getTipValue: function(){
-        if(this._tipValue==null){
-            this._tipValue = '';
-        }
-        return this._tipValue;
+        return this._tipValue || '';
     },
 
     setTipValue: function(tipValue){
@@ -302,10 +251,7 @@ wof.bizWidget.VoucherItem.prototype = {
     },
 
     getLinkageItem: function(){
-        if(this._linkageItem==null){
-            this._linkageItem = '';
-        }
-        return this._linkageItem;
+        return this._linkageItem || '';
     },
 
     setLinkageItem: function(linkageItem){
@@ -313,10 +259,7 @@ wof.bizWidget.VoucherItem.prototype = {
     },
 
     getRowspan: function(){
-        if(this._rowspan==null){
-            this._rowspan = 1;
-        }
-        return this._rowspan;
+        return this._rowspan || 1;
     },
 
     setRowspan: function(rowspan){
@@ -324,10 +267,7 @@ wof.bizWidget.VoucherItem.prototype = {
     },
 
     getIsFixItem: function(){
-        if(this._isFixItem==null){
-            this._isFixItem = false;
-        }
-        return this._isFixItem;
+        return this._isFixItem || false;
     },
 
     setIsFixItem: function(isFixItem){
@@ -335,9 +275,7 @@ wof.bizWidget.VoucherItem.prototype = {
     },
 
     getColspan: function(){
-        if(this._colspan==null)
-            this._colspan = 1;
-        return this._colspan;
+        return this._colspan || 1;
     },
 
     setColspan: function(colspan){
@@ -355,7 +293,7 @@ wof.bizWidget.VoucherItem.prototype = {
     /**
      * Render 方法定义
      */
-    initRender:function(){
+    _initRender:function(){
         var label = wof$.create('Label');
         label.setIsInside(true);
         label.setLeft(0);
@@ -365,7 +303,7 @@ wof.bizWidget.VoucherItem.prototype = {
         this._label = label;
     },
     //选择实现
-    beforeRender: function () {
+    _beforeRender: function () {
         this._label.setWidth(this.getLabelWidth());
         this._label.setText(this.getItemLabel());
         this._label.setTip(this.getTipValue());
@@ -380,7 +318,7 @@ wof.bizWidget.VoucherItem.prototype = {
     },
 
     //选择实现
-    afterRender: function () {
+    _afterRender: function () {
 
     },
 
@@ -493,7 +431,7 @@ wof.bizWidget.VoucherItem.prototype = {
                 this._component[readonlyMethod](false);
                 break;
             case 'View':
-                this._component[readonlyMethod](false);
+                this._component[readonlyMethod](true);
                 break;
             default:
                 this._component[readonlyMethod](this.getReadOnly() ? true : false);
@@ -502,139 +440,67 @@ wof.bizWidget.VoucherItem.prototype = {
 
     //根据当前的显示类型设置对应的元件
     _setComponent: function() {
-        if(this.getDataField().length <= 0) {
-            return;
-        }
-        // var component = null;
-        // var clzName = '';
-        // var setValMethod = '';
-        // var readonlyMethod = '';
+        if(this.getDataField().length > 0) {
+            var visbleType = this.getVisbleType();
+            switch(visbleType){
+                case 'text':
+                    this._initComponent('wof.widget.Input');
+                    this._component.setValue(this.getValue());
+                    break;
 
-        var visbleType = this.getVisbleType();
-        switch (visbleType) {
-        case 'text':
-            this._initComponent('wof.widget.Input');
-            this._component.setValue(this.getValue());
-            break;
+                case 'textArea':
+                    throw new Error(visbleType + 'is not yet implemented');
+                    break;
 
-        case 'textArea':
-            throw new Error(visbleType + 'is not yet implemented');
-            break;
-        
-        case 'richTextArea':
-            throw new Error(visbleType + 'is not yet implemented');
-            break;
-        
-        case 'select':
-            this._initComponent('wof.widget.ComboBox');
-            this._component.setIsMultiSelect(this.getUseMultiSelect());
-            this._component.setMode(this.getSelectPattern());
-            var refdata = this.getOriginNode().getRefData();
-            var fname = this.getDataField();
-            if (refdata && refdata[fname]) {
+                case 'richTextArea':
+                    throw new Error(visbleType + 'is not yet implemented');
+                    break;
 
-                var vals = [];
-                var val = this.getValue();
-                var re = /(@start@)(.*?)(@end@)/g;
-                var matches = val.match(re);
-                for (var i=0;matches!=null&&i<matches.length;i++){
-                    var v = matches[i].substring(7,matches[i].length-5);
-                    vals.push(v);
-                }
-                this._component.setValues(vals);
-                var data = refdata[fname]['data'];
-                this._component.setComboBoxData(data);
+                case 'select':
+                    this._initComponent('wof.widget.ComboBox');
+                    this._component.setIsMultiSelect(this.getUseMultiSelect());
+                    this._component.setMode(this.getSelectPattern());
+                    var refdata = this.getOriginNode().getRefData();
+                    var fname = this.getDataField();
+                    if (refdata && refdata[fname]) {
+
+                        var vals = [];
+                        var val = this.getValue();
+                        var re = /(@start@)(.*?)(@end@)/g;
+                        var matches = val.match(re);
+                        for (var i=0;matches!=null&&i<matches.length;i++){
+                            var v = matches[i].substring(7,matches[i].length-5);
+                            vals.push(v);
+                        }
+                        this._component.setValues(vals);
+                        var data = refdata[fname]['data'];
+                        this._component.setComboBoxData(data);
+                    }
+                    break;
+
+                case 'checkBox':
+                    throw new Error(visbleType + 'is not yet implemented');
+                    break;
+
+                case 'date':
+                    throw new Error(visbleType + 'is not yet implemented');
+                    break;
+
+                case 'radio':
+                    throw new Error(visbleType + 'is not yet implemented');
+                    break;
+
+                case 'file':
+                    throw new Error(visbleType + 'is not yet implemented');
+                    break;
+
+                case 'number':
+                    throw new Error(visbleType + 'is not yet implemented');
+                    break;
+
+                default:
             }
-            break;
-        
-        case 'checkBox':
-            throw new Error(visbleType + 'is not yet implemented');
-            break;
-        
-        case 'date':
-            throw new Error(visbleType + 'is not yet implemented');
-            break;
-        
-        case 'radio':
-            throw new Error(visbleType + 'is not yet implemented');
-            break;
-        
-        case 'file':
-            throw new Error(visbleType + 'is not yet implemented');
-            break;
-        
-        case 'number':
-            throw new Error(visbleType + 'is not yet implemented');
-            break;
-        
-        default:
         }
-
-
-            // if(visbleType=='text'){
-            //     clzName = 'wof.widget.Input';
-            //     setValMethod = 'setValue';
-            // }else if(visbleType=='textArea'){
-            //     clzName = 'wof.widget.TextArea';
-            // }else if(visbleType=='richTextArea'){
-            //     clzName = 'wof.widget.HTMLEditor';
-            // }else if(visbleType=='select'){
-            //     clzName = 'wof.widget.ComboBox';
-            // }else if(visbleType=='checkBox'){
-            //     clzName = 'wof.widget.CheckBox';
-            // }else if(visbleType=='date'){
-            //     clzName = 'wof.widget.DateEditor';
-            // }else if(visbleType=='radio'){
-            //     clzName = 'wof.widget.RadioGroup';
-            // }else if(visbleType=='file'){
-            //     clzName = 'wof.widget.FileBox';
-            // }else if(visbleType=='number'){
-            //     clzName = 'wof.widget.Input';
-            // }
-
-            // /**
-            //  * todo 暂时使用
-            //  */
-            // clzName = 'wof.widget.Input';
-            // setValMethod = 'setValue';
-            // readonlyMethod = 'setReadonly';
-
-            // if(this._component!=null&&this._component.getClassName()==clzName){
-            //     component = this._component;
-            // }else{
-            //     if(this._component!=null){
-            //         this._component.removeChildren(true);
-            //         this._component.remove(true);
-            //         this._component = null;
-            //     }
-            //     component = wof$.create(clzName);
-            //     component.setIsInside(true);
-            //     component.appendTo(this);
-            //     this._component = component;
-            // }
-            // component.setLeft(this.getLabelWidth());
-            // component.setWidth(this.getInputWidth());
-            // component.setHeight(this.getInputHeight());
-
-
-            // var displayVal = this.getValues();
-            // component[setValMethod](displayVal); //todo 需要结合当前的格式化配置来进行显示
-
-            // //根据编辑状态和只读属性设置控件只读
-            // var voucherComponent = this.getOriginNode();
-            // var state = voucherComponent.getState();
-            // console.log(state);
-            // if(state=='Add'){
-            //     component[readonlyMethod](false);
-            // }else if(state=='View'){
-            //     component[readonlyMethod](true);
-            // }else{
-            //     if(this.getReadOnly() == true){
-            //         component[readonlyMethod](true);
-            //     }else{
-            //         component[readonlyMethod](false);
-            //     }
-            // }
     },
 
     //是否已经被修改过数据

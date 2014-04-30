@@ -50,6 +50,12 @@ wof.bizWidget.VoucherGridComponent = function() {
 wof.bizWidget.VoucherGridComponent.prototype = {
 
 	_insideOnReceiveMessage : {
+
+		"wof.widget.Grid_onPageSizeChange":function (message){
+			this.setPageNo(1);
+			this.setPageSize(parseInt(message.data.pageSize));
+			this.gotoPage(1);
+		},
 		"wof.widget.Grid_onToNext" : function(message) {
 			this.nextPage();
 			this.sendMessage('wof.bizWidget.GridComponent_ToNext');
@@ -481,10 +487,10 @@ wof.bizWidget.VoucherGridComponent.prototype = {
 		this.updateVoucherGridComponent(data);
 		this.setRefData(this.getDataSource().getRefData());
 	},
-	beforeRender : function() {
+	_beforeRender : function() {
 
 	},
-	initRender : function() {
+	_initRender : function() {
 		var that = this;
 		var objs = wof$.find('*');
 		for (var i = 0; i < objs.size(); i++) {
@@ -940,7 +946,7 @@ wof.bizWidget.VoucherGridComponent.prototype = {
 			}
 		}
 
-		var currentData = this.grid.getCurrentData();
+		var currentData = this.grid.getCurrentUpdateData();
 		var gridData = this.getGridData();
 		var updateData = [];
 		for (var i = 0; i < currentData.length; i++) {

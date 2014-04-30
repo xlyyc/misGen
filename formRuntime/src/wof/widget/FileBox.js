@@ -25,7 +25,7 @@ wof.widget.FileBox.prototype = {
      */
 
     //选择实现
-    beforeRender: function () {
+    _beforeRender: function () {
 
     },
 
@@ -35,7 +35,7 @@ wof.widget.FileBox.prototype = {
     },
 
     //选择实现
-    afterRender: function () {
+    _afterRender: function () {
 
     },
 

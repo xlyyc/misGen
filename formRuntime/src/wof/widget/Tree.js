@@ -56,13 +56,13 @@ wof.widget.Tree.prototype = {
     },
 
     //选择实现
-    initRender: function () {
+    _initRender: function () {
         var tree = wis$.create('Tree');
         tree.appendTo(this.getDomInstance());
         this._tree = tree;
     },
 
-    beforeRender: function(){
+    _beforeRender: function(){
         var _this = this;
         this._tree.setRadioType(this.getRadioType());
         this._tree.setChkStyle(this.getChkStyle());
@@ -85,7 +85,7 @@ wof.widget.Tree.prototype = {
     },
 
     //选择实现
-    afterRender: function () {
+    _afterRender: function () {
 
     },
 
