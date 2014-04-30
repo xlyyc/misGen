@@ -63,7 +63,7 @@ wis.widget.Button.prototype = {
      * 初始化渲染方法
      * 仅在第一次调用render时执行
      */
-    initRender: function () {
+    _initRender: function () {
         this._linkObj = jQuery('<a class="ui_btn ui_btn_small" onclick="" style="width: 100%;height:100%"></a>');
         this._iObj = jQuery('<i></i>');
         this._linkObj.append(this._iObj);
@@ -84,7 +84,7 @@ wis.widget.Button.prototype = {
     },
 
     //渲染前处理方法
-    beforeRender: function () {
+    _beforeRender: function () {
 
     },
 
@@ -113,7 +113,7 @@ wis.widget.Button.prototype = {
     },
 
     //渲染后处理方法
-    afterRender: function () {
+    _afterRender: function () {
 
     },
 

@@ -100,7 +100,7 @@ wis.widget.DateEditor.prototype = {
      * 初始化渲染方法
      * 仅在第一次调用render时执行
      */
-    initRender: function () {
+    _initRender: function () {
         var dateEditorTemp = jQuery('<input type="text" name="'+this.getName()+'">');
         this._dateEditorTemp = dateEditorTemp;
         this.getDomInstance().append(dateEditorTemp);
@@ -124,7 +124,7 @@ wis.widget.DateEditor.prototype = {
     },
 
     //渲染前处理方法
-    beforeRender: function () {
+    _beforeRender: function () {
 
     },
 
@@ -134,7 +134,7 @@ wis.widget.DateEditor.prototype = {
     },
 
     //渲染后处理方法
-    afterRender: function () {
+    _afterRender: function () {
 
     },
 

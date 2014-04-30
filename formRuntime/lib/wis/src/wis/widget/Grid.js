@@ -22,22 +22,23 @@ wis.widget.Grid.prototype = {
 	_emptyMsg : "没有数据",
 	_errorMsg : "取数出错",
 	_columns : [],
-	_onAfterEdit : null,
-	_onBeforeEdit : null,
 	_onReload : null,
 	_onToFirst : null,
 	_onToPrev : null,
 	_onToNext : null,
 	_onToLast : null,
-	_onCurPageEnter : null,
-	_onSelectChange : null,
 	_onSelectRow : null,
 	_onUnSelectRow : null,
-	_onBeforeCheckRow : null,
 	_onCheckRow : null,
-	_onDblClickRow : null,
-	_onBeforeCheckAllRow : null,
-	_onCheckAllRow : null,
+	_onAfterEdit : null, // TODO
+	_onBeforeEdit : null, // TODO
+	_onCurPageEnter : null, // TODO
+	_onSelectChange : null, // TODO
+	_onBeforeCheckRow : null,// TODO
+	_onDblClickRow : null, // TODO
+	_onBeforeCheckAllRow : null, // TODO
+	_onCheckAllRow : null, // TODO
+	_onPageSizeChange : null,
 	_addRow : null,
 	_deleteRow : null,
 	_getGridData : null,
@@ -47,8 +48,24 @@ wis.widget.Grid.prototype = {
 	_getSelectedRowObj : null,
 	_refData : null,
 	_grid : null,
-	_state:null,
-	
+	_state : null,
+
+	onToFirst : function(callback) {
+		this._onToFirst = callback;
+	},
+	onToPrev : function(callback) {
+		this._onToPrev = callback;
+	},
+	onToNext : function(callback) {
+		this._onToNext = callback;
+	},
+	onToLast : function(callback) {
+		this._onToLast = callback;
+	},
+	onUnSelectRow : function(callback) {
+		this._onUnSelectRow = callback;
+	},
+
 	getState : function() {
 		return this._state;
 	},
@@ -215,84 +232,124 @@ wis.widget.Grid.prototype = {
 		this.setOptions(data);
 	},
 
-    setOptions: function(data){
-        if (data.name) {
-            this.setTitle(data.name);
-        }
-        if (data.checkbox) {
-            this.setCheckbox(data.checkbox);
-        }
-        if (data.data) {
-            this.setGridData(data.data);
-        }
-        if (data.columns) {
-            this.setColumns(data.columns);
-        }
-        if (data.total) {
-            this.setTotal(data.total);
-        }
-        if (data.pageNo) {
-            this.setPage(data.pageNo)
-        }
-        if (data.pageSize) {
-            this.setPageSize(data.pageSize);
-        }
-        if (data.onToNext) {
-            this.onToNext = data.onToNext;
-        }
-        if (data.onToPrev) {
-            this.onToPrev = data.onToPrev;
-        }
-        if (data.onToFirst) {
-            this.onToFirst = data.onToFirst;
-        }
-        if (data.onToLast) {
-            this.onToLast = data.onToLast;
-        }
-        if (data.onReload) {
-            this.onReload = data.onReload;
-        }
-        if (data.refData) {
-            this.setRefData(data.refData);
-        }
-        if(data.state){
-        	this.setState(data.state);
-        }
-    },
+	setOptions : function(data) {
+		if (data.name) {
+			this.setTitle(data.name);
+		}
+		if (data.checkbox) {
+			this.setCheckbox(data.checkbox);
+		}
+		if (data.data) {
+			this.setGridData(data.data);
+		}
+		if (data.columns) {
+			this.setColumns(data.columns);
+		}
+		if (data.total) {
+			this.setTotal(data.total);
+		}
+		if (data.page) {
+			this.setPage(data.page)
+		}
+		if (data.pageSize) {
+			this.setPageSize(data.pageSize);
+		}
+		if (data.onToNext) {
+			this.onToNext = data.onToNext;
+		}
+		if (data.onToPrev) {
+			this.onToPrev = data.onToPrev;
+		}
+		if (data.onToFirst) {
+			this.onToFirst = data.onToFirst;
+		}
+		if (data.onToLast) {
+			this.onToLast = data.onToLast;
+		}
+		if (data.onReload) {
+			this.onReload = data.onReload;
+		}
+		if (data.onSelectRow) {
+			this._onSelectRow = data.onSelectRow;
+		}
+		if (data.onCheckRow) {
+			this._onCheckRow = data.onCheckRow;
+		}
+		if (data.onSelectRow) {
+			this._onSelectRow = data.onSelectRow;
+		}
+		if (data.onToFirst) {
+			this._onToFirst = data.onToFirst;
+		}
+		if (data.onToLast) {
+			this._onToLast = data.onToLast;
+		}
+		if (data.onToPrev) {
+			this._onToPrev = data.onToPrev;
+		}
+		if (data.onToNext) {
+			this._onToNext = data.onToNext;
+		}
+		if (data.onPageSizeChange) {
+			this._onPageSizeChange = data.onPageSizeChange;
+		}
+		if (data.state) {
+			this.setState(data.state);
+		}
+	},
 
 	addRow : function() {
 		jQuery(this.getDomInstance()).grid('addRow');
+		jQuery(this.getDomInstance()).grid('editRow', 0);
 	},
 	getCurrentData : function() {
-		return jQuery(this.getDomInstance()).grid('getSelectedRowData');
+		return jQuery(this.getDomInstance()).grid('option').gridData;
 	},
+	getCurrentUpdateData : function() {
+		return jQuery(this.getDomInstance()).grid('option').updatedRow;
+	},
+	
 	getCurrentAddData : function() {
 		return jQuery(this.getDomInstance()).grid('option').addedRow;
 	},
 	getSelectedRows : function() {
+		return jQuery(this.getDomInstance()).grid('option').checkedRowIndex
+	},
+	getCheckIndex : function() {
+		return jQuery(this.getDomInstance()).grid('option').checkedRowIndex;
+	},
+	getCheckData : function() {
 		return jQuery(this.getDomInstance()).grid('getCheckedRowData');
 	},
-	updateRow : function() {
-        jQuery(this.getDomInstance()).grid('updateRow', 1);
+	updateRow : function(data) {
+		jQuery(this.getDomInstance())
+				.grid('editRow', this.getSelectedRows()[0]);
 	},
 
-    onSelectRow: function(callback){
-        this._onSelectRow = callback;
-    },
-    onCheckRow:function (callback){
-    	this._onCheckRow = callback;
-    	
-    },
+	onSelectRow : function(callback) {
+		this._onSelectRow = callback;
+	},
+	onCheckRow : function(callback) {
+		this._onCheckRow = callback;
+
+	},
+	onReload : function(callback) {
+		this._onReload = callback;
+	},
+
+	getActiveRowIndex : function() {
+		return jQuery(this.getDomInstance()).grid('option').activeRowIndex
+	},
 
 	/**
 	 * 初始化渲染方法 仅在第一次调用render时执行
 	 */
-	initRender : function() {
+	_initRender : function() {
 
 	},
 
 	// 渲染前处理方法
-	beforeRender : function() {
+	_beforeRender : function() {
 
 	},
 
@@ -311,7 +368,10 @@ wis.widget.Grid.prototype = {
 					validator : 'number'
 				};
 				if (column.visbleType == 'select') {
-					var ref = refData[bindDataField].data;
+					var ref = '';
+					if (refData && bindDataField in refData) {
+						ref = refData[bindDataField].data;
+					}
 					editor.options = {
 						width : 100,
 						textField : "name",
@@ -344,37 +404,74 @@ wis.widget.Grid.prototype = {
 				}
 			}
 		}
-		
+
 		var that = this;
 		jQuery(this.getDomInstance()).grid({
 			title : this.getTitle(),
-			width : this.getWidth(),
-			//activeRowIndex : 2,
-			//checkedRowIndex : [ 1, 2 ],
-			totalRecord : this.getTitle(),
+			width : this.getWidth() || 400,
+			height : this.getHeight() || 150,
+			// activeRowIndex : 2,
+			// checkedRowIndex : [ 1, 2 ],
+			totalRecord : this.getTotal(),
 			headHeight : this.getHeaderRowHeight() || 20,
 			rowHeight : this.getRowHeight() || 20,
 			usePage : this.getUsePage(),
-			useCheckColumn : this.getCheckbox() ||  true,
-			mode : this.getState(),
-			onNextPage : function(data) {
-				console.log(data);
-			},
+			useCheckColumn : this.getCheckbox() || true,
+			mode : this.getState() ? this.getState() : 'edit',
 			gridData : formateData,
 			columns : this.getGridColumnDefine(columns),
-			onSelectRow : function (e,data){
-                if(that._onSelectRow!=null){
-                    that._onSelectRow(data);
-                }
+			pageNo : this.getPage(),
+			pageSize : this.getPageSize(),
+			onReload : function() {
+				if (that._onSelectRow != null) {
+					that._onReload();
+				}
 			},
-			onCheckRow:function (e,data){
-			    if(that._onCheckRow!=null){
-                    that._onCheckRow(data);
-                }
+			onSelectRow : function(e, data) {
+				if (that._onSelectRow != null) {
+					that._onSelectRow(data);
+				}
+			},
+			onUnselectRow : function() {
+				if (that._onUnSelectRow != null) {
+					that._onUnSelectRow(data);
+				}
+
+			},
+			onCheckRow : function(e, data) {
+				if (that._onCheckRow != null) {
+					console.log(data);
+					that._onCheckRow(data);
+				}
+			},
+			onFirstPage : function() {
+				if (that._onToFirst != null) {
+					that._onToFirst();
+				}
+			},
+			onLastPage : function() {
+				if (that._onToLast != null) {
+					that._onToLast();
+				}
+
+			},
+			onNextPage : function() {
+				if (that._onToNext != null) {
+					that._onToNext();
+				}
+			},
+			onPrevPage : function() {
+				if (that._onToPrev != null) {
+					that._onToPrev();
+				}
+			},
+			onPageSizeChange : function(e, data) {
+				if (that._onPageSizeChange != null) {
+					that._onPageSizeChange(data);
+				}
 			}
 		});
-		
-	
+
 	},
 
 	getGridColumnDefine : function(columns) {
@@ -383,9 +480,9 @@ wis.widget.Grid.prototype = {
 			for (var i = 0; i < columns.length; i++) {
 				var c = columns[i];
 				var column = {
-					"title" : c.caption,
-					"name" : c.bindDataField,
-					"width" : c.width,
+					title : c.caption,
+					name : c.bindDataField,
+					width : c.width,
 					lock : c.isPin || false
 				};
 				convertColumns.push(column);
@@ -394,7 +491,7 @@ wis.widget.Grid.prototype = {
 		return convertColumns;
 	},
 	// 渲染后处理方法
-	afterRender : function() {
+	_afterRender : function() {
 
 	},
 
@@ -410,4 +507,4 @@ wis.widget.Grid.prototype = {
 
 	}
 
-};
+}

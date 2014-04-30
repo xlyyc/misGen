@@ -199,7 +199,7 @@ wis.widget.Dialog.prototype = {
      * 初始化渲染方法
      * 仅在第一次调用render时执行
      */
-    initRender: function () {
+    _initRender: function () {
 
         if( this.getType() )
         {
@@ -291,7 +291,7 @@ wis.widget.Dialog.prototype = {
     },
 
     //渲染前处理方法
-    beforeRender: function () {
+    _beforeRender: function () {
         // to do ...
     },
 
@@ -334,7 +334,7 @@ wis.widget.Dialog.prototype = {
 
 
     //渲染后处理方法
-    afterRender: function () {
+    _afterRender: function () {
 
 
     },

@@ -340,12 +340,12 @@ wis.widget.Grid.prototype = {
 	/**
 	 * 初始化渲染方法 仅在第一次调用render时执行
 	 */
-	initRender : function() {
+	_initRender : function() {
 
 	},
 
 	// 渲染前处理方法
-	beforeRender : function() {
+	_beforeRender : function() {
 
 	},
 
@@ -484,7 +484,7 @@ wis.widget.Grid.prototype = {
 		return convertColumns;
 	},
 	// 渲染后处理方法
-	afterRender : function() {
+	_afterRender : function() {
 
 	},
 

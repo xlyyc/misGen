@@ -72,13 +72,13 @@ wis.widget.SelectFiles.prototype = {
      * 初始化渲染方法
      * 仅在第一次调用render时执行
      */
-    initRender: function () {
+    _initRender: function () {
         this._file = jQuery('<input type="file" name="'+this.getName()+'">');
         this.getDomInstance().append(this._file);
     },
 
     //渲染前处理方法
-    beforeRender: function () {
+    _beforeRender: function () {
 
     },
 
@@ -88,7 +88,7 @@ wis.widget.SelectFiles.prototype = {
     },
 
     //渲染后处理方法
-    afterRender: function () {
+    _afterRender: function () {
 
 
     },

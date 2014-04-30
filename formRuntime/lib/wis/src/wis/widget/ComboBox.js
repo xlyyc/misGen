@@ -153,7 +153,7 @@ wis.widget.ComboBox.prototype = {
     /**
      * 初始化渲染方法 仅在第一次调用render时执行
      */
-    initRender: function () {
+    _initRender: function () {
         var _this = this;
         this._domInput = jQuery('<div class="l-text l-text-combobox" style="width: 70px;">'
             +'<input type="text" class="l-text-field" style="width: 50px;">'
@@ -202,7 +202,7 @@ wis.widget.ComboBox.prototype = {
     },
 
     // 渲染前处理方法
-    beforeRender: function () {
+    _beforeRender: function () {
         this._renderFlag = true;
 
         var _this = this;
@@ -318,7 +318,7 @@ wis.widget.ComboBox.prototype = {
     },
 
     // 渲染后处理方法
-    afterRender: function () {
+    _afterRender: function () {
         this._renderFlag = false;
 
     },

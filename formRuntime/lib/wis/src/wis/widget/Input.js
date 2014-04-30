@@ -159,7 +159,7 @@ wis.widget.Input.prototype = {
      * 初始化渲染方法
      * 仅在第一次调用render时执行
      */
-    initRender: function () {
+    _initRender: function () {
     	this._rootObj = jQuery('<input class="wis_input_style_default" type="'+this.getType()+'"/>');
 		this._rootObj.val(this.getPlaceholder());
 		this.getDomInstance().append(this._rootObj);
@@ -167,7 +167,7 @@ wis.widget.Input.prototype = {
     },
 
     //渲染前处理方法
-    beforeRender: function () {},
+    _beforeRender: function () {},
 
     //渲染方法
     render: function () {
@@ -189,7 +189,7 @@ wis.widget.Input.prototype = {
     },
 
     //渲染后处理方法
-    afterRender: function () {},
+    _afterRender: function () {},
 
     /**
      * getData/setData 方法定义

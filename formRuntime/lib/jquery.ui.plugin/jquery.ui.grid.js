@@ -22,9 +22,9 @@
             useCheckColumn: true, //  是否显示选择列
             activeRowIndex: null,   // 选中的行索引。
             checkedRowIndex: [],    // 选中的checkbox列索引。
-            addedRow: [],
-            deletedRow: [],
-            updatedRow: [],
+            addedRow: [],  // 新增的数据
+            deletedRow: [], //删除的数据
+            updatedRow: [], //修改的数据
             onNextPage: null,
             onPrevPage: null,
             onFirstPage: null,
@@ -39,7 +39,9 @@
             afterAddColumn: null, //TODO
             afterDeleteColumn: null, //TODO
             afterRender: null,
-            onSortColumn: null //TODO
+            onSortColumn: null,
+            beforeEdit: null, //TODO
+            afterEdit: null//TODO
         },
         getData: function () {
             return {
@@ -61,9 +63,13 @@
                 this.options.mode = data.mode;
             }
         },
+        /**
+         * 选择一行
+         * @param rowIndex
+         */
         selectRow: function (rowIndex) {
             if (rowIndex != null) {
-                this.unselectRow();
+                this.unselectRow(); // 取消选择当前行，只能有一行选择上。
                 var tr = $('.grid_main', this.element).find('tr')
                 if (this._useLockColumnLayout()) {
                     tr = tr.not(':first');
@@ -75,6 +81,9 @@
                 this._trigger('onSelectRow', null, this.getSelectedRowData());
             }
         },
+        /**
+         * 取消选择一行
+         */
         unselectRow: function () {
             if (this.options.activeRowIndex != null) {
                 this._trigger('onUnselectRow', null, {data: this.getSelectedRowData()});
@@ -82,6 +91,12 @@
                 $('.grid_selectRow', this.element).removeClass('grid_selectRow');
             }
         },
+        /**
+         * 选中一行
+         * @param rowIndexArray 选择中的行索引
+         * @param isCheck 是否选中
+         * @private
+         */
         _checkRow: function (rowIndexArray, isCheck) {
             if (this.options.useCheckColumn) {
                 var check = $('.grid_fix_column', this.element).find('.grid_checkColumn').find('input');
@@ -103,18 +118,36 @@
                 that._trigger('onCheckRow', null, {data: that.getCheckedRowData()});
             }
         },
+        /**
+         * 选中一行
+         * @param index 行索引
+         */
         checkRow: function (index) {
             this._checkRow([index], true);
         },
+        /**
+         * 取消选中一行
+         * @param index 行索引
+         */
         uncheckRow: function (index) {
             this._checkRow([index], false);
         },
+        /**
+         * 选中所有行
+         */
         checkAllRow: function () {
             this._checkRow(null, true);
         },
+        /**
+         * 取消选中所有行
+         */
         uncheckAllRow: function () {
             this._checkRow(null, false);
         },
+        /**
+         * 获取已选择的行数据
+         * @returns {*}
+         */
         getSelectedRowData: function () {
             var data = null;
             if (this.options.activeRowIndex != null) {
@@ -122,6 +155,10 @@
             }
             return data;
         },
+        /**
+         * 获取已选中的行数据
+         * @returns {Array}
+         */
         getCheckedRowData: function () {
             var data = [];
             if (this.options.checkedRowIndex != null) {
@@ -131,10 +168,17 @@
             }
             return data;
         },
+        /**
+         * 添加一行
+         * @param index 行索引
+         * @param rowData 行数据
+         */
         addRow: function (index, rowData) {
-            if (rowData === undefined) {
-                rowData = index;
+            if (index === undefined) {
                 index = 0;
+            }
+            if (rowData === undefined) {
+                rowData = {};
             }
             var row = this._renderRow(0, rowData, false),
                 allRow = $('.grid_main', this.element).find('tr'),
@@ -142,13 +186,17 @@
             if (this._useLockColumnLayout()) {
                 var fixRow = this._renderRow(0, rowData, true),
                     firstFixColumnRow = $('.grid_fix_column', this.element).find('tr').get(index);
-                $(firstFixColumnRow).before(fixRow);
+                $(firstFixColumnRow).after(fixRow);
             }
-            $(firstRow).before(row);
+            $(firstRow).after(row);
             row.data('_newIndex', index);
             this.options.addedRow.push(rowData);
             this._recomputeIndex();
         },
+        /**
+         * 删除一行
+         * @param index 行索引
+         */
         deleteRow: function (index) {
             var allTr = $('.grid_main', this.element).find('tr').not(':first');
             var needRemove = allTr.get(index);
@@ -163,6 +211,7 @@
             if (!needRemove) {
                 return;
             }
+            // 删除一行时，需要维护deleteRow，和addRow数组。
             if (isNew) {
                 removeData = this.options.addedRow[isNew];
                 this.options.addedRow = addedRow.slice(0, isNew).concat(addedRow.slice(isNew + 1))
@@ -186,6 +235,11 @@
             this.options.deletedRow.push(removeData);
             this._recomputeIndex();
         },
+        /**
+         * 修改一行
+         * @param index  行索引
+         * @param rowData 行数据
+         */
         updateRow: function (index, rowData) {
             if (!index) {
                 return;
@@ -193,6 +247,10 @@
             this.deleteRow(index);
             this.addRow(index, rowData);
         },
+        /**
+         * 编辑行
+         * @param index 行索引
+         */
         editRow: function (index) {
             var cell = null;
             if (this._useLockColumnLayout()) {
@@ -209,6 +267,10 @@
             }
             cell.editMode();
         },
+        /**
+         * 重新计算行索引
+         * @private
+         */
         _recomputeIndex: function () {
             var index = -1;
             $('.grid_main', this.element).find('tr').each(function () {
@@ -221,47 +283,63 @@
                 index++;
             })
         },
+        /**
+         * 下一页
+         */
         nextPage: function () {
-            //TODO 如果设置了url，设置url参数重新加载数据,如果 gridData 大小大于pageSize，使用内存分页
             var eventData = {pageNo: this.pageNo, pageSize: this.pageSize};
             this._trigger('onNextPage', eventData);
         },
+        /**
+         * 上一页
+         */
         prevPage: function () {
             var eventData = {pageNo: this.pageNo, pageSize: this.pageSize};
             this._trigger('onPrevPage', eventData);
         },
         moveColumn: function (sourceColumn, targetColumn) {
-
+            //TODO
         },
         sortColumn: function (columnIndex) {
-            // 事件
+            //TODO
         },
         addColumn: function (columnData, index) {
-
+            //TODO
         },
         deleteColumnsByIndex: function (index) {
-
+            //TODO
         },
         deleteColumnsByName: function () {
-
+            //TODO
         },
         getColumnIndexByName: function (columnName) {
-
+            //TODO
         },
         updateColumn: function (columnData, column) {
-
+            //TODO
         },
+        /**
+         * 设置属性
+         * @param key 属性名称
+         * @param value 属性值
+         * @private
+         */
         _setOption: function (key, value) {
             this._super(key, value);
             if (key.activeRowIndex || key.activeRowIndex === 0) {
                 this.selectRow(value);
             }
         },
+        /**
+         * 创建
+         * @private
+         */
         _create: function () {
             var columns = this.options.columns;
             if (columns == null || columns.length == 0) {
                 return;
             }
+            // 锁定列在最前面显示
             columns.sort(function (obj) {
                 if (obj.lock == true) {
                     return -1;
@@ -269,6 +347,9 @@
                     return 1;
                 }
             });
+            this.options.addedRow = [];
+            this.options.deletedRow = [];
+            this.options.updatedRow = [];
             this.lockColumns = [];
             for (var i = 0; i < columns.length; i++) {
                 var column = columns[i];
@@ -331,6 +412,9 @@
             this.element.append(container);
             this.render();
         },
+        /**
+         * 渲染方法
+         */
         render: function () {
             var that = this;
             if (!that.options.gridData) {
@@ -347,14 +431,25 @@
                 }
             } else {
                 that._renderBody();
-                that._renderPage();
+                that._renderPageBar();
                 if (that._useLockColumnLayout()) {
                     $('.grid_fix_head', that.element).remove();
                     $('.grid_fix_column', that.element).remove();
                     $('.grid_fix', that.element).remove();
                     var body = $('.grid_main', that.element);
-                    var head = body.clone().removeClass('grid_main').addClass('grid_fix_head').css({height: that.options.headHeight,
+                    var head = body.clone(true).removeClass('grid_main').addClass('grid_fix_head').css({height: that.options.headHeight,
                         overflow: 'hidden', width: that.options.width - 17, background: 'white'});
+                    head.find('tr').not(':first').remove();
+                    head.find('td').click(function (e) {
+                        var columnName = $(this).data('_name'),
+                            columns = that.options.columns;
+                        for (var i = 0; i < columns.length; i++) {
+                            if (columnName === columns[i].name) {
+                                break;
+                            }
+                        }
+                        that._trigger('onSortColumn', e, {column: columns[i]});
+                    });
                     body.after(head);
                     var width = 0;
                     $('.grid_main', that.element).scroll(function () {
@@ -396,6 +491,14 @@
                 that._rendered();
             }
         },
+        /**
+         * 渲染一行
+         * @param index 行索引
+         * @param rowData 行数据
+         * @param lockOnly 是否只渲染锁定列
+         * @returns {*}
+         * @private
+         */
         _renderRow: function (index, rowData, lockOnly) {
             if (!rowData) {
                 rowData = {};
@@ -425,51 +528,65 @@
                 })(tr);
             }
             for (var j = 0; j < columns.length; j++) {
-                var column = columns[j],
-                    columnName = column.name,
-                    value = rowData[columnName] || '',
-                    cell = null;
-                cell = new $.ui.cell({type: 'text', value: value, width: column.width, onClick: function () {
-                    that._trigger('onClickCell');
-                }, onValueChange: function () {
-                    that.options.updatedRow.push(rowData);
-                    that._trigger('onChangeCellValue');
-                }});
                 (function (c) {
-                    tr.append($('<td>').append(cell.widget()).data('cell', c).click(function () {
+                    var column = columns[j],
+                        columnName = column.name,
+                        value = rowData[columnName] || '',
+                        cell = null;
+                    cell = new $.ui.cell({type: 'text', value: value, width: column.width, onClick: function () {
+                        that._trigger('onClickCell');
+                    }, onValueChange: function (e, data) {
+                        rowData[columnName] = data.value;
+                        that.options.updatedRow.push(rowData);
+                        that._trigger('onChangeCellValue');
+                    }});
+                    tr.append($('<td>').append(cell.widget()).data('cell', cell).click(function () {
                         if (that.options.mode == 'edit') {
-                            c.editMode();
+                            cell.editMode();
                         }
                         return true;
                     }));
-                })(cell);
+                })(j);
             }
             return tr;
         },
+        /**
+         * 渲染表格头
+         * @param head 头容器
+         * @param lockOnly 是否只渲染锁定列
+         * @private
+         */
         _renderHead: function (head, lockOnly) {
             head = (head || this.head);
             var content = null,
                 th = null;
             if (this.options.useCheckColumn) {
                 content = $('<div>').width(30);
-                th = $('<td></td>').addClass('grid_lock_column').append(content);
+                th = $('<td>').addClass('grid_lock_column').append(content);
                 head.append(th);
             }
             var columns = lockOnly ? this.lockColumns : this.options.columns;
             for (var i = 0; i < columns.length; i++) {
                 var column = columns[i];
                 content = $('<div>').text(column.title).width(column.width);
-                th = $('<td></td>').html(content);
+                th = $('<td>').data('_name', column.name).html(content);
                 if (column.lock == true) {
                     th.addClass('grid_lock_column');
                 }
                 head.append(th);
             }
         },
+        /**
+         * 渲染表格体
+         * @param body 表格体容器
+         * @param lockOnly 是否只渲染锁定列
+         * @private
+         */
         _renderBody: function (body, lockOnly) {
             var data = this.options.gridData;
             if ($.isEmptyObject(data)) {
-                this.body.empty();
+                this.body.find('tr').not(':first').remove();
+                //this.body.empty();
                 return;
             }
             body = (body || this.body);
@@ -492,7 +609,11 @@
                 count++;
             }
         },
-        _renderPage: function () {
+        /**
+         * 渲染分页条
+         * @private
+         */
+        _renderPageBar: function () {
             if (this.options.usePage) {
                 var that = this;
                 if (this.page) {
@@ -514,11 +635,20 @@
                 }
             }
         },
+        /**
+         * 渲染完成
+         * @private
+         */
         _rendered: function () {
             this.selectRow(this.options.activeRowIndex);
             this._checkRow(this.options.checkedRowIndex, true);
             this._trigger('afterRender');
         },
+        /**
+         * 是否使用锁定布局
+         * @returns {boolean}
+         * @private
+         */
         _useLockColumnLayout: function () {
             return this.lockColumns.length > 0 || this.options.useCheckColumn;
         }
@@ -617,10 +747,10 @@
                 this.element.empty();
                 this.element.append($('<input>', {
                     type: 'text'
-                }).width(this.options.width - 5).val(this.options.value).blur(function () {
+                }).width(this.options.width - 5).val(this.options.value).blur(function (e) {
                     that.options.value = $(this).val();
                     var eventData = {value: $(this).val()};
-                    that._trigger('onValueChange', eventData);
+                    that._trigger('onValueChange', e, eventData);
                     that.viewMode()
                 }));
                 this._delay(function () {

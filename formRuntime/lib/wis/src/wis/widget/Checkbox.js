@@ -115,7 +115,7 @@ wis.widget.Checkbox.prototype = {
      * 初始化渲染方法
      * 仅在第一次调用render时执行
      */
-    initRender: function () {
+    _initRender: function () {
         this._rootObj = $('<div></div>'); //1. 根节点
         this._labelObj = $('<label class="wis_checkbox_style_default"></label>');// 2. Label节点
         this._inputObj = $('<input type="checkbox"/>');// 3. 复选框节点
@@ -128,7 +128,7 @@ wis.widget.Checkbox.prototype = {
         this._bindEvents();
     }, 
     //渲染前处理方法
-    beforeRender: function (){},
+    _beforeRender: function (){},
 
     //渲染方法
     render: function () {
@@ -154,7 +154,7 @@ wis.widget.Checkbox.prototype = {
     },
 
     //渲染后处理方法
-    afterRender: function () {},
+    _afterRender: function () {},
 
     /**
      * getData/setData 方法定义
