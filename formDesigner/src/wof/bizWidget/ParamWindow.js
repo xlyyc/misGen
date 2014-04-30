@@ -144,7 +144,7 @@ wof.bizWidget.ParamWindow.prototype = {
             mapType = 'page';
         }
         var tr = jQuery('<tr style="height:30px;border:1px inset #a1a1a1;">');
-        var sel = this._createSelect({'name':'mapType','value':mapType,options:[{'name':'页面值','value':'page'},{'name':'固定值','value':'value'},{'name':'表达式','value':'expression'}]});
+        var sel = this._createSelect({'name':'mapType','value':mapType,options:[{'name':'页面值','value':'pageParam'},{'name':'固定值','value':'value'},{'name':'表达式','value':'expression'}]});
         var td1 = jQuery('<td style="width:30%;">');
         td1.append(sel);
         tr.append(td1);
