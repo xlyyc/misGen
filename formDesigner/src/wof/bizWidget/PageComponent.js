@@ -56,6 +56,7 @@ wof.bizWidget.PageComponent.prototype = {
 
     //选择实现
     _afterRender: function () {
+
         this.sendMessage('wof.bizWidget.PageComponent_render');
     },
 
@@ -76,7 +77,7 @@ wof.bizWidget.PageComponent.prototype = {
 
     //创建初始化的button
     createSelf: function(width, height){
-        var node = new wof.bizWidget.PageComponent();
+        var node = wof$.create('PageComponent');
         node.setOverflow('auto');
         node.setWidth(width);
         node.setHeight(height);
