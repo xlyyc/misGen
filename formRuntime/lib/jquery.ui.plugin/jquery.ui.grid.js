@@ -92,8 +92,8 @@
             }
         },
         /**
-         * 选中一行
-         * @param rowIndexArray 选择中的行索引
+         * 选中或取消选中一行
+         * @param rowIndexArray 选择中的行索引数组
          * @param isCheck 是否选中
          * @private
          */
@@ -198,16 +198,18 @@
          * @param index 行索引
          */
         deleteRow: function (index) {
-            var allTr = $('.grid_main', this.element).find('tr').not(':first');
-            var needRemove = allTr.get(index);
-            var isNew = $(needRemove).data('_newIndex');
-            var addedRow = this.options.addedRow,
+            var allTr = $('.grid_main', this.element).find('tr').not(':first'),
+                needRemove = allTr.get(index),
+                isNew = $(needRemove).data('_newIndex'),
+                addedRow = this.options.addedRow,
                 gridData = this.options.gridData,
-                count = addedRow.length + gridData.length;
+                count = addedRow.length + gridData.length,
+                removeData = null,
+                total = 0,
+                position = 0;
             if (index > count) {
                 return;
             }
-            var removeData = null;
             if (!needRemove) {
                 return;
             }
@@ -216,21 +218,19 @@
                 removeData = this.options.addedRow[isNew];
                 this.options.addedRow = addedRow.slice(0, isNew).concat(addedRow.slice(isNew + 1))
             } else {
-                var total = 0;
                 for (var i = 0; i < index; i++) {
                     var tr = $(allTr[i]);
                     if (tr.data('_newIndex')) {
                         total++;
                     }
                 }
-                var position = index - total;
+                position = index - total;
                 removeData = this.options.gridData[position];
                 this.options.gridData = gridData.slice(0, position).concat(gridData.slice(position + 1));
             }
             needRemove.remove();
             if (this._useLockColumnLayout()) {
-                var fixDom = $('.grid_fix_column', this.element).find('tr').get(index + 1);
-                fixDom.remove();
+                $('.grid_fix_column', this.element).find('tr').get(index + 1).remove();
             }
             this.options.deletedRow.push(removeData);
             this._recomputeIndex();
@@ -287,15 +287,13 @@
          * 下一页
          */
         nextPage: function () {
-            var eventData = {pageNo: this.pageNo, pageSize: this.pageSize};
-            this._trigger('onNextPage', eventData);
+            this._trigger('onNextPage', {pageNo: this.pageNo, pageSize: this.pageSize});
         },
         /**
          * 上一页
          */
         prevPage: function () {
-            var eventData = {pageNo: this.pageNo, pageSize: this.pageSize};
-            this._trigger('onPrevPage', eventData);
+            this._trigger('onPrevPage', {pageNo: this.pageNo, pageSize: this.pageSize});
         },
         moveColumn: function (sourceColumn, targetColumn) {
             //TODO
@@ -363,6 +361,7 @@
             if (!this.options.headHeight) {
                 this.options.headHeight = 20;
             }
+            //TODO 部分逻辑需要放到init方法中
             var container = this.container = $('<div>').addClass('grid_container')
                     .width(this.options.width).height(this.options.height).css({position: 'relative'}),
                 titleHeight = 20,
@@ -372,7 +371,7 @@
                 this.title = $('<div>').height(titleHeight).css({position: 'absolute'}).addClass('grid_title').text(this.options.title);
                 container.append(this.title);
             }
-            if (this._useLockColumnLayout()) {
+            if (this._useLockColumnLayout()) { // 使用锁定列布局
                 var height = this.options.height;
                 var top = 0;
                 if (this.options.usePage) {
@@ -417,6 +416,7 @@
          */
         render: function () {
             var that = this;
+            // 没设置girdData，但设置了url，发送ajax请求加载数据后重新render
             if (!that.options.gridData) {
                 if (that.options.url) {
                     $.ajax({
@@ -432,13 +432,13 @@
             } else {
                 that._renderBody();
                 that._renderPageBar();
-                if (that._useLockColumnLayout()) {
+                if (that._useLockColumnLayout()) { // 使用锁定列布局，需要clone原始table。
                     $('.grid_fix_head', that.element).remove();
                     $('.grid_fix_column', that.element).remove();
                     $('.grid_fix', that.element).remove();
-                    var body = $('.grid_main', that.element);
-                    var head = body.clone(true).removeClass('grid_main').addClass('grid_fix_head').css({height: that.options.headHeight,
-                        overflow: 'hidden', width: that.options.width - 17, background: 'white'});
+                    var body = $('.grid_main', that.element),
+                        head = body.clone(true).removeClass('grid_main').addClass('grid_fix_head').css({height: that.options.headHeight,
+                            overflow: 'hidden', width: that.options.width - 17, background: 'white'});
                     head.find('tr').not(':first').remove();
                     head.find('td').click(function (e) {
                         var columnName = $(this).data('_name'),
@@ -463,10 +463,10 @@
                         offset = 17;
                     }
                     var table = $('<div class="grid_fix_column"><table><tr></tr></table></div>')
-                        .css({background: 'white', overflow: 'hidden', position: 'absolute',
-                            top: body.css('top'), width: width, height: body.height() - offset});
-                    var lockColumnsBody = table.find('table');
-                    var tr = table.find('tr').height(that.options.headHeight);
+                            .css({background: 'white', overflow: 'hidden', position: 'absolute',
+                                top: body.css('top'), width: width, height: body.height() - offset}),
+                        lockColumnsBody = table.find('table'),
+                        tr = table.find('tr').height(that.options.headHeight);
                     that._renderHead(tr, true);
                     that._renderBody(lockColumnsBody, true);
                     body.after(table);
@@ -736,7 +736,7 @@
         },
         _create: function () {
             var that = this;
-            this.element.width(this.options.width).text(this.options.value).click(function (e) {
+            this.element.css('overflow', 'hidden').width(this.options.width).text(this.options.value).click(function (e) {
                 that._trigger('onClick', e);
             });
         },

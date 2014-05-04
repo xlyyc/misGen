@@ -57,11 +57,11 @@ wof.bizWidget.VoucherGridComponent.prototype = {
 			this.gotoPage(1);
 		},
 		"wof.widget.Grid_onToNext" : function(message) {
-			this.nextPage();
+			this.nextPage(true);
 			this.sendMessage('wof.bizWidget.GridComponent_ToNext');
 		},
 		"wof.widget.Grid_onToPrev" : function(message) {
-			this.prevPage();
+			this.prevPage(true);
 			this.sendMessage('wof.bizWidget.GridComponent_ToPrev');
 		},
 		"wof.widget.Grid_onToFirst" : function(message) {
@@ -540,7 +540,7 @@ wof.bizWidget.VoucherGridComponent.prototype = {
 		grid.render();
 		grid.appendTo(this);
 	},
-	nextPage : function() {
+	nextPage : function(forceFlush) {
 		var pageNo = this.getPageNo();
 		var totalPage = this.getTotalPage();
 		if (pageNo >= totalPage) {
@@ -548,16 +548,16 @@ wof.bizWidget.VoucherGridComponent.prototype = {
 			return;
 		}
 		pageNo++;
-		this.gotoPage(pageNo);
+		this.gotoPage(pageNo,forceFlush);
 	},
-	prevPage : function() {
+	prevPage : function(forceFlush) {
 		var pageNo = this.getPageNo();
 		if (pageNo <= 1) {
 			alert('没有上页'); // todo 调用widget下的对话框
 			return;
 		}
 		pageNo--;
-		this.gotoPage(pageNo);
+		this.gotoPage(pageNo,forceFlush);
 	},
 	/**
 	 * 如果pageNo落在当前缓存中 直接从缓存载入数据 如果pageNo不在缓存中 则需要发起新的查询(此查询将修改相关数据和属性)
