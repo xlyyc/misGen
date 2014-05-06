@@ -232,16 +232,6 @@ jQuery(function(){
         bizWidgetComponents.push(pageComponentSpanner);
         components.push(pageComponentSpanner);
 
-    /*    var buttonSpanner = wof$.create('ButtonSpanner');
-        buttonSpanner.appendTo(gridLayout1);
-        widgetComponents.push(buttonSpanner);
-        components.push(buttonSpanner);
-
-        var tabSpanner = wof$.create('TabSpanner');
-        tabSpanner.appendTo(gridLayout1);
-        widgetComponents.push(tabSpanner);
-        components.push(tabSpanner);*/
-
         var commitComponentSpanner = wof$.create('CommitComponentSpanner');
         commitComponentSpanner.appendTo(gridLayout1);
         widgetComponents.push(commitComponentSpanner);
@@ -267,6 +257,16 @@ jQuery(function(){
         deleteRecordComponentSpanner.appendTo(gridLayout1);
         widgetComponents.push(deleteRecordComponentSpanner);
         components.push(deleteRecordComponentSpanner);
+
+        var buttonSpanner = wof$.create('ButtonSpanner');
+        buttonSpanner.appendTo(gridLayout1);
+        widgetComponents.push(buttonSpanner);
+        components.push(buttonSpanner);
+
+        var tabSpanner = wof$.create('TabSpanner');
+        tabSpanner.appendTo(gridLayout1);
+        widgetComponents.push(tabSpanner);
+        components.push(tabSpanner);
 
 
         for(var i=0;i<components.length;i++){
